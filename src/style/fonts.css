@@ -1,0 +1,29 @@
+/* *********** Noto Sans KR */
+@font-face {
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./font/noto-sans-kr-v27-latin_korean-regular.woff2') format('woff2'),
+       url('./font/noto-sans-kr-v27-latin_korean-regular.woff') format('woff')
+}
+@font-face {
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-weight: 500;
+  src: url('./font/noto-sans-kr-v27-latin_korean-500.woff2') format('woff2'),
+       url('./font/noto-sans-kr-v27-latin_korean-500.woff') format('woff')
+}
+@font-face {
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-weight: 700;
+  src: url('./font/noto-sans-kr-v27-latin_korean-700.woff2') format('woff2'),
+       url('./font/noto-sans-kr-v27-latin_korean-700.woff') format('woff')
+}
+@font-face {
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-weight: 900;
+  src: url('./font/noto-sans-kr-v27-latin_korean-900.woff2') format('woff2'),
+       url('./font/noto-sans-kr-v27-latin_korean-900.woff') format('woff')
+}
