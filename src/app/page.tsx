@@ -1,15 +1,10 @@
 import { Box } from '@mui/material';
 
+import Layout from '@/components/Layout';
 
 export default function Home() {
   return (
-    <main>
-      <Box
-        sx={{
-          background: 'red'
-        }}
-      >testtest</Box>
-
+    <Layout>
       <div>
         Loam
       </div>
@@ -26,6 +21,6 @@ export default function Home() {
         메모장, 게시판 <br />
         아이스펭 기능등 <br />
       </div>
-    </main>
+    </Layout>
   );
 }
