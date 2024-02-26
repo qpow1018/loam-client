@@ -1,8 +1,10 @@
-html, body, h1, input, select {
+html, body, h1, input, select, button {
   font-family: 'Noto Sans KR', sans-serif;
 }
 
 body {
-  background-color: #282828;
+  background-color: #1f1f1f;
   color: #f1f1f1;
+  line-height: 1.5;
+  letter-spacing: -0.3px;
 }
