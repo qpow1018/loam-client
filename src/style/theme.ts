@@ -11,6 +11,7 @@ const theme = {
     background: {
       default: '#292929',
       base: '#1f1f1f',
+      overlay: 'rgba(0, 0, 0, 0.4)',
     },
     text: {
       primary: '#f1f1f1',
@@ -31,6 +32,9 @@ const theme = {
     letterSpacing: '-0.3px',
     borderRadius: '4px',
     transition: '0.25s ease',
+  },
+  zIndex: {
+    fixedLoading: 5000,
   },
 }
 
