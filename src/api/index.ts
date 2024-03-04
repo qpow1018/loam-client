@@ -1,4 +1,5 @@
-import apiBase from "./apiBase";
+import apiBase from './apiBase';
+import * as Types from '@/types/api';
 
 class API {
   private static _instance: API | null = null;
@@ -9,14 +10,15 @@ class API {
     return API._instance;
   }
 
-  public async getMyCharacters() {
+  public async getMyCharacters(): Promise<Types.ResMyCharacterInfo[]> {
     return await apiBase.get('/api/my-characters');
   }
 
-
-
-
-
+  public async addMyCharacter(name: string): Promise<Types.ResMyCharacterInfo | null> {
+    return await apiBase.post('/api/my-character', {
+      name,
+    });
+  }
 
 }
 

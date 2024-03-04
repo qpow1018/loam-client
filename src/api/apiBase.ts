@@ -31,12 +31,11 @@ class APIBase {
         data: data,
       });
 
-      console.log('resData', resData);
+      return resData.data.data;
 
     } catch (error) {
-      // console.error('error', error);
-      throw new Error('api 에러 체크');
-      
+      console.error('api error', error);
+      throw error;
     }
   }
 
@@ -44,7 +43,17 @@ class APIBase {
     return await this.apiRequest(HTTPMethods.GET, url);
   }
 
+  public async post(url: string, data?: Object) {
+    return await this.apiRequest(HTTPMethods.POST, url, data);
+  }
 
+  public async put(url: string, data?: Object) {
+    return await this.apiRequest(HTTPMethods.PUT, url, data);
+  }
+
+  public async delete(url: string) {
+    return await this.apiRequest(HTTPMethods.DELETE, url);
+  }
 }
 
 export default APIBase.getInstance();
