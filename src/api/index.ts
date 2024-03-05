@@ -19,7 +19,6 @@ class API {
       name,
     });
   }
-
 }
 
 export default API.getInstance();
