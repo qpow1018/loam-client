@@ -32,9 +32,8 @@ export default function ModalBase(
           sx={{
             borderRadius: theme.common.borderRadius,
             backgroundColor: theme.color.background.default,
-            marginBottom: '60px',
+            marginBottom: '80px',
             width: props.width !== undefined ? props.width : 480,
-            height: '360px',
           }}
         >
           <ModalHeader
