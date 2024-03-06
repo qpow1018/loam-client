@@ -20,12 +20,14 @@ const theme = {
     border: {
       default: '#505050',
       light: '#818181',
+      dark: '#3c3c3c',
     },
   },
   size: {
     headerHeight: 56,
     buttonHeight: 36,
     inputHeight: 36,
+    modalHeaderHeight: 48,
   },
   common: {
     fontFamily: `'Noto Sans KR', sans-serif`,
