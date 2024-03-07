@@ -8,6 +8,13 @@ const theme = {
       main: '#b40007', // rgb(180, 0, 7)
       light: 'rgba(180, 0, 7, 0.8)',
     },
+    dark: {
+      gray1: '#1f1f1f',
+      gray2: '#292929',
+      gray3: '#3c3c3c',
+      gray4: '#464646',
+      gray5: '#505050',
+    },
     background: {
       default: '#292929',
       base: '#1f1f1f',
