@@ -2,22 +2,32 @@
 
 import { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
-
 import theme from '@/style/theme';
 
 import API from '@/api';
 import { ResMyCharacterInfo } from '@/types/api';
 
+import { utils } from '@/libs';
+
 import Layout from '@/components/Layout';
 import BoxSection from '@/components/BoxSection';
 import Text from '@/components/Text';
-import TextInput from '@/components/Form/TextInput';
 import Button, { ButtonTheme } from '@/components/Button';
+import BoxLoading from '@/components/Loading/BoxLoading';
+import FixedLoading from '@/components/Loading/FixedLoading';
+
+import SubmitCharacterModal, { SubmitCharacterModalType } from './SubmitCharacterModal';
 
 export default function MyCharacters() {
   const [characterList, setCharacterList] = useState<ResMyCharacterInfo[]>([]);
-  const [isLoadedCharacterList, setIsLoadedCharacterList] = useState<boolean>(false);
+  const [isLoadedGetCharacterList, setIsLoadedGetCharacterList] = useState<boolean>(false);
   const [characterNameToAdd, setCharacterNameToAdd] = useState<string>('');
+  const [isLoadedAddCharacter, setIsLoadedAddCharacter] = useState<boolean>(false);
+
+
+  const [isSubmitCharacterModalOpen, setIsSubmitCharacterModalOpen] = useState<boolean>(false);
+  const [submitCharacterModalType, setSubmitCharacterModalType] = useState<SubmitCharacterModalType | null>(null);
+
 
   useEffect(() => {
     setupMyCharacterListFromServer();
@@ -25,34 +35,50 @@ export default function MyCharacters() {
 
   async function setupMyCharacterListFromServer() {
     try {
-      const resData = await API.getMyCharacters();
-      setCharacterList(resData);
-      setIsLoadedCharacterList(true);
+      // const resData = await API.getMyCharacters();
+      // setCharacterList(resData);
+      // setIsLoadedGetCharacterList(true);
 
     } catch (error) {
       console.error('setupMyCharacterListFromServer', error);
-      // TODO error snackbar 만들기
+      alert('setupMyCharacterListFromServer error');
     }
   }
 
+
+
+  function openSubmitCharacterModal(modalType: SubmitCharacterModalType) {
+    setSubmitCharacterModalType(modalType);
+    setIsSubmitCharacterModalOpen(true);
+  }
+
+  function closeSubmitCharacterModal() {
+    setSubmitCharacterModalType(null);
+    setIsSubmitCharacterModalOpen(false);
+  }
+
+
+
+
+
+
   // TODO 궁금증 - 이 함수에 async await을 걸고 안걸고 차이 - 프로세스, 스레드 관련?
   function handleSubmitCharacterName(characterName: string) {
-    // TODO 로딩 대기 추가
+    if (isLoadedAddCharacter === true) {
+      return;
+    }
 
     const _characterName = characterName.trim();
 
     // 글자수 체크
     if (_characterName.length < 2) {
-      // TODO 스낵바
       alert('2글자 이상 입력하세요.');
       return;
     }
 
     // 중복 체크
     const matchedItemIndex = [ ...characterList ].findIndex(item => item.name === characterName);
-    console.log('matchedItemIndex', matchedItemIndex);
     if (matchedItemIndex >= 0) {
-      // TODO 스낵바
       alert('이미 추가된 캐릭터입니다.');
       return;
     }
@@ -61,118 +87,120 @@ export default function MyCharacters() {
   }
 
   async function addMyCharacterFromServer(characterName: string) {
-    try {
-      const resData = await API.addMyCharacter(characterName);
+    setIsLoadedAddCharacter(true);
 
-      if (resData !== null) {
-        const newList = [ ...characterList, resData ];
-        setCharacterList(newList);
+    await utils.waitFor(250);
 
-      } else {
-        // TODO 스낵바 - 해당 이름의 캐릭터가 없음
-      }
 
-    } catch (error) {
-      console.error('addMyCharacterFromServer', error);
-      // TODO 스낵바
-    }
+    // try {
+    //   const resData = await API.addMyCharacter(characterName);
+
+    //   if (resData !== null) {
+    //     const newList = [ ...characterList, resData ];
+    //     setCharacterList(newList);
+
+    //   } else {
+    //     // TODO 스낵바 - 해당 이름의 캐릭터가 없음
+    //   }
+
+    // } catch (error) {
+    //   console.error('addMyCharacterFromServer', error);
+    //   // TODO 스낵바
+    // }
   }
 
   return (
     <Layout>
       <Box
         sx={{
-          padding: '24px 16px'
+          padding: '12px'
         }}
       >
         <BoxSection
           sx={{
             width: '1024px',
             padding: '16px',
-            marginBottom: '24px'
           }}
         >
-          <AddCharacterPanel
-            characterNameToAdd={characterNameToAdd}
-            onChangeCharacterNameToAdd={(value) => setCharacterNameToAdd(value)}
-            onSubmitCharacterName={() => handleSubmitCharacterName(characterNameToAdd)}
+          <MyCharacterListHeader
+            title={'내 캐릭터 목록'}
+            openSubmitCharacterModal={() => openSubmitCharacterModal(SubmitCharacterModalType.create)}
           />
-        </BoxSection>
 
-        <BoxSection
-          sx={{
-            width: '1024px',
-            padding: '16px',
-          }}
-        >
-          { isLoadedCharacterList === true ? (
-            <MyCharacterListPanel
+
+
+
+          { isLoadedGetCharacterList === true ? (
+            <MyCharacterListBody
               characterList={characterList}
             />
           ) : (
-            <Box>
-              {/* TODO 로딩 컴포넌트 */}
-              로딩 컴포넌트
-            </Box>
+            <BoxLoading />
           )}
         </BoxSection>
+
+        { (isSubmitCharacterModalOpen === true && submitCharacterModalType !== null) &&
+          <SubmitCharacterModal
+            isOpen={isSubmitCharacterModalOpen}
+            onClose={closeSubmitCharacterModal}
+            title={
+              submitCharacterModalType === SubmitCharacterModalType.create
+              ? '캐릭터 추가하기'
+              : '캐릭터 수정하기'
+            }
+            modalType={submitCharacterModalType}
+          />
+        }
+
+
+        { isLoadedAddCharacter === true &&
+          <FixedLoading />
+        }
       </Box>
     </Layout>
   );
 }
 
-function AddCharacterPanel(
+function MyCharacterListHeader(
   props: {
-    characterNameToAdd: string;
-    onChangeCharacterNameToAdd: (value: string) => void;
-    onSubmitCharacterName: () => void;
+    title: string;
+    openSubmitCharacterModal: () => void;
   }
 ) {
   return (
-    <>
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingBottom: '12px',
+        borderBottom: `1px solid ${theme.color.border.default}`,
+      }}
+    >
       <Text
         sx={{
-          fontSize: '0.75rem',
+          fontSize: '0.875rem',
           fontWeight: 500,
-          marginBottom: '8px',
-          color: theme.color.text.secondary,
         }}
       >
-        캐릭터 추가
+        { props.title }
       </Text>
 
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-        }}
+      <Button
+        onClick={props.openSubmitCharacterModal}
+        theme={ButtonTheme.bgPri}
       >
-        <Box
-          sx={{
-            flex: 1,
-            marginRight: '16px'
-          }}
-        >
-          <TextInput
-            value={props.characterNameToAdd}
-            onChange={props.onChangeCharacterNameToAdd}
-            placeholder='캐릭터 이름을 입력하세요'
-            onPressEnter={props.onSubmitCharacterName}
-          />
-        </Box>
-
-        <Button
-          onClick={props.onSubmitCharacterName}
-          theme={ButtonTheme.bgPri}
-        >
-          추가하기
-        </Button>
-      </Box>
-    </>
+        추가히기
+      </Button>
+    </Box>
   );
 }
 
-function MyCharacterListPanel(
+
+
+
+
+function MyCharacterListBody(
   props: {
     characterList: ResMyCharacterInfo[];
   }
