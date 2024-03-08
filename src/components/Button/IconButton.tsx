@@ -21,7 +21,7 @@ export default function IconButton(
           transition: theme.common.transition,
           width: props.buttonSize !== undefined ? props.buttonSize: `${theme.size.iconButtonSize}px`,
           height: props.buttonSize !== undefined ? props.buttonSize: `${theme.size.iconButtonSize}px`,
-          backgroundColor: theme.color.dark.gray4,
+          backgroundColor: theme.color.dark.gray3,
           color: theme.color.text.secondary,
           '&:hover': {
             backgroundColor: theme.color.dark.gray5,
