@@ -20,19 +20,49 @@ export default function SubmitCharacterModal(
   props: {
     isOpen: boolean;
     onClose: () => void;
-    title: string;
     modalType: SubmitCharacterModalType;
+    createMyCharacter: (nickname: string, classValue: string) => void;
+    updateMyCharacter: (nickname: string, classValue: string) => void;
   }
 ) {
   const allClassInfos = loaDB.getAllClassInfos();
 
   const [nickname, setNickname] = useState<string>('');
+  const [classValue, setClassValue] = useState<string | null>(null);
+
+  function handleClickSubmitButton() {
+    const _nickname = nickname.trim();
+    if (_nickname.length < 2) {
+      alert('2글자 이상 입력해주세요.');
+      return;
+    }
+
+    if (classValue === null) {
+      alert('클래스를 선택하세요.');
+      return;
+    }
+
+    if (props.modalType === SubmitCharacterModalType.create) {
+      props.createMyCharacter(nickname, classValue);
+      
+    } else {
+      props.updateMyCharacter(nickname, classValue);
+
+    }
+  }
+
+  // TODO 추가할 기능
+  // 모달 열릴때 인풋 포커스
 
   return (
     <Modal
       isOpen={props.isOpen}
       onClose={props.onClose}
-      title={props.title}
+      title={
+        props.modalType === SubmitCharacterModalType.create
+        ? '캐릭터 추가하기'
+        : '캐릭터 수정하기'
+      }
       width={900}
     >
       <Box sx={{ padding: '16px' }}>
@@ -53,6 +83,8 @@ export default function SubmitCharacterModal(
               key={item.mainClassInfo.value}
               mainClassLabel={item.mainClassInfo.label}
               classInfos={item.classes}
+              currentClassValue={classValue}
+              onClickClassValue={(value) => setClassValue(value)}
             />
           )}
         </FormRow>
@@ -60,14 +92,28 @@ export default function SubmitCharacterModal(
         <Box
           sx={{
             display: 'flex',
+            justifyContent: 'center',
             borderTop: `1px solid ${theme.color.border.dark}`,
+            paddingTop: '12px',
           }}
         >
-          추가 or 수정
+          <Button
+            onClick={handleClickSubmitButton}
+            theme={ButtonTheme.bgPri}
+            sx={{
+              width: 120,
+              height: 40,
+              fontSize: '0.813rem'
+            }}
+          >
+            {
+              props.modalType === SubmitCharacterModalType.create
+              ? '추가하기'
+              : '수정하기'
+            }
+          </Button>
         </Box>
-
       </Box>
-
     </Modal>
   );
 }
@@ -115,6 +161,8 @@ function LoaClassRow(
   props: {
     mainClassLabel: string;
     classInfos: LDB_ClassInfo[];
+    currentClassValue: string | null;
+    onClickClassValue: (value: string) => void;
   }
 ) {
   return (
@@ -139,7 +187,8 @@ function LoaClassRow(
       { props.classInfos.map(item =>
         <Button
           key={item.value}
-          theme={ButtonTheme.bdGray}
+          onClick={() => props.onClickClassValue(item.value)}
+          theme={item.value === props.currentClassValue ? ButtonTheme.bgGray : ButtonTheme.bdGray}
           isRound={true}
           sx={{
             width: '88px',
