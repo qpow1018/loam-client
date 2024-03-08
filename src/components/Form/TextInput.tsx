@@ -41,7 +41,7 @@ export default function TextInput(
           border: `1px solid ${theme.color.border.default}`,
           color: theme.color.text.primary,
           padding: '0 12px',
-          fontSize: '0.75rem',
+          fontSize: '0.813rem',
           '& > input': {
             width: '100%',
             height: '100%',
