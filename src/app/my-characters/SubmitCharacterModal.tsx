@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Box, ButtonBase } from '@mui/material';
+import React, { useState } from 'react';
+import { Box } from '@mui/material';
 import theme from '@/style/theme';
 
 import { loaDB } from '@/libs';
@@ -9,7 +9,6 @@ import Modal from '@/components/Modal';
 import Text from '@/components/Text';
 import TextInput from '@/components/Form/TextInput';
 import Button, { ButtonTheme } from '@/components/Button';
-
 
 export enum SubmitCharacterModalType {
   create = 'create',
@@ -21,35 +20,14 @@ export default function SubmitCharacterModal(
     isOpen: boolean;
     onClose: () => void;
     modalType: SubmitCharacterModalType;
-    createMyCharacter: (nickname: string, classValue: string) => void;
-    updateMyCharacter: (nickname: string, classValue: string) => void;
+    createMyCharacter: (nickname: string, classValue: string | null) => void;
+    updateMyCharacter: (nickname: string, classValue: string | null) => void;
   }
 ) {
   const allClassInfos = loaDB.getAllClassInfos();
 
   const [nickname, setNickname] = useState<string>('');
   const [classValue, setClassValue] = useState<string | null>(null);
-
-  function handleClickSubmitButton() {
-    const _nickname = nickname.trim();
-    if (_nickname.length < 2) {
-      alert('2글자 이상 입력해주세요.');
-      return;
-    }
-
-    if (classValue === null) {
-      alert('클래스를 선택하세요.');
-      return;
-    }
-
-    if (props.modalType === SubmitCharacterModalType.create) {
-      props.createMyCharacter(nickname, classValue);
-      
-    } else {
-      props.updateMyCharacter(nickname, classValue);
-
-    }
-  }
 
   // TODO 추가할 기능
   // 모달 열릴때 인풋 포커스
@@ -98,7 +76,11 @@ export default function SubmitCharacterModal(
           }}
         >
           <Button
-            onClick={handleClickSubmitButton}
+            onClick={() => {
+              props.modalType === SubmitCharacterModalType.create
+              ? props.createMyCharacter(nickname, classValue)
+              : props.updateMyCharacter(nickname, classValue)
+            }}
             theme={ButtonTheme.bgPri}
             sx={{
               width: 120,
