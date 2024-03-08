@@ -35,6 +35,7 @@ const theme = {
     buttonHeight: 36,
     inputHeight: 36,
     modalHeaderHeight: 48,
+    iconButtonSize: 36,
   },
   common: {
     fontFamily: `'Noto Sans KR', sans-serif`,
