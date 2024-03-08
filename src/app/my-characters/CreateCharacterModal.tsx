@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import theme from '@/style/theme';
 
@@ -10,24 +9,18 @@ import Text from '@/components/Text';
 import TextInput from '@/components/Form/TextInput';
 import Button, { ButtonTheme } from '@/components/Button';
 
-export enum SubmitCharacterModalType {
-  create = 'create',
-  update = 'update',
-}
-
-export default function SubmitCharacterModal(
+export default function CreateCharacterModal(
   props: {
     isOpen: boolean;
     onClose: () => void;
-    modalType: SubmitCharacterModalType;
-    createMyCharacter: (nickname: string, classValue: string | null) => void;
-    updateMyCharacter: (nickname: string, classValue: string | null) => void;
+    nickname: string;
+    onChangeNickname: (value: string) => void;
+    classValue: string | null;
+    onChangeClassValue: (classValue: string) => void;
+    createMyCharacter: () => void;
   }
 ) {
   const allClassInfos = loaDB.getAllClassInfos();
-
-  const [nickname, setNickname] = useState<string>('');
-  const [classValue, setClassValue] = useState<string | null>(null);
 
   // TODO 추가할 기능
   // 모달 열릴때 인풋 포커스
@@ -36,18 +29,14 @@ export default function SubmitCharacterModal(
     <Modal
       isOpen={props.isOpen}
       onClose={props.onClose}
-      title={
-        props.modalType === SubmitCharacterModalType.create
-        ? '캐릭터 추가하기'
-        : '캐릭터 수정하기'
-      }
+      title='캐릭터 추가하기'
       width={900}
     >
       <Box sx={{ padding: '16px' }}>
         <FormRow label='닉네임'>
           <TextInput
-            value={nickname}
-            onChange={(value) => setNickname(value)}
+            value={props.nickname}
+            onChange={props.onChangeNickname}
             placeholder='캐릭터 닉네임을 입력하세요'
             sx={{
               width: 280,
@@ -61,8 +50,8 @@ export default function SubmitCharacterModal(
               key={item.mainClassInfo.value}
               mainClassLabel={item.mainClassInfo.label}
               classInfos={item.classes}
-              currentClassValue={classValue}
-              onClickClassValue={(value) => setClassValue(value)}
+              currentClassValue={props.classValue}
+              onClickClassValue={props.onChangeClassValue}
             />
           )}
         </FormRow>
@@ -76,11 +65,7 @@ export default function SubmitCharacterModal(
           }}
         >
           <Button
-            onClick={() => {
-              props.modalType === SubmitCharacterModalType.create
-              ? props.createMyCharacter(nickname, classValue)
-              : props.updateMyCharacter(nickname, classValue)
-            }}
+            onClick={props.createMyCharacter}
             theme={ButtonTheme.bgPri}
             sx={{
               width: 120,
@@ -88,11 +73,7 @@ export default function SubmitCharacterModal(
               fontSize: '0.813rem'
             }}
           >
-            {
-              props.modalType === SubmitCharacterModalType.create
-              ? '추가하기'
-              : '수정하기'
-            }
+            추가하기
           </Button>
         </Box>
       </Box>

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
 import theme from '@/style/theme';
 
-import { utils, loaDB } from '@/libs';
+import { loaDB } from '@/libs';
 import { LDB_MyCharacterInfo } from '@/types/loaDB';
 
 import Layout from '@/components/Layout';
@@ -13,18 +13,20 @@ import Text from '@/components/Text';
 import Button, { ButtonTheme } from '@/components/Button';
 import IconButton from '@/components/Button/IconButton';
 
-import SubmitCharacterModal, { SubmitCharacterModalType } from './SubmitCharacterModal';
+import CreateCharacterModal from './CreateCharacterModal';
 
 import {
   UnfoldMore as UnfoldMoreIcon,
-  Edit as EditIcon,
   Delete as DeleteIcon,
 } from '@mui/icons-material';
 
+
 export default function MyCharacters() {
   const [characterList, setCharacterList] = useState<LDB_MyCharacterInfo[]>([]);
-  const [isSubmitCharacterModalOpen, setIsSubmitCharacterModalOpen] = useState<boolean>(false);
-  const [submitCharacterModalType, setSubmitCharacterModalType] = useState<SubmitCharacterModalType | null>(null);
+
+  const [isCreateCharacterModalOpen, setIsCreateCharacterModalOpen] = useState<boolean>(false);
+  const [nicknameToCreate, setNicknameToCreate] = useState<string>('');
+  const [classValueToCreate, setClassValueToCreate] = useState<string | null>(null);
 
   useEffect(() => {
     setupMyCharacterList();
@@ -35,14 +37,14 @@ export default function MyCharacters() {
     setCharacterList(myCharacters);
   }
 
-  function openSubmitCharacterModal(modalType: SubmitCharacterModalType) {
-    setSubmitCharacterModalType(modalType);
-    setIsSubmitCharacterModalOpen(true);
+  function openSubmitCharacterModal() {
+    setIsCreateCharacterModalOpen(true);
   }
 
   function closeSubmitCharacterModal() {
-    setSubmitCharacterModalType(null);
-    setIsSubmitCharacterModalOpen(false);
+    setNicknameToCreate('');
+    setClassValueToCreate(null);
+    setIsCreateCharacterModalOpen(false);
   }
 
   function checkValidNickname(nickname: string) {
@@ -64,14 +66,14 @@ export default function MyCharacters() {
     }
   }
 
-  function createMyCharacter(nickname: string, classValue: string | null) {
+  function createMyCharacter() {
     try {
-      const _nickname = nickname.trim();
+      const _nickname = nicknameToCreate.trim();
       checkValidNickname(_nickname);
       checkDuplicatedNickname(_nickname);
-      checkValidClassValue(classValue);
+      checkValidClassValue(classValueToCreate);
 
-      loaDB.addMyCharacter(nickname, classValue!);
+      loaDB.addMyCharacter(_nickname, classValueToCreate!);
 
       setupMyCharacterList();
       closeSubmitCharacterModal();
@@ -81,13 +83,15 @@ export default function MyCharacters() {
     }
   }
 
-
+  // TODO
+  function openDeleteCharacterDialog() {
+    alert('삭제');
+  }
 
   // TODO
   function handleClickMoveButton() {
-
+    alert('순서 변경');
   }
-
 
 
   return (
@@ -105,7 +109,7 @@ export default function MyCharacters() {
         >
           <CharacterListHeader
             title={'내 캐릭터 목록'}
-            openSubmitCharacterModal={() => openSubmitCharacterModal(SubmitCharacterModalType.create)}
+            openSubmitCharacterModal={openSubmitCharacterModal}
           />
 
           { characterList.length > 0 &&
@@ -118,28 +122,41 @@ export default function MyCharacters() {
                   className={classData.label}
                   thumbnail={classData.imageUrl}
                   onClickMoveButton={handleClickMoveButton}
+                  onClickDeleteButton={openDeleteCharacterDialog}
                 />
               );
             })
           }
 
           { characterList.length === 0 &&
-            <Box>
-              {/* TODO 엠프티 박스 필요 */}
-              엠프티 박스 필요
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                padding: '100px 0',
+              }}
+            >
+              <Text
+                sx={{
+                  fontSize: '0.813rem',
+                  color: theme.color.text.secondary,
+                }}
+              >
+                내 캐릭터를 추가하세요.
+              </Text>
             </Box>
           }
         </BoxSection>
 
-        { (isSubmitCharacterModalOpen === true && submitCharacterModalType !== null) &&
-          <SubmitCharacterModal
-            isOpen={isSubmitCharacterModalOpen}
+        { isCreateCharacterModalOpen === true &&
+          <CreateCharacterModal
+            isOpen={isCreateCharacterModalOpen}
             onClose={closeSubmitCharacterModal}
-            modalType={submitCharacterModalType}
-            createMyCharacter={(nickname, classValue) => createMyCharacter(nickname, classValue)}
-
-
-            updateMyCharacter={(nickname, classValue) => createMyCharacter(nickname, classValue)}
+            nickname={nicknameToCreate}
+            onChangeNickname={(value) => setNicknameToCreate(value)}
+            classValue={classValueToCreate}
+            onChangeClassValue={(value) => setClassValueToCreate(value)}
+            createMyCharacter={createMyCharacter}
           />
         }
       </Box>
@@ -188,6 +205,7 @@ function CharacterListItem(
     className: string;
     thumbnail: string;
     onClickMoveButton: () => void;
+    onClickDeleteButton: () => void;
   }
 ) {
   return (
@@ -250,16 +268,7 @@ function CharacterListItem(
       </Box>
 
       <IconButton
-        onClick={props.onClickMoveButton}
-      >
-        <EditIcon />
-      </IconButton>
-
-      <IconButton
-        onClick={props.onClickMoveButton}
-        sx={{
-          marginLeft: '8px'
-        }}
+        onClick={props.onClickDeleteButton}
       >
         <DeleteIcon />
       </IconButton>
