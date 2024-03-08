@@ -12,6 +12,7 @@ import BoxSection from '@/components/BoxSection';
 import Text from '@/components/Text';
 import Button, { ButtonTheme } from '@/components/Button';
 import IconButton from '@/components/Button/IconButton';
+import ProfileImage from '@/components/ProfileImage';
 
 import CreateCharacterModal from './CreateCharacterModal';
 
@@ -19,7 +20,6 @@ import {
   UnfoldMore as UnfoldMoreIcon,
   Delete as DeleteIcon,
 } from '@mui/icons-material';
-
 
 export default function MyCharacters() {
   const [characterList, setCharacterList] = useState<LDB_MyCharacterInfo[]>([]);
@@ -37,7 +37,7 @@ export default function MyCharacters() {
     setCharacterList(myCharacters);
   }
 
-  function openSubmitCharacterModal() {
+  function openCreateCharacterModal() {
     setIsCreateCharacterModalOpen(true);
   }
 
@@ -109,7 +109,7 @@ export default function MyCharacters() {
         >
           <CharacterListHeader
             title={'내 캐릭터 목록'}
-            openSubmitCharacterModal={openSubmitCharacterModal}
+            openCreateCharacterModal={openCreateCharacterModal}
           />
 
           { characterList.length > 0 &&
@@ -167,7 +167,7 @@ export default function MyCharacters() {
 function CharacterListHeader(
   props: {
     title: string;
-    openSubmitCharacterModal: () => void;
+    openCreateCharacterModal: () => void;
   }
 ) {
   return (
@@ -190,7 +190,7 @@ function CharacterListHeader(
       </Text>
 
       <Button
-        onClick={props.openSubmitCharacterModal}
+        onClick={props.openCreateCharacterModal}
         theme={ButtonTheme.bgPri}
       >
         추가하기
@@ -236,17 +236,11 @@ function CharacterListItem(
           alignItems: 'center'
         }}
       >
-        <Box
-          sx={{
-            borderRadius: '50%',
-            width: 36,
-            height: 36,
-            background: '#333',
-            marginRight: '8px'
-          }}
-        ></Box>
+        <ProfileImage
+          url={props.thumbnail}
+        />
 
-        <Box>
+        <Box sx={{ marginLeft: '12px' }}>
           <Text
             sx={{
               fontSize: '0.875rem',

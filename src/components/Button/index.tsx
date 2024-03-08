@@ -61,7 +61,7 @@ export default function Button(
           flexShrink: 0,
           borderRadius: props.isRound === true ? '60px' : theme.common.borderRadius,
           transition: theme.common.transition,
-          fontSize: '0.75rem',
+          fontSize: '0.813rem',
           fontWeight: 500,
           minWidth: '80px',
           height: `${theme.size.buttonHeight}px`,
