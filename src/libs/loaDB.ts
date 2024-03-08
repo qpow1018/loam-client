@@ -21,6 +21,10 @@ class LoaDB {
     return allClassInfos.filter(item => item.mainClass === mainClassValue);
   }
 
+  public getClassInfo(classValue: string): LDB_ClassInfo {
+    return LOSTARK.classInfo[classValue];
+  }
+
   public getAllClassInfos(): LDB_MainClassInfoAndClasses[] {
     const mainClassInfos = this.getMainClassInfos();
     return mainClassInfos.map(mainClassInfo => ({
