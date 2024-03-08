@@ -28,9 +28,9 @@ const buttonThemeMap = {
   },
   [ButtonTheme.bgGray]: {
     color: theme.color.text.primary,
-    backgroundColor: theme.color.dark.gray3,
+    backgroundColor: theme.color.dark.gray4,
     hoverBackgroundColor: theme.color.dark.gray5,
-    borderColor: theme.color.dark.gray3,
+    borderColor: theme.color.dark.gray4,
     hoverBorderColor: theme.color.dark.gray5,
   },
   [ButtonTheme.bdGray]: {
