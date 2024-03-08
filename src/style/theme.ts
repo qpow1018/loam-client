@@ -33,7 +33,7 @@ const theme = {
   size: {
     headerHeight: 56,
     buttonHeight: 36,
-    inputHeight: 36,
+    inputHeight: 40,
     modalHeaderHeight: 48,
     iconButtonSize: 36,
   },
