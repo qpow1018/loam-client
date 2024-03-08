@@ -4,48 +4,36 @@ import { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
 import theme from '@/style/theme';
 
-import API from '@/api';
-import { ResMyCharacterInfo } from '@/types/api';
-
-import { utils } from '@/libs';
+import { utils, loaDB } from '@/libs';
+import { LDB_MyCharacterInfo } from '@/types/loaDB';
 
 import Layout from '@/components/Layout';
 import BoxSection from '@/components/BoxSection';
 import Text from '@/components/Text';
 import Button, { ButtonTheme } from '@/components/Button';
-import BoxLoading from '@/components/Loading/BoxLoading';
-import FixedLoading from '@/components/Loading/FixedLoading';
+import IconButton from '@/components/Button/IconButton';
 
 import SubmitCharacterModal, { SubmitCharacterModalType } from './SubmitCharacterModal';
 
+import {
+  UnfoldMore as UnfoldMoreIcon,
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+} from '@mui/icons-material';
+
 export default function MyCharacters() {
-  const [characterList, setCharacterList] = useState<ResMyCharacterInfo[]>([]);
-  const [isLoadedGetCharacterList, setIsLoadedGetCharacterList] = useState<boolean>(false);
-  const [characterNameToAdd, setCharacterNameToAdd] = useState<string>('');
-  const [isLoadedAddCharacter, setIsLoadedAddCharacter] = useState<boolean>(false);
-
-
+  const [characterList, setCharacterList] = useState<LDB_MyCharacterInfo[]>([]);
   const [isSubmitCharacterModalOpen, setIsSubmitCharacterModalOpen] = useState<boolean>(false);
   const [submitCharacterModalType, setSubmitCharacterModalType] = useState<SubmitCharacterModalType | null>(null);
 
-
   useEffect(() => {
-    setupMyCharacterListFromServer();
+    setupMyCharacterList();
   }, []);
 
-  async function setupMyCharacterListFromServer() {
-    try {
-      // const resData = await API.getMyCharacters();
-      // setCharacterList(resData);
-      // setIsLoadedGetCharacterList(true);
-
-    } catch (error) {
-      console.error('setupMyCharacterListFromServer', error);
-      alert('setupMyCharacterListFromServer error');
-    }
+  function setupMyCharacterList() {
+    const myCharacters = loaDB.getMyCharacters();
+    setCharacterList(myCharacters);
   }
-
-
 
   function openSubmitCharacterModal(modalType: SubmitCharacterModalType) {
     setSubmitCharacterModalType(modalType);
@@ -57,57 +45,50 @@ export default function MyCharacters() {
     setIsSubmitCharacterModalOpen(false);
   }
 
-
-
-
-
-
-  // TODO 궁금증 - 이 함수에 async await을 걸고 안걸고 차이 - 프로세스, 스레드 관련?
-  function handleSubmitCharacterName(characterName: string) {
-    if (isLoadedAddCharacter === true) {
-      return;
+  function checkValidNickname(nickname: string) {
+    if (nickname.length < 2) {
+      throw new Error('2글자 이상 입력하세요.');
     }
-
-    const _characterName = characterName.trim();
-
-    // 글자수 체크
-    if (_characterName.length < 2) {
-      alert('2글자 이상 입력하세요.');
-      return;
-    }
-
-    // 중복 체크
-    const matchedItemIndex = [ ...characterList ].findIndex(item => item.name === characterName);
-    if (matchedItemIndex >= 0) {
-      alert('이미 추가된 캐릭터입니다.');
-      return;
-    }
-
-    addMyCharacterFromServer(_characterName);
   }
 
-  async function addMyCharacterFromServer(characterName: string) {
-    setIsLoadedAddCharacter(true);
-
-    await utils.waitFor(250);
-
-
-    // try {
-    //   const resData = await API.addMyCharacter(characterName);
-
-    //   if (resData !== null) {
-    //     const newList = [ ...characterList, resData ];
-    //     setCharacterList(newList);
-
-    //   } else {
-    //     // TODO 스낵바 - 해당 이름의 캐릭터가 없음
-    //   }
-
-    // } catch (error) {
-    //   console.error('addMyCharacterFromServer', error);
-    //   // TODO 스낵바
-    // }
+  function checkDuplicatedNickname(nickname: string) {
+    const isMatchedIndex = [ ...characterList ].findIndex(item => item.nickname === nickname);
+    if (isMatchedIndex >= 0) {
+      throw new Error('이미 추가된 캐릭터입니다.');
+    }
   }
+
+  function checkValidClassValue(classValue: string | null) {
+    if (classValue === null) {
+      throw new Error('클래스를 선택하세요.');
+    }
+  }
+
+  function createMyCharacter(nickname: string, classValue: string | null) {
+    try {
+      const _nickname = nickname.trim();
+      checkValidNickname(_nickname);
+      checkDuplicatedNickname(_nickname);
+      checkValidClassValue(classValue);
+
+      loaDB.addMyCharacter(nickname, classValue!);
+
+      setupMyCharacterList();
+      closeSubmitCharacterModal();
+
+    } catch (error: any) {
+      alert(error.message);
+    }
+  }
+
+
+
+  // TODO
+  function handleClickMoveButton() {
+
+  }
+
+
 
   return (
     <Layout>
@@ -122,46 +103,51 @@ export default function MyCharacters() {
             padding: '16px',
           }}
         >
-          <MyCharacterListHeader
+          <CharacterListHeader
             title={'내 캐릭터 목록'}
             openSubmitCharacterModal={() => openSubmitCharacterModal(SubmitCharacterModalType.create)}
           />
 
+          { characterList.length > 0 &&
+            characterList.map(item => {
+              const classData = loaDB.getClassInfo(item.classValue);
+              return (
+                <CharacterListItem
+                  key={item.id}
+                  nickname={item.nickname}
+                  className={classData.label}
+                  thumbnail={classData.imageUrl}
+                  onClickMoveButton={handleClickMoveButton}
+                />
+              );
+            })
+          }
 
-
-
-          { isLoadedGetCharacterList === true ? (
-            <MyCharacterListBody
-              characterList={characterList}
-            />
-          ) : (
-            <BoxLoading />
-          )}
+          { characterList.length === 0 &&
+            <Box>
+              {/* TODO 엠프티 박스 필요 */}
+              엠프티 박스 필요
+            </Box>
+          }
         </BoxSection>
 
         { (isSubmitCharacterModalOpen === true && submitCharacterModalType !== null) &&
           <SubmitCharacterModal
             isOpen={isSubmitCharacterModalOpen}
             onClose={closeSubmitCharacterModal}
-            title={
-              submitCharacterModalType === SubmitCharacterModalType.create
-              ? '캐릭터 추가하기'
-              : '캐릭터 수정하기'
-            }
             modalType={submitCharacterModalType}
+            createMyCharacter={(nickname, classValue) => createMyCharacter(nickname, classValue)}
+
+
+            updateMyCharacter={(nickname, classValue) => createMyCharacter(nickname, classValue)}
           />
-        }
-
-
-        { isLoadedAddCharacter === true &&
-          <FixedLoading />
         }
       </Box>
     </Layout>
   );
 }
 
-function MyCharacterListHeader(
+function CharacterListHeader(
   props: {
     title: string;
     openSubmitCharacterModal: () => void;
@@ -190,47 +176,18 @@ function MyCharacterListHeader(
         onClick={props.openSubmitCharacterModal}
         theme={ButtonTheme.bgPri}
       >
-        추가히기
+        추가하기
       </Button>
     </Box>
   );
 }
 
-
-
-
-
-function MyCharacterListBody(
-  props: {
-    characterList: ResMyCharacterInfo[];
-  }
-) {
-  return (
-    <>
-      { props.characterList.length > 0 &&
-        props.characterList.map(item =>
-          <CharacterListItem
-            key={item._id}
-            name={item.name}
-            className={item.className}
-          />
-        )
-      }
-
-      { props.characterList.length === 0 &&
-        <Box>
-          {/* TODO 엠프티 박스 필요 */}
-          엠프티 박스 필요
-        </Box>
-      }
-    </>
-  );
-}
-
 function CharacterListItem(
   props: {
-    name: string;
+    nickname: string;
     className: string;
+    thumbnail: string;
+    onClickMoveButton: () => void;
   }
 ) {
   return (
@@ -238,31 +195,74 @@ function CharacterListItem(
       sx={{
         display: 'flex',
         alignItems: 'center',
-
-        borderBottom: `1px solid ${theme.color.border.default}`,
+        borderBottom: `1px solid ${theme.color.border.dark}`,
         padding: '12px 0'
       }}
     >
-      <Box>
-        드래그핸들
-      </Box>
+      <IconButton
+        onClick={props.onClickMoveButton}
+        buttonSize={32}
+        iconSize={16}
+        sx={{
+          backgroundColor: 'transparent',
+        }}
+      >
+        <UnfoldMoreIcon />
+      </IconButton>
 
       <Box
         sx={{
-          flex: 1
+          flex: 1,
+          margin: '0 12px',
+          display: 'flex',
+          alignItems: 'center'
         }}
       >
-        <Box>{ props.name }</Box>
-        <Box>{ props.className }</Box>
+        <Box
+          sx={{
+            borderRadius: '50%',
+            width: 36,
+            height: 36,
+            background: '#333',
+            marginRight: '8px'
+          }}
+        ></Box>
+
+        <Box>
+          <Text
+            sx={{
+              fontSize: '0.875rem',
+              fontWeight: 500
+            }}
+          >
+            { props.nickname }
+          </Text>
+
+          <Text
+            sx={{
+              fontSize: '0.75rem',
+              color: theme.color.text.secondary,
+            }}
+          >
+            { props.className }
+          </Text>
+        </Box>
       </Box>
 
-      <Box>
-        수정
-      </Box>
+      <IconButton
+        onClick={props.onClickMoveButton}
+      >
+        <EditIcon />
+      </IconButton>
 
-      <Box>
-        삭제
-      </Box>
+      <IconButton
+        onClick={props.onClickMoveButton}
+        sx={{
+          marginLeft: '8px'
+        }}
+      >
+        <DeleteIcon />
+      </IconButton>
     </Box>
   );
 }
