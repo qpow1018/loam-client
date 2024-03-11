@@ -16,7 +16,7 @@ export default function SectionTitlePanel(
         alignItems: 'center',
         height: 56,
         borderBottom: `1px solid ${theme.color.border.dark}`,
-        padding: '0 12px'
+        padding: '0 12px',
       }}
     >
       <Box sx={{ flex: 1 }}>
