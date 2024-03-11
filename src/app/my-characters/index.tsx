@@ -23,7 +23,6 @@ import {
 
 export default function MyCharacters() {
   const [characterList, setCharacterList] = useState<LDB_MyCharacterInfo[]>([]);
-
   const [isCreateCharacterModalOpen, setIsCreateCharacterModalOpen] = useState<boolean>(false);
   const [nicknameToCreate, setNicknameToCreate] = useState<string>('');
   const [classValueToCreate, setClassValueToCreate] = useState<string | null>(null);
