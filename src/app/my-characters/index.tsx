@@ -13,6 +13,7 @@ import Text from '@/components/Text';
 import Button, { ButtonTheme } from '@/components/Button';
 import IconButton from '@/components/Button/IconButton';
 import ProfileImage from '@/components/ProfileImage';
+import EmptyBox from '@/components/EmptyBox';
 
 import CreateCharacterModal from './CreateCharacterModal';
 
@@ -127,23 +128,10 @@ export default function MyCharacters() {
             })
           }
 
-          { characterList.length === 0 &&
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                padding: '100px 0',
-              }}
-            >
-              <Text
-                sx={{
-                  fontSize: '0.813rem',
-                  color: theme.color.text.secondary,
-                }}
-              >
-                내 캐릭터를 추가하세요.
-              </Text>
-            </Box>
+          { characterList.length !== 0 &&
+            <EmptyBox
+              text='내 캐릭터를 추가하세요.'
+            />
           }
         </BoxSection>
 
