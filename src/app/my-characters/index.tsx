@@ -128,7 +128,7 @@ export default function MyCharacters() {
             })
           }
 
-          { characterList.length !== 0 &&
+          { characterList.length === 0 &&
             <EmptyBox
               text='내 캐릭터를 추가하세요.'
             />
