@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import { Box } from '@mui/material';
 import theme from '@/style/theme';
 
@@ -5,28 +8,34 @@ import BoxSection from '@/components/BoxSection';
 import Text from '@/components/Text';
 import Button, { ButtonTheme } from '@/components/Button';
 import EmptyBox from '@/components/EmptyBox';
+import Modal from '@/components/Modal';
 
 import SectionTitlePanel from '../shared/SectionTitlePanel';
 import LoadoMenuButton from '../shared/LoadoMenuButton';
 
-
-import AddIcon from '@mui/icons-material/Add';
-import AddBoxIcon from '@mui/icons-material/AddBox';
-
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
+import {
+  Settings as SettingsIcon,
+  AddCircle as AddCircleIcon,
+} from '@mui/icons-material';
 
 export default function MainCharacterSection() {
+  const [isLoadoManagementModalOpen, setIsLoadoManagementModalOpen] = useState<boolean>(false);
+
   return (
     <BoxSection>
       <SectionTitlePanel
         title='캐릭터 단위'
         rightComponent={<>
-          <LoadoMenuButton>
+          <LoadoMenuButton
+            onClick={() => setIsLoadoManagementModalOpen(true)}
+            iconComponent={<SettingsIcon />}
+          >
             할일 관리
           </LoadoMenuButton>
 
-          <LoadoMenuButton>
+          <LoadoMenuButton
+            iconComponent={<AddCircleIcon />}
+          >
             캐릭터 추가
           </LoadoMenuButton>
         </>}
@@ -48,9 +57,49 @@ export default function MainCharacterSection() {
       {/* <EmptyBox
       
       /> */}
+
+      { isLoadoManagementModalOpen === true &&
+        <LoadoManagementModal
+          isOpen={isLoadoManagementModalOpen}
+          onClose={() => setIsLoadoManagementModalOpen(false)}
+          title={'할일 관리'}
+        />
+      }
+
     </BoxSection>
   );
 }
+
+function LoadoManagementModal(
+  props: {
+    isOpen: boolean;
+    onClose: () => void;
+    title: string;
+  }
+) {
+  return (
+    <Modal
+      isOpen={props.isOpen}
+      onClose={props.onClose}
+      title={props.title}
+      width={900}
+    >
+      <Box
+        sx={{
+          padding: '12px'
+        }}
+      >
+        일간 - 종류
+        주간 - 종류
+      </Box>
+    </Modal>
+  );
+}
+
+
+
+
+
 
 
 
