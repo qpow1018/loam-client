@@ -6,8 +6,15 @@ import Text from '@/components/Text';
 import Button, { ButtonTheme } from '@/components/Button';
 import EmptyBox from '@/components/EmptyBox';
 
-import SectionTitlePanel from './components/SectionTitlePanel';
-import LoadoMenuButton from './components/LoadoMenuButton';
+import SectionTitlePanel from '../shared/SectionTitlePanel';
+import LoadoMenuButton from '../shared/LoadoMenuButton';
+
+
+import AddIcon from '@mui/icons-material/Add';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 
 export default function MainCharacterSection() {
   return (
@@ -45,6 +52,9 @@ export default function MainCharacterSection() {
   );
 }
 
+
+
+
 function LoadoInfoPanel(
   props: {
   }
@@ -53,7 +63,7 @@ function LoadoInfoPanel(
     <Box
       sx={{
         // boxShadow: '0 0 1px #fff',
-        width: 150,
+        width: 120,
       }}
     >
       <LoadoInfoCell text='일단 할일' />
@@ -101,3 +111,5 @@ function LoadoInfoCell(
     </Box>
   );
 }
+
+
