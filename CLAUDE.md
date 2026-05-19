@@ -10,8 +10,8 @@ api/
 app/
 assets/
 components/
-  common/       # 도메인 무관 범용 UI 프리미티브 (Button, Modal, Header 등)
-  <도메인>/     # 둘 이상의 페이지에서 공유되는 도메인 컴포넌트 (필요 시 생성, 예: loado/, maple/)
+common/ # 도메인 무관 범용 UI 프리미티브 (Button, Modal, Header 등)
+<도메인>/ # 둘 이상의 페이지에서 공유되는 도메인 컴포넌트 (필요 시 생성, 예: loado/, maple/)
 define/
 utils/
 types/
@@ -39,10 +39,17 @@ types/
 - 한 폴더 안에 여러 컴포넌트가 있을 때 폴더명은 대표/패밀리 개념을 사용 (예: `button/`에 `Button.tsx` + `IconButton.tsx`)
 - import는 직접 경로 사용 — barrel(`index.ts`) 없음 (예: `@/components/common/button/Button`)
 
+### TypeScript 타입
+
+- 기본은 `type` 사용. `interface`는 declaration merging이 필요할 때만.
+- 새 타입은 `T` 접두사 (예: `TCharacter`, `TLoadoTableProps`).
+- 제네릭 파라미터는 단일 문자(`<T>`)를 사용해도 됨 — 한 타입 내부 스코프라 prefix-T와 혼동 없음.
+
 ### scss 파일
 
 - `*.module.scss` 형태로 작성
-- 컴포넌트 이름과 동일한 이름을 사용 -> camelCase 사용, 파일의 첫문자는 소문자
+- 파일명: 컴포넌트 이름과 동일한 camelCase, 첫문자는 소문자 (예: `loadoTable.module.scss`)
+- 클래스명: kebab-case 사용 (예: `.loado-table`, `.header-row`)
 - css nesting 적용
 - 실제 사용처에선 styles라는 이름으로 import
 - 실제 사용처에선 styles[''] 형태로 사용
