@@ -7,9 +7,9 @@ import theme from '@/style/theme';
 import { loaDB } from '@/libs';
 import { LDB_MyCharacterInfo } from '@/types/loaDB';
 
-import Header from '@/components/Header';
-import Button, { ButtonTheme } from '@/components/Button';
-import IconButton from '@/components/Button/IconButton';
+import Header from '@/components/common/header/Header';
+import Button, { ButtonTheme } from '@/components/common/button/Button';
+import IconButton from '@/components/common/button/IconButton';
 import CreateCharacterModal from './CreateCharacterModal';
 
 import styles from './index.module.scss';

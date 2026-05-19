@@ -3,7 +3,7 @@ import theme from '@/style/theme';
 
 import CloseIcon from '@mui/icons-material/Close';
 
-import styles from './index.module.scss';
+import styles from './modal.module.scss';
 
 export default function ModalBase(
   props: {

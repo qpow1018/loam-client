@@ -2,7 +2,7 @@ import { ButtonBase, SxProps } from '@mui/material';
 
 import theme from '@/style/theme';
 
-import styles from './index.module.scss';
+import styles from './button.module.scss';
 
 export enum ButtonTheme {
   bgPri = 'bgPri',

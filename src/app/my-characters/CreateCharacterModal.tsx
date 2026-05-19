@@ -4,9 +4,9 @@ import theme from '@/style/theme';
 import { loaDB } from '@/libs';
 import { LDB_ClassInfo } from '@/types/loaDB';
 
-import Modal from '@/components/Modal';
-import TextInput from '@/components/Form/TextInput';
-import Button, { ButtonTheme } from '@/components/Button';
+import Modal from '@/components/common/modal/Modal';
+import TextInput from '@/components/common/form/TextInput';
+import Button, { ButtonTheme } from '@/components/common/button/Button';
 
 import styles from './CreateCharacterModal.module.scss';
 

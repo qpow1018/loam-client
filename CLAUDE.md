@@ -10,9 +10,17 @@ api/
 app/
 assets/
 components/
+  common/       # 도메인 무관 범용 UI 프리미티브 (Button, Modal, Header 등)
+  <도메인>/     # 둘 이상의 페이지에서 공유되는 도메인 컴포넌트 (필요 시 생성, 예: loado/, maple/)
 define/
 utils/
 types/
+
+### 컴포넌트 배치 규칙
+
+- 단일 페이지 전용 컴포넌트는 `app/<route>/_component/`에 둔다.
+- 두 번째 페이지가 그 컴포넌트를 필요로 하는 순간 → `src/components/<도메인>/`으로 승격.
+- 도메인과 무관하게 어디서든 쓰이는 범용 UI 프리미티브는 `src/components/common/`.
 
 ## Tech Stack (기술 스택)
 
@@ -24,6 +32,12 @@ types/
 <!-- ## Domain Context (도메인 컨텍스트) -->
 
 ## Coding Convention (코딩 컨벤션)
+
+### 컴포넌트 파일
+
+- 폴더명은 lowercase, 컴포넌트 파일명은 PascalCase (예: `common/button/Button.tsx`)
+- 한 폴더 안에 여러 컴포넌트가 있을 때 폴더명은 대표/패밀리 개념을 사용 (예: `button/`에 `Button.tsx` + `IconButton.tsx`)
+- import는 직접 경로 사용 — barrel(`index.ts`) 없음 (예: `@/components/common/button/Button`)
 
 ### scss 파일
 
