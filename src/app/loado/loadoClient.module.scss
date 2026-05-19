@@ -1,0 +1,19 @@
+.container {
+  padding: 24px;
+  background-color: $gray-800;
+  color: $text-primary;
+  border-radius: $border-radius;
+  font-family: $font-family;
+
+  .title {
+    color: $primary;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .message {
+    color: $text-secondary;
+    font-size: 14px;
+  }
+}
