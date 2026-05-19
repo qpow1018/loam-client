@@ -1,7 +1,5 @@
-import LoadoComponent from './index';
+import LoadoClient from "./LoadoClient";
 
 export default function LoadoPage() {
-  return (
-    <LoadoComponent />
-  );
+  return <LoadoClient />;
 }
