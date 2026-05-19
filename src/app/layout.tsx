@@ -1,8 +1,14 @@
 import type { Metadata } from "next";
+import { Noto_Sans_KR } from 'next/font/google';
 
-import '@/style/reset.scss';
-import '@/style/fonts.scss';
-import '@/style/global.scss';
+import '@/assets/reset.scss';
+import '@/assets/global.scss';
+
+const notoSansKr = Noto_Sans_KR({
+  variable: '--font-noto-sans-kr',
+  subsets: ['latin'],
+  weight: ['400', '500', '700', '900'],
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
+    <html lang="ko" className={notoSansKr.variable}>
       <body>{children}</body>
     </html>
   );

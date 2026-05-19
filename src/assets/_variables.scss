@@ -1,0 +1,62 @@
+// Base
+$white: #fff;
+$black: #000;
+
+// Brand
+$primary: #0d9488; // teal-600
+$secondary: #f87171; // red-400
+
+// Text
+$text-primary: #fff; // white
+$text-secondary: #71717a; // gray-400
+
+// Gray
+$gray-100: #e4e4e7;
+$gray-200: #d4d4d8;
+$gray-300: #a1a1aa;
+$gray-400: #71717a;
+$gray-500: #52525b;
+$gray-600: #3f3f46;
+$gray-700: #27272a;
+$gray-800: #18181b;
+$gray-900: #09090b;
+
+// Red
+$red-100: #fee2e2;
+$red-200: #fecaca;
+$red-300: #fca5a5;
+$red-400: #f87171;
+$red-500: #ef4444;
+$red-600: #dc2626;
+$red-700: #b91c1c;
+$red-800: #991b1b;
+$red-900: #7f1d1d;
+
+// Teal
+$teal-100: #ccfbf1;
+$teal-200: #99f6e4;
+$teal-300: #5eead4;
+$teal-400: #2dd4bf;
+$teal-500: #14b8a6;
+$teal-600: #0d9488;
+$teal-700: #0f766e;
+$teal-800: #115e59;
+$teal-900: #134e4a;
+
+// Overlay
+$bg-overlay: rgba(0, 0, 0, 0.4);
+
+// Size
+$header-height: 56px;
+$modal-header-height: 48px;
+
+// Common
+$font-family: var(--font-noto-sans-kr), sans-serif;
+$border-radius: 6px;
+$transition: 0.25s ease;
+
+// Z-index
+$z-index-header: 100;
+$z-index-modal: 200;
+$z-index-loading: 300;
+$z-index-toast: 400;
