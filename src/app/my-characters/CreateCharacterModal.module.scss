@@ -1,0 +1,13 @@
+@use '@/assets/variables' as *;
+
+.formRowLabel {
+  font-size: 0.813rem;
+  color: $text-secondary;
+}
+
+.classRowLabel {
+  flex-shrink: 0;
+  width: 80px;
+  font-size: 0.688rem;
+  color: $text-secondary;
+}

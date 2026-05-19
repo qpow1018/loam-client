@@ -1,15 +1,9 @@
-import { Box } from '@mui/material';
-
-import BoxSection from '@/components/BoxSection';
+import styles from './ArmorySection.module.scss';
 
 export default function ArmorySection() {
   return (
-    <BoxSection
-      sx={{
-        marginTop: '24px'
-      }}
-    >
+    <section className={styles.section}>
       ArmorySection 섹션
-    </BoxSection>
+    </section>
   );
 }

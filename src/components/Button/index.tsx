@@ -2,7 +2,7 @@ import { ButtonBase, SxProps } from '@mui/material';
 
 import theme from '@/style/theme';
 
-import Text from '@/components/Text';
+import styles from './index.module.scss';
 
 export enum ButtonTheme {
   bgPri = 'bgPri',
@@ -77,9 +77,9 @@ export default function Button(
         ...(Array.isArray(props.sx) ? props.sx : [props.sx])
       ]}
     >
-      <Text sx={{ paddingBottom: '1px' }}>
+      <p className={styles.buttonText}>
         { props.children }
-      </Text>
+      </p>
     </ButtonBase>
   );
 }

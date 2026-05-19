@@ -1,11 +1,9 @@
-import { Box } from '@mui/material';
-
-import BoxSection from '@/components/BoxSection';
+import styles from './MemoSection.module.scss';
 
 export default function MemoSection() {
   return (
-    <BoxSection>
+    <section className={styles.section}>
       메모 섹션
-    </BoxSection>
+    </section>
   );
 }

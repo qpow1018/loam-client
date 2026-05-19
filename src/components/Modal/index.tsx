@@ -1,9 +1,9 @@
 import { Box, Modal, ButtonBase } from '@mui/material';
 import theme from '@/style/theme';
 
-import Text from '@/components/Text';
-
 import CloseIcon from '@mui/icons-material/Close';
+
+import styles from './index.module.scss';
 
 export default function ModalBase(
   props: {
@@ -65,15 +65,9 @@ function ModalHeader(
         borderBottom: `1px solid ${theme.color.border.dark}`,
       }}
     >
-      <Text
-        sx={{
-          fontSize: '0.875rem',
-          fontWeight: 500,
-          color: theme.color.text.secondary,
-        }}
-      >
+      <p className={styles.headerTitle}>
         {props.title}
-      </Text>
+      </p>
 
       <ButtonBase
         onClick={props.onClose}

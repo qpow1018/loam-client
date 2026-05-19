@@ -1,13 +1,9 @@
-import { Box } from '@mui/material';
-
-import BoxSection from '@/components/BoxSection';
+import styles from './MainCharacterSection.module.scss';
 
 export default function MainCharacterSection() {
   return (
-    <BoxSection
-    
-    >
+    <section className={styles.section}>
       로아두 섹션
-    </BoxSection>
+    </section>
   );
 }

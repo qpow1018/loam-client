@@ -5,9 +5,10 @@ import { loaDB } from '@/libs';
 import { LDB_ClassInfo } from '@/types/loaDB';
 
 import Modal from '@/components/Modal';
-import Text from '@/components/Text';
 import TextInput from '@/components/Form/TextInput';
 import Button, { ButtonTheme } from '@/components/Button';
+
+import styles from './CreateCharacterModal.module.scss';
 
 export default function CreateCharacterModal(
   props: {
@@ -103,14 +104,9 @@ function FormRow(
           height: theme.size.inputHeight,
         }}
       >
-        <Text
-          sx={{
-            fontSize: '0.813rem',
-            color: theme.color.text.secondary,
-          }}
-        >
+        <p className={styles.formRowLabel}>
           { props.label }
-        </Text>
+        </p>
       </Box>
 
       <Box sx={{ width: '100%' }}>
@@ -136,16 +132,9 @@ function LoaClassRow(
         marginBottom: '8px',
       }}
     >
-      <Text
-        sx={{
-          flexShrink: 0,
-          width: '80px',
-          fontSize: '0.688rem',
-          color: theme.color.text.secondary,
-        }}
-      >
+      <p className={styles.classRowLabel}>
         { props.mainClassLabel }
-      </Text>
+      </p>
 
       { props.classInfos.map(item =>
         <Button

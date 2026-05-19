@@ -8,13 +8,11 @@ import { loaDB } from '@/libs';
 import { LDB_MyCharacterInfo } from '@/types/loaDB';
 
 import Header from '@/components/Header';
-import BoxSection from '@/components/BoxSection';
-import Text from '@/components/Text';
 import Button, { ButtonTheme } from '@/components/Button';
 import IconButton from '@/components/Button/IconButton';
-import ProfileImage from '@/components/ProfileImage';
-
 import CreateCharacterModal from './CreateCharacterModal';
+
+import styles from './index.module.scss';
 
 import {
   UnfoldMore as UnfoldMoreIcon,
@@ -102,12 +100,7 @@ export default function MyCharacters() {
           padding: '12px'
         }}
       >
-        <BoxSection
-          sx={{
-            width: '1024px',
-            padding: '16px',
-          }}
-        >
+        <section className={styles.characterListSection}>
           <CharacterListHeader
             title={'내 캐릭터 목록'}
             openCreateCharacterModal={openCreateCharacterModal}
@@ -137,17 +130,12 @@ export default function MyCharacters() {
                 padding: '100px 0',
               }}
             >
-              <Text
-                sx={{
-                  fontSize: '0.813rem',
-                  color: theme.color.text.secondary,
-                }}
-              >
+              <p className={styles.emptyMessage}>
                 내 캐릭터를 추가하세요.
-              </Text>
+              </p>
             </Box>
           }
-        </BoxSection>
+        </section>
 
         { isCreateCharacterModalOpen === true &&
           <CreateCharacterModal
@@ -181,14 +169,9 @@ function CharacterListHeader(
         borderBottom: `1px solid ${theme.color.border.default}`,
       }}
     >
-      <Text
-        sx={{
-          fontSize: '0.875rem',
-          fontWeight: 500,
-        }}
-      >
+      <p className={styles.listHeaderTitle}>
         { props.title }
-      </Text>
+      </p>
 
       <Button
         onClick={props.openCreateCharacterModal}
@@ -237,28 +220,18 @@ function CharacterListItem(
           alignItems: 'center'
         }}
       >
-        <ProfileImage
-          url={props.thumbnail}
-        />
+        <div className={styles.profileImage}>
+          <img src={props.thumbnail} alt="" />
+        </div>
 
         <Box sx={{ marginLeft: '12px' }}>
-          <Text
-            sx={{
-              fontSize: '0.875rem',
-              fontWeight: 500
-            }}
-          >
+          <p className={styles.itemNickname}>
             { props.nickname }
-          </Text>
+          </p>
 
-          <Text
-            sx={{
-              fontSize: '0.75rem',
-              color: theme.color.text.secondary,
-            }}
-          >
+          <p className={styles.itemClassName}>
             { props.className }
-          </Text>
+          </p>
         </Box>
       </Box>
 
