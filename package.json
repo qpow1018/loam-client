@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@emotion/react": "^11.11.3",
@@ -14,7 +14,7 @@
     "@mui/icons-material": "^5.15.10",
     "@mui/material": "^5.15.10",
     "axios": "^1.6.7",
-    "next": "15.5.18",
+    "next": "16.2.6",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "uuid": "^9.0.1"
@@ -24,8 +24,8 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/uuid": "^9.0.8",
-    "eslint": "^8",
-    "eslint-config-next": "15.5.18",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "16.2.6",
     "typescript": "^5"
   }
 }
