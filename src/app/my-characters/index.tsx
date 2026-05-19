@@ -7,7 +7,7 @@ import theme from '@/style/theme';
 import { loaDB } from '@/libs';
 import { LDB_MyCharacterInfo } from '@/types/loaDB';
 
-import Layout from '@/components/Layout';
+import Header from '@/components/Header';
 import BoxSection from '@/components/BoxSection';
 import Text from '@/components/Text';
 import Button, { ButtonTheme } from '@/components/Button';
@@ -94,7 +94,9 @@ export default function MyCharacters() {
 
 
   return (
-    <Layout>
+    <>
+      <Header />
+
       <Box
         sx={{
           padding: '12px'
@@ -159,7 +161,7 @@ export default function MyCharacters() {
           />
         }
       </Box>
-    </Layout>
+    </>
   );
 }
 

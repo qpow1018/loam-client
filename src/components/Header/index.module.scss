@@ -1,0 +1,33 @@
+@use '../../style/variables' as v;
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  height: v.$size-header-height;
+  background-color: v.$color-bg-default;
+}
+
+.logo {
+  box-shadow: 0 0 1px red;
+  margin-right: 24px;
+}
+
+.navigation {
+  box-shadow: 0 0 1px red;
+  flex: 1;
+}
+
+.navigationLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  height: 32px;
+  background: red;
+  margin-right: 12px;
+}
+
+.subMenu {
+  box-shadow: 0 0 1px red;
+}

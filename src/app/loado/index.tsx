@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 
-import Layout from '@/components/Layout';
+import Header from '@/components/Header';
 
 import MainCharacterSection from './MainCharacterSection';
 import ArmorySection from './ArmorySection';
@@ -8,7 +8,9 @@ import MemoSection from './MemoSection';
 
 export default function Loado() {
   return (
-    <Layout>
+    <>
+      <Header />
+
       <Box
         sx={{
           padding: '12px',
@@ -29,6 +31,6 @@ export default function Loado() {
           <MemoSection />
         </Box>
       </Box>
-    </Layout>
+    </>
   );
 }

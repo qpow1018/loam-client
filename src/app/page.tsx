@@ -1,10 +1,10 @@
-import { Box } from '@mui/material';
-
-import Layout from '@/components/Layout';
+import Header from '@/components/Header';
 
 export default function Home() {
   return (
-    <Layout>
+    <>
+      <Header />
+
       <div>
         Loam
       </div>
@@ -17,6 +17,6 @@ export default function Home() {
         메모장, 게시판 <br />
         아이스펭 기능등 <br />
       </div>
-    </Layout>
+    </>
   );
 }
