@@ -1,0 +1,23 @@
+.row-label-cell {
+  flex-shrink: 0;
+  width: $loado-label-cell-width;
+  height: $loado-cell-height;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: $gray-100;
+  user-select: none;
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+  }
+}

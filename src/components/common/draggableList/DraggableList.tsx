@@ -19,7 +19,7 @@ import { CSS } from '@dnd-kit/utilities';
 
 import styles from './draggableList.module.scss';
 
-type TDragHandleProps = {
+export type TDragHandleProps = {
   ref: (node: HTMLElement | null) => void;
   onPointerDown?: (event: React.PointerEvent) => void;
 };

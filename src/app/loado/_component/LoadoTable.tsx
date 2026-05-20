@@ -2,61 +2,76 @@
 
 import DraggableList from '@/components/common/draggableList/DraggableList';
 
+import type {
+  TLoadoCellValue,
+  TLoadoColumn,
+  TLoadoRow,
+  TLoadoTableData,
+} from '../_type/loado';
+
+import CellView from './CellView';
+import HeaderCell from './HeaderCell';
+import RowLabelCell from './RowLabelCell';
+
 import styles from './loadoTable.module.scss';
 
-export type TCharacter = { id: string; nickname: string };
-export type TMission = { id: string; title: string };
-
 export default function LoadoTable(props: {
-  characters: TCharacter[];
-  missions: TMission[];
-  onReorderCharacters: (newOrder: TCharacter[]) => void;
-  onReorderMissions: (newOrder: TMission[]) => void;
+  data: TLoadoTableData;
+  onChange: (next: TLoadoTableData) => void;
 }) {
-  const { characters, missions, onReorderCharacters, onReorderMissions } = props;
+  const { data, onChange } = props;
+
+  function updateCell(rowId: string, colId: string, next: TLoadoCellValue) {
+    const prevRow = data.cells[rowId] ?? {};
+    onChange({
+      ...data,
+      cells: {
+        ...data.cells,
+        [rowId]: { ...prevRow, [colId]: next },
+      },
+    });
+  }
 
   return (
     <div className={styles['loado-table']}>
       <div className={styles['header-row']}>
-        <div className={`${styles['cell']} ${styles['label-cell']}`} />
-        <DraggableList<TCharacter>
-          items={props.characters}
+        <div className={styles['corner-cell']} />
+
+        <DraggableList<TLoadoColumn>
+          items={data.columns}
           getId={(c) => c.id}
           direction="horizontal"
-          onReorder={props.onReorderCharacters}
+          onReorder={(cols) => onChange({ ...data, columns: cols })}
         >
-          {(c, { dragHandleProps }) => (
-            <div
-              className={`${styles['cell']} ${styles['handle']}`}
-              ref={dragHandleProps.ref}
-              onPointerDown={dragHandleProps.onPointerDown}
-            >
-              {c.nickname}
-            </div>
+          {(col, { dragHandleProps }) => (
+            <HeaderCell column={col} dragHandleProps={dragHandleProps} />
           )}
         </DraggableList>
       </div>
 
-      <DraggableList<TMission>
-        items={props.missions}
-        getId={(m) => m.id}
+      <DraggableList<TLoadoRow>
+        items={data.rows}
+        getId={(r) => r.id}
         direction="vertical"
-        onReorder={props.onReorderMissions}
+        onReorder={(rows) => onChange({ ...data, rows })}
       >
-        {(m, { dragHandleProps }) => (
-          <div className={styles['row']}>
-            <div
-              className={`${styles['cell']} ${styles['label-cell']} ${styles['handle']}`}
-              ref={dragHandleProps.ref}
-              onPointerDown={dragHandleProps.onPointerDown}
-            >
-              {m.title}
+        {(row, { dragHandleProps }) =>
+          row.kind === 'divider' ? (
+            <div className={styles['row-divider']} {...dragHandleProps} />
+          ) : (
+            <div className={styles['row']}>
+              <RowLabelCell row={row} dragHandleProps={dragHandleProps} />
+              {data.columns.map((col) => (
+                <CellView
+                  key={col.id}
+                  row={row}
+                  cell={data.cells[row.id]?.[col.id]}
+                  onChange={(next) => updateCell(row.id, col.id, next)}
+                />
+              ))}
             </div>
-            {props.characters.map((c) => (
-              <div key={c.id} className={styles['cell']} />
-            ))}
-          </div>
-        )}
+          )
+        }
       </DraggableList>
     </div>
   );

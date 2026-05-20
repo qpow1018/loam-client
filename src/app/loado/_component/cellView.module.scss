@@ -1,0 +1,45 @@
+.cell {
+  flex-shrink: 0;
+  width: $loado-cell-width;
+  height: $loado-cell-height;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  color: $gray-100;
+  user-select: none;
+  background: transparent;
+  border: none;
+
+  &.checkbox {
+    cursor: pointer;
+    font-size: 1.25rem;
+
+    &:hover:not(:disabled) {
+      background-color: $gray-600;
+    }
+  }
+
+  &.text {
+    padding: 0 8px;
+    outline: none;
+
+    &:focus {
+      background-color: $gray-600;
+    }
+  }
+
+  &.gauge {
+    cursor: pointer;
+    font-variant-numeric: tabular-nums;
+
+    &:hover:not(:disabled) {
+      background-color: $gray-600;
+    }
+  }
+
+  &.inactive {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
