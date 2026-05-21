@@ -14,7 +14,7 @@ import styles from './loadoClient.module.scss';
 // 시드 데이터는 결정적(deterministic) ID로 작성한다.
 // 모듈 로드 시 uuid를 호출하면 SSR/CSR 사이에 ID가 어긋나 hydration 에러가 난다.
 // 사용자가 행/열을 새로 추가할 때 비로소 uuid를 호출한다.
-const SEED_STATE: TLoadoTableData = {
+const MOCK_DATA: TLoadoTableData = {
   columns: [
     { id: 'seed-char-1', name: '캐릭터1' },
     { id: 'seed-char-2', name: '캐릭터2' },
@@ -65,18 +65,78 @@ const SEED_STATE: TLoadoTableData = {
       cellRole: 'checkbox',
     },
   ],
-  cells: {},
+  cells: {
+    'seed-row-guild': {
+      'seed-char-1': {
+        kind: 'checkbox',
+        checkboxState: 'checked',
+        text: '오늘',
+        cycleKey: 'mock',
+        lastAccumulatedCycleKey: 'mock',
+      },
+      'seed-char-2': {
+        kind: 'checkbox',
+        checkboxState: 'unchecked',
+        text: '',
+        cycleKey: 'mock',
+        lastAccumulatedCycleKey: 'mock',
+      },
+    },
+    'seed-row-chaosgate': {
+      'seed-char-1': {
+        kind: 'checkbox',
+        checkboxState: 'skip',
+        text: '',
+        cycleKey: 'mock',
+        lastAccumulatedCycleKey: 'mock',
+      },
+      'seed-char-2': {
+        kind: 'checkbox',
+        checkboxState: 'none',
+        text: '메모만',
+        cycleKey: 'mock',
+        lastAccumulatedCycleKey: 'mock',
+      },
+    },
+    'seed-row-weekly-memo': {
+      'seed-char-1': {
+        kind: 'text',
+        checkboxState: 'none',
+        text: '주간 메모 내용',
+        cycleKey: 'mock',
+        lastAccumulatedCycleKey: 'mock',
+      },
+    },
+    'seed-row-chaos': {
+      'seed-char-1': {
+        kind: 'restGauge',
+        checkboxState: 'none',
+        text: '',
+        restGauge: 80,
+        cycleKey: 'mock',
+        lastAccumulatedCycleKey: 'mock',
+      },
+      'seed-char-2': {
+        kind: 'restGauge',
+        checkboxState: 'none',
+        text: '',
+        restGauge: 160,
+        cycleKey: 'mock',
+        lastAccumulatedCycleKey: 'mock',
+      },
+    },
+  },
 };
 
 export default function LoadoClient() {
   const [hydrated, setHydrated] = useState(false);
 
-  const [loadoTableData, setLoadoTableData] = useState<TLoadoTableData>(SEED_STATE);
+  const [loadoTableData, setLoadoTableData] = useState<TLoadoTableData>(MOCK_DATA);
 
   // 클라이언트 마운트 시 저장된 상태가 있으면 교체. 동시에 휴식게이지 누적도 1회 반영.
   // localStorage 읽기는 클라이언트 마운트 이후에만 가능하므로 이 패턴이 불가피하다.
   useEffect(() => {
-    const base = storage.get<TLoadoTableData>(StorageKey.LOADO_TABLE, SEED_STATE);
+    const base = storage.get<TLoadoTableData>(StorageKey.LOADO_TABLE, MOCK_DATA);
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoadoTableData(syncRestGaugeCycles(base));
     setHydrated(true);

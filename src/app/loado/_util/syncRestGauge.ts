@@ -3,7 +3,7 @@ import { cyclesBetween, getCurrentCycleKey } from './cycleKey';
 import { transitionRestGauge } from './restGauge';
 
 // state 안의 휴식게이지 셀들을 현재 사이클까지 진행시킨다.
-// 직전 사이클에서의 수행 여부는 cell.doneCycleKey === lastAccumulatedCycleKey로 판정.
+// 직전 사이클에서의 수행 여부는 cell.checkboxState === 'checked' && cell.cycleKey === lastAccumulatedCycleKey로 판정.
 // 그 이전 사이클들은 미수행으로 가정(데이터 없음).
 export function syncRestGaugeCycles(
   state: TLoadoTableData,
@@ -41,18 +41,22 @@ export function syncRestGaugeCycles(
         currentCycleKey,
         row.resetPeriod,
       );
-      let value = cell.value;
+      let value = cell.restGauge ?? 0;
       for (let i = 0; i < cycles; i++) {
         const didPerform =
-          i === 0 && cell.doneCycleKey === cell.lastAccumulatedCycleKey;
+          i === 0 &&
+          cell.checkboxState === 'checked' &&
+          cell.cycleKey === cell.lastAccumulatedCycleKey;
         value = transitionRestGauge({ current: value, didPerform });
       }
 
       nextRow[colId] = {
+        ...cell,
         kind: 'restGauge',
-        value,
+        restGauge: value,
+        cycleKey: currentCycleKey,
         lastAccumulatedCycleKey: currentCycleKey,
-        doneCycleKey: null,
+        checkboxState: 'unchecked',
       };
       rowChanged = true;
     }

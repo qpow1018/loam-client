@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { X } from 'lucide-react';
+import { MdClose } from 'react-icons/md';
 
 import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 
@@ -64,7 +64,7 @@ export default function Modal(props: {
             onClick={onClose}
             aria-label="닫기"
           >
-            <X size={20} />
+            <MdClose size={20} />
           </button>
         )}
 

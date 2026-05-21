@@ -12,10 +12,11 @@ import type {
 } from '@/app/loado/_type/loado';
 
 import DraggableList from '@/components/common/draggableList/DraggableList';
+import { createEmptyCell } from '../_util/createEmptyCell';
 import CornerCell from './CornerCell';
 import HeaderCell from './HeaderCell';
 import RowLabelCell from './RowLabelCell';
-import CellView from './CellView';
+import ContentCell from './ContentCell';
 import TaskModal from './TaskModal';
 
 import styles from './loadoTable.module.scss';
@@ -123,10 +124,10 @@ export default function LoadoTable(props: {
                 onEdit={() => openTaskModal(row.id)}
               />
               {data.columns.map((col) => (
-                <CellView
+                <ContentCell
                   key={col.id}
                   row={row}
-                  cell={data.cells[row.id]?.[col.id]}
+                  cell={data.cells[row.id]?.[col.id] ?? createEmptyCell(row)}
                   onChange={(next) => updateCell(row.id, col.id, next)}
                 />
               ))}

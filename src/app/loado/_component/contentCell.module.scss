@@ -1,0 +1,43 @@
+.content-cell {
+  position: relative;
+  flex-shrink: 0;
+  width: $loado-cell-width;
+  min-height: $loado-cell-height;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13px;
+  color: $text-primary;
+  cursor: pointer;
+
+  .text {
+    font-size: 13px;
+    color: $text-primary;
+  }
+
+  .tooltip {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 6px;
+    padding: 6px 8px;
+    background-color: $gray-700;
+    color: $text-primary;
+    font-size: 11px;
+    border-radius: $border-radius;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  &:hover {
+    background-color: $gray-700;
+
+    .tooltip {
+      display: block;
+    }
+  }
+}

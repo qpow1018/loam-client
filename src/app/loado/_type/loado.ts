@@ -30,19 +30,9 @@ export type TLoadoResetPeriod =
 
 export type TLoadoCellRole = 'checkbox' | 'text' | 'restGauge';
 
-export type TLoadoCellValue =
-  | { kind: 'checkbox'; checked: boolean; cycleKey: string }
-  | { kind: 'text'; text: string; cycleKey: string }
-  | {
-      kind: 'restGauge';
-      value: number;
-      lastAccumulatedCycleKey: string;
-      doneCycleKey?: string | null; // 사용자가 "오늘 수행함"으로 표시한 사이클 키. 없으면 미수행.
-    };
-
-export type TLoadoCellValueTest = {
+export type TLoadoCellValue = {
   kind: TLoadoCellRole;
-  checkboxState: 'checked' | 'unchecked' | 'pause' | 'empty';
+  checkboxState: 'checked' | 'unchecked' | 'skip' | 'none';
   text: string;
   restGauge?: number;
   cycleKey: string;

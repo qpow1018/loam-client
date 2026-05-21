@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Plus } from 'lucide-react';
+import { MdAdd } from 'react-icons/md';
 
 import styles from './cornerCell.module.scss';
 
@@ -50,7 +50,7 @@ export default function CornerCell(props: {
         aria-expanded={isMenuOpen}
         aria-label="추가 메뉴 열기"
       >
-        <Plus size={18} />
+        <MdAdd size={18} />
       </button>
 
       {isMenuOpen && (

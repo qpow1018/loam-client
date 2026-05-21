@@ -1,0 +1,37 @@
+.content {
+  padding: 24px;
+  min-height: 240px;
+}
+
+.footer {
+  display: flex;
+  gap: 8px;
+  padding: 16px 24px;
+  border-top: 1px solid $gray-500;
+
+  .button {
+    height: 36px;
+    padding: 0 16px;
+    border-radius: 4px;
+    font-size: 0.813rem;
+    font-weight: 500;
+    color: $text-primary;
+    transition: background-color $transition;
+  }
+
+  .button-cancel {
+    background-color: $gray-600;
+
+    &:hover {
+      background-color: $gray-500;
+    }
+  }
+
+  .button-submit {
+    background-color: $teal-600;
+
+    &:hover {
+      background-color: $teal-500;
+    }
+  }
+}

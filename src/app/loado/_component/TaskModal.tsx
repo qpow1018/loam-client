@@ -54,7 +54,7 @@ export default function TaskModal(props: {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={isEdit ? '할일 수정' : '할일 추가'} width={680}>
-      <div className={styles['body']}>
+      <div className={styles['task-modal-content']}>
         <label className={styles['field']}>
           <span className={styles['field-label']}>이름</span>
           <input
