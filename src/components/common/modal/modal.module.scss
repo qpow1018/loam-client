@@ -1,5 +1,44 @@
-.headerTitle {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: $text-secondary;
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: $z-index-modal;
+  background-color: $bg-overlay;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .modal {
+    position: relative;
+    margin-bottom: 80px;
+    background-color: $gray-700;
+    border-radius: $border-radius;
+
+    .header {
+      display: flex;
+      align-items: center;
+      height: $modal-header-height;
+      padding: 0 16px;
+      border-bottom: 1px solid $gray-500;
+
+      .header-title {
+        font-size: 14px;
+        font-weight: 500;
+        color: $text-primary;
+      }
+    }
+
+    .close-button {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      color: $text-primary;
+    }
+  }
 }

@@ -1,89 +1,75 @@
-import { Box, Modal, ButtonBase } from '@mui/material';
-import theme from '@/style/theme';
+'use client';
 
-import CloseIcon from '@mui/icons-material/Close';
+import { useEffect } from 'react';
+import { X } from 'lucide-react';
+
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 
 import styles from './modal.module.scss';
 
-export default function ModalBase(
-  props: {
-    isOpen: boolean;
-    onClose: () => void;
-    children: React.ReactNode;
-    title: string;
-    width?: number;
-  }
-) {
-  return (
-    <Modal
-      open={props.isOpen}
-      onClose={props.onClose}
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        '.MuiBackdrop-root': {
-          backgroundColor: theme.color.background.overlay,
-        },
-      }}
-    >
-      <div style={{ outline: 'none' }}>
-        <Box
-          sx={{
-            borderRadius: theme.common.borderRadius,
-            backgroundColor: theme.color.background.default,
-            marginBottom: '80px',
-            width: props.width !== undefined ? props.width : 480,
-          }}
-        >
-          <ModalHeader
-            title={props.title}
-            onClose={props.onClose}
-          />
+export default function Modal(props: {
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+  title?: string;
+  isShowCloseButton?: boolean;
+  isDismissable?: boolean;
+  width?: number;
+}) {
+  const {
+    isOpen,
+    onClose,
+    children,
+    title,
+    isShowCloseButton = true,
+    isDismissable = true,
+    width = 480,
+  } = props;
 
-          { props.children }
-        </Box>
+  useBodyScrollLock(isOpen);
+
+  useEffect(() => {
+    if (!isOpen || !isDismissable) return;
+
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose();
+    }
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, isDismissable, onClose]);
+
+  if (!isOpen) return null;
+
+  function handleBackdropMouseDown(e: React.MouseEvent<HTMLDivElement>) {
+    if (!isDismissable) return;
+    if (e.target === e.currentTarget) onClose();
+  }
+
+  return (
+    <div className={styles['modal-backdrop']} onMouseDown={handleBackdropMouseDown}>
+      <div className={styles['modal']} style={{ width }}>
+        {title !== undefined && (
+          <div className={styles['header']}>
+            <p className={styles['header-title']}>{title}</p>
+          </div>
+        )}
+
+        {isShowCloseButton && (
+          <button
+            type="button"
+            className={styles['close-button']}
+            onClick={onClose}
+            aria-label="닫기"
+          >
+            <X size={20} />
+          </button>
+        )}
+
+        {children}
       </div>
-    </Modal>
-  );
-}
-
-function ModalHeader(
-  props: {
-    title: string;
-    onClose: () => void;
-  }
-) {
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '0 8px 0 16px',
-        height: `${theme.size.modalHeaderHeight}px`,
-        borderBottom: `1px solid ${theme.color.border.dark}`,
-      }}
-    >
-      <p className={styles.headerTitle}>
-        {props.title}
-      </p>
-
-      <ButtonBase
-        onClick={props.onClose}
-        sx={{
-          borderRadius: '50%',
-          transition: theme.common.transition,
-          width: 32,
-          height: 32,
-          color: theme.color.text.secondary,
-          '&:hover': {
-            color: theme.color.text.primary,
-          }
-        }}
-      >
-        <CloseIcon />
-      </ButtonBase>
-    </Box>
+    </div>
   );
 }
