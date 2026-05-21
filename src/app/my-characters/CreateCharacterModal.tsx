@@ -39,9 +39,7 @@ export default function CreateCharacterModal(
             value={props.nickname}
             onChange={props.onChangeNickname}
             placeholder='캐릭터 닉네임을 입력하세요'
-            sx={{
-              width: 280,
-            }}
+            className={styles['nickname-input']}
           />
         </FormRow>
 
