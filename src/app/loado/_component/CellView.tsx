@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import type { TLoadoCellValue, TLoadoDataRow } from '../_type/loado';
 import { getCurrentCycleKey, isWeekdayActive } from '../_util/cycleKey';
-import { DEFAULT_REST_GAUGE_CONFIG } from '../_util/restGauge';
+import { REST_GAUGE } from '../_util/restGauge';
 
 import styles from './cellView.module.scss';
 
@@ -50,7 +50,6 @@ export default function CellView({ row, cell, onChange }: TProps) {
   }
 
   // restGauge
-  const config = row.restGaugeConfig ?? DEFAULT_REST_GAUGE_CONFIG;
   const gauge =
     cell?.kind === 'restGauge'
       ? cell
@@ -76,7 +75,7 @@ export default function CellView({ row, cell, onChange }: TProps) {
       }
       title={isDone ? '오늘 수행 표시됨 (다시 클릭하면 해제)' : '클릭하면 오늘 수행 표시'}
     >
-      {gauge.value}/{config.max}
+      {gauge.value}/{REST_GAUGE.max}
       {isDone ? ' ✓' : ''}
     </button>
   );

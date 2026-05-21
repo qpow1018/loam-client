@@ -1,6 +1,6 @@
 import type { TLoadoCellValue, TLoadoTableData } from '../_type/loado';
 import { cyclesBetween, getCurrentCycleKey } from './cycleKey';
-import { DEFAULT_REST_GAUGE_CONFIG, transitionRestGauge } from './restGauge';
+import { transitionRestGauge } from './restGauge';
 
 // state 안의 휴식게이지 셀들을 현재 사이클까지 진행시킨다.
 // 직전 사이클에서의 수행 여부는 cell.doneCycleKey === lastAccumulatedCycleKey로 판정.
@@ -18,7 +18,6 @@ export function syncRestGaugeCycles(
       if (existing) nextCells[row.id] = existing;
       continue;
     }
-    const config = row.restGaugeConfig ?? DEFAULT_REST_GAUGE_CONFIG;
     const currentCycleKey = getCurrentCycleKey(row.resetPeriod, now);
     const rowCells = state.cells[row.id];
     if (!rowCells) continue;
@@ -46,7 +45,7 @@ export function syncRestGaugeCycles(
       for (let i = 0; i < cycles; i++) {
         const didPerform =
           i === 0 && cell.doneCycleKey === cell.lastAccumulatedCycleKey;
-        value = transitionRestGauge({ current: value, didPerform, config });
+        value = transitionRestGauge({ current: value, didPerform });
       }
 
       nextRow[colId] = {
