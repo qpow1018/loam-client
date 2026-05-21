@@ -7,10 +7,10 @@ import styles from './cornerCell.module.scss';
 
 export default function CornerCell(props: {
   onAddCharacter: () => void;
-  onAddTask: () => void;
+  onClickAddTask: () => void;
   onAddDivider: () => void;
 }) {
-  const { onAddCharacter, onAddTask, onAddDivider } = props;
+  const { onAddCharacter, onClickAddTask, onAddDivider } = props;
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -70,7 +70,7 @@ export default function CornerCell(props: {
               type="button"
               role="menuitem"
               className={styles['menu-item']}
-              onClick={() => selectAndClose(onAddTask)}
+              onClick={() => selectAndClose(onClickAddTask)}
             >
               할일 추가
             </button>
