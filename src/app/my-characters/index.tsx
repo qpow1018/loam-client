@@ -8,7 +8,7 @@ import { loaDB } from '@/libs';
 import { LDB_MyCharacterInfo } from '@/types/loaDB';
 
 import Header from '@/components/common/header/Header';
-import Button, { ButtonTheme } from '@/components/common/button/Button';
+import Button from '@/components/common/button/Button';
 import IconButton from '@/components/common/button/IconButton';
 import CreateCharacterModal from './CreateCharacterModal';
 
@@ -175,7 +175,7 @@ function CharacterListHeader(
 
       <Button
         onClick={props.openCreateCharacterModal}
-        theme={ButtonTheme.bgPri}
+        theme='bg-pri'
       >
         추가하기
       </Button>
@@ -203,11 +203,8 @@ function CharacterListItem(
     >
       <IconButton
         onClick={props.onClickMoveButton}
-        buttonSize={32}
-        iconSize={16}
-        sx={{
-          backgroundColor: 'transparent',
-        }}
+        size='small'
+        className={styles['unfold-button']}
       >
         <UnfoldMoreIcon />
       </IconButton>

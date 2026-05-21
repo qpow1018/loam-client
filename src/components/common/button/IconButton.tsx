@@ -1,39 +1,34 @@
-import { ButtonBase, SxProps } from '@mui/material';
+import styles from './iconButton.module.scss';
 
-import theme from '@/style/theme';
+type TIconButtonSize = 'small' | 'medium' | 'large';
 
-export default function IconButton(
-  props: {
-    onClick?: () => void;
-    children: React.ReactNode;
-    buttonSize?: number | string;
-    iconSize?: number | string;
-    sx?: SxProps;
-  }
-) {
+export default function IconButton(props: {
+  size?: TIconButtonSize;
+  isDisabled?: boolean;
+  className?: string;
+  onClick?: () => void;
+  children: React.ReactNode;
+}) {
+  const {
+    size = 'medium',
+    isDisabled = false,
+    className,
+    onClick,
+    children,
+  } = props;
+
   return (
-    <ButtonBase
-      onClick={props.onClick}
-      sx={[
-        {
-          flexShrink: 0,
-          borderRadius: '50%',
-          transition: theme.common.transition,
-          width: props.buttonSize !== undefined ? props.buttonSize: `${theme.size.iconButtonSize}px`,
-          height: props.buttonSize !== undefined ? props.buttonSize: `${theme.size.iconButtonSize}px`,
-          backgroundColor: theme.color.dark.gray3,
-          color: theme.color.text.secondary,
-          '&:hover': {
-            backgroundColor: theme.color.dark.gray5,
-          },
-          '& .MuiSvgIcon-root': {
-            fontSize: props.iconSize !== undefined ? props.iconSize : '18px'
-          }
-        },
-        ...(Array.isArray(props.sx) ? props.sx : [props.sx])
-      ]}
+    <button
+      type="button"
+      className={`
+        ${styles['icon-btn']}
+        ${styles[`size-${size}`]}
+        ${className ?? ''}
+      `}
+      disabled={isDisabled}
+      onClick={onClick}
     >
-      { props.children }
-    </ButtonBase>
+      {children}
+    </button>
   );
 }

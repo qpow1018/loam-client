@@ -6,7 +6,7 @@ import { LDB_ClassInfo } from '@/types/loaDB';
 
 import Modal from '@/components/common/modal/Modal';
 import TextInput from '@/components/common/form/TextInput';
-import Button, { ButtonTheme } from '@/components/common/button/Button';
+import Button from '@/components/common/button/Button';
 
 import styles from './CreateCharacterModal.module.scss';
 
@@ -67,12 +67,9 @@ export default function CreateCharacterModal(
         >
           <Button
             onClick={props.createMyCharacter}
-            theme={ButtonTheme.bgPri}
-            sx={{
-              width: 120,
-              height: 40,
-              fontSize: '0.813rem'
-            }}
+            theme='bg-pri'
+            size='medium'
+            className={styles['add-button']}
           >
             추가하기
           </Button>
@@ -140,14 +137,10 @@ function LoaClassRow(
         <Button
           key={item.value}
           onClick={() => props.onClickClassValue(item.value)}
-          theme={item.value === props.currentClassValue ? ButtonTheme.bgGray : ButtonTheme.bdGray}
+          theme={item.value === props.currentClassValue ? 'bg-gray600' : 'bd-gray'}
           isRound={true}
-          sx={{
-            width: '88px',
-            height: '32px',
-            fontSize: '0.688rem',
-            marginLeft: '8px'
-          }}
+          size='small'
+          className={styles['class-toggle']}
         >
           { item.label }
         </Button>

@@ -1,3 +1,114 @@
-.buttonText {
-  padding-bottom: 1px;
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex-shrink: 0;
+  position: relative;
+  border: 1px solid transparent;
+  border-radius: $border-radius;
+  transition: background-color $transition, border-color $transition, color $transition;
+  font-family: $font-family;
+  font-weight: 500;
+  min-width: 80px;
+  padding: 0 12px;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  &.theme-bg-pri {
+    background-color: $primary;
+    border-color: $primary;
+    color: $text-primary;
+
+    &:hover:not(:disabled) {
+      background-color: $teal-500;
+      border-color: $teal-500;
+    }
+  }
+
+  &.theme-bg-sec {
+    background-color: $secondary;
+    border-color: $secondary;
+    color: $text-primary;
+
+    &:hover:not(:disabled) {
+      background-color: $red-300;
+      border-color: $red-300;
+    }
+  }
+
+  &.theme-bg-gray600 {
+    background-color: $gray-600;
+    border-color: $gray-600;
+    color: $text-primary;
+
+    &:hover:not(:disabled) {
+      background-color: $gray-500;
+      border-color: $gray-500;
+    }
+  }
+
+  &.theme-bd-gray {
+    background-color: transparent;
+    border-color: $gray-500;
+    color: $text-primary;
+
+    &:hover:not(:disabled) {
+      border-color: $gray-400;
+    }
+  }
+
+  &.size-small {
+    height: 32px;
+    font-size: 12px;
+  }
+
+  &.size-medium {
+    height: 36px;
+    font-size: 13px;
+  }
+
+  &.size-large {
+    height: 40px;
+    font-size: 14px;
+  }
+
+  &.is-round {
+    border-radius: 60px;
+  }
+
+  &.is-full-width {
+    width: 100%;
+  }
+
+  &.is-loading {
+    color: transparent;
+    cursor: wait;
+    pointer-events: none;
+  }
 }
+
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin-top: -8px;
+  margin-left: -8px;
+  border: 2px solid $white;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+

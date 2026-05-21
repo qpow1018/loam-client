@@ -39,3 +39,11 @@
     object-fit: cover;
   }
 }
+
+.unfold-button {
+  background-color: transparent;
+
+  &:hover:not(:disabled) {
+    background-color: transparent;
+  }
+}
