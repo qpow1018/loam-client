@@ -13,6 +13,7 @@ components/
 common/ # 도메인 무관 범용 UI 프리미티브 (Button, Modal, Header 등)
 <도메인>/ # 둘 이상의 페이지에서 공유되는 도메인 컴포넌트 (필요 시 생성, 예: loado/, maple/)
 define/
+hooks/ # 범용 커스텀 훅 (useBodyScrollLock 등)
 utils/
 types/
 
