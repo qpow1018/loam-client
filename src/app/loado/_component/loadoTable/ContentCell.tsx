@@ -3,7 +3,8 @@
 import { useState } from 'react';
 
 import type { TLoadoCellValue } from '@/app/loado/_type/loado';
-import { getCurrentCycleKey, isWeekdayActive } from '@/app/loado/_util/cycleKey';
+import { isWeekdayActive } from '@/app/loado/_util/cycleKey';
+import { commitCellWrite } from '@/app/loado/_util/cell';
 
 import CellSettingsModal from './cellSettingsModal/CellSettingsModal';
 import TextEditModal from './textEditModal/TextEditModal';
@@ -39,19 +40,17 @@ export default function ContentCell(props: {
       return;
     }
     if (shouldSkip) return;
-    onChange({
-      ...cell,
-      checkboxState: cell.checkboxState === 'checked' ? 'unchecked' : 'checked',
-    });
+    onChange(
+      commitCellWrite({
+        ...cell,
+        checkboxState: cell.checkboxState === 'checked' ? 'unchecked' : 'checked',
+      }),
+    );
   }
 
   function handleSaveText(next: string) {
     if (cell.role !== 'text') return;
-    onChange({
-      ...cell,
-      text: next,
-      cycleKey: getCurrentCycleKey(cell.resetPeriod),
-    });
+    onChange(commitCellWrite({ ...cell, text: next }));
     setIsTextEditModalOpen(false);
   }
 

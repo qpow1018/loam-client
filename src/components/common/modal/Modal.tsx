@@ -58,13 +58,13 @@ export default function Modal(props: {
 
   if (!isOpen) return null;
 
-  function handleBackdropMouseDown(e: React.MouseEvent<HTMLDivElement>) {
+  function handleBackdropClick(e: React.MouseEvent<HTMLDivElement>) {
     if (!isDismissable) return;
     if (e.target === e.currentTarget) onClose();
   }
 
   return (
-    <div className={styles['modal-backdrop']} onMouseDown={handleBackdropMouseDown}>
+    <div className={styles['modal-backdrop']} onClick={handleBackdropClick}>
       <div className={styles['modal']} style={{ width }}>
         {title !== undefined && (
           <div className={styles['header']}>

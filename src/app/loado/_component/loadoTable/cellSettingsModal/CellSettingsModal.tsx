@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import type { TLoadoCellValue } from '@/app/loado/_type/loado';
 import { PERIOD_OPTIONS, TYPE_OPTIONS } from '@/app/loado/_define/options';
-import { changeCellRole } from '@/app/loado/_util/cell';
+import { changeCellRole, commitCellWrite } from '@/app/loado/_util/cell';
 
 import Modal from '@/components/common/modal/Modal';
 import ButtonGroup from '@/components/common/buttonGroup/ButtonGroup';
@@ -40,7 +40,7 @@ export default function CellSettingsModal(props: {
             options={PERIOD_OPTIONS}
             value={tempCellValue.resetPeriod}
             onChange={(resetPeriod) =>
-              setTempCellValue((prev) => ({ ...prev, resetPeriod }))
+              setTempCellValue((prev) => commitCellWrite({ ...prev, resetPeriod }))
             }
           />
         </FormRow>

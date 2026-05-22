@@ -18,6 +18,7 @@ export default function TextInput(props: {
   } = props;
 
   function handleKeyUp(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.nativeEvent.isComposing) return;
     if (e.key === 'Enter' && onPressEnter !== undefined) {
       onPressEnter();
     }

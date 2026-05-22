@@ -9,6 +9,13 @@ import type {
 import { cyclesBetween, getCurrentCycleKey } from './cycleKey';
 import { getNextRestGauge } from './restGauge';
 
+// 사용자 write 시점에 cycleKey/lastAccumulatedCycleKey를 모두 현재 사이클로 맞춰주는 헬퍼.
+// 둘 중 하나만 갱신하면 다음 syncCells가 셀을 "사이클 미스매치"로 보고 wipe해버린다.
+export function commitCellWrite<T extends TLoadoCellValue>(updated: T): T {
+  const cycleKey = getCurrentCycleKey(updated.resetPeriod);
+  return { ...updated, cycleKey, lastAccumulatedCycleKey: cycleKey };
+}
+
 export function createEmptyCell(row: TLoadoDataRow): TLoadoCellValue {
   const cycleKey = getCurrentCycleKey(row.resetPeriod);
   const base = {

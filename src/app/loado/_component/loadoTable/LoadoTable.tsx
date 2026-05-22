@@ -31,10 +31,25 @@ export default function LoadoTable() {
   const [data, setData] = useState<TLoadoTableData | null>(null);
 
   // localStorage는 클라이언트에서만 접근 가능하므로 마운트 이후에 읽어 상태에 반영한다.
+  // 추가로 탭 visibility / focus / 주기적 polling으로 06:00 KST 사이클 경계를 넘었을 때 자동 재동기화.
   useEffect(() => {
     const base = storage.get<TLoadoTableData>(StorageKey.LOADO_TABLE, EMPTY_DATA);
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setData(syncCells(base));
+
+    function resync() {
+      setData((prev) => (prev === null ? prev : syncCells(prev)));
+    }
+
+    document.addEventListener('visibilitychange', resync);
+    window.addEventListener('focus', resync);
+    const intervalId = window.setInterval(resync, 5 * 60 * 1000);
+
+    return () => {
+      document.removeEventListener('visibilitychange', resync);
+      window.removeEventListener('focus', resync);
+      window.clearInterval(intervalId);
+    };
   }, []);
 
   // 데이터가 바뀌면 localStorage에 저장. 로드 전(null)엔 스킵.
