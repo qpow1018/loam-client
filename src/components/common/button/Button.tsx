@@ -1,6 +1,6 @@
 import styles from './button.module.scss';
 
-type TButtonTheme = 'bg-pri' | 'bg-sec' | 'bg-gray600' | 'bd-gray';
+export type TButtonTheme = 'bg-pri' | 'bg-sec' | 'bg-gray600' | 'bd-gray';
 
 type TButtonSize = 'small' | 'medium' | 'large';
 

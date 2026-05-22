@@ -1,0 +1,14 @@
+.row-divider {
+  width: 100%;
+  height: 12px;
+  border-bottom: 1px solid $gray-700;
+  cursor: grab;
+
+  &:hover {
+    background-color: $gray-700;
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
+}

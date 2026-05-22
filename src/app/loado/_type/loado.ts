@@ -23,7 +23,6 @@ export type TLoadoDataRow = {
   id: string;
   name: string;
   iconUrl?: string;
-  height?: number;
   resetPeriod: TLoadoResetPeriod;
   cellRole: TLoadoCellRole;
 };

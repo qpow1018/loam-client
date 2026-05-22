@@ -3,16 +3,20 @@
 import { useEffect, useRef, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 
+import type { TLoadoDataRow } from '@/app/loado/_type/loado';
+import TaskModal from './taskModal/TaskModal';
+
 import styles from './cornerCell.module.scss';
 
 export default function CornerCell(props: {
   onAddCharacter: () => void;
-  onClickAddTask: () => void;
+  onAddTask: (row: TLoadoDataRow) => void;
   onAddDivider: () => void;
 }) {
-  const { onAddCharacter, onClickAddTask, onAddDivider } = props;
+  const { onAddCharacter, onAddTask, onAddDivider } = props;
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -40,53 +44,68 @@ export default function CornerCell(props: {
     setIsMenuOpen(false);
   }
 
-  return (
-    <div className={styles['corner-cell']} ref={containerRef}>
-      <button
-        type="button"
-        className={styles['add-button']}
-        onClick={() => setIsMenuOpen((v) => !v)}
-        aria-haspopup="menu"
-        aria-expanded={isMenuOpen}
-        aria-label="추가 메뉴 열기"
-      >
-        <MdAdd size={18} />
-      </button>
+  function handleTaskSubmit(next: TLoadoDataRow) {
+    onAddTask(next);
+    setIsTaskModalOpen(false);
+  }
 
-      {isMenuOpen && (
-        <ul className={styles['menu']} role="menu">
-          <li>
-            <button
-              type="button"
-              role="menuitem"
-              className={styles['menu-item']}
-              onClick={() => selectAndClose(onAddCharacter)}
-            >
-              캐릭터 추가
-            </button>
-          </li>
-          <li>
-            <button
-              type="button"
-              role="menuitem"
-              className={styles['menu-item']}
-              onClick={() => selectAndClose(onClickAddTask)}
-            >
-              할일 추가
-            </button>
-          </li>
-          <li>
-            <button
-              type="button"
-              role="menuitem"
-              className={styles['menu-item']}
-              onClick={() => selectAndClose(onAddDivider)}
-            >
-              할일 구분선 추가
-            </button>
-          </li>
-        </ul>
+  return (
+    <>
+      <div className={styles['corner-cell']} ref={containerRef}>
+        <button
+          type="button"
+          className={styles['add-button']}
+          onClick={() => setIsMenuOpen((v) => !v)}
+          aria-haspopup="menu"
+          aria-expanded={isMenuOpen}
+          aria-label="추가 메뉴 열기"
+        >
+          <MdAdd size={18} />
+        </button>
+
+        {isMenuOpen && (
+          <ul className={styles['menu']} role="menu">
+            <li>
+              <button
+                type="button"
+                role="menuitem"
+                className={styles['menu-item']}
+                onClick={() => selectAndClose(onAddCharacter)}
+              >
+                캐릭터 추가
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                role="menuitem"
+                className={styles['menu-item']}
+                onClick={() => selectAndClose(() => setIsTaskModalOpen(true))}
+              >
+                할일 추가
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                role="menuitem"
+                className={styles['menu-item']}
+                onClick={() => selectAndClose(onAddDivider)}
+              >
+                할일 구분선 추가
+              </button>
+            </li>
+          </ul>
+        )}
+      </div>
+
+      {isTaskModalOpen && (
+        <TaskModal
+          isOpen={isTaskModalOpen}
+          onClose={() => setIsTaskModalOpen(false)}
+          onSubmit={handleTaskSubmit}
+        />
       )}
-    </div>
+    </>
   );
 }

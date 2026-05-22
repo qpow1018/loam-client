@@ -1,35 +1,62 @@
 'use client';
 
+import { useState } from 'react';
+
 import type { TDragHandleProps } from '@/components/common/draggableList/DraggableList';
 
 import type { TLoadoDataRow } from '../../_type/loado';
+import TaskModal from './taskModal/TaskModal';
 
 import styles from './rowLabelCell.module.scss';
 
 export default function RowLabelCell(props: {
-  row: TLoadoDataRow;
   dragHandleProps: TDragHandleProps;
-  onEdit: () => void;
+  row: TLoadoDataRow;
+  onChange: (next: TLoadoDataRow) => void;
+  onDelete: () => void;
 }) {
-  const { row, dragHandleProps, onEdit } = props;
+  const { dragHandleProps, row, onChange, onDelete } = props;
+
+  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
 
   function handleContextMenu(e: React.MouseEvent) {
     e.preventDefault();
-    onEdit();
+    setIsTaskModalOpen(true);
+  }
+
+  function handleSubmit(next: TLoadoDataRow) {
+    onChange(next);
+    setIsTaskModalOpen(false);
+  }
+
+  function handleDelete() {
+    setIsTaskModalOpen(false);
+    onDelete();
   }
 
   return (
-    <div
-      className={styles['row-label-cell']}
-      {...dragHandleProps}
-      onContextMenu={handleContextMenu}
-    >
-      {row.iconUrl ? (
-        // 외부 사용자 입력 URL이므로 Next/Image의 호스트 화이트리스트로 못 다룸 → img 사용
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={row.iconUrl} alt="" />
-      ) : null}
-      {row.name}
-    </div>
+    <>
+      <div
+        {...dragHandleProps}
+        className={styles['row-label-cell']}
+        onContextMenu={handleContextMenu}
+      >
+        <div className={styles['icon-box']}>
+          {row.iconUrl && <img src={row.iconUrl} alt="" />}
+        </div>
+
+        {row.name}
+      </div>
+
+      {isTaskModalOpen && (
+        <TaskModal
+          isOpen={isTaskModalOpen}
+          onClose={() => setIsTaskModalOpen(false)}
+          editingData={row}
+          onSubmit={handleSubmit}
+          onDelete={handleDelete}
+        />
+      )}
+    </>
   );
 }

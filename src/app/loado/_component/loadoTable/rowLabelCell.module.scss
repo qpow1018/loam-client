@@ -4,20 +4,35 @@
   height: $loado-cell-height;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 8px;
-  font-size: 0.875rem;
-  color: $gray-100;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: $text-primary;
   user-select: none;
   cursor: grab;
 
-  &:active {
-    cursor: grabbing;
+  .icon-box {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+
+    img {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+    }
   }
 
-  img {
-    width: 20px;
-    height: 20px;
-    object-fit: contain;
+  &:hover {
+    background-color: $gray-700;
+  }
+
+  &:active {
+    cursor: grabbing;
   }
 }

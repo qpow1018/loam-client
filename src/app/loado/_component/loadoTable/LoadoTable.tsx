@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import type {
@@ -16,8 +15,8 @@ import { createEmptyCell } from '../../_util/createEmptyCell';
 import CornerCell from './CornerCell';
 import HeaderCell from './HeaderCell';
 import RowLabelCell from './RowLabelCell';
+import RowDivider from './RowDivider';
 import ContentCell from './ContentCell';
-import TaskModal from './taskModal/TaskModal';
 
 import styles from './loadoTable.module.scss';
 
@@ -26,9 +25,6 @@ export default function LoadoTable(props: {
   onChange: (next: TLoadoTableData) => void;
 }) {
   const { data, onChange } = props;
-
-  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
-  const [targetTaskRowId, setTargetTaskRowId] = useState<string | null>(null);
 
   function updateCell(rowId: string, colId: string, next: TLoadoCellValue) {
     const prevRow = data.cells[rowId] ?? {};
@@ -46,36 +42,23 @@ export default function LoadoTable(props: {
     onChange({ ...data, columns: [...data.columns, newColumn] });
   }
 
-  function openTaskModal(rowId: string | null) {
-    setTargetTaskRowId(rowId);
-    setIsTaskModalOpen(true);
-  }
-
-  function closeTaskModal() {
-    setIsTaskModalOpen(false);
-    setTargetTaskRowId(null);
-  }
-
   function addDivider() {
     const newRow: TLoadoRow = { kind: 'divider', id: uuidv4() };
     onChange({ ...data, rows: [...data.rows, newRow] });
   }
 
-  function handleTaskSubmit(row: TLoadoDataRow) {
-    if (targetTaskRowId === null) {
-      onChange({ ...data, rows: [...data.rows, row] });
-    } else {
-      onChange({
-        ...data,
-        rows: data.rows.map((r) => (r.id === row.id ? row : r)),
-      });
-    }
-    closeTaskModal();
+  function addTaskRow(row: TLoadoDataRow) {
+    onChange({ ...data, rows: [...data.rows, row] });
   }
 
-  function handleTaskDelete() {
-    if (targetTaskRowId === null) return;
-    const rowId = targetTaskRowId;
+  function updateRow(next: TLoadoDataRow) {
+    onChange({
+      ...data,
+      rows: data.rows.map((r) => (r.id === next.id ? next : r)),
+    });
+  }
+
+  function deleteRow(rowId: string) {
     const restCells = { ...data.cells };
     delete restCells[rowId];
     onChange({
@@ -83,7 +66,6 @@ export default function LoadoTable(props: {
       rows: data.rows.filter((r) => r.id !== rowId),
       cells: restCells,
     });
-    closeTaskModal();
   }
 
   return (
@@ -91,7 +73,7 @@ export default function LoadoTable(props: {
       <div className={styles['header-row']}>
         <CornerCell
           onAddCharacter={addCharacter}
-          onClickAddTask={() => openTaskModal(null)}
+          onAddTask={addTaskRow}
           onAddDivider={addDivider}
         />
 
@@ -115,13 +97,14 @@ export default function LoadoTable(props: {
       >
         {(row, { dragHandleProps }) =>
           row.kind === 'divider' ? (
-            <div className={styles['row-divider']} {...dragHandleProps} />
+            <RowDivider dragHandleProps={dragHandleProps} onDelete={() => deleteRow(row.id)} />
           ) : (
             <div className={styles['row']}>
               <RowLabelCell
-                row={row}
                 dragHandleProps={dragHandleProps}
-                onEdit={() => openTaskModal(row.id)}
+                row={row}
+                onChange={updateRow}
+                onDelete={() => deleteRow(row.id)}
               />
               {data.columns.map((col) => (
                 <ContentCell
@@ -134,18 +117,6 @@ export default function LoadoTable(props: {
           )
         }
       </DraggableList>
-
-      {isTaskModalOpen && (
-        <TaskModal
-          isOpen={isTaskModalOpen}
-          onClose={closeTaskModal}
-          editingData={data.rows.find(
-            (r): r is TLoadoDataRow => r.id === targetTaskRowId && r.kind === 'data',
-          )}
-          onSubmit={handleTaskSubmit}
-          onDelete={targetTaskRowId !== null ? handleTaskDelete : undefined}
-        />
-      )}
     </div>
   );
 }

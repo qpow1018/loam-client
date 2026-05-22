@@ -3,24 +3,14 @@
   padding: 12px;
   border-radius: 8px;
   background-color: $gray-800;
-}
 
-.header-row {
-  display: flex;
-  border-bottom: 1px solid $gray-500;
-}
+  .header-row {
+    display: flex;
+    border-bottom: 1px solid $gray-500;
+  }
 
-.row {
-  display: flex;
-  border-bottom: 1px solid $gray-700;
-}
-
-.row-divider {
-  height: 12px;
-  background-color: $gray-700;
-  cursor: grab;
-
-  &:active {
-    cursor: grabbing;
+  .row {
+    display: flex;
+    border-bottom: 1px solid $gray-700;
   }
 }
