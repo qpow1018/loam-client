@@ -1,19 +1,19 @@
 'use client';
 
-import ButtonGroup from '@/components/common/buttonGroup/ButtonGroup';
-import TextInput from '@/components/common/form/TextInput';
-
 import type { TLoadoCellValue } from '@/app/loado/_type/loado';
 
-import styles from './restGaugeFields.module.scss';
+import ButtonGroup from '@/components/common/buttonGroup/ButtonGroup';
+import TextInput from '@/components/common/form/TextInput';
+import FormRow from './FormRow';
 
 type TNumericField = 'restGauge' | 'restGaugeSkipThreshold';
 
 export default function RestGaugeFields(props: {
   cell: TLoadoCellValue;
-  onPatch: (updates: Partial<TLoadoCellValue>) => void;
+  onChangeTempCellValue: (updates: Partial<TLoadoCellValue>) => void;
 }) {
-  const { cell, onPatch } = props;
+  const { cell, onChangeTempCellValue } = props;
+
   const binaryValue =
     cell.checkboxState === 'checked' || cell.checkboxState === 'unchecked'
       ? cell.checkboxState
@@ -22,45 +22,38 @@ export default function RestGaugeFields(props: {
   function handleNumericChange(field: TNumericField) {
     return (raw: string) => {
       const digits = raw.replace(/[^\d]/g, '');
-      onPatch({ [field]: digits === '' ? null : Number(digits) });
+      onChangeTempCellValue({ [field]: digits === '' ? null : Number(digits) });
     };
   }
 
   return (
     <>
-      <div className={styles['field']}>
-        <span className={styles['field-label']}>상태</span>
+      <FormRow label="상태">
         <ButtonGroup
           options={[
             { value: 'unchecked', label: '미체크' },
             { value: 'checked', label: '체크' },
           ]}
           value={binaryValue}
-          onChange={(checkboxState) => onPatch({ checkboxState })}
+          onChange={(checkboxState) => onChangeTempCellValue({ checkboxState })}
         />
-      </div>
+      </FormRow>
 
-      <div className={styles['field']}>
-        <span className={styles['field-label']}>휴식게이지</span>
-        <div className={styles['text-input-wrapper']}>
-          <TextInput
-            value={cell.restGauge !== null ? String(cell.restGauge) : ''}
-            onChange={handleNumericChange('restGauge')}
-            placeholder="0"
-          />
-        </div>
-      </div>
+      <FormRow label="휴식게이지">
+        <TextInput
+          value={cell.restGauge !== null ? String(cell.restGauge) : ''}
+          onChange={handleNumericChange('restGauge')}
+          placeholder="0"
+        />
+      </FormRow>
 
-      <div className={styles['field']}>
-        <span className={styles['field-label']}>임계값</span>
-        <div className={styles['text-input-wrapper']}>
-          <TextInput
-            value={cell.restGaugeSkipThreshold !== null ? String(cell.restGaugeSkipThreshold) : ''}
-            onChange={handleNumericChange('restGaugeSkipThreshold')}
-            placeholder="0"
-          />
-        </div>
-      </div>
+      <FormRow label="임계값">
+        <TextInput
+          value={cell.restGaugeSkipThreshold !== null ? String(cell.restGaugeSkipThreshold) : ''}
+          onChange={handleNumericChange('restGaugeSkipThreshold')}
+          placeholder="0"
+        />
+      </FormRow>
     </>
   );
 }

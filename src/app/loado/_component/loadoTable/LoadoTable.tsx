@@ -17,7 +17,7 @@ import CornerCell from './CornerCell';
 import HeaderCell from './HeaderCell';
 import RowLabelCell from './RowLabelCell';
 import ContentCell from './ContentCell';
-import TaskModal from './TaskModal';
+import TaskModal from './taskModal/TaskModal';
 
 import styles from './loadoTable.module.scss';
 

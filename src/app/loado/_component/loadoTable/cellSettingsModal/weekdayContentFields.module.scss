@@ -1,44 +1,27 @@
-.field {
+.weekday-picker {
   display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 12px;
+  gap: 6px;
 
-  .field-label {
+  .weekday-button {
+    width: 36px;
+    height: 36px;
+    border-radius: 4px;
     font-size: 13px;
     color: $text-secondary;
-    min-width: 48px;
-  }
+    background-color: $gray-600;
+    transition: background-color $transition;
 
-  .text-input-wrapper {
-    width: 360px;
-  }
-
-  .weekday-picker {
-    display: flex;
-    gap: 6px;
-
-    .weekday-button {
-      width: 36px;
-      height: 36px;
-      border-radius: 4px;
-      font-size: 13px;
-      color: $text-secondary;
-      background-color: $gray-600;
-      transition: background-color $transition;
-
-      &:hover {
-        background-color: $gray-500;
-      }
+    &:hover {
+      background-color: $gray-500;
     }
+  }
 
-    .weekday-button-selected {
-      color: $text-primary;
-      background-color: $teal-600;
+  .weekday-button-selected {
+    color: $text-primary;
+    background-color: $secondary;
 
-      &:hover {
-        background-color: $teal-500;
-      }
+    &:hover {
+      background-color: $red-500;
     }
   }
 }

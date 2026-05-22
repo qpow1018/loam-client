@@ -1,0 +1,16 @@
+.form-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+
+  .form-row-label {
+    font-size: 13px;
+    color: $text-secondary;
+    min-width: 80px;
+  }
+
+  .form-row-content {
+    width: 100%;
+  }
+}

@@ -6,7 +6,7 @@ import type { TLoadoCellValue, TLoadoCheckboxState } from '@/app/loado/_type/loa
 import { getCurrentCycleKey, isWeekdayActive } from '@/app/loado/_util/cycleKey';
 
 import CellSettingsModal from './cellSettingsModal/CellSettingsModal';
-import TextEditModal from './TextEditModal';
+import TextEditModal from './textEditModal/TextEditModal';
 
 import styles from './contentCell.module.scss';
 
@@ -22,30 +22,19 @@ export default function ContentCell(props: {
   const [isCellSettingsModalOpen, setIsCellSettingsModalOpen] = useState(false);
 
   const isInactiveWeekday =
-    cell.role === 'weekdayContent' &&
-    cell.weekdays !== undefined &&
-    !isWeekdayActive(cell.weekdays);
+    cell.role === 'weekdayContent' && !isWeekdayActive(cell.weekdays);
 
-  const displayedState: TLoadoCheckboxState = isInactiveWeekday
-    ? 'skip'
-    : cell.checkboxState;
+  const displayedState: TLoadoCheckboxState = isInactiveWeekday ? 'skip' : cell.checkboxState;
 
   const displayedText = cell.role === 'text' ? cell.text : cell.checkboxLabel;
 
   function handleClick() {
-    switch (cell.role) {
-      case 'checkbox':
-      case 'restGauge':
-        toggleCheckbox();
-        break;
-      case 'weekdayContent':
-        if (isInactiveWeekday) return;
-        toggleCheckbox();
-        break;
-      case 'text':
-        setIsTextEditModalOpen(true);
-        break;
+    if (cell.role === 'text') {
+      setIsTextEditModalOpen(true);
+      return;
     }
+    if (isInactiveWeekday) return;
+    toggleCheckbox();
   }
 
   function toggleCheckbox() {

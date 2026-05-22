@@ -7,6 +7,8 @@ import type { TLoadoResetPeriod, TLoadoCellRole, TLoadoCellValue } from '@/app/l
 import Modal from '@/components/common/modal/Modal';
 import ButtonGroup from '@/components/common/buttonGroup/ButtonGroup';
 import Tabs from '@/components/common/tabs/Tabs';
+import Button from '@/components/common/button/Button';
+import FormRow from './FormRow';
 import CheckboxFields from './CheckboxFields';
 import TextFields from './TextFields';
 import RestGaugeFields from './RestGaugeFields';
@@ -35,63 +37,66 @@ export default function CellSettingsModal(props: {
 }) {
   const { isOpen, cell, onClose, onSubmit } = props;
 
-  const [pendingCell, setPendingCell] = useState<TLoadoCellValue>(cell);
-  const patch = (updates: Partial<TLoadoCellValue>) =>
-    setPendingCell((prev) => ({ ...prev, ...updates }));
+  const [tempCellValue, setTempCellValue] = useState<TLoadoCellValue>(cell);
+
+  function handleChangeTempCellValue(updates: Partial<TLoadoCellValue>) {
+    setTempCellValue((prev) => ({ ...prev, ...updates }));
+  }
 
   function handleSubmit() {
-    onSubmit(pendingCell);
+    onSubmit(tempCellValue);
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="할 일 설정" width={800}>
+    <Modal isOpen={isOpen} onClose={onClose} title="할 일 설정" width={600}>
       <div className={styles['cell-settings-modal-content']}>
-        <div className={styles['field']}>
-          <span className={styles['field-label']}>주기</span>
+        <FormRow label="주기">
           <ButtonGroup
             options={PERIOD_OPTIONS}
-            value={pendingCell.resetPeriod}
-            onChange={(resetPeriod) => patch({ resetPeriod })}
+            value={tempCellValue.resetPeriod}
+            onChange={(resetPeriod) => handleChangeTempCellValue({ resetPeriod })}
           />
-        </div>
+        </FormRow>
 
         <div className={styles['tabs-section']}>
           <Tabs
             options={TYPE_OPTIONS}
-            value={pendingCell.role}
-            onChange={(role) => patch({ role })}
+            value={tempCellValue.role}
+            onChange={(role) => handleChangeTempCellValue({ role })}
           />
         </div>
 
-        {pendingCell.role === 'checkbox' && (
-          <CheckboxFields cell={pendingCell} onPatch={patch} />
+        {tempCellValue.role === 'checkbox' && (
+          <CheckboxFields cell={tempCellValue} onChangeTempCellValue={handleChangeTempCellValue} />
         )}
 
-        {pendingCell.role === 'text' && <TextFields cell={pendingCell} onPatch={patch} />}
-
-        {pendingCell.role === 'restGauge' && (
-          <RestGaugeFields cell={pendingCell} onPatch={patch} />
+        {tempCellValue.role === 'text' && (
+          <TextFields cell={tempCellValue} onChangeTempCellValue={handleChangeTempCellValue} />
         )}
 
-        {pendingCell.role === 'weekdayContent' && (
-          <WeekdayContentFields cell={pendingCell} onPatch={patch} />
+        {tempCellValue.role === 'restGauge' && (
+          <RestGaugeFields cell={tempCellValue} onChangeTempCellValue={handleChangeTempCellValue} />
         )}
 
-        <div className={styles['footer']}>
-          <button
-            type="button"
-            className={`${styles['button']} ${styles['button-cancel']}`}
-            onClick={onClose}
-          >
+        {tempCellValue.role === 'weekdayContent' && (
+          <WeekdayContentFields
+            cell={tempCellValue}
+            onChangeTempCellValue={handleChangeTempCellValue}
+          />
+        )}
+
+        <div className={styles['action-buttons']}>
+          <Button theme="bg-gray600" size="large" onClick={onClose}>
             취소
-          </button>
-          <button
-            type="button"
-            className={`${styles['button']} ${styles['button-submit']}`}
+          </Button>
+          <Button
+            theme="bg-pri"
+            size="large"
+            className={styles['submit-btn']}
             onClick={handleSubmit}
           >
-            수정
-          </button>
+            수정하기
+          </Button>
         </div>
       </div>
     </Modal>

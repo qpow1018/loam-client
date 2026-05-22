@@ -74,7 +74,9 @@ export function cyclesBetween(
 }
 
 // weekdayContent 행: 오늘이 활성 요일인지. weekdays: 0=월~6=일.
+// 빈 배열은 "제약 없음" → 항상 활성으로 본다.
 export function isWeekdayActive(weekdays: number[], now: Date = new Date()): boolean {
+  if (weekdays.length === 0) return true;
   const shifted = shiftToKstCycleDate(now);
   const utcDow = shifted.getUTCDay(); // 0=Sun..6=Sat
   const mondayBased = (utcDow + 6) % 7; // 0=Mon..6=Sun

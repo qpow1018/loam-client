@@ -1,17 +1,18 @@
 'use client';
 
+import type { TLoadoCellValue } from '@/app/loado/_type/loado';
+
 import ButtonGroup from '@/components/common/buttonGroup/ButtonGroup';
 import TextInput from '@/components/common/form/TextInput';
 
-import type { TLoadoCellValue } from '@/app/loado/_type/loado';
-
-import styles from './checkboxFields.module.scss';
+import FormRow from './FormRow';
 
 export default function CheckboxFields(props: {
   cell: TLoadoCellValue;
-  onPatch: (updates: Partial<TLoadoCellValue>) => void;
+  onChangeTempCellValue: (updates: Partial<TLoadoCellValue>) => void;
 }) {
-  const { cell, onPatch } = props;
+  const { cell, onChangeTempCellValue } = props;
+
   const binaryValue =
     cell.checkboxState === 'checked' || cell.checkboxState === 'unchecked'
       ? cell.checkboxState
@@ -19,27 +20,23 @@ export default function CheckboxFields(props: {
 
   return (
     <>
-      <div className={styles['field']}>
-        <span className={styles['field-label']}>상태</span>
+      <FormRow label="상태">
         <ButtonGroup
           options={[
             { value: 'unchecked', label: '미체크' },
             { value: 'checked', label: '체크' },
           ]}
           value={binaryValue}
-          onChange={(checkboxState) => onPatch({ checkboxState })}
+          onChange={(checkboxState) => onChangeTempCellValue({ checkboxState })}
         />
-      </div>
+      </FormRow>
 
-      <div className={styles['field']}>
-        <span className={styles['field-label']}>라벨</span>
-        <div className={styles['text-input-wrapper']}>
-          <TextInput
-            value={cell.checkboxLabel}
-            onChange={(checkboxLabel) => onPatch({ checkboxLabel })}
-          />
-        </div>
-      </div>
+      <FormRow label="라벨">
+        <TextInput
+          value={cell.checkboxLabel}
+          onChange={(checkboxLabel) => onChangeTempCellValue({ checkboxLabel })}
+        />
+      </FormRow>
     </>
   );
 }
