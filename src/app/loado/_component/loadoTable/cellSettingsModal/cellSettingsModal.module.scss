@@ -2,10 +2,6 @@
   padding: 24px;
   min-height: 240px;
 
-  .tabs-section {
-    margin-bottom: 24px;
-  }
-
   .field {
     display: flex;
     align-items: center;
@@ -17,10 +13,10 @@
       color: $text-secondary;
       min-width: 48px;
     }
+  }
 
-    .text-input-wrapper {
-      width: 360px;
-    }
+  .tabs-section {
+    margin-bottom: 24px;
   }
 
   .footer {

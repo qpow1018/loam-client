@@ -42,7 +42,7 @@ export default function TaskModal(props: {
         kind: 'data',
         id: uuidv4(),
         name: trimmedName,
-        resetPeriod: { kind: 'daily' },
+        resetPeriod: 'daily',
         cellRole: 'checkbox',
       });
     }

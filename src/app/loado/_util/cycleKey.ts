@@ -32,7 +32,7 @@ export function getCurrentCycleKey(
   resetPeriod: TLoadoResetPeriod,
   now: Date = new Date(),
 ): string {
-  switch (resetPeriod.kind) {
+  switch (resetPeriod) {
     case 'permanent':
       return 'permanent';
     case 'daily': {
@@ -66,10 +66,10 @@ export function cyclesBetween(
   to: string,
   period: TLoadoResetPeriod,
 ): number {
-  if (period.kind === 'permanent') return 0;
+  if (period === 'permanent') return 0;
   const days = daysBetweenCycleKeys(from, to);
   if (days <= 0) return 0;
-  if (period.kind === 'weekly') return Math.floor(days / 7);
+  if (period === 'weekly') return Math.floor(days / 7);
   return days; // daily
 }
 

@@ -1,0 +1,16 @@
+.field {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+
+  .field-label {
+    font-size: 13px;
+    color: $text-secondary;
+    min-width: 48px;
+  }
+
+  .text-input-wrapper {
+    width: 360px;
+  }
+}

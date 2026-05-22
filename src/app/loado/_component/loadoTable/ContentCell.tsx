@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 
-import type { TLoadoCellValue, TLoadoDataRow } from '@/app/loado/_type/loado';
+import type { TLoadoCellValue, TLoadoCheckboxState } from '@/app/loado/_type/loado';
 import { getCurrentCycleKey, isWeekdayActive } from '@/app/loado/_util/cycleKey';
 
-import CellSettingsModal from './CellSettingsModal';
+import CellSettingsModal from './cellSettingsModal/CellSettingsModal';
 import TextEditModal from './TextEditModal';
 
 import styles from './contentCell.module.scss';
@@ -13,26 +13,27 @@ import styles from './contentCell.module.scss';
 import { MdCheckBox, MdCheckBoxOutlineBlank, MdPause } from 'react-icons/md';
 
 export default function ContentCell(props: {
-  row: TLoadoDataRow;
   cell: TLoadoCellValue;
   onChange: (next: TLoadoCellValue) => void;
 }) {
-  const { row, cell, onChange } = props;
+  const { cell, onChange } = props;
 
   const [isTextEditModalOpen, setIsTextEditModalOpen] = useState(false);
   const [isCellSettingsModalOpen, setIsCellSettingsModalOpen] = useState(false);
 
   const isInactiveWeekday =
-    cell.kind === 'weekdayContent' &&
-    row.weekdays !== undefined &&
-    !isWeekdayActive(row.weekdays);
+    cell.role === 'weekdayContent' &&
+    cell.weekdays !== undefined &&
+    !isWeekdayActive(cell.weekdays);
 
-  const displayedState: TLoadoCellValue['checkboxState'] = isInactiveWeekday
+  const displayedState: TLoadoCheckboxState = isInactiveWeekday
     ? 'skip'
     : cell.checkboxState;
 
+  const displayedText = cell.role === 'text' ? cell.text : cell.checkboxLabel;
+
   function handleClick() {
-    switch (cell.kind) {
+    switch (cell.role) {
       case 'checkbox':
       case 'restGauge':
         toggleCheckbox();
@@ -83,9 +84,9 @@ export default function ContentCell(props: {
       >
         {renderStateIcon(displayedState)}
 
-        {cell.text && <span className={styles['text']}>{cell.text}</span>}
+        {displayedText && <span className={styles['text']}>{displayedText}</span>}
 
-        {cell.kind === 'restGauge' && (
+        {cell.role === 'restGauge' && (
           <span className={styles['tooltip']}>휴식게이지 {cell.restGauge ?? 0}</span>
         )}
       </div>
@@ -102,7 +103,6 @@ export default function ContentCell(props: {
       {isCellSettingsModalOpen && (
         <CellSettingsModal
           isOpen={isCellSettingsModalOpen}
-          row={row}
           cell={cell}
           onClose={() => setIsCellSettingsModalOpen(false)}
           onSubmit={handleCellSettingsSubmit}
@@ -112,7 +112,7 @@ export default function ContentCell(props: {
   );
 }
 
-function renderStateIcon(state: TLoadoCellValue['checkboxState']) {
+function renderStateIcon(state: TLoadoCheckboxState) {
   switch (state) {
     case 'checked':
       return <MdCheckBox size={20} />;

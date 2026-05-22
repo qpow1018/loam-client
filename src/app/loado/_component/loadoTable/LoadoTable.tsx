@@ -126,7 +126,6 @@ export default function LoadoTable(props: {
               {data.columns.map((col) => (
                 <ContentCell
                   key={col.id}
-                  row={row}
                   cell={data.cells[row.id]?.[col.id] ?? createEmptyCell(row)}
                   onChange={(next) => updateCell(row.id, col.id, next)}
                 />

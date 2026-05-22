@@ -26,7 +26,7 @@ export function syncRestGaugeCycles(
 
     for (const colId of Object.keys(rowCells)) {
       const cell = rowCells[colId];
-      if (cell.kind !== 'restGauge') {
+      if (cell.role !== 'restGauge') {
         nextRow[colId] = cell;
         continue;
       }
@@ -52,7 +52,7 @@ export function syncRestGaugeCycles(
 
       nextRow[colId] = {
         ...cell,
-        kind: 'restGauge',
+        role: 'restGauge',
         restGauge: value,
         cycleKey: currentCycleKey,
         lastAccumulatedCycleKey: currentCycleKey,
