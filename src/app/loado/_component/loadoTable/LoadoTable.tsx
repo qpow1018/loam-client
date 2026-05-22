@@ -42,6 +42,28 @@ export default function LoadoTable(props: {
     onChange({ ...data, columns: [...data.columns, newColumn] });
   }
 
+  function updateColumn(next: TLoadoColumn) {
+    onChange({
+      ...data,
+      columns: data.columns.map((c) => (c.id === next.id ? next : c)),
+    });
+  }
+
+  function deleteColumn(colId: string) {
+    const nextCells: typeof data.cells = {};
+    for (const [rowId, rowCells] of Object.entries(data.cells)) {
+      const { [colId]: _removed, ...rest } = rowCells;
+      if (Object.keys(rest).length > 0) {
+        nextCells[rowId] = rest;
+      }
+    }
+    onChange({
+      ...data,
+      columns: data.columns.filter((c) => c.id !== colId),
+      cells: nextCells,
+    });
+  }
+
   function addDivider() {
     const newRow: TLoadoRow = { kind: 'divider', id: uuidv4() };
     onChange({ ...data, rows: [...data.rows, newRow] });
@@ -84,7 +106,12 @@ export default function LoadoTable(props: {
           onReorder={(cols) => onChange({ ...data, columns: cols })}
         >
           {(col, { dragHandleProps }) => (
-            <HeaderCell column={col} dragHandleProps={dragHandleProps} />
+            <HeaderCell
+              column={col}
+              dragHandleProps={dragHandleProps}
+              onChange={updateColumn}
+              onDelete={() => deleteColumn(col.id)}
+            />
           )}
         </DraggableList>
       </div>

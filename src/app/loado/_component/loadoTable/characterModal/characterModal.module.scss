@@ -1,0 +1,36 @@
+.character-modal-content {
+  padding: 24px;
+
+  .form-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+
+    .form-row-label {
+      font-size: 13px;
+      color: $text-secondary;
+      min-width: 80px;
+    }
+
+    .form-row-content {
+      width: 100%;
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 12px;
+
+    .delete-btn {
+      margin-right: auto;
+    }
+
+    .submit-btn {
+      width: 120px;
+    }
+  }
+}
