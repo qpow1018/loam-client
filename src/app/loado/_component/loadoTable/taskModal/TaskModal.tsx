@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
+import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import type { TLoadoDataRow } from '@/app/loado/_type/loado';
@@ -13,6 +13,7 @@ import Button from '@/components/common/button/Button';
 import IconButton from '@/components/common/button/IconButton';
 import TextInput from '@/components/common/form/TextInput';
 import IconPickerModal from '@/app/loado/_component/loadoTable/iconPickerModal/IconPickerModal';
+import FormRow from '@/app/loado/_component/loadoTable/FormRow';
 
 import styles from './taskModal.module.scss';
 
@@ -59,9 +60,14 @@ export default function TaskModal(props: {
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} title={isEdit ? '할일 수정' : '할일 추가'} width={600}>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        title={isEdit ? '할일 수정' : '할일 추가'}
+        width={600}
+      >
         <div className={styles['task-modal-content']}>
-          <FormRow label="주기">
+          <FormRow label="기본 주기">
             <ButtonGroup
               options={PERIOD_OPTIONS}
               value={tempRow.resetPeriod}
@@ -158,14 +164,5 @@ export default function TaskModal(props: {
         />
       )}
     </>
-  );
-}
-
-function FormRow(props: { label: string; children: ReactNode }) {
-  return (
-    <div className={styles['form-row']}>
-      <span className={styles['form-row-label']}>{props.label}</span>
-      <div className={styles['form-row-content']}>{props.children}</div>
-    </div>
   );
 }

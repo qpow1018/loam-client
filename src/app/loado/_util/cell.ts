@@ -13,7 +13,7 @@ export function createEmptyCell(row: TLoadoDataRow): TLoadoCellValue {
   return {
     role: row.role,
     resetPeriod: row.resetPeriod,
-    checkboxState: 'none',
+    checkboxState: row.role === 'text' ? 'none' : 'unchecked',
     checkboxLabel: '',
     text: '',
     restGauge: null,

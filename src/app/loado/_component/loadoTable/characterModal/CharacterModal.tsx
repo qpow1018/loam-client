@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
+import { useState } from 'react';
 
 import type { TLoadoColumn } from '@/app/loado/_type/loado';
 
@@ -9,6 +9,7 @@ import Confirm from '@/components/common/modal/Confirm';
 import Button from '@/components/common/button/Button';
 import IconButton from '@/components/common/button/IconButton';
 import TextInput from '@/components/common/form/TextInput';
+import FormRow from '@/app/loado/_component/loadoTable/FormRow';
 
 import styles from './characterModal.module.scss';
 
@@ -101,11 +102,3 @@ export default function CharacterModal(props: {
   );
 }
 
-function FormRow(props: { label: string; children: ReactNode }) {
-  return (
-    <div className={styles['form-row']}>
-      <span className={styles['form-row-label']}>{props.label}</span>
-      <div className={styles['form-row-content']}>{props.children}</div>
-    </div>
-  );
-}

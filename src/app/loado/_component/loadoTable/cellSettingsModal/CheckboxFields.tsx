@@ -5,7 +5,7 @@ import type { TLoadoCellValue } from '@/app/loado/_type/loado';
 import ButtonGroup from '@/components/common/buttonGroup/ButtonGroup';
 import TextInput from '@/components/common/form/TextInput';
 
-import FormRow from './FormRow';
+import FormRow from '@/app/loado/_component/loadoTable/FormRow';
 
 export default function CheckboxFields(props: {
   cell: TLoadoCellValue;

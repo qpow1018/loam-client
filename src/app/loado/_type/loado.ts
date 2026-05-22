@@ -23,6 +23,7 @@ export type TLoadoDataRow = {
   id: string;
   name: string;
   iconUrl?: string;
+  // 신규 셀의 기본값. 셀 단위로 CellSettingsModal에서 따로 변경 가능 — cell이 source of truth.
   resetPeriod: TLoadoResetPeriod;
   role: TLoadoCellRole;
 };
