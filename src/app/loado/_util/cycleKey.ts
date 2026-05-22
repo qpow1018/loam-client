@@ -1,14 +1,22 @@
-import type { TLoadoResetPeriod } from '../_type/loado';
+import type { TLoadoResetPeriod } from '@/app/loado/_type/loado';
 
+// 로스트아크 리셋 규칙
 const KST_OFFSET_MIN = 9 * 60;
-const RESET_HOUR = 6;
+const DAILY_RESET_HOUR_KST = 6;
+// 주간 리셋 요일 — JavaScript Date.getUTCDay() 기준 (0=일, 3=수, 6=토)
+const WEEKLY_RESET_DOW = 3;
+
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 // 현재 시각을 "KST에서 06:00을 0시로 본 가상 날짜"로 옮긴 Date를 돌려준다.
 // 반환된 Date의 UTC 필드(getUTCFullYear 등)를 읽으면 그 가상 날짜가 나온다.
+//
+// 트릭: now.getTime()은 UTC ms. 거기에 KST offset을 더한 ms를 다시 Date로 만들면
+// 그 Date의 UTC 필드를 읽었을 때 KST 시각이 그대로 나온다 (가상 timezone 시프트).
+// 거기서 다시 06:00을 빼면 "06:00을 0시로 보는" 가상 날짜가 된다.
 function shiftToKstCycleDate(now: Date): Date {
   const kstMs = now.getTime() + KST_OFFSET_MIN * 60 * 1000;
-  const cycleMs = kstMs - RESET_HOUR * 60 * 60 * 1000;
+  const cycleMs = kstMs - DAILY_RESET_HOUR_KST * 60 * 60 * 1000;
   return new Date(cycleMs);
 }
 
@@ -19,10 +27,10 @@ function formatYmd(d: Date): string {
   return `${y}-${m}-${day}`;
 }
 
-// shifted Date 기준 직전 수요일(같은 날이면 그대로) 반환. UTC 필드로 계산.
-function alignToPreviousWednesday(shifted: Date): Date {
-  const dow = shifted.getUTCDay(); // 0=Sun..6=Sat
-  const offset = (dow - 3 + 7) % 7; // Wed=3
+// shifted Date 기준 직전 주간 리셋 요일(같은 날이면 그대로) 반환. UTC 필드로 계산.
+function alignToWeeklyReset(shifted: Date): Date {
+  const dow = shifted.getUTCDay();
+  const offset = (dow - WEEKLY_RESET_DOW + 7) % 7;
   const result = new Date(shifted.getTime());
   result.setUTCDate(shifted.getUTCDate() - offset);
   return result;
@@ -40,19 +48,19 @@ export function getCurrentCycleKey(
     }
     case 'weekly': {
       const shifted = shiftToKstCycleDate(now);
-      return formatYmd(alignToPreviousWednesday(shifted));
+      return formatYmd(alignToWeeklyReset(shifted));
     }
   }
 }
 
-export function parseCycleKeyToUtcDate(key: string): Date | null {
+function parseCycleKeyToUtcDate(key: string): Date | null {
   if (key === 'permanent') return null;
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(key);
   if (!m) return null;
   return new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3])));
 }
 
-export function daysBetweenCycleKeys(from: string, to: string): number {
+function daysBetweenCycleKeys(from: string, to: string): number {
   const a = parseCycleKeyToUtcDate(from);
   const b = parseCycleKeyToUtcDate(to);
   if (!a || !b) return 0;

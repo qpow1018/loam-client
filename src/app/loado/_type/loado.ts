@@ -13,7 +13,7 @@ export type TLoadoTableData = {
 export type TLoadoColumn = {
   id: string;
   name: string;
-  width?: number;
+  imageUrl?: string;
 };
 
 export type TLoadoRow = TLoadoDataRow | { kind: 'divider'; id: string };
@@ -24,7 +24,7 @@ export type TLoadoDataRow = {
   name: string;
   iconUrl?: string;
   resetPeriod: TLoadoResetPeriod;
-  cellRole: TLoadoCellRole;
+  role: TLoadoCellRole;
 };
 
 export type TLoadoCellValue = {

@@ -1,4 +1,4 @@
-import type { TLoadoResetPeriod, TLoadoCellRole } from '../_type/loado';
+import type { TLoadoResetPeriod, TLoadoCellRole } from '@/app/loado/_type/loado';
 
 export const PERIOD_OPTIONS: { value: TLoadoResetPeriod; label: string }[] = [
   { value: 'permanent', label: '무기한' },

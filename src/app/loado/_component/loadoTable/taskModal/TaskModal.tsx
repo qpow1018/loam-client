@@ -23,7 +23,7 @@ const EMPTY_ROW: TLoadoDataRow = {
   id: '',
   name: '',
   resetPeriod: 'daily',
-  cellRole: 'checkbox',
+  role: 'checkbox',
 };
 
 export default function TaskModal(props: {
@@ -72,8 +72,8 @@ export default function TaskModal(props: {
           <FormRow label="기본 타입">
             <ButtonGroup
               options={TYPE_OPTIONS}
-              value={tempRow.cellRole}
-              onChange={(cellRole) => handleChangeTempRow({ cellRole })}
+              value={tempRow.role}
+              onChange={(role) => handleChangeTempRow({ role })}
             />
           </FormRow>
 

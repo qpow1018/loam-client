@@ -1,4 +1,4 @@
-// 카오스 던전 기준 휴식게이지 수치.
+// 로스트아크 휴식게이지 수치 (카오스 던전, 가디언 토벌 통일).
 export const REST_GAUGE = {
   max: 200,
   accumPerDay: 20,
@@ -8,7 +8,7 @@ export const REST_GAUGE = {
 
 // 한 사이클이 지난 시점의 게이지 값.
 // 직전 사이클에 수행했다면 임계값 이상에서만 소모, 미수행이면 누적(max로 캡).
-export function transitionRestGauge(args: { current: number; didPerform: boolean }): number {
+export function getNextRestGauge(args: { current: number; didPerform: boolean }): number {
   const { current, didPerform } = args;
   if (didPerform) {
     return current >= REST_GAUGE.consumeThreshold

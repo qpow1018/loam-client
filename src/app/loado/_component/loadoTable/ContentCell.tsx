@@ -24,7 +24,14 @@ export default function ContentCell(props: {
   const isInactiveWeekday =
     cell.role === 'weekdayContent' && !isWeekdayActive(cell.weekdays);
 
-  const displayedState: TLoadoCheckboxState = isInactiveWeekday ? 'skip' : cell.checkboxState;
+  const isRestGaugeBelowThreshold =
+    cell.role === 'restGauge' &&
+    cell.restGaugeSkipThreshold !== null &&
+    (cell.restGauge ?? 0) < cell.restGaugeSkipThreshold;
+
+  const shouldSkip = isInactiveWeekday || isRestGaugeBelowThreshold;
+
+  const displayedState: TLoadoCheckboxState = shouldSkip ? 'skip' : cell.checkboxState;
 
   const displayedText = cell.role === 'text' ? cell.text : cell.checkboxLabel;
 
@@ -33,7 +40,7 @@ export default function ContentCell(props: {
       setIsTextEditModalOpen(true);
       return;
     }
-    if (isInactiveWeekday) return;
+    if (shouldSkip) return;
     toggleCheckbox();
   }
 
