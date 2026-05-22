@@ -18,7 +18,6 @@ export function syncRestGaugeCycles(
       if (existing) nextCells[row.id] = existing;
       continue;
     }
-    const currentCycleKey = getCurrentCycleKey(row.resetPeriod, now);
     const rowCells = state.cells[row.id];
     if (!rowCells) continue;
 
@@ -31,6 +30,7 @@ export function syncRestGaugeCycles(
         nextRow[colId] = cell;
         continue;
       }
+      const currentCycleKey = getCurrentCycleKey(cell.resetPeriod, now);
       if (cell.lastAccumulatedCycleKey === currentCycleKey) {
         nextRow[colId] = cell;
         continue;
@@ -39,7 +39,7 @@ export function syncRestGaugeCycles(
       const cycles = cyclesBetween(
         cell.lastAccumulatedCycleKey,
         currentCycleKey,
-        row.resetPeriod,
+        cell.resetPeriod,
       );
       let value = cell.restGauge ?? 0;
       for (let i = 0; i < cycles; i++) {

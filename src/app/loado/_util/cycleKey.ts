@@ -35,9 +35,7 @@ export function getCurrentCycleKey(
   switch (resetPeriod.kind) {
     case 'permanent':
       return 'permanent';
-    case 'daily':
-    case 'special': {
-      // special은 일일과 동일한 리셋 주기를 쓰고, 요일 활성 여부는 isWeekdayActive로 별도 판단한다.
+    case 'daily': {
       return formatYmd(shiftToKstCycleDate(now));
     }
     case 'weekly': {
@@ -62,7 +60,7 @@ export function daysBetweenCycleKeys(from: string, to: string): number {
 }
 
 // 두 cycleKey 사이에 흐른 "사이클 수"를 계산.
-// daily/special은 일 단위, weekly는 7일을 한 사이클로, permanent는 항상 0.
+// daily는 일 단위, weekly는 7일을 한 사이클로, permanent는 항상 0.
 export function cyclesBetween(
   from: string,
   to: string,
@@ -72,10 +70,10 @@ export function cyclesBetween(
   const days = daysBetweenCycleKeys(from, to);
   if (days <= 0) return 0;
   if (period.kind === 'weekly') return Math.floor(days / 7);
-  return days; // daily, special
+  return days; // daily
 }
 
-// 특수 행: 오늘이 활성 요일인지. weekdays: 0=월~6=일.
+// weekdayContent 행: 오늘이 활성 요일인지. weekdays: 0=월~6=일.
 export function isWeekdayActive(weekdays: number[], now: Date = new Date()): boolean {
   const shifted = shiftToKstCycleDate(now);
   const utcDow = shifted.getUTCDay(); // 0=Sun..6=Sat

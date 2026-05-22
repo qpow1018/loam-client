@@ -2,7 +2,7 @@
 
 import type { TDragHandleProps } from '@/components/common/draggableList/DraggableList';
 
-import type { TLoadoDataRow } from '../_type/loado';
+import type { TLoadoDataRow } from '../../_type/loado';
 
 import styles from './rowLabelCell.module.scss';
 

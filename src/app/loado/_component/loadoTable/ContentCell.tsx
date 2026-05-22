@@ -3,10 +3,10 @@
 import { useState } from 'react';
 
 import type { TLoadoCellValue, TLoadoDataRow } from '@/app/loado/_type/loado';
-import { getCurrentCycleKey } from '@/app/loado/_util/cycleKey';
+import { getCurrentCycleKey, isWeekdayActive } from '@/app/loado/_util/cycleKey';
 
-import CellSettingsModal from './modal/CellSettingsModal';
-import TextEditModal from './modal/TextEditModal';
+import CellSettingsModal from './CellSettingsModal';
+import TextEditModal from './TextEditModal';
 
 import styles from './contentCell.module.scss';
 
@@ -22,10 +22,23 @@ export default function ContentCell(props: {
   const [isTextEditModalOpen, setIsTextEditModalOpen] = useState(false);
   const [isCellSettingsModalOpen, setIsCellSettingsModalOpen] = useState(false);
 
+  const isInactiveWeekday =
+    cell.kind === 'weekdayContent' &&
+    row.weekdays !== undefined &&
+    !isWeekdayActive(row.weekdays);
+
+  const displayedState: TLoadoCellValue['checkboxState'] = isInactiveWeekday
+    ? 'skip'
+    : cell.checkboxState;
+
   function handleClick() {
-    switch (row.cellRole) {
+    switch (cell.kind) {
       case 'checkbox':
       case 'restGauge':
+        toggleCheckbox();
+        break;
+      case 'weekdayContent':
+        if (isInactiveWeekday) return;
         toggleCheckbox();
         break;
       case 'text':
@@ -46,7 +59,7 @@ export default function ContentCell(props: {
     onChange({
       ...cell,
       text: next,
-      cycleKey: getCurrentCycleKey(row.resetPeriod),
+      cycleKey: getCurrentCycleKey(cell.resetPeriod),
     });
     setIsTextEditModalOpen(false);
   }
@@ -68,11 +81,11 @@ export default function ContentCell(props: {
         onClick={handleClick}
         onContextMenu={handleContextMenu}
       >
-        {renderStateIcon(cell.checkboxState)}
+        {renderStateIcon(displayedState)}
 
         {cell.text && <span className={styles['text']}>{cell.text}</span>}
 
-        {row.cellRole === 'restGauge' && (
+        {cell.kind === 'restGauge' && (
           <span className={styles['tooltip']}>휴식게이지 {cell.restGauge ?? 0}</span>
         )}
       </div>

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import Header from '@/components/common/header/Header';
 import { storage, StorageKey } from '@/utils/storage';
 
-import LoadoTable from './_component/LoadoTable';
+import LoadoTable from './_component/loadoTable/LoadoTable';
 import type { TLoadoTableData } from './_type/loado';
 import { syncRestGaugeCycles } from './_util/syncRestGauge';
 
@@ -46,8 +46,9 @@ const MOCK_DATA: TLoadoTableData = {
       id: 'seed-row-chaosgate',
       name: '카오스 게이트',
       // 예시 요일: 수·금·일 = 2, 4, 6 (0=월~6=일)
-      resetPeriod: { kind: 'special', weekdays: [2, 4, 6] },
-      cellRole: 'checkbox',
+      resetPeriod: { kind: 'daily' },
+      cellRole: 'weekdayContent',
+      weekdays: [2, 4, 6],
     },
     { kind: 'divider', id: 'seed-divider-1' },
     {
@@ -69,6 +70,7 @@ const MOCK_DATA: TLoadoTableData = {
     'seed-row-guild': {
       'seed-char-1': {
         kind: 'checkbox',
+        resetPeriod: { kind: 'daily' },
         checkboxState: 'checked',
         text: '오늘',
         cycleKey: 'mock',
@@ -76,6 +78,7 @@ const MOCK_DATA: TLoadoTableData = {
       },
       'seed-char-2': {
         kind: 'checkbox',
+        resetPeriod: { kind: 'daily' },
         checkboxState: 'unchecked',
         text: '',
         cycleKey: 'mock',
@@ -84,16 +87,18 @@ const MOCK_DATA: TLoadoTableData = {
     },
     'seed-row-chaosgate': {
       'seed-char-1': {
-        kind: 'checkbox',
-        checkboxState: 'skip',
+        kind: 'weekdayContent',
+        resetPeriod: { kind: 'daily' },
+        checkboxState: 'unchecked',
         text: '',
         cycleKey: 'mock',
         lastAccumulatedCycleKey: 'mock',
       },
       'seed-char-2': {
-        kind: 'checkbox',
-        checkboxState: 'none',
-        text: '메모만',
+        kind: 'weekdayContent',
+        resetPeriod: { kind: 'daily' },
+        checkboxState: 'checked',
+        text: '',
         cycleKey: 'mock',
         lastAccumulatedCycleKey: 'mock',
       },
@@ -101,6 +106,7 @@ const MOCK_DATA: TLoadoTableData = {
     'seed-row-weekly-memo': {
       'seed-char-1': {
         kind: 'text',
+        resetPeriod: { kind: 'weekly' },
         checkboxState: 'none',
         text: '주간 메모 내용',
         cycleKey: 'mock',
@@ -110,6 +116,7 @@ const MOCK_DATA: TLoadoTableData = {
     'seed-row-chaos': {
       'seed-char-1': {
         kind: 'restGauge',
+        resetPeriod: { kind: 'daily' },
         checkboxState: 'none',
         text: '',
         restGauge: 80,
@@ -118,6 +125,7 @@ const MOCK_DATA: TLoadoTableData = {
       },
       'seed-char-2': {
         kind: 'restGauge',
+        resetPeriod: { kind: 'daily' },
         checkboxState: 'none',
         text: '',
         restGauge: 160,

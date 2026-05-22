@@ -5,6 +5,7 @@ export function createEmptyCell(row: TLoadoDataRow): TLoadoCellValue {
   const cycleKey = getCurrentCycleKey(row.resetPeriod);
   return {
     kind: row.cellRole,
+    resetPeriod: row.resetPeriod,
     checkboxState: 'none',
     text: '',
     cycleKey,

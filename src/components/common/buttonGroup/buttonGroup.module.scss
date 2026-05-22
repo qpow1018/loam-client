@@ -1,0 +1,32 @@
+.button-group {
+  display: inline-flex;
+  padding: 2px;
+  background-color: $gray-800;
+  border-radius: $border-radius;
+  gap: 2px;
+
+  .option {
+    height: 28px;
+    padding: 0 14px;
+    border-radius: 4px;
+    background-color: transparent;
+    color: $text-secondary;
+    font-size: 13px;
+    transition:
+      background-color $transition,
+      color $transition;
+
+    &:hover {
+      color: $text-primary;
+    }
+  }
+
+  .option-selected {
+    background-color: $gray-600;
+    color: $text-primary;
+
+    &:hover {
+      background-color: $gray-600;
+    }
+  }
+}

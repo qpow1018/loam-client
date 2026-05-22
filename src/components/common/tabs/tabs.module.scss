@@ -1,0 +1,29 @@
+.tabs {
+  display: flex;
+  border-bottom: 1px solid $gray-500;
+
+  .tab {
+    padding: 10px 12px;
+    background-color: transparent;
+    color: $text-secondary;
+    font-size: 13px;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition:
+      color $transition,
+      border-color $transition;
+
+    &:hover {
+      color: $text-primary;
+    }
+  }
+
+  .tab-selected {
+    color: $text-primary;
+    border-bottom-color: $red-500;
+
+    &:hover {
+      color: $text-primary;
+    }
+  }
+}

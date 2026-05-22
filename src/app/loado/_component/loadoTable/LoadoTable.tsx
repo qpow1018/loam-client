@@ -12,7 +12,7 @@ import type {
 } from '@/app/loado/_type/loado';
 
 import DraggableList from '@/components/common/draggableList/DraggableList';
-import { createEmptyCell } from '../_util/createEmptyCell';
+import { createEmptyCell } from '../../_util/createEmptyCell';
 import CornerCell from './CornerCell';
 import HeaderCell from './HeaderCell';
 import RowLabelCell from './RowLabelCell';
