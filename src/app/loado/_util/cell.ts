@@ -151,10 +151,7 @@ function syncCell(cell: TLoadoCellValue, currentCycleKey: string): TLoadoCellVal
       let value = cell.restGauge;
       for (let i = 0; i < cycles; i++) {
         // 첫 사이클만 직전 수행 여부를 반영. 그 이전은 데이터 없음 → 미수행으로 가정.
-        const didPerform =
-          i === 0 &&
-          cell.checkboxState === 'checked' &&
-          cell.cycleKey === cell.lastAccumulatedCycleKey;
+        const didPerform = i === 0 && cell.checkboxState === 'checked';
         value = getNextRestGauge({ current: value, didPerform });
       }
       return {

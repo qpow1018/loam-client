@@ -1,11 +1,11 @@
 'use client';
 
+import { useMemo } from 'react';
 import {
   DndContext,
   type DragEndEvent,
   PointerSensor,
   useSensor,
-  useSensors,
   closestCenter,
 } from '@dnd-kit/core';
 import {
@@ -34,7 +34,8 @@ export default function DraggableList<T>(props: {
 }) {
   const { items, getId, direction, onReorder, children, className } = props;
 
-  const sensors = useSensors(useSensor(PointerSensor));
+  const pointerSensor = useSensor(PointerSensor);
+  const sensors = useMemo(() => [pointerSensor], [pointerSensor]);
 
   const ids = items.map(getId);
   const strategy =

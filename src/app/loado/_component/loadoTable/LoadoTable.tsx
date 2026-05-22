@@ -58,64 +58,92 @@ export default function LoadoTable() {
     storage.set(StorageKey.LOADO_TABLE, data);
   }, [data]);
 
+  // children에는 non-null setter를 노출 — 핸들러마다 null 가드를 반복하지 않기 위함.
+  function setNonNullData(action: React.SetStateAction<TLoadoTableData>) {
+    setData((prev) => {
+      if (prev === null) return prev;
+      return typeof action === 'function'
+        ? (action as (p: TLoadoTableData) => TLoadoTableData)(prev)
+        : action;
+    });
+  }
+
   if (data === null) return null;
 
-  return <LoadoTableContent data={data} setData={setData} />;
+  return <LoadoTableContent data={data} setData={setNonNullData} />;
 }
 
 function LoadoTableContent(props: {
   data: TLoadoTableData;
-  setData: (next: TLoadoTableData) => void;
+  setData: React.Dispatch<React.SetStateAction<TLoadoTableData>>;
 }) {
   const { data, setData } = props;
 
-  function updateColumn(next: TLoadoColumn) {
-    const exists = data.columns.some((c) => c.id === next.id);
-    const columns = exists
-      ? data.columns.map((c) => (c.id === next.id ? next : c))
-      : [...data.columns, next];
-    setData({ ...data, columns });
+  function addColumn(next: TLoadoColumn) {
+    setData((prev) => ({ ...prev, columns: [...prev.columns, next] }));
   }
 
-  function deleteColumn(colId: string) {
-    const nextCells: typeof data.cells = {};
-    for (const [rowId, rowCells] of Object.entries(data.cells)) {
-      const { [colId]: _removed, ...rest } = rowCells;
-      if (Object.keys(rest).length > 0) nextCells[rowId] = rest;
-    }
-    setData({
-      ...data,
-      columns: data.columns.filter((c) => c.id !== colId),
-      cells: nextCells,
+  function updateColumn(next: TLoadoColumn) {
+    setData((prev) => {
+      if (!prev.columns.some((c) => c.id === next.id)) return prev;
+      return {
+        ...prev,
+        columns: prev.columns.map((c) => (c.id === next.id ? next : c)),
+      };
     });
   }
 
+  function deleteColumn(colId: string) {
+    setData((prev) => {
+      const nextCells: typeof prev.cells = {};
+      for (const [rowId, rowCells] of Object.entries(prev.cells)) {
+        const { [colId]: _removed, ...rest } = rowCells;
+        if (Object.keys(rest).length > 0) nextCells[rowId] = rest;
+      }
+      return {
+        ...prev,
+        columns: prev.columns.filter((c) => c.id !== colId),
+        cells: nextCells,
+      };
+    });
+  }
+
+  function addRow(next: TLoadoRow) {
+    setData((prev) => ({ ...prev, rows: [...prev.rows, next] }));
+  }
+
   function updateRow(next: TLoadoRow) {
-    const exists = data.rows.some((r) => r.id === next.id);
-    const rows = exists
-      ? data.rows.map((r) => (r.id === next.id ? next : r))
-      : [...data.rows, next];
-    setData({ ...data, rows });
+    setData((prev) => {
+      if (!prev.rows.some((r) => r.id === next.id)) return prev;
+      return {
+        ...prev,
+        rows: prev.rows.map((r) => (r.id === next.id ? next : r)),
+      };
+    });
   }
 
   function deleteRow(rowId: string) {
-    const restCells = { ...data.cells };
-    delete restCells[rowId];
-    setData({
-      ...data,
-      rows: data.rows.filter((r) => r.id !== rowId),
-      cells: restCells,
+    setData((prev) => {
+      const restCells = { ...prev.cells };
+      delete restCells[rowId];
+      return {
+        ...prev,
+        rows: prev.rows.filter((r) => r.id !== rowId),
+        cells: restCells,
+      };
     });
   }
 
   function updateCell(rowId: string, colId: string, next: TLoadoCellValue) {
-    const prevRow = data.cells[rowId] ?? {};
-    setData({
-      ...data,
-      cells: {
-        ...data.cells,
-        [rowId]: { ...prevRow, [colId]: next },
-      },
+    setData((prev) => {
+      const prevRow = prev.cells[rowId] ?? {};
+      return {
+        ...prev,
+        cells: {
+          ...prev.cells,
+          [rowId]: { ...prevRow, [colId]: next },
+        },
+      };
     });
   }
 
@@ -123,16 +151,16 @@ function LoadoTableContent(props: {
     <div className={styles['loado-table']}>
       <div className={styles['header-row']}>
         <CornerCell
-          onAddCharacter={() => updateColumn({ id: uuidv4(), name: '새 캐릭터' })}
-          onAddTask={updateRow}
-          onAddDivider={() => updateRow({ kind: 'divider', id: uuidv4() })}
+          onAddCharacter={() => addColumn({ id: uuidv4(), name: '새 캐릭터' })}
+          onAddTask={addRow}
+          onAddDivider={() => addRow({ kind: 'divider', id: uuidv4() })}
         />
 
         <DraggableList<TLoadoColumn>
           items={data.columns}
           getId={(c) => c.id}
           direction="horizontal"
-          onReorder={(cols) => setData({ ...data, columns: cols })}
+          onReorder={(cols) => setData((prev) => ({ ...prev, columns: cols }))}
         >
           {(col, { dragHandleProps }) => (
             <HeaderCell
@@ -149,7 +177,7 @@ function LoadoTableContent(props: {
         items={data.rows}
         getId={(r) => r.id}
         direction="vertical"
-        onReorder={(rows) => setData({ ...data, rows })}
+        onReorder={(rows) => setData((prev) => ({ ...prev, rows }))}
       >
         {(row, { dragHandleProps }) =>
           row.kind === 'divider' ? (
