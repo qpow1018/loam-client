@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import type { TLoadoCellValue, TLoadoCheckboxState } from '@/app/loado/_type/loado';
+import type { TLoadoCellValue } from '@/app/loado/_type/loado';
 import { getCurrentCycleKey, isWeekdayActive } from '@/app/loado/_util/cycleKey';
 
 import CellSettingsModal from './cellSettingsModal/CellSettingsModal';
@@ -11,6 +11,8 @@ import TextEditModal from './textEditModal/TextEditModal';
 import styles from './contentCell.module.scss';
 
 import { MdCheckBox, MdCheckBoxOutlineBlank, MdPause } from 'react-icons/md';
+
+type TDisplayState = 'checked' | 'unchecked' | 'skip' | null;
 
 export default function ContentCell(props: {
   cell: TLoadoCellValue;
@@ -21,17 +23,13 @@ export default function ContentCell(props: {
   const [isTextEditModalOpen, setIsTextEditModalOpen] = useState(false);
   const [isCellSettingsModalOpen, setIsCellSettingsModalOpen] = useState(false);
 
-  const isInactiveWeekday =
-    cell.role === 'weekdayContent' && !isWeekdayActive(cell.weekdays);
-
+  const isInactiveWeekday = cell.role === 'weekdayContent' && !isWeekdayActive(cell.weekdays);
   const isRestGaugeBelowThreshold =
-    cell.role === 'restGauge' &&
-    cell.restGaugeSkipThreshold !== null &&
-    (cell.restGauge ?? 0) < cell.restGaugeSkipThreshold;
+    cell.role === 'restGauge' && cell.restGauge < cell.restGaugeSkipThreshold;
 
   const shouldSkip = isInactiveWeekday || isRestGaugeBelowThreshold;
-
-  const displayedState: TLoadoCheckboxState = shouldSkip ? 'skip' : cell.checkboxState;
+  const displayedState: TDisplayState =
+    cell.role === 'text' ? null : shouldSkip ? 'skip' : cell.checkboxState;
 
   const displayedText = cell.role === 'text' ? cell.text : cell.checkboxLabel;
 
@@ -41,11 +39,6 @@ export default function ContentCell(props: {
       return;
     }
     if (shouldSkip) return;
-    toggleCheckbox();
-  }
-
-  function toggleCheckbox() {
-    if (cell.checkboxState !== 'checked' && cell.checkboxState !== 'unchecked') return;
     onChange({
       ...cell,
       checkboxState: cell.checkboxState === 'checked' ? 'unchecked' : 'checked',
@@ -53,6 +46,7 @@ export default function ContentCell(props: {
   }
 
   function handleSaveText(next: string) {
+    if (cell.role !== 'text') return;
     onChange({
       ...cell,
       text: next,
@@ -83,11 +77,11 @@ export default function ContentCell(props: {
         {displayedText && <span className={styles['text']}>{displayedText}</span>}
 
         {cell.role === 'restGauge' && (
-          <span className={styles['tooltip']}>휴식게이지 {cell.restGauge ?? 0}</span>
+          <span className={styles['tooltip']}>휴식게이지 {cell.restGauge}</span>
         )}
       </div>
 
-      {isTextEditModalOpen && (
+      {isTextEditModalOpen && cell.role === 'text' && (
         <TextEditModal
           isOpen={isTextEditModalOpen}
           onClose={() => setIsTextEditModalOpen(false)}
@@ -108,7 +102,7 @@ export default function ContentCell(props: {
   );
 }
 
-function renderStateIcon(state: TLoadoCheckboxState) {
+function renderStateIcon(state: TDisplayState) {
   switch (state) {
     case 'checked':
       return <MdCheckBox size={20} />;
@@ -116,7 +110,7 @@ function renderStateIcon(state: TLoadoCheckboxState) {
       return <MdCheckBoxOutlineBlank size={20} />;
     case 'skip':
       return <MdPause size={20} />;
-    default:
+    case null:
       return null;
   }
 }

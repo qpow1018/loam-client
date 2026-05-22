@@ -1,5 +1,7 @@
 import type {
+  TLoadoCellRole,
   TLoadoCellValue,
+  TLoadoCheckboxState,
   TLoadoDataRow,
   TLoadoTableData,
 } from '@/app/loado/_type/loado';
@@ -9,19 +11,76 @@ import { getNextRestGauge } from './restGauge';
 
 export function createEmptyCell(row: TLoadoDataRow): TLoadoCellValue {
   const cycleKey = getCurrentCycleKey(row.resetPeriod);
-
-  return {
-    role: row.role,
-    resetPeriod: row.resetPeriod,
-    checkboxState: row.role === 'text' ? 'none' : 'unchecked',
-    checkboxLabel: '',
-    text: '',
-    restGauge: null,
-    restGaugeSkipThreshold: null,
-    weekdays: [],
+  const base = {
     cycleKey,
     lastAccumulatedCycleKey: cycleKey,
+    resetPeriod: row.resetPeriod,
   };
+  switch (row.role) {
+    case 'text':
+      return { ...base, role: 'text', text: '' };
+    case 'restGauge':
+      return {
+        ...base,
+        role: 'restGauge',
+        checkboxState: 'unchecked',
+        checkboxLabel: '',
+        restGauge: 0,
+        restGaugeSkipThreshold: 0,
+      };
+    case 'weekdayContent':
+      return {
+        ...base,
+        role: 'weekdayContent',
+        checkboxState: 'unchecked',
+        checkboxLabel: '',
+        weekdays: [],
+      };
+    case 'checkbox':
+      return {
+        ...base,
+        role: 'checkbox',
+        checkboxState: 'unchecked',
+        checkboxLabel: '',
+      };
+  }
+}
+
+// 셀의 role을 다른 role로 변경하면서 가능한 한 기존 필드 값을 유지한다.
+// 사용자가 CellSettingsModal에서 role을 바꿀 때, 라벨 같은 정보가 날아가지 않게 함.
+export function changeCellRole(cell: TLoadoCellValue, newRole: TLoadoCellRole): TLoadoCellValue {
+  if (cell.role === newRole) return cell;
+  const base = {
+    cycleKey: cell.cycleKey,
+    lastAccumulatedCycleKey: cell.lastAccumulatedCycleKey,
+    resetPeriod: cell.resetPeriod,
+  };
+  const checkboxState: TLoadoCheckboxState =
+    cell.role === 'text' ? 'unchecked' : cell.checkboxState;
+  const checkboxLabel = cell.role === 'text' ? '' : cell.checkboxLabel;
+  switch (newRole) {
+    case 'text':
+      return { ...base, role: 'text', text: '' };
+    case 'restGauge':
+      return {
+        ...base,
+        role: 'restGauge',
+        checkboxState,
+        checkboxLabel,
+        restGauge: 0,
+        restGaugeSkipThreshold: 0,
+      };
+    case 'weekdayContent':
+      return {
+        ...base,
+        role: 'weekdayContent',
+        checkboxState,
+        checkboxLabel,
+        weekdays: [],
+      };
+    case 'checkbox':
+      return { ...base, role: 'checkbox', checkboxState, checkboxLabel };
+  }
 }
 
 // state 안의 모든 셀을 현재 사이클까지 진행시킨다.
@@ -82,7 +141,7 @@ function syncCell(cell: TLoadoCellValue, currentCycleKey: string): TLoadoCellVal
         currentCycleKey,
         cell.resetPeriod,
       );
-      let value = cell.restGauge ?? 0;
+      let value = cell.restGauge;
       for (let i = 0; i < cycles; i++) {
         // 첫 사이클만 직전 수행 여부를 반영. 그 이전은 데이터 없음 → 미수행으로 가정.
         const didPerform =
@@ -116,3 +175,4 @@ function syncCell(cell: TLoadoCellValue, currentCycleKey: string): TLoadoCellVal
       };
   }
 }
+

@@ -10,8 +10,7 @@ import type {
   TLoadoCellValue,
 } from '@/app/loado/_type/loado';
 import { storage, StorageKey } from '@/utils/storage';
-
-import { createEmptyCell, syncCells } from '../../_util/cell';
+import { createEmptyCell, syncCells } from '@/app/loado/_util/cell';
 
 import DraggableList from '@/components/common/draggableList/DraggableList';
 import CornerCell from './CornerCell';
@@ -32,7 +31,6 @@ export default function LoadoTable() {
   const [data, setData] = useState<TLoadoTableData | null>(null);
 
   // localStorage는 클라이언트에서만 접근 가능하므로 마운트 이후에 읽어 상태에 반영한다.
-  // 동시에 휴식게이지 누적도 1회 처리.
   useEffect(() => {
     const base = storage.get<TLoadoTableData>(StorageKey.LOADO_TABLE, EMPTY_DATA);
     // eslint-disable-next-line react-hooks/set-state-in-effect

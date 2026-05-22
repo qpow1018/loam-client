@@ -2,7 +2,7 @@ export type TLoadoResetPeriod = 'permanent' | 'daily' | 'weekly';
 
 export type TLoadoCellRole = 'checkbox' | 'text' | 'restGauge' | 'weekdayContent';
 
-export type TLoadoCheckboxState = 'checked' | 'unchecked' | 'skip' | 'none';
+export type TLoadoCheckboxState = 'checked' | 'unchecked';
 
 export type TLoadoTableData = {
   columns: TLoadoColumn[];
@@ -28,15 +28,48 @@ export type TLoadoDataRow = {
   role: TLoadoCellRole;
 };
 
-export type TLoadoCellValue = {
+export type TLoadoCellValue =
+  | TLoadoCellValueCheckbox
+  | TLoadoCellValueText
+  | TLoadoCellValueRestGauge
+  | TLoadoCellValueWeekdayContent;
+
+export type TLoadoCellValueCheckbox = {
+  role: 'checkbox';
   cycleKey: string;
   lastAccumulatedCycleKey: string;
   resetPeriod: TLoadoResetPeriod;
-  role: TLoadoCellRole;
   checkboxState: TLoadoCheckboxState;
-  checkboxLabel: string; // checkbox / restGauge / weekdayContent kind에서 사용
-  text: string; // text kind에서 사용
-  restGauge: number | null;
-  restGaugeSkipThreshold: number | null;
-  weekdays: number[]; // weekdayContent kind일 때만 사용. 0=월 ~ 6=일
+  checkboxLabel: string;
 };
+
+export type TLoadoCellValueText = {
+  role: 'text';
+  cycleKey: string;
+  lastAccumulatedCycleKey: string;
+  resetPeriod: TLoadoResetPeriod;
+  text: string;
+};
+
+export type TLoadoCellValueRestGauge = {
+  role: 'restGauge';
+  cycleKey: string;
+  lastAccumulatedCycleKey: string;
+  resetPeriod: TLoadoResetPeriod;
+  checkboxState: TLoadoCheckboxState;
+  checkboxLabel: string;
+  restGauge: number;
+  restGaugeSkipThreshold: number;
+};
+
+export type TLoadoCellValueWeekdayContent = {
+  role: 'weekdayContent';
+  cycleKey: string;
+  lastAccumulatedCycleKey: string;
+  resetPeriod: TLoadoResetPeriod;
+  checkboxState: TLoadoCheckboxState;
+  checkboxLabel: string;
+  weekdays: number[];
+};
+
+

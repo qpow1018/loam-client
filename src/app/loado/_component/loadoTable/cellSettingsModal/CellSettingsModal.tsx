@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import type { TLoadoCellValue } from '@/app/loado/_type/loado';
 import { PERIOD_OPTIONS, TYPE_OPTIONS } from '@/app/loado/_define/options';
+import { changeCellRole } from '@/app/loado/_util/cell';
 
 import Modal from '@/components/common/modal/Modal';
 import ButtonGroup from '@/components/common/buttonGroup/ButtonGroup';
@@ -27,10 +28,6 @@ export default function CellSettingsModal(props: {
 
   const [tempCellValue, setTempCellValue] = useState<TLoadoCellValue>(cell);
 
-  function handleChangeTempCellValue(updates: Partial<TLoadoCellValue>) {
-    setTempCellValue((prev) => ({ ...prev, ...updates }));
-  }
-
   function handleSubmit() {
     onSubmit(tempCellValue);
   }
@@ -42,7 +39,9 @@ export default function CellSettingsModal(props: {
           <ButtonGroup
             options={PERIOD_OPTIONS}
             value={tempCellValue.resetPeriod}
-            onChange={(resetPeriod) => handleChangeTempCellValue({ resetPeriod })}
+            onChange={(resetPeriod) =>
+              setTempCellValue((prev) => ({ ...prev, resetPeriod }))
+            }
           />
         </FormRow>
 
@@ -50,27 +49,24 @@ export default function CellSettingsModal(props: {
           <Tabs
             options={TYPE_OPTIONS}
             value={tempCellValue.role}
-            onChange={(role) => handleChangeTempCellValue({ role })}
+            onChange={(role) => setTempCellValue((prev) => changeCellRole(prev, role))}
           />
         </div>
 
         {tempCellValue.role === 'checkbox' && (
-          <CheckboxFields cell={tempCellValue} onChangeTempCellValue={handleChangeTempCellValue} />
+          <CheckboxFields cell={tempCellValue} onChange={setTempCellValue} />
         )}
 
         {tempCellValue.role === 'text' && (
-          <TextFields cell={tempCellValue} onChangeTempCellValue={handleChangeTempCellValue} />
+          <TextFields cell={tempCellValue} onChange={setTempCellValue} />
         )}
 
         {tempCellValue.role === 'restGauge' && (
-          <RestGaugeFields cell={tempCellValue} onChangeTempCellValue={handleChangeTempCellValue} />
+          <RestGaugeFields cell={tempCellValue} onChange={setTempCellValue} />
         )}
 
         {tempCellValue.role === 'weekdayContent' && (
-          <WeekdayContentFields
-            cell={tempCellValue}
-            onChangeTempCellValue={handleChangeTempCellValue}
-          />
+          <WeekdayContentFields cell={tempCellValue} onChange={setTempCellValue} />
         )}
 
         <div className={styles['action-buttons']}>

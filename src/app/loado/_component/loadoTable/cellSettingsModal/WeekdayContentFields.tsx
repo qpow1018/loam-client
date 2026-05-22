@@ -1,6 +1,6 @@
 'use client';
 
-import type { TLoadoCellValue } from '@/app/loado/_type/loado';
+import type { TLoadoCellValueWeekdayContent } from '@/app/loado/_type/loado';
 
 import ButtonGroup from '@/components/common/buttonGroup/ButtonGroup';
 import TextInput from '@/components/common/form/TextInput';
@@ -11,21 +11,16 @@ import styles from './weekdayContentFields.module.scss';
 const WEEKDAY_LABELS = ['월', '화', '수', '목', '금', '토', '일'];
 
 export default function WeekdayContentFields(props: {
-  cell: TLoadoCellValue;
-  onChangeTempCellValue: (updates: Partial<TLoadoCellValue>) => void;
+  cell: TLoadoCellValueWeekdayContent;
+  onChange: (next: TLoadoCellValueWeekdayContent) => void;
 }) {
-  const { cell, onChangeTempCellValue } = props;
-
-  const binaryValue =
-    cell.checkboxState === 'checked' || cell.checkboxState === 'unchecked'
-      ? cell.checkboxState
-      : 'unchecked';
+  const { cell, onChange } = props;
 
   function toggleDay(day: number) {
     const next = cell.weekdays.includes(day)
       ? cell.weekdays.filter((d) => d !== day)
       : [...cell.weekdays, day].sort((a, b) => a - b);
-    onChangeTempCellValue({ weekdays: next });
+    onChange({ ...cell, weekdays: next });
   }
 
   return (
@@ -36,15 +31,15 @@ export default function WeekdayContentFields(props: {
             { value: 'unchecked', label: '미체크' },
             { value: 'checked', label: '체크' },
           ]}
-          value={binaryValue}
-          onChange={(checkboxState) => onChangeTempCellValue({ checkboxState })}
+          value={cell.checkboxState}
+          onChange={(checkboxState) => onChange({ ...cell, checkboxState })}
         />
       </FormRow>
 
       <FormRow label="라벨">
         <TextInput
           value={cell.checkboxLabel}
-          onChange={(checkboxLabel) => onChangeTempCellValue({ checkboxLabel })}
+          onChange={(checkboxLabel) => onChange({ ...cell, checkboxLabel })}
         />
       </FormRow>
 

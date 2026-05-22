@@ -1,6 +1,6 @@
 'use client';
 
-import type { TLoadoCellValue } from '@/app/loado/_type/loado';
+import type { TLoadoCellValueRestGauge } from '@/app/loado/_type/loado';
 
 import ButtonGroup from '@/components/common/buttonGroup/ButtonGroup';
 import TextInput from '@/components/common/form/TextInput';
@@ -9,20 +9,16 @@ import FormRow from '@/app/loado/_component/loadoTable/FormRow';
 type TNumericField = 'restGauge' | 'restGaugeSkipThreshold';
 
 export default function RestGaugeFields(props: {
-  cell: TLoadoCellValue;
-  onChangeTempCellValue: (updates: Partial<TLoadoCellValue>) => void;
+  cell: TLoadoCellValueRestGauge;
+  onChange: (next: TLoadoCellValueRestGauge) => void;
 }) {
-  const { cell, onChangeTempCellValue } = props;
-
-  const binaryValue =
-    cell.checkboxState === 'checked' || cell.checkboxState === 'unchecked'
-      ? cell.checkboxState
-      : 'unchecked';
+  const { cell, onChange } = props;
 
   function handleNumericChange(field: TNumericField) {
     return (raw: string) => {
       const digits = raw.replace(/[^\d]/g, '');
-      onChangeTempCellValue({ [field]: digits === '' ? null : Number(digits) });
+      const parsed = digits === '' ? 0 : Number(digits);
+      onChange({ ...cell, [field]: parsed });
     };
   }
 
@@ -34,14 +30,14 @@ export default function RestGaugeFields(props: {
             { value: 'unchecked', label: '미체크' },
             { value: 'checked', label: '체크' },
           ]}
-          value={binaryValue}
-          onChange={(checkboxState) => onChangeTempCellValue({ checkboxState })}
+          value={cell.checkboxState}
+          onChange={(checkboxState) => onChange({ ...cell, checkboxState })}
         />
       </FormRow>
 
       <FormRow label="휴식게이지">
         <TextInput
-          value={cell.restGauge !== null ? String(cell.restGauge) : ''}
+          value={String(cell.restGauge)}
           onChange={handleNumericChange('restGauge')}
           placeholder="0"
         />
@@ -49,7 +45,7 @@ export default function RestGaugeFields(props: {
 
       <FormRow label="임계값">
         <TextInput
-          value={cell.restGaugeSkipThreshold !== null ? String(cell.restGaugeSkipThreshold) : ''}
+          value={String(cell.restGaugeSkipThreshold)}
           onChange={handleNumericChange('restGaugeSkipThreshold')}
           placeholder="0"
         />
