@@ -2,48 +2,58 @@
 
 import { useState, useEffect } from 'react';
 
-import { getMyCharacters, addMyCharacter } from '@/app/my-characters/_util/myCharacter';
 import type { TMyCharacterInfo } from '@/app/my-characters/_type/myCharacters';
+import {
+  getMyCharacters,
+  addMyCharacter,
+  reorderMyCharacters,
+  deleteMyCharacter,
+} from '@/app/my-characters/_util/myCharacter';
 
 import Header from '@/components/common/header/Header';
-import CharacterList from './_component/characterList/CharacterList';
+import Button from '@/components/common/button/Button';
+import CharacterList from './_component/CharacterList';
 import CreateCharacterModal from './_component/createCharacterModal/CreateCharacterModal';
 
 import styles from './myCharactersClient.module.scss';
 
 export default function MyCharactersClient() {
-  const [characterList, setCharacterList] = useState<TMyCharacterInfo[]>([]);
+  const [characters, setCharacters] = useState<TMyCharacterInfo[]>([]);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   useEffect(() => {
-    setCharacterList(getMyCharacters());
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setCharacters(getMyCharacters());
   }, []);
 
+  function handleReorder(next: TMyCharacterInfo[]) {
+    setCharacters(next);
+    reorderMyCharacters(next);
+  }
+
   function handleSubmitCharacter(nickname: string, classValue: string | null) {
-    try {
-      const trimmed = nickname.trim();
-      if (trimmed.length < 2) throw new Error('2글자 이상 입력하세요.');
-      if (characterList.some((c) => c.nickname === trimmed)) {
-        throw new Error('이미 추가된 캐릭터입니다.');
-      }
-      if (classValue === null) throw new Error('클래스를 선택하세요.');
-
-      addMyCharacter(trimmed, classValue);
-      setCharacterList(getMyCharacters());
-      setIsCreateModalOpen(false);
-    } catch (error: any) {
-      alert(error.message);
+    const trimmed = nickname.trim();
+    if (trimmed.length < 2) {
+      alert('2글자 이상 입력하세요.');
+      return;
     }
+    if (characters.some((c) => c.nickname === trimmed)) {
+      alert('이미 추가된 캐릭터입니다.');
+      return;
+    }
+    if (classValue === null) {
+      alert('클래스를 선택하세요.');
+      return;
+    }
+
+    addMyCharacter(trimmed, classValue);
+    setCharacters(getMyCharacters());
+    setIsCreateModalOpen(false);
   }
 
-  // TODO
-  function handleMoveCharacter(_id: string) {
-    alert('순서 변경');
-  }
-
-  // TODO
-  function handleDeleteCharacter(_id: string) {
-    alert('삭제');
+  function handleDeleteCharacter(id: string) {
+    deleteMyCharacter(id);
+    setCharacters(getMyCharacters());
   }
 
   return (
@@ -51,12 +61,26 @@ export default function MyCharactersClient() {
       <Header />
 
       <div className={styles['my-characters-client']}>
-        <CharacterList
-          characters={characterList}
-          onClickAdd={() => setIsCreateModalOpen(true)}
-          onClickItemMove={handleMoveCharacter}
-          onClickItemDelete={handleDeleteCharacter}
-        />
+        <section className={styles['character-list-container']}>
+          <div className={styles['list-header']}>
+            <p className={styles['title']}>내 캐릭터 목록</p>
+            <Button onClick={() => setIsCreateModalOpen(true)} theme="bg-pri">
+              추가하기
+            </Button>
+          </div>
+
+          {characters.length === 0 ? (
+            <div className={styles['empty']}>
+              <p className={styles['empty-message']}>내 캐릭터를 추가하세요.</p>
+            </div>
+          ) : (
+            <CharacterList
+              characters={characters}
+              onReorder={handleReorder}
+              onDeleteItem={handleDeleteCharacter}
+            />
+          )}
+        </section>
 
         {isCreateModalOpen && (
           <CreateCharacterModal

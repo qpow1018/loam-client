@@ -1,3 +1,34 @@
 .my-characters-client {
   padding: 24px;
+
+  .character-list-container {
+    width: 1024px;
+    padding: 16px;
+    border-radius: $border-radius;
+    background: $gray-700;
+
+    .list-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1px solid $gray-500;
+
+      .title {
+        font-size: 14px;
+        font-weight: 500;
+      }
+    }
+
+    .empty {
+      display: flex;
+      justify-content: center;
+      padding: 100px 0;
+
+      .empty-message {
+        font-size: 13px;
+        color: $text-secondary;
+      }
+    }
+  }
 }
