@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 
 import { getMyCharacters, addMyCharacter } from '@/app/my-characters/_util/myCharacter';
-import type { TMyCharacterInfo } from '@/app/my-characters/_type/myCharacter';
+import type { TMyCharacterInfo } from '@/app/my-characters/_type/myCharacters';
 
 import Header from '@/components/common/header/Header';
 import CharacterList from './_component/characterList/CharacterList';

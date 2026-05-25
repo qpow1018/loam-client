@@ -1,30 +1,17 @@
-type MainClassInfo = {
-  [key: string]: {
-    value: string;
-    label: string;
-  }
-}
+import type { TMainClassInfo, TClassInfo } from '@/app/my-characters/_type/myCharacters';
 
-type ClassInfo = {
-  [key: string]: {
-    value: string;
-    label: string;
-    mainClass: string;
-    imageUrl: string;
-  }
-}
-
-const mainClassInfo: MainClassInfo = {
+export const mainClassInfo: Record<string, TMainClassInfo> = {
   Warrior: { value: 'Warrior', label: '전사' },
   MartialArtist: { value: 'MartialArtist', label: '무도가' },
   Gunner: { value: 'Gunner', label: '헌터' },
   Mage: { value: 'Mage', label: '마법사' },
   Assassin: { value: 'Assassin', label: '암살자' },
   Specialist: { value: 'Specialist', label: '스페셜리스트' },
-}
+  GuardianKnight: { value: 'GuardianKnight', label: '가디언나이트' },
+};
 
-const classInfo: ClassInfo = {
-  // start 전사
+export const classInfo: Record<string, TClassInfo> = {
+  // 전사
   Berserker: {
     value: 'Berserker',
     label: '버서커',
@@ -53,10 +40,16 @@ const classInfo: ClassInfo = {
     value: 'Slayer',
     label: '슬레이어',
     mainClass: 'Warrior',
-    imageUrl: 'https://cdn-lostark.game.onstove.com/2018/obt/assets/images/common/thumb/berserker_female.png',
+    imageUrl: 'https://cdn-lostark.game.onstove.com/2018/obt/assets/images/common/thumb/berserker_female_m.png',
   },
-  // end 전사
-  // start 무도가
+  Valkyrie: {
+    value: 'Valkyrie',
+    label: '발키리',
+    mainClass: 'Warrior',
+    imageUrl: 'https://cdn-lostark.game.onstove.com/2018/obt/assets/images/common/thumb/valkyrie_m.png',
+  },
+
+  // 무도가
   BattleMaster: {
     value: 'BattleMaster',
     label: '배틀마스터',
@@ -91,10 +84,10 @@ const classInfo: ClassInfo = {
     value: 'Breaker',
     label: '브레이커',
     mainClass: 'MartialArtist',
-    imageUrl: 'https://cdn-lostark.game.onstove.com/2018/obt/assets/images/common/thumb/infighter_male.png',
+    imageUrl: 'https://cdn-lostark.game.onstove.com/2018/obt/assets/images/common/thumb/infighter_male_m.png',
   },
-  // end 무도가
-  // start 헌터
+
+  // 헌터
   DevilHunter: {
     value: 'DevilHunter',
     label: '데빌헌터',
@@ -117,7 +110,7 @@ const classInfo: ClassInfo = {
     value: 'Scouter',
     label: '스카우터',
     mainClass: 'Gunner',
-    imageUrl: 'https://cdn-lostark.game.onstove.com/2018/obt/assets/images/common/thumb/scouter.png',
+    imageUrl: 'https://cdn-lostark.game.onstove.com/2018/obt/assets/images/common/thumb/scouter_m.png',
   },
   Gunslinger: {
     value: 'Gunslinger',
@@ -125,8 +118,8 @@ const classInfo: ClassInfo = {
     mainClass: 'Gunner',
     imageUrl: 'https://cdn-lostark.game.onstove.com/2018/obt/assets/images/common/thumb/devil_hunter_female_m.png',
   },
-  // end 헌터
-  // start 마법사
+
+  // 마법사
   Arcana: {
     value: 'Arcana',
     label: '아르카나',
@@ -151,8 +144,8 @@ const classInfo: ClassInfo = {
     mainClass: 'Mage',
     imageUrl: 'https://cdn-lostark.game.onstove.com/2018/obt/assets/images/common/thumb/elemental_master_m.png',
   },
-  // end 마법사
-  // start 암살자
+
+  // 암살자
   Demonic: {
     value: 'Demonic',
     label: '데모닉',
@@ -175,10 +168,10 @@ const classInfo: ClassInfo = {
     value: 'SoulEater',
     label: '소울이터',
     mainClass: 'Assassin',
-    imageUrl: 'https://cdn-lostark.game.onstove.com/2018/obt/assets/images/common/thumb/soul_eater.png',
+    imageUrl: 'https://cdn-lostark.game.onstove.com/2018/obt/assets/images/common/thumb/soul_eater_m.png',
   },
-  // end 암살자
-  // start 스페셜리스트
+
+  // 스페셜리스트
   Dohwaga: {
     value: 'Dohwaga',
     label: '도화가',
@@ -191,12 +184,18 @@ const classInfo: ClassInfo = {
     mainClass: 'Specialist',
     imageUrl: 'https://cdn-lostark.game.onstove.com/2018/obt/assets/images/common/thumb/weather_artist_m.png',
   },
-  // end 스페셜리스트
-}
+  Wildsoul: {
+    value: 'Wildsoul',
+    label: '환수사',
+    mainClass: 'Specialist',
+    imageUrl: 'https://cdn-lostark.game.onstove.com/2018/obt/assets/images/common/thumb/alchemist_m.png',
+  },
 
-const LOSTARK = {
-  mainClassInfo: mainClassInfo,
-  classInfo: classInfo,
-}
-
-export default LOSTARK;
+  // 가디언나이트
+  GuardianKnight: {
+    value: 'GuardianKnight',
+    label: '가디언나이트',
+    mainClass: 'GuardianKnight',
+    imageUrl: 'https://cdn-lostark.game.onstove.com/2018/obt/assets/images/common/thumb/dragon_knight_m.png',
+  },
+};

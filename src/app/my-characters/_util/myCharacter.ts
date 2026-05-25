@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { storage, StorageKey } from '@/utils/storage';
 
-import type { TMyCharacterInfo } from '@/app/my-characters/_type/myCharacter';
+import type { TMyCharacterInfo } from '@/app/my-characters/_type/myCharacters';
 
 export function getMyCharacters(): TMyCharacterInfo[] {
   return storage.local.get<TMyCharacterInfo[]>(StorageKey.MY_CHARACTER_LIST, []);

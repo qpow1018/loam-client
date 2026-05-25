@@ -1,10 +1,10 @@
 .form-row {
   display: flex;
-  align-items: center;
   gap: 8px;
   margin-bottom: 16px;
 
   .form-row-label {
+    line-height: 40px;
     font-size: 13px;
     color: $text-secondary;
     min-width: 80px;

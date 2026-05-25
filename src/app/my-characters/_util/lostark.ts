@@ -1,28 +1,18 @@
-import LOSTARK from '@/app/my-characters/_define/lostark';
+import { mainClassInfo, classInfo } from '@/app/my-characters/_define/lostark';
 
 import type {
-  TMainClassInfo,
   TClassInfo,
   TMainClassInfoAndClasses,
-} from '@/app/my-characters/_type/lostark';
-
-export function getMainClassInfos(): TMainClassInfo[] {
-  return Object.values(LOSTARK.mainClassInfo);
-}
-
-export function getClassInfoByMainClass(mainClassValue: string): TClassInfo[] {
-  const allClassInfos = Object.values(LOSTARK.classInfo);
-  return allClassInfos.filter((item) => item.mainClass === mainClassValue);
-}
+} from '@/app/my-characters/_type/myCharacters';
 
 export function getClassInfo(classValue: string): TClassInfo {
-  return LOSTARK.classInfo[classValue];
+  return classInfo[classValue];
 }
 
 export function getAllClassInfos(): TMainClassInfoAndClasses[] {
-  const mainClassInfos = getMainClassInfos();
-  return mainClassInfos.map((mainClassInfo) => ({
-    mainClassInfo,
-    classes: getClassInfoByMainClass(mainClassInfo.value),
+  const allClassInfos = Object.values(classInfo);
+  return Object.values(mainClassInfo).map((mainClass) => ({
+    mainClassInfo: mainClass,
+    classes: allClassInfos.filter((c) => c.mainClass === mainClass.value),
   }));
 }

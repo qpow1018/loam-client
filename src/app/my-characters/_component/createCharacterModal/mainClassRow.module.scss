@@ -1,17 +1,29 @@
 .main-class-row {
   display: flex;
   align-items: center;
+  gap: 8px;
   margin-bottom: 8px;
 
-  .label {
-    flex-shrink: 0;
-    width: 80px;
-    font-size: 0.688rem;
-    color: $text-secondary;
-  }
-
   .class-toggle {
-    width: 88px;
-    margin-left: 8px;
+    padding: 0 16px;
+    height: 32px;
+    border-radius: 999px;
+    background-color: transparent;
+    border: 1px solid $gray-500;
+    color: $text-primary;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color $transition, border-color $transition, color $transition;
+
+    &:hover {
+      background-color: $gray-700;
+    }
+
+    &.selected {
+      background-color: $primary;
+      border-color: $primary;
+      color: $white;
+      font-weight: 500;
+    }
   }
 }

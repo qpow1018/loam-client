@@ -1,4 +1,4 @@
-import type { TMyCharacterInfo } from '@/app/my-characters/_type/myCharacter';
+import type { TMyCharacterInfo } from '@/app/my-characters/_type/myCharacters';
 import { getClassInfo } from '@/app/my-characters/_util/lostark';
 
 import Button from '@/components/common/button/Button';
