@@ -109,7 +109,7 @@ function LoadoTableContent(props: {
     <div className={styles['loado-table']}>
       <div className={styles['header-row']}>
         <CornerCell
-          onAddCharacter={() => handleAddColumn({ id: uuidv4(), name: '새 캐릭터' })}
+          onAddCharacter={handleAddColumn}
           onAddTask={handleAddRow}
           onAddDivider={() => handleAddRow({ kind: 'divider', id: uuidv4() })}
         />

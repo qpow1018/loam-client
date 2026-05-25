@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 
-import type { TDragHandleProps } from '@/components/common/draggableList/DraggableList';
+import type { TLoadoColumn } from '@/app/loado/_type/loado';
 
-import type { TLoadoColumn } from '../../_type/loado';
+import type { TDragHandleProps } from '@/components/common/draggableList/DraggableList';
 import CharacterModal from './characterModal/CharacterModal';
 
 import styles from './headerCell.module.scss';
@@ -36,11 +36,12 @@ export default function HeaderCell(props: {
 
   return (
     <>
-      <div
-        {...dragHandleProps}
-        className={styles['header-cell']}
-        onContextMenu={handleContextMenu}
-      >
+      <div {...dragHandleProps} className={styles['header-cell']} onContextMenu={handleContextMenu}>
+        {column.imageUrl && (
+          <div className={styles['icon-box']}>
+            <img src={column.imageUrl} alt="" />
+          </div>
+        )}
         {column.name}
       </div>
 

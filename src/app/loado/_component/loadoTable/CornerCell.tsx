@@ -3,19 +3,21 @@
 import { useEffect, useRef, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 
-import type { TLoadoDataRow } from '@/app/loado/_type/loado';
+import type { TLoadoColumn, TLoadoDataRow } from '@/app/loado/_type/loado';
+import CharacterModal from './characterModal/CharacterModal';
 import TaskModal from './taskModal/TaskModal';
 
 import styles from './cornerCell.module.scss';
 
 export default function CornerCell(props: {
-  onAddCharacter: () => void;
+  onAddCharacter: (column: TLoadoColumn) => void;
   onAddTask: (row: TLoadoDataRow) => void;
   onAddDivider: () => void;
 }) {
   const { onAddCharacter, onAddTask, onAddDivider } = props;
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isCharacterModalOpen, setIsCharacterModalOpen] = useState(false);
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -44,6 +46,11 @@ export default function CornerCell(props: {
     setIsMenuOpen(false);
   }
 
+  function handleCharacterSubmit(next: TLoadoColumn) {
+    onAddCharacter(next);
+    setIsCharacterModalOpen(false);
+  }
+
   function handleTaskSubmit(next: TLoadoDataRow) {
     onAddTask(next);
     setIsTaskModalOpen(false);
@@ -70,7 +77,7 @@ export default function CornerCell(props: {
                 type="button"
                 role="menuitem"
                 className={styles['menu-item']}
-                onClick={() => selectAndClose(onAddCharacter)}
+                onClick={() => selectAndClose(() => setIsCharacterModalOpen(true))}
               >
                 캐릭터 추가
               </button>
@@ -98,6 +105,14 @@ export default function CornerCell(props: {
           </ul>
         )}
       </div>
+
+      {isCharacterModalOpen && (
+        <CharacterModal
+          isOpen={isCharacterModalOpen}
+          onClose={() => setIsCharacterModalOpen(false)}
+          onSubmit={handleCharacterSubmit}
+        />
+      )}
 
       {isTaskModalOpen && (
         <TaskModal
