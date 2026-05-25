@@ -1,18 +1,19 @@
-.body {
-  padding: 16px;
-}
+.create-character-modal-content {
+  padding: 24px;
 
-.footer {
-  display: flex;
-  justify-content: center;
-  border-top: 1px solid $gray-600;
-  padding-top: 12px;
-}
+  .nickname-input {
+    width: 280px;
+  }
 
-.nickname-input {
-  width: 280px;
-}
+  .action-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 12px;
 
-.add-button {
-  width: 120px;
+    .submit-btn {
+      width: 120px;
+    }
+  }
 }

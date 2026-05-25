@@ -2,16 +2,16 @@
   display: flex;
   align-items: center;
   margin-bottom: 8px;
-}
 
-.label {
-  flex-shrink: 0;
-  width: 80px;
-  font-size: 0.688rem;
-  color: $text-secondary;
-}
+  .label {
+    flex-shrink: 0;
+    width: 80px;
+    font-size: 0.688rem;
+    color: $text-secondary;
+  }
 
-.class-toggle {
-  width: 88px;
-  margin-left: 8px;
+  .class-toggle {
+    width: 88px;
+    margin-left: 8px;
+  }
 }

@@ -1,21 +1,16 @@
 .form-row {
   display: flex;
-  margin-bottom: 12px;
-}
-
-.label-box {
-  flex-shrink: 0;
-  display: flex;
   align-items: center;
-  width: 100px;
-  height: 40px;
-}
+  gap: 8px;
+  margin-bottom: 16px;
 
-.label {
-  font-size: 0.813rem;
-  color: $text-secondary;
-}
+  .form-row-label {
+    font-size: 13px;
+    color: $text-secondary;
+    min-width: 80px;
+  }
 
-.content {
-  width: 100%;
+  .form-row-content {
+    width: 100%;
+  }
 }

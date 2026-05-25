@@ -20,17 +20,9 @@ export default function CreateCharacterModal(props: {
 
   const allClassInfos = getAllClassInfos();
 
-  // TODO 추가할 기능
-  // 모달 열릴때 인풋 포커스
-
   return (
-    <Modal
-      isOpen={props.isOpen}
-      onClose={props.onClose}
-      title="캐릭터 추가하기"
-      width={900}
-    >
-      <div className={styles['body']}>
+    <Modal isOpen={props.isOpen} onClose={props.onClose} title="캐릭터 추가하기" width={900}>
+      <div className={styles['create-character-modal-content']}>
         <FormRow label="닉네임">
           <TextInput
             value={nickname}
@@ -52,14 +44,17 @@ export default function CreateCharacterModal(props: {
           ))}
         </FormRow>
 
-        <div className={styles['footer']}>
+        <div className={styles['action-buttons']}>
+          <Button theme="bg-gray600" size="large" onClick={props.onClose}>
+            취소
+          </Button>
           <Button
-            onClick={() => props.onSubmit(nickname, classValue)}
             theme="bg-pri"
-            size="medium"
-            className={styles['add-button']}
+            size="large"
+            className={styles['submit-btn']}
+            onClick={() => props.onSubmit(nickname, classValue)}
           >
-            추가하기
+            추가
           </Button>
         </div>
       </div>

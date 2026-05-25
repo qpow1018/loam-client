@@ -1,4 +1,4 @@
-import LOSTARK from '@/define/lostark';
+import LOSTARK from '@/app/my-characters/_define/lostark';
 
 import type {
   TMainClassInfo,
