@@ -38,7 +38,7 @@ types/
 
 - 폴더명은 lowercase, 컴포넌트 파일명은 PascalCase (예: `common/button/Button.tsx`)
 - 한 폴더 안에 여러 컴포넌트가 있을 때 폴더명은 대표/패밀리 개념을 사용 (예: `button/`에 `Button.tsx` + `IconButton.tsx`)
-- import는 직접 경로 사용 — barrel(`index.ts`) 없음 (예: `@/components/common/button/Button`)
+- import는 직접 경로 사용
 
 ### TypeScript 타입
 

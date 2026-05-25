@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
 import theme from '@/style/theme';
 
-import { loaDB } from '@/libs';
-import { LDB_MyCharacterInfo } from '@/types/loaDB';
+import { getMyCharacters, addMyCharacter } from '@/app/my-characters/_util/myCharacter';
+import { getClassInfo } from '@/app/my-characters/_util/lostark';
+import { TMyCharacterInfo } from '@/app/my-characters/_type/myCharacter';
 
 import Header from '@/components/common/header/Header';
 import Button from '@/components/common/button/Button';
@@ -20,7 +21,7 @@ import {
 } from '@mui/icons-material';
 
 export default function MyCharacters() {
-  const [characterList, setCharacterList] = useState<LDB_MyCharacterInfo[]>([]);
+  const [characterList, setCharacterList] = useState<TMyCharacterInfo[]>([]);
   const [isCreateCharacterModalOpen, setIsCreateCharacterModalOpen] = useState<boolean>(false);
   const [nicknameToCreate, setNicknameToCreate] = useState<string>('');
   const [classValueToCreate, setClassValueToCreate] = useState<string | null>(null);
@@ -30,8 +31,7 @@ export default function MyCharacters() {
   }, []);
 
   function setupMyCharacterList() {
-    const myCharacters = loaDB.getMyCharacters();
-    setCharacterList(myCharacters);
+    setCharacterList(getMyCharacters());
   }
 
   function openCreateCharacterModal() {
@@ -70,7 +70,7 @@ export default function MyCharacters() {
       checkDuplicatedNickname(_nickname);
       checkValidClassValue(classValueToCreate);
 
-      loaDB.addMyCharacter(_nickname, classValueToCreate!);
+      addMyCharacter(_nickname, classValueToCreate!);
 
       setupMyCharacterList();
       closeSubmitCharacterModal();
@@ -108,7 +108,7 @@ export default function MyCharacters() {
 
           { characterList.length > 0 &&
             characterList.map(item => {
-              const classData = loaDB.getClassInfo(item.classValue);
+              const classData = getClassInfo(item.classValue);
               return (
                 <CharacterListItem
                   key={item.id}

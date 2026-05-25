@@ -1,8 +1,8 @@
 import { Box } from '@mui/material';
 import theme from '@/style/theme';
 
-import { loaDB } from '@/libs';
-import { LDB_ClassInfo } from '@/types/loaDB';
+import { getAllClassInfos } from '@/app/my-characters/_util/lostark';
+import { TClassInfo } from '@/app/my-characters/_type/lostark';
 
 import Modal from '@/components/common/modal/Modal';
 import TextInput from '@/components/common/form/TextInput';
@@ -21,7 +21,7 @@ export default function CreateCharacterModal(
     createMyCharacter: () => void;
   }
 ) {
-  const allClassInfos = loaDB.getAllClassInfos();
+  const allClassInfos = getAllClassInfos();
 
   // TODO 추가할 기능
   // 모달 열릴때 인풋 포커스
@@ -114,7 +114,7 @@ function FormRow(
 function LoaClassRow(
   props: {
     mainClassLabel: string;
-    classInfos: LDB_ClassInfo[];
+    classInfos: TClassInfo[];
     currentClassValue: string | null;
     onClickClassValue: (value: string) => void;
   }
