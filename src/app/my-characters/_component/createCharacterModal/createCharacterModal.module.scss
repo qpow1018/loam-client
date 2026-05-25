@@ -1,0 +1,18 @@
+.body {
+  padding: 16px;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid $gray-600;
+  padding-top: 12px;
+}
+
+.nickname-input {
+  width: 280px;
+}
+
+.add-button {
+  width: 120px;
+}

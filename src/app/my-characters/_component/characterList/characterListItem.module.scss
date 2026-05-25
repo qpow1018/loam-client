@@ -1,0 +1,50 @@
+.character-list-item {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid $gray-600;
+  padding: 12px 0;
+}
+
+.move-button {
+  background-color: transparent;
+
+  &:hover:not(:disabled) {
+    background-color: transparent;
+  }
+}
+
+.body {
+  flex: 1;
+  margin: 0 12px;
+  display: flex;
+  align-items: center;
+}
+
+.thumbnail {
+  overflow: hidden;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  background: $gray-600;
+
+  > img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.text-area {
+  margin-left: 12px;
+}
+
+.nickname {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.class-name {
+  font-size: 0.75rem;
+  color: $text-secondary;
+}
