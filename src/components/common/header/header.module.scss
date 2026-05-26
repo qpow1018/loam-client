@@ -1,31 +1,46 @@
 .header {
+  position: sticky;
+  top: 0;
+  z-index: $z-index-header;
   display: flex;
   align-items: center;
+  gap: 24px;
   padding: 0 16px;
   height: $header-height;
   background-color: $gray-700;
-}
 
-.logo {
-  box-shadow: 0 0 1px red;
-  margin-right: 24px;
-}
+  .logo {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: $primary;
+  }
 
-.navigation {
-  box-shadow: 0 0 1px red;
-  flex: 1;
-}
+  .navigation {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 
-.navigationLink {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 90px;
-  height: 32px;
-  background: red;
-  margin-right: 12px;
-}
+    .navigation-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 16px;
+      height: 36px;
+      font-size: 12px;
+      font-weight: 500;
+      color: $text-primary;
+      border-radius: $border-radius;
+      text-decoration: none;
 
-.subMenu {
-  box-shadow: 0 0 1px red;
+      &:hover {
+        background-color: $gray-800;
+      }
+    }
+  }
+
+  .sub-menu {
+    box-shadow: 0 0 1px red;
+  }
 }

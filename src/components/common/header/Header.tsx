@@ -2,56 +2,43 @@ import Link from 'next/link';
 
 import styles from './header.module.scss';
 
+const LOA_MAIN_MENUS = [
+  {
+    name: '할일',
+    link: '/loado',
+  },
+  {
+    name: '내 캐릭터',
+    link: '/my-characters',
+  },
+  {
+    name: '기타 기능',
+    link: '/etc-features',
+  },
+  {
+    name: '설정',
+    link: '/settings',
+  },
+  {
+    name: '개발 메모',
+    link: '/dev',
+  },
+];
+
 export default function Header() {
   return (
-    <header className={styles.header}>
-      <Logo />
-      <Navigation />
-      <SubMenu />
+    <header className={styles['header']}>
+      <div className={styles['logo']}>LoaM</div>
+
+      <nav className={styles['navigation']}>
+        {LOA_MAIN_MENUS.map((item) => (
+          <Link key={item.link} href={item.link} className={styles['navigation-link']}>
+            {item.name}
+          </Link>
+        ))}
+      </nav>
+
+      {/* <div className={styles['sub-menu']}>서브메뉴</div> */}
     </header>
-  );
-}
-
-function Logo() {
-  return (
-    <div className={styles.logo}>
-      LoaM
-    </div>
-  );
-}
-
-function Navigation() {
-  return (
-    <nav className={styles.navigation}>
-      <NavigationLink
-        link='/loado'
-        text='할일'
-      />
-      <NavigationLink
-        link='/my-characters'
-        text='내 캐릭터'
-      />
-    </nav>
-  );
-}
-
-function NavigationLink(
-  props: {
-    link: string;
-    text: string;
-  }
-) {
-  return (
-    <Link href={props.link} className={styles.navigationLink}>
-      { props.text }
-    </Link>
-  );
-}
-
-function SubMenu() {
-  return (
-    <div className={styles.subMenu}>
-      서브메뉴
-    </div>
   );
 }

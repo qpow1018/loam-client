@@ -10,7 +10,6 @@ import {
   deleteMyCharacter,
 } from '@/app/my-characters/_util/myCharacter';
 
-import Header from '@/components/common/header/Header';
 import Button from '@/components/common/button/Button';
 import CharacterList from './_component/CharacterList';
 import CreateCharacterModal from './_component/createCharacterModal/CreateCharacterModal';
@@ -57,39 +56,35 @@ export default function MyCharactersClient() {
   }
 
   return (
-    <>
-      <Header />
+    <div className={styles['my-characters-client']}>
+      <section className={styles['character-list-container']}>
+        <div className={styles['list-header']}>
+          <p className={styles['title']}>내 캐릭터 목록</p>
+          <Button onClick={() => setIsCreateModalOpen(true)} theme="bg-pri">
+            추가하기
+          </Button>
+        </div>
 
-      <div className={styles['my-characters-client']}>
-        <section className={styles['character-list-container']}>
-          <div className={styles['list-header']}>
-            <p className={styles['title']}>내 캐릭터 목록</p>
-            <Button onClick={() => setIsCreateModalOpen(true)} theme="bg-pri">
-              추가하기
-            </Button>
+        {characters.length === 0 ? (
+          <div className={styles['empty']}>
+            <p className={styles['empty-message']}>내 캐릭터를 추가하세요.</p>
           </div>
-
-          {characters.length === 0 ? (
-            <div className={styles['empty']}>
-              <p className={styles['empty-message']}>내 캐릭터를 추가하세요.</p>
-            </div>
-          ) : (
-            <CharacterList
-              characters={characters}
-              onReorder={handleReorder}
-              onDeleteItem={handleDeleteCharacter}
-            />
-          )}
-        </section>
-
-        {isCreateModalOpen && (
-          <CreateCharacterModal
-            isOpen={isCreateModalOpen}
-            onClose={() => setIsCreateModalOpen(false)}
-            onSubmit={handleSubmitCharacter}
+        ) : (
+          <CharacterList
+            characters={characters}
+            onReorder={handleReorder}
+            onDeleteItem={handleDeleteCharacter}
           />
         )}
-      </div>
-    </>
+      </section>
+
+      {isCreateModalOpen && (
+        <CreateCharacterModal
+          isOpen={isCreateModalOpen}
+          onClose={() => setIsCreateModalOpen(false)}
+          onSubmit={handleSubmitCharacter}
+        />
+      )}
+    </div>
   );
 }
