@@ -1,0 +1,14 @@
+.memo-table {
+  flex-shrink: 0;
+  width: 320px;
+
+  .add-btn-wrap {
+    margin-bottom: 12px;
+  }
+
+  .memo-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+}

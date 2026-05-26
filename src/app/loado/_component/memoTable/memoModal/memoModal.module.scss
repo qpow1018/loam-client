@@ -1,0 +1,19 @@
+.memo-modal-content {
+  padding: 16px;
+
+  .action-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 24px;
+
+    .delete-btn {
+      margin-right: auto;
+    }
+
+    .submit-btn {
+      width: 120px;
+    }
+  }
+}

@@ -2,6 +2,7 @@ import { isClient } from './common';
 
 export const StorageKey = {
   LOADO_TABLE: 'loado-table-state',
+  LOADO_MEMOS: 'loado-memos-state',
   MY_CHARACTER_LIST: 'my-character-list',
 } as const;
 

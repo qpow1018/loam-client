@@ -1,0 +1,37 @@
+.memo-card {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  width: 100%;
+  padding: 8px;
+  background-color: $gray-800;
+  border-radius: $border-radius;
+
+  .memo-content {
+    flex: 1;
+    font-size: 13px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    color: $text-primary;
+    cursor: pointer;
+  }
+
+  .drag-handle {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    color: $text-secondary;
+    cursor: grab;
+    touch-action: none;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  &:hover {
+    background-color: $gray-700;
+  }
+}
