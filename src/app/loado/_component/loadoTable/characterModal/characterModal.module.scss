@@ -5,8 +5,6 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 12px;
-    max-height: 420px;
-    overflow-y: auto;
   }
 
   .card {
@@ -51,7 +49,7 @@
     .nickname {
       flex: 1;
       min-width: 0;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 500;
       text-align: left;
       white-space: nowrap;

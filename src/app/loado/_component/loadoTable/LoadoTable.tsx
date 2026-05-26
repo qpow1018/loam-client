@@ -84,23 +84,16 @@ function LoadoTableContent(props: {
 }) {
   const { data, setData } = props;
 
-  const handleAddColumn = (next: TLoadoColumn) =>
-    setData((prev) => addColumn(prev, next));
-  const handleUpdateColumn = (next: TLoadoColumn) =>
-    setData((prev) => updateColumn(prev, next));
-  const handleDeleteColumn = (colId: string) =>
-    setData((prev) => deleteColumn(prev, colId));
+  const handleAddColumn = (next: TLoadoColumn) => setData((prev) => addColumn(prev, next));
+  const handleUpdateColumn = (next: TLoadoColumn) => setData((prev) => updateColumn(prev, next));
+  const handleDeleteColumn = (colId: string) => setData((prev) => deleteColumn(prev, colId));
   const handleReorderColumns = (columns: TLoadoColumn[]) =>
     setData((prev) => reorderColumns(prev, columns));
 
-  const handleAddRow = (next: TLoadoRow) =>
-    setData((prev) => addRow(prev, next));
-  const handleUpdateRow = (next: TLoadoRow) =>
-    setData((prev) => updateRow(prev, next));
-  const handleDeleteRow = (rowId: string) =>
-    setData((prev) => deleteRow(prev, rowId));
-  const handleReorderRows = (rows: TLoadoRow[]) =>
-    setData((prev) => reorderRows(prev, rows));
+  const handleAddRow = (next: TLoadoRow) => setData((prev) => addRow(prev, next));
+  const handleUpdateRow = (next: TLoadoRow) => setData((prev) => updateRow(prev, next));
+  const handleDeleteRow = (rowId: string) => setData((prev) => deleteRow(prev, rowId));
+  const handleReorderRows = (rows: TLoadoRow[]) => setData((prev) => reorderRows(prev, rows));
 
   const handleUpdateCell = (rowId: string, colId: string, next: TLoadoCellValue) =>
     setData((prev) => updateCell(prev, rowId, colId, next));
@@ -139,7 +132,10 @@ function LoadoTableContent(props: {
       >
         {(row, { dragHandleProps }) =>
           row.kind === 'divider' ? (
-            <RowDivider dragHandleProps={dragHandleProps} onDelete={() => handleDeleteRow(row.id)} />
+            <RowDivider
+              dragHandleProps={dragHandleProps}
+              onDelete={() => handleDeleteRow(row.id)}
+            />
           ) : (
             <div className={styles['row']}>
               <RowLabelCell

@@ -1,21 +1,21 @@
 .my-characters-client {
-  padding: 24px;
+  padding: 16px;
 
   .character-list-container {
     width: 1024px;
     padding: 16px;
     border-radius: $border-radius;
-    background: $gray-700;
+    background: $gray-800;
 
     .list-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding-bottom: 12px;
-      border-bottom: 1px solid $gray-500;
+      border-bottom: 1px solid $gray-600;
 
       .title {
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 500;
       }
     }
