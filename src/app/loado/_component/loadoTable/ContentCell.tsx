@@ -104,11 +104,11 @@ export default function ContentCell(props: {
 function renderStateIcon(state: TDisplayState) {
   switch (state) {
     case 'checked':
-      return <MdCheckBox size={18} />;
+      return <MdCheckBox size={20} />;
     case 'unchecked':
-      return <MdCheckBoxOutlineBlank size={18} />;
+      return <MdCheckBoxOutlineBlank size={20} />;
     case 'skip':
-      return <MdPause size={18} />;
+      return <MdPause size={20} />;
     case null:
       return null;
   }
