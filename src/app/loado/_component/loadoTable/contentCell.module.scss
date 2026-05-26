@@ -8,14 +8,15 @@
   justify-content: center;
   text-align: center;
   padding: 4px;
-  gap: 8px;
+  gap: 12px;
   color: $text-primary;
   cursor: pointer;
 
   .text {
     @include line-clamp(2);
-    font-size: 12px;
+    font-size: 11px;
     color: $text-primary;
+    word-break: break-word;
   }
 
   .tooltip {

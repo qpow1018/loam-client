@@ -54,7 +54,7 @@ export default function MemoTable() {
   return (
     <div className={styles['memo-table']}>
       <div className={styles['add-btn-wrap']}>
-        <Button theme="bd-gray" size="large" onClick={() => setIsAddModalOpen(true)}>
+        <Button theme="bd-gray" size="small" onClick={() => setIsAddModalOpen(true)}>
           <MdAdd size={18} />
           <span>메모 추가</span>
         </Button>
