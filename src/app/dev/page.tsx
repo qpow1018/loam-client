@@ -10,6 +10,8 @@ export default function Dev() {
         <br />
         설정 페이지 - 저장소 초기화, 저장 등등
         <br />
+        localStorage schema guard/migration 추가 - 깨진 저장값, 예전 구조 복구
+        <br />
         유용한 사이트 모음 - 로펙, 아이스펭 등
         <br />
         메이플
