@@ -6,7 +6,7 @@ import type {
   TLoadoRow,
   TLoadoCellValue,
 } from '@/app/loado/_type/loado';
-import { syncCells } from './cell';
+import { createEmptyCell, syncCells } from './cell';
 
 const EMPTY_DATA: TLoadoTableData = {
   columns: [],
@@ -26,7 +26,16 @@ export function saveLoadoTableData(data: TLoadoTableData): void {
 
 // Column mutations
 export function addColumn(data: TLoadoTableData, next: TLoadoColumn): TLoadoTableData {
-  return { ...data, columns: [...data.columns, next] };
+  const nextCells = { ...data.cells };
+  for (const row of data.rows) {
+    if (row.kind !== 'data') continue;
+    nextCells[row.id] = {
+      ...(nextCells[row.id] ?? {}),
+      [next.id]: createEmptyCell(row),
+    };
+  }
+
+  return { ...data, columns: [...data.columns, next], cells: nextCells };
 }
 
 export function updateColumn(data: TLoadoTableData, next: TLoadoColumn): TLoadoTableData {
@@ -56,7 +65,18 @@ export function reorderColumns(data: TLoadoTableData, columns: TLoadoColumn[]): 
 
 // Row mutations
 export function addRow(data: TLoadoTableData, next: TLoadoRow): TLoadoTableData {
-  return { ...data, rows: [...data.rows, next] };
+  if (next.kind !== 'data') return { ...data, rows: [...data.rows, next] };
+
+  const nextRowCells: Record<string, TLoadoCellValue> = {};
+  for (const col of data.columns) {
+    nextRowCells[col.id] = createEmptyCell(next);
+  }
+
+  return {
+    ...data,
+    rows: [...data.rows, next],
+    cells: { ...data.cells, [next.id]: nextRowCells },
+  };
 }
 
 export function updateRow(data: TLoadoTableData, next: TLoadoRow): TLoadoTableData {

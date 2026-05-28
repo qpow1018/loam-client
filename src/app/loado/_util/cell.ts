@@ -16,8 +16,11 @@ export function commitCellWrite<T extends TLoadoCellValue>(updated: T): T {
   return { ...updated, cycleKey, lastAccumulatedCycleKey: cycleKey };
 }
 
-export function createEmptyCell(row: TLoadoDataRow): TLoadoCellValue {
-  const cycleKey = getCurrentCycleKey(row.resetPeriod);
+export function createEmptyCell(
+  row: TLoadoDataRow,
+  now: Date = new Date(),
+): TLoadoCellValue {
+  const cycleKey = getCurrentCycleKey(row.resetPeriod, now);
   const base = {
     cycleKey,
     lastAccumulatedCycleKey: cycleKey,
@@ -109,22 +112,23 @@ export function syncCells(
       if (existing) nextCells[row.id] = existing;
       continue;
     }
-    const rowCells = state.cells[row.id];
-    if (!rowCells) continue;
+    const rowCells = state.cells[row.id] ?? {};
+    const colIds = new Set(state.columns.map((col) => col.id));
 
     const nextRow: Record<string, TLoadoCellValue> = {};
-    let rowChanged = false;
+    let rowChanged = Object.keys(rowCells).some((colId) => !colIds.has(colId));
 
-    for (const colId of Object.keys(rowCells)) {
-      const cell = rowCells[colId];
+    for (const col of state.columns) {
+      const cell = rowCells[col.id] ?? createEmptyCell(row, now);
+      if (rowCells[col.id] === undefined) rowChanged = true;
       const currentCycleKey = getCurrentCycleKey(cell.resetPeriod, now);
 
       if (cell.lastAccumulatedCycleKey === currentCycleKey) {
-        nextRow[colId] = cell;
+        nextRow[col.id] = cell;
         continue;
       }
 
-      nextRow[colId] = syncCell(cell, currentCycleKey);
+      nextRow[col.id] = syncCell(cell, currentCycleKey);
       rowChanged = true;
     }
 
@@ -179,4 +183,3 @@ function syncCell(cell: TLoadoCellValue, currentCycleKey: string): TLoadoCellVal
       };
   }
 }
-
