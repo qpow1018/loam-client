@@ -29,7 +29,7 @@ export default function CellSettingsModal(props: {
   const [tempCellValue, setTempCellValue] = useState<TLoadoCellValue>(cell);
 
   function handleSubmit() {
-    onSubmit(tempCellValue);
+    onSubmit(commitCellWrite(tempCellValue));
   }
 
   return (
