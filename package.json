@@ -2,10 +2,14 @@
   "name": "loam-client",
   "version": "0.1.0",
   "private": true,
+  "description": "LoaM desktop app",
+  "main": "electron/main.js",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "electron:dev": "electron .",
+    "electron:build": "electron-builder",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
@@ -25,10 +29,30 @@
     "@types/node": "^20",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "electron": "^31.7.7",
+    "electron-builder": "^26.8.1",
     "eslint": "^9.39.4",
     "eslint-config-next": "16.2.6",
     "prettier": "^3.8.3",
     "sass": "^1.99.0",
     "typescript": "^6.0.3"
+  },
+  "build": {
+    "appId": "app.loam.client",
+    "productName": "LoaM",
+    "extraMetadata": {
+      "main": "electron/main.js",
+      "dependencies": {}
+    },
+    "files": [
+      "electron/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis"
+    }
   }
 }

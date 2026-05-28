@@ -1,0 +1,79 @@
+.settings-page {
+  padding: 16px;
+
+  .settings-container {
+    width: 1024px;
+    max-width: 100%;
+    padding: 16px;
+    border-radius: $border-radius;
+    background: $gray-800;
+
+    &+.settings-container {
+      margin-top: 16px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1px solid $gray-600;
+
+      .title {
+        font-size: 13px;
+        font-weight: 500;
+      }
+    }
+
+    .memo-list {
+      .memo-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 14px 0;
+        border-bottom: 1px solid $gray-700;
+
+        &:last-child {
+          padding-bottom: 0;
+          border-bottom: none;
+        }
+
+        .icon-box {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: $gray-600;
+          color: $primary;
+        }
+
+        .memo-content {
+          min-width: 0;
+
+          h2 {
+            margin-bottom: 4px;
+            font-size: 14px;
+            font-weight: 500;
+          }
+
+          p {
+            color: $text-secondary;
+            font-size: 12px;
+            word-break: keep-all;
+          }
+        }
+
+        .item-actions {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          flex-shrink: 0;
+          margin-left: auto;
+        }
+      }
+    }
+  }
+}
