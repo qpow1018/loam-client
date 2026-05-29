@@ -16,6 +16,8 @@ import CreateCharacterModal from './_component/createCharacterModal/CreateCharac
 
 import styles from './myCharactersClient.module.scss';
 
+const NICKNAME_REGEX = /^[가-힣a-zA-Z0-9]{2,16}$/;
+
 export default function MyCharactersClient() {
   const [characters, setCharacters] = useState<TMyCharacterInfo[]>([]);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -32,8 +34,8 @@ export default function MyCharactersClient() {
 
   function handleSubmitCharacter(nickname: string, classValue: string | null) {
     const trimmed = nickname.trim();
-    if (trimmed.length < 2) {
-      alert('2글자 이상 입력하세요.');
+    if (!NICKNAME_REGEX.test(trimmed)) {
+      alert('닉네임은 한글, 영문, 숫자만 사용해 2~16자로 입력하세요.');
       return;
     }
     if (characters.some((c) => c.nickname === trimmed)) {

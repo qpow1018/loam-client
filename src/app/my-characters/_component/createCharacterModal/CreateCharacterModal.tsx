@@ -10,6 +10,9 @@ import MainClassRow from './MainClassRow';
 
 import styles from './createCharacterModal.module.scss';
 
+const MAX_NICKNAME_LENGTH = 16;
+const NICKNAME_DISALLOWED_CHARS_REGEX = /[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9]/g;
+
 export default function CreateCharacterModal(props: {
   isOpen: boolean;
   onClose: () => void;
@@ -20,13 +23,17 @@ export default function CreateCharacterModal(props: {
 
   const allClassInfos = getAllClassInfos();
 
+  function handleNicknameChange(next: string) {
+    setNickname(next.replace(NICKNAME_DISALLOWED_CHARS_REGEX, '').slice(0, MAX_NICKNAME_LENGTH));
+  }
+
   return (
     <Modal isOpen={props.isOpen} onClose={props.onClose} title="캐릭터 추가하기" width={900}>
       <div className={styles['create-character-modal-content']}>
         <FormRow label="닉네임">
           <TextInput
             value={nickname}
-            onChange={setNickname}
+            onChange={handleNicknameChange}
             placeholder="캐릭터 닉네임을 입력하세요"
             className={styles['nickname-input']}
           />
