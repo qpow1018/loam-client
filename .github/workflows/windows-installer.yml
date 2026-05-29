@@ -1,6 +1,14 @@
 name: Windows Installer
 
 on:
+  push:
+    branches:
+      - dev
+    paths:
+      - '.github/workflows/windows-installer.yml'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'src-tauri/**'
   workflow_dispatch:
 
 jobs:
