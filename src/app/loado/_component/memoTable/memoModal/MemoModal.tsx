@@ -31,9 +31,10 @@ export default function MemoModal(props: {
 
   function handleSave() {
     if (isSaveDisabled) return;
+    const trimmedContent = content.trim();
     onSubmit({
       id: editingData?.id ?? uuidv4(),
-      content,
+      content: trimmedContent,
     });
   }
 

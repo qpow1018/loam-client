@@ -28,8 +28,19 @@ export default function CellSettingsModal(props: {
 
   const [tempCellValue, setTempCellValue] = useState<TLoadoCellValue>(cell);
 
+  function trimCellValue(cell: TLoadoCellValue): TLoadoCellValue {
+    switch (cell.role) {
+      case 'text':
+        return { ...cell, text: cell.text.trim() };
+      case 'checkbox':
+      case 'restGauge':
+      case 'weekdayContent':
+        return { ...cell, checkboxLabel: cell.checkboxLabel.trim() };
+    }
+  }
+
   function handleSubmit() {
-    onSubmit(commitCellWrite(tempCellValue));
+    onSubmit(commitCellWrite(trimCellValue(tempCellValue)));
   }
 
   return (

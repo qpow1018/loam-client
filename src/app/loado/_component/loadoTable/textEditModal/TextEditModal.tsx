@@ -19,7 +19,7 @@ export default function TextEditModal(props: {
   const [value, setValue] = useState(initialText);
 
   function handleSave() {
-    onSubmit(value);
+    onSubmit(value.trim());
   }
 
   return (
