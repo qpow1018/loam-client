@@ -19,10 +19,6 @@ const LOA_MAIN_MENUS = [
     name: '설정',
     link: '/settings',
   },
-  {
-    name: '개발 메모',
-    link: '/dev',
-  },
 ];
 
 export default function Header() {
