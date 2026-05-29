@@ -56,6 +56,6 @@ Those routes currently redirect to the latest GitHub Release assets.
 Expected release asset names:
 
 ```text
-LoaM_0.1.0_universal.dmg
-LoaM_0.1.0_x64-setup.exe
+LoaM-mac.dmg
+LoaM-windows.exe
 ```
