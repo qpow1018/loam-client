@@ -1,0 +1,56 @@
+.memo-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid $gray-700;
+
+  &:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .icon-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: $gray-600;
+    color: $primary;
+  }
+
+  .memo-content {
+    flex: 1;
+    min-width: 0;
+
+    h2 {
+      margin-bottom: 4px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    p {
+      color: $text-secondary;
+      font-size: 12px;
+      word-break: keep-all;
+    }
+
+    .item-status {
+      margin-top: 6px;
+      color: $primary;
+    }
+  }
+
+  .item-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 12px;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+}

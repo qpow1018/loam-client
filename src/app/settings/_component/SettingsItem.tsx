@@ -2,7 +2,7 @@ import type { IconType } from 'react-icons';
 
 import Button, { type TButtonTheme } from '@/components/common/button/Button';
 
-import styles from '../settingsClient.module.scss';
+import styles from '@/app/settings/_component/settingsItem.module.scss';
 
 export type TSettingAction = {
   label: string;

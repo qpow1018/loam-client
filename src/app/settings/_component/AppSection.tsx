@@ -1,17 +1,19 @@
 'use client';
 
 import { useSyncExternalStore } from 'react';
-import { MdInstallMobile } from 'react-icons/md';
 
 import {
   getDownloadLabel,
   getDownloadPlatform,
   getDownloadUrl,
   subscribeDownloadPlatformStore,
-} from '../_util/download';
-import SettingsItem, { type TSettingItem } from './SettingsItem';
+} from '@/app/settings/_util/download';
 
-import styles from '../settingsClient.module.scss';
+import SettingsItem, { type TSettingItem } from '@/app/settings/_component/SettingsItem';
+
+import styles from '@/app/settings/_component/appSection.module.scss';
+
+import { MdInstallMobile } from 'react-icons/md';
 
 export default function AppSection() {
   const downloadPlatform = useSyncExternalStore(
@@ -21,12 +23,6 @@ export default function AppSection() {
   );
   const downloadLabel = getDownloadLabel(downloadPlatform);
   const downloadUrl = getDownloadUrl(downloadPlatform);
-
-  const handleDownloadClick = () => {
-    if (downloadUrl === null) return;
-
-    window.location.href = downloadUrl;
-  };
 
   const appSettings: TSettingItem[] = [
     {
@@ -44,6 +40,12 @@ export default function AppSection() {
       ],
     },
   ];
+
+  function handleDownloadClick() {
+    if (downloadUrl === null) return;
+
+    window.location.href = downloadUrl;
+  }
 
   return (
     <section className={styles['settings-container']}>
