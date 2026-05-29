@@ -59,3 +59,7 @@ Expected release asset names:
 LoaM-mac.dmg
 LoaM-windows.exe
 ```
+
+To verify the Windows installer without a local Windows machine, run the
+`Windows Installer` workflow manually from GitHub Actions and download the
+`LoaM-windows` artifact.
