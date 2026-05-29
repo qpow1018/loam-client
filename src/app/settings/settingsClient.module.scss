@@ -65,6 +65,11 @@
             font-size: 12px;
             word-break: keep-all;
           }
+
+          .item-status {
+            margin-top: 6px;
+            color: $primary;
+          }
         }
 
         .item-actions {
@@ -78,5 +83,9 @@
         }
       }
     }
+  }
+
+  .backup-input {
+    display: none;
   }
 }
