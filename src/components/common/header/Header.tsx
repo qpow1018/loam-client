@@ -12,8 +12,8 @@ const LOA_MAIN_MENUS = [
     link: '/my-characters',
   },
   {
-    name: '기타 기능',
-    link: '/etc-features',
+    name: '참고 사이트',
+    link: '/reference-sites',
   },
   {
     name: '설정',
