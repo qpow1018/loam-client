@@ -51,6 +51,7 @@
         }
 
         .memo-content {
+          flex: 1;
           min-width: 0;
 
           h2 {
@@ -69,6 +70,8 @@
         .item-actions {
           display: flex;
           align-items: center;
+          justify-content: flex-end;
+          flex-wrap: wrap;
           gap: 12px;
           flex-shrink: 0;
           margin-left: auto;

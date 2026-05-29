@@ -1,10 +1,26 @@
 'use client';
 
+import { useSyncExternalStore } from 'react';
 import { MdDeleteOutline, MdFileDownload, MdInstallMobile, MdSecurity } from 'react-icons/md';
 
 import Button from '@/components/common/button/Button';
 
-import styles from './settings.module.scss';
+import styles from './settingsClient.module.scss';
+
+const RELEASE_BASE_URL = 'https://github.com/qpow1018/loam-client/releases/latest';
+
+const DOWNLOAD_OPTIONS = {
+  mac: {
+    label: 'macOS',
+    url: '/download/mac',
+  },
+  windows: {
+    label: 'Windows',
+    url: '/download/windows',
+  },
+} as const;
+
+type TDownloadPlatform = keyof typeof DOWNLOAD_OPTIONS;
 
 const COMPLETED_SETTINGS = [
   {
@@ -32,7 +48,39 @@ const TODO_MEMOS = [
   },
 ];
 
+function getDownloadPlatform(): TDownloadPlatform | null {
+  if (typeof navigator === 'undefined') return null;
+
+  const platform = navigator.platform;
+  const normalizedPlatform = platform.toLowerCase();
+
+  if (normalizedPlatform.includes('mac')) return 'mac';
+  if (normalizedPlatform.includes('win')) return 'windows';
+
+  return null;
+}
+
+function subscribePlatformStore() {
+  return () => undefined;
+}
+
 export default function SettingsClient() {
+  const downloadPlatform = useSyncExternalStore(
+    subscribePlatformStore,
+    getDownloadPlatform,
+    () => null,
+  );
+  const primaryDownload = downloadPlatform ? DOWNLOAD_OPTIONS[downloadPlatform] : null;
+  const downloadLabel = primaryDownload ? `${primaryDownload.label} 다운로드` : '릴리스 보기';
+
+  const handleDownloadClick = () => {
+    window.location.href = primaryDownload?.url ?? RELEASE_BASE_URL;
+  };
+
+  const handleReleasePageClick = () => {
+    window.open(RELEASE_BASE_URL, '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <main className={styles['settings-page']}>
       <section className={styles['settings-container']}>
@@ -54,9 +102,13 @@ export default function SettingsClient() {
                   <p>{memo.description}</p>
                 </div>
                 <div className={styles['item-actions']}>
-                  <Button theme="bg-pri" size="small">
+                  <Button theme="bg-pri" size="small" onClick={handleDownloadClick}>
                     <MdInstallMobile size={18} />
-                    <span>다운로드</span>
+                    <span>{downloadLabel}</span>
+                  </Button>
+                  <Button theme="bd-gray" size="small" onClick={handleReleasePageClick}>
+                    <MdFileDownload size={18} />
+                    <span>전체 파일</span>
                   </Button>
                 </div>
               </article>
