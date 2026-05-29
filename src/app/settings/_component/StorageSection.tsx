@@ -111,6 +111,14 @@ export default function StorageSection() {
             <SettingsItem key={item.title} item={item} />
           ))}
         </div>
+
+        <input
+          id={BACKUP_INPUT_ID}
+          type="file"
+          accept="application/json,.json"
+          className={styles['backup-input']}
+          onChange={handleBackupFileChange}
+        />
       </section>
 
       <section className={styles['settings-container']}>
@@ -124,14 +132,6 @@ export default function StorageSection() {
           ))}
         </div>
       </section>
-
-      <input
-        id={BACKUP_INPUT_ID}
-        type="file"
-        accept="application/json,.json"
-        className={styles['backup-input']}
-        onChange={handleBackupFileChange}
-      />
 
       <Confirm
         isOpen={pendingBackup !== null}
