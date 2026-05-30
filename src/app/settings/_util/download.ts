@@ -36,6 +36,12 @@ export function getDownloadUrl(platform: TDownloadPlatform | null) {
   return primaryDownload?.url ?? null;
 }
 
+export function getDownloadPlatformLabel(platform: TDownloadPlatform | null) {
+  if (platform === 'mac') return 'macOS';
+  if (platform === 'windows') return 'Windows';
+  return '지원 OS 아님';
+}
+
 export function subscribeDownloadPlatformStore() {
   return () => undefined;
 }

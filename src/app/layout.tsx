@@ -5,6 +5,7 @@ import '@/assets/reset.scss';
 import '@/assets/global.scss';
 
 import Header from '@/components/common/header/Header';
+import AutoBackupRunner from '@/app/_component/AutoBackupRunner';
 
 const notoSansKr = Noto_Sans_KR({
   variable: '--font-noto-sans-kr',
@@ -26,6 +27,7 @@ export default function RootLayout({
     <html lang="ko" className={notoSansKr.variable}>
       <body>
         <Header />
+        <AutoBackupRunner />
 
         {children}
       </body>

@@ -5,15 +5,14 @@ import { useSyncExternalStore } from 'react';
 import {
   getDownloadLabel,
   getDownloadPlatform,
+  getDownloadPlatformLabel,
   getDownloadUrl,
   subscribeDownloadPlatformStore,
 } from '@/app/settings/_util/download';
 
-import SettingsItem, { type TSettingItem } from '@/app/settings/_component/SettingsItem';
-
-import styles from '@/app/settings/_component/appSection.module.scss';
-
-import { MdInstallMobile } from 'react-icons/md';
+import Button from '@/components/common/button/Button';
+import SettingsField from '@/app/settings/_component/SettingsField';
+import SettingsSection from '@/app/settings/_component/SettingsSection';
 
 export default function AppSection() {
   const downloadPlatform = useSyncExternalStore(
@@ -23,23 +22,7 @@ export default function AppSection() {
   );
   const downloadLabel = getDownloadLabel(downloadPlatform);
   const downloadUrl = getDownloadUrl(downloadPlatform);
-
-  const appSettings: TSettingItem[] = [
-    {
-      title: '앱 다운로드',
-      description: '브라우저를 열지 않고 LoaM을 독립된 데스크톱 창에서 사용할 수 있습니다.',
-      icon: MdInstallMobile,
-      actions: [
-        {
-          label: downloadLabel,
-          icon: MdInstallMobile,
-          theme: 'bg-pri',
-          onClick: handleDownloadClick,
-          isDisabled: downloadUrl === null,
-        },
-      ],
-    },
-  ];
+  const platformLabel = getDownloadPlatformLabel(downloadPlatform);
 
   function handleDownloadClick() {
     if (downloadUrl === null) return;
@@ -48,16 +31,30 @@ export default function AppSection() {
   }
 
   return (
-    <section className={styles['settings-container']}>
-      <div className={styles['section-header']}>
-        <p className={styles['title']}>앱</p>
-      </div>
-
-      <div className={styles['memo-list']} aria-label="앱 설정 기능">
-        {appSettings.map((item) => (
-          <SettingsItem key={item.title} item={item} />
-        ))}
-      </div>
-    </section>
+    <SettingsSection
+      title="앱 다운로드"
+      description="브라우저를 열지 않고 LoaM을 독립된 데스크톱 창에서 사용할 수 있습니다."
+      status={
+        downloadUrl === null
+          ? '현재 환경에서는 자동 다운로드를 지원하지 않습니다.'
+          : '다운로드 가능'
+      }
+      actions={
+        <Button
+          theme="bg-pri"
+          size="small"
+          isDisabled={downloadUrl === null}
+          onClick={handleDownloadClick}
+        >
+          {downloadLabel}
+        </Button>
+      }
+    >
+      <SettingsField label="환경" value={platformLabel} />
+      <SettingsField
+        label="상태"
+        value={downloadUrl === null ? '다운로드 링크 없음' : '설치 파일 준비됨'}
+      />
+    </SettingsSection>
   );
 }

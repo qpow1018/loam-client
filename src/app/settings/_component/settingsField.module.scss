@@ -1,0 +1,44 @@
+.setting-field {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 32px;
+
+  .field-label {
+    color: $text-secondary;
+    font-size: 12px;
+  }
+
+  .field-value {
+    min-width: 0;
+    color: $text-primary;
+    font-size: 12px;
+  }
+
+  .field-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .is-path {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 720px) {
+    grid-template-columns: 1fr;
+    align-items: flex-start;
+    gap: 6px;
+
+    .field-actions {
+      justify-content: flex-start;
+      width: 100%;
+    }
+  }
+}

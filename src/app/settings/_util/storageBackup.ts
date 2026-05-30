@@ -14,9 +14,25 @@ export type TBackupPayload = {
   data: Partial<Record<(typeof BACKUP_STORAGE_KEYS)[number], unknown>>;
 };
 
-function getBackupFileName() {
-  const stamp = new Date().toISOString().slice(0, 10);
-  return `loam-backup-${stamp}.json`;
+function formatLocalDate(date: Date) {
+  const year = date.getFullYear();
+  const month = `${date.getMonth() + 1}`.padStart(2, '0');
+  const day = `${date.getDate()}`.padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
+export function createBackupFileName(options?: { includeTime?: boolean; prefix?: string }) {
+  const now = new Date();
+  const date = formatLocalDate(now);
+  const prefix = options?.prefix ?? 'loam-backup';
+
+  if (options?.includeTime !== true) {
+    return `${prefix}-${date}.json`;
+  }
+
+  const time = now.toTimeString().slice(0, 8).replaceAll(':', '');
+  return `${prefix}-${date}-${time}.json`;
 }
 
 export function createBackupPayload(): TBackupPayload {
@@ -47,7 +63,7 @@ export function downloadBackupPayload(backup: TBackupPayload): void {
   const anchor = document.createElement('a');
 
   anchor.href = url;
-  anchor.download = getBackupFileName();
+  anchor.download = createBackupFileName();
   anchor.click();
   URL.revokeObjectURL(url);
 }
