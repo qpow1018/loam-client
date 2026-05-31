@@ -8,11 +8,14 @@ export default function SettingsSection(props: {
   status?: string;
   actions?: ReactNode;
   children?: ReactNode;
+  variant?: 'default' | 'primary';
 }) {
-  const { title, description, status, actions, children } = props;
+  const { title, description, status, actions, children, variant = 'default' } = props;
 
   return (
-    <section className={styles['settings-section']}>
+    <section
+      className={`${styles['settings-section']} ${variant === 'primary' ? styles['is-primary'] : ''}`}
+    >
       <div className={styles['section-header']}>
         <div className={styles['title-group']}>
           <h2>{title}</h2>

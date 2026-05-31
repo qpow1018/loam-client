@@ -49,7 +49,7 @@ export default function StorageResetSection() {
           ))}
         </SettingsField>
 
-        <SettingsField label="전체 초기화" value="자동백업 설정까지 모두 삭제합니다.">
+        <SettingsField label="전체 초기화" value="할일, 메모, 내 캐릭터 데이터를 삭제합니다.">
           <Button theme="bg-sec" size="small" onClick={() => setPendingResetTarget('all')}>
             {RESET_TARGETS.all.actionLabel}
           </Button>

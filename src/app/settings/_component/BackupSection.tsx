@@ -63,17 +63,29 @@ export default function BackupSection() {
         title="백업/복원"
         description="할일 테이블, 메모, 내 캐릭터 데이터를 JSON 파일로 내보내고 다시 가져옵니다."
         status={backupStatus}
-        actions={
-          <>
-            <Button theme="bg-sec" size="small" onClick={handleExportClick}>
-              내보내기
-            </Button>
-            <Button theme="bd-gray" size="small" onClick={handleImportClick}>
-              가져오기
-            </Button>
-          </>
-        }
-      />
+        variant="primary"
+      >
+        <div className={styles['backup-actions']}>
+          <Button
+            theme="bg-pri"
+            size="large"
+            isFullWidth
+            className={styles['backup-action']}
+            onClick={handleExportClick}
+          >
+            백업 파일 내보내기
+          </Button>
+          <Button
+            theme="bd-gray"
+            size="large"
+            isFullWidth
+            className={styles['backup-action']}
+            onClick={handleImportClick}
+          >
+            백업 파일 가져오기
+          </Button>
+        </div>
+      </SettingsSection>
 
       <input
         ref={backupInputRef}

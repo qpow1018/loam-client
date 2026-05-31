@@ -1,3 +1,19 @@
 .backup-input {
   display: none;
 }
+
+.backup-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 10px;
+}
+
+.backup-action {
+  min-width: 0;
+}
+
+@media (max-width: 720px) {
+  .backup-actions {
+    grid-template-columns: 1fr;
+  }
+}

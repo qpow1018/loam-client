@@ -24,13 +24,17 @@ function isStandaloneDisplayMode() {
 export default function PwaInstallSection() {
   const [installPrompt, setInstallPrompt] = useState<TBeforeInstallPromptEvent | null>(null);
   const [isStandalone, setIsStandalone] = useState(false);
-  const [status, setStatus] = useState('설치 상태를 확인하고 있습니다.');
+  const [status, setStatus] = useState('브라우저 설치 지원을 확인하고 있습니다.');
 
   useEffect(() => {
     queueMicrotask(() => {
       const standalone = isStandaloneDisplayMode();
       setIsStandalone(standalone);
-      setStatus(standalone ? '설치된 앱으로 실행 중입니다.' : '설치 대기 중');
+      setStatus(
+        standalone
+          ? '설치된 앱으로 실행 중입니다.'
+          : '설치 버튼이 보이지 않으면 브라우저 메뉴에서 설치해주세요.',
+      );
     });
 
     function handleBeforeInstallPrompt(event: Event) {
@@ -77,7 +81,7 @@ export default function PwaInstallSection() {
       }
     >
       <SettingsField label="실행 방식" value={isStandalone ? '설치 앱' : '브라우저'} />
-      <SettingsField label="상태" value={canInstall ? '설치 가능' : status} />
+      <SettingsField label="상태" value={status} />
     </SettingsSection>
   );
 }
