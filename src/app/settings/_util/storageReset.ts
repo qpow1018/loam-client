@@ -1,4 +1,3 @@
-import { AUTO_BACKUP_SETTINGS_CHANGED_EVENT } from '@/app/settings/_util/autoBackup';
 import { StorageKey, storage } from '@/utils/storage';
 
 export type TResetTarget = 'all' | 'loado' | 'memo' | 'characters';
@@ -17,14 +16,8 @@ export const RESET_TARGETS: Record<
     label: '전체',
     actionLabel: '전체 초기화',
     statusLabel: '전체 저장소',
-    confirmMessage:
-      '할일 테이블, 메모, 내 캐릭터, 자동백업 설정을 모두 초기화할까요? 백업 파일 자체는 삭제하지 않습니다.',
-    keys: [
-      StorageKey.LOADO_TABLE,
-      StorageKey.LOADO_MEMOS,
-      StorageKey.MY_CHARACTER_LIST,
-      StorageKey.AUTO_BACKUP_SETTINGS,
-    ],
+    confirmMessage: '할일 테이블, 메모, 내 캐릭터 데이터를 모두 초기화할까요?',
+    keys: [StorageKey.LOADO_TABLE, StorageKey.LOADO_MEMOS, StorageKey.MY_CHARACTER_LIST],
   },
   loado: {
     label: '할일',
@@ -57,10 +50,6 @@ export function resetStorageTarget(target: TResetTarget) {
   const resetTarget = RESET_TARGETS[target];
   for (const key of resetTarget.keys) {
     storage.local.remove(key);
-  }
-
-  if (resetTarget.keys.includes(StorageKey.AUTO_BACKUP_SETTINGS)) {
-    window.dispatchEvent(new Event(AUTO_BACKUP_SETTINGS_CHANGED_EVENT));
   }
 
   return resetTarget;

@@ -7,10 +7,6 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "tauri:dev": "tauri dev",
-    "tauri:build": "tauri build",
-    "tauri:build:mac": "tauri build --target universal-apple-darwin --bundles dmg",
-    "tauri:build:windows": "tauri build --bundles nsis",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
@@ -27,7 +23,6 @@
     "uuid": "^14.0.0"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^2.11.2",
     "@types/node": "^20",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",

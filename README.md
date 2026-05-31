@@ -14,52 +14,27 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Desktop App
+## PWA
 
-LoaM can also run as a Tauri desktop shell around the web app.
-
-```bash
-npm run tauri:dev
-npm run tauri:build
-```
-
-Release installers are built with:
+LoaM is installable as a Progressive Web App from supported browsers.
+Build and run the production app with:
 
 ```bash
-npm run tauri:build:mac
-npm run tauri:build:windows
+npm run build
+npm run start
 ```
 
-Universal macOS builds also need the Intel Rust target:
-
-```bash
-rustup target add x86_64-apple-darwin
-```
-
-Tauri requires Rust and Cargo. Install them with rustup before running the Tauri commands:
-
-```bash
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-```
-
-The production Tauri window loads the deployed web app at `https://loam-client.vercel.app/loado`.
-
-Desktop installers are linked from:
+The app exposes a web manifest at:
 
 ```text
-https://loam-client.vercel.app/download/mac
-https://loam-client.vercel.app/download/windows
+/manifest.webmanifest
 ```
 
-Those routes currently redirect to the latest GitHub Release assets.
-
-Expected release asset names:
+and registers a service worker from:
 
 ```text
-LoaM-mac.dmg
-LoaM-windows.exe
+/sw.js
 ```
 
-To verify the Windows installer without a local Windows machine, run the
-`Windows Installer` workflow manually from GitHub Actions and download the
-`LoaM-windows` artifact.
+Data backup and restore remain available from the settings page as manual JSON
+export/import actions.
