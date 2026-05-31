@@ -8,8 +8,8 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: '/loado',
     scope: '/',
     display: 'standalone',
-    background_color: '#ffffff',
-    theme_color: '#ffffff',
+    background_color: '#18181b',
+    theme_color: '#18181b',
     icons: [
       {
         src: '/icons/icon-192.png',
