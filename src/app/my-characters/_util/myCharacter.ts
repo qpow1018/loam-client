@@ -30,6 +30,10 @@ export function reorderMyCharacters(characters: TMyCharacterInfo[]): void {
   storage.local.set(StorageKey.MY_CHARACTER_LIST, characters);
 }
 
+export function updateMyCharacters(characters: TMyCharacterInfo[]): void {
+  storage.local.set(StorageKey.MY_CHARACTER_LIST, characters);
+}
+
 export function deleteMyCharacter(id: string): void {
   const myCharacters = getMyCharacters();
   storage.local.set(
