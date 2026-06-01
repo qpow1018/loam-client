@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import api from '@/api';
 import type { TLostarkSiblingCharacter } from '@/api/lostark/type';
@@ -7,14 +7,19 @@ import type {
   TMyCharacterInfo,
 } from '@/app/my-characters/_type/myCharacters';
 import { getClassImageUrl } from '@/app/my-characters/_util/lostark';
+import toast from '@/utils/toast';
 
 import Modal from '@/components/common/modal/Modal';
 import TextInput from '@/components/common/form/TextInput';
 import Button from '@/components/common/button/Button';
-import toast from '@/utils/toast';
-import FormRow from './FormRow';
 
 import styles from './createCharacterModal.module.scss';
+
+import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md';
+
+function parseItemLevel(itemLevel: string) {
+  return Number(itemLevel.replaceAll(',', ''));
+}
 
 export default function CreateCharacterModal(props: {
   isOpen: boolean;
@@ -27,17 +32,13 @@ export default function CreateCharacterModal(props: {
   const [selectedCharacterNames, setSelectedCharacterNames] = useState<Set<string>>(new Set());
   const [isLoading, setIsLoading] = useState(false);
 
-  const registeredCharacterNameSet = useMemo(
-    () => new Set(props.registeredCharacters.map((character) => character.nickname)),
-    [props.registeredCharacters],
-  );
-
-  const unregisteredCharacters = useMemo(
-    () => characters.filter((character) => !registeredCharacterNameSet.has(character.CharacterName)),
-    [characters, registeredCharacterNameSet],
-  );
-
   const isSubmitDisabled = selectedCharacterNames.size === 0;
+  const registeredCharacterNames = new Set(
+    props.registeredCharacters.map((character) => character.nickname),
+  );
+  const unregisteredCharacters = characters
+    .filter((character) => !registeredCharacterNames.has(character.CharacterName))
+    .toSorted((a, b) => parseItemLevel(b.ItemAvgLevel) - parseItemLevel(a.ItemAvgLevel));
 
   async function handleSearch() {
     const trimmed = characterName.trim();
@@ -49,6 +50,13 @@ export default function CreateCharacterModal(props: {
     try {
       const response = await api.lostark.getSiblingCharacters(trimmed);
       setCharacters(response.data);
+      setSelectedCharacterNames(
+        new Set(
+          response.data
+            .filter((character) => !registeredCharacterNames.has(character.CharacterName))
+            .map((character) => character.CharacterName),
+        ),
+      );
     } catch {
       setCharacters([]);
       toast.error('원정대 캐릭터를 불러오지 못했습니다.');
@@ -84,20 +92,19 @@ export default function CreateCharacterModal(props: {
   return (
     <Modal isOpen={props.isOpen} onClose={props.onClose} title="원정대 불러오기" width={760}>
       <div className={styles['create-character-modal-content']}>
-        <FormRow label="대표 캐릭터">
-          <div className={styles['search-row']}>
-            <TextInput
-              value={characterName}
-              onChange={setCharacterName}
-              onPressEnter={handleSearch}
-              placeholder="캐릭터명을 입력하세요"
-              className={styles['nickname-input']}
-            />
-            <Button theme="bg-pri" onClick={handleSearch} isLoading={isLoading}>
-              검색
-            </Button>
-          </div>
-        </FormRow>
+        <div className={styles['search-section']}>
+          <span className={styles['label']}>대표 캐릭터</span>
+          <TextInput
+            value={characterName}
+            onChange={setCharacterName}
+            onPressEnter={handleSearch}
+            placeholder="캐릭터명을 입력하세요"
+            className={styles['nickname-input']}
+          />
+          <Button theme="bg-pri" onClick={handleSearch} isLoading={isLoading}>
+            검색
+          </Button>
+        </div>
 
         <div className={styles['result-section']}>
           <p className={styles['hint']}>등록되지 않은 캐릭터만 표시됩니다.</p>
@@ -117,8 +124,8 @@ export default function CreateCharacterModal(props: {
                     className={`${styles['character-card']} ${isSelected ? styles['selected'] : ''}`}
                     onClick={() => handleToggleCharacter(character.CharacterName)}
                   >
-                    <span className={styles['checkbox']} aria-hidden="true">
-                      {isSelected ? '✓' : ''}
+                    <span className={styles['selection-icon']} aria-hidden="true">
+                      {isSelected ? <MdCheckBox /> : <MdCheckBoxOutlineBlank />}
                     </span>
                     <span className={styles['thumbnail']}>
                       {classImageUrl && <img src={classImageUrl} alt="" />}

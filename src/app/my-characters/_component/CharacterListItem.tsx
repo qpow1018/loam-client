@@ -20,7 +20,6 @@ export default function CharacterListItem(props: {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const lopecUrl = `https://lopec.kr/character/specPoint/${encodeURIComponent(props.nickname)}`;
-  const iloaUrl = `https://iloa.gg/character/${encodeURIComponent(props.nickname)}`;
 
   return (
     <>
@@ -53,13 +52,6 @@ export default function CharacterListItem(props: {
           onClick={() => window.open(lopecUrl, '_blank', 'noopener,noreferrer')}
         >
           로펙
-        </Button>
-        <Button
-          theme="bg-gray600"
-          size="small"
-          onClick={() => window.open(iloaUrl, '_blank', 'noopener,noreferrer')}
-        >
-          일로아
         </Button>
 
         <IconButton onClick={() => setIsConfirmOpen(true)}>

@@ -1,14 +1,22 @@
 .create-character-modal-content {
   padding: 24px;
 
-  .nickname-input {
-    width: 280px;
-  }
-
-  .search-row {
+  .search-section {
     display: flex;
     align-items: center;
     gap: 8px;
+
+    .label {
+      flex-shrink: 0;
+      width: 80px;
+      font-size: 13px;
+      font-weight: 500;
+      color: $text-secondary;
+    }
+
+    .nickname-input {
+      width: 280px;
+    }
   }
 
   .result-section {
@@ -35,38 +43,33 @@
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
-      max-height: 400px;
-      overflow-y: auto;
     }
 
     .character-card {
       display: grid;
-      grid-template-columns: 20px 36px minmax(0, 1fr);
+      grid-template-columns: 24px 36px minmax(0, 1fr);
       align-items: center;
       gap: 10px;
       min-height: 58px;
       padding: 10px;
-      border: 1px solid $gray-700;
       border-radius: $border-radius;
       background: $gray-800;
       color: $text-primary;
       text-align: left;
       cursor: pointer;
 
-      &.selected {
-        border-color: $primary;
-      }
-
-      .checkbox {
+      .selection-icon {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 18px;
-        height: 18px;
-        border: 1px solid $gray-500;
-        border-radius: 4px;
-        font-size: 12px;
+        width: 24px;
+        height: 24px;
         color: $primary;
+
+        >svg {
+          width: 20px;
+          height: 20px;
+        }
       }
 
       .thumbnail {
