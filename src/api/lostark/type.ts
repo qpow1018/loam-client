@@ -1,4 +1,4 @@
-export type TLostarkSiblingCharactersResponse = {
+export type TResLostarkSiblingCharacters = {
   ok?: boolean;
   status?: number;
   data: TLostarkSiblingCharacter[];
