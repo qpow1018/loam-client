@@ -2,16 +2,28 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { storage, StorageKey } from '@/utils/storage';
 
-import type { TMyCharacterInfo } from '@/app/my-characters/_type/myCharacters';
+import type {
+  TCreateMyCharacterInfo,
+  TMyCharacterInfo,
+} from '@/app/my-characters/_type/myCharacters';
 
 export function getMyCharacters(): TMyCharacterInfo[] {
   return storage.local.get<TMyCharacterInfo[]>(StorageKey.MY_CHARACTER_LIST, []);
 }
 
-export function addMyCharacter(nickname: string, classValue: string): void {
+export function addMyCharacter(character: TCreateMyCharacterInfo): void {
   const myCharacters = getMyCharacters();
-  const next: TMyCharacterInfo = { id: uuidv4(), nickname, classValue };
+  const next: TMyCharacterInfo = { id: uuidv4(), ...character };
   storage.local.set(StorageKey.MY_CHARACTER_LIST, [...myCharacters, next]);
+}
+
+export function addMyCharacters(characters: TCreateMyCharacterInfo[]): void {
+  const myCharacters = getMyCharacters();
+  const nextCharacters = characters.map((character) => ({
+    id: uuidv4(),
+    ...character,
+  }));
+  storage.local.set(StorageKey.MY_CHARACTER_LIST, [...myCharacters, ...nextCharacters]);
 }
 
 export function reorderMyCharacters(characters: TMyCharacterInfo[]): void {

@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import type { TLoadoColumn } from '@/app/loado/_type/loado';
 import type { TMyCharacterInfo } from '@/app/my-characters/_type/myCharacters';
 import { getMyCharacters } from '@/app/my-characters/_util/myCharacter';
-import { getClassInfo } from '@/app/my-characters/_util/lostark';
+import { getClassImageUrl } from '@/app/my-characters/_util/lostark';
 
 import Modal from '@/components/common/modal/Modal';
 import Confirm from '@/components/common/modal/Confirm';
@@ -37,7 +37,7 @@ export default function CharacterModal(props: {
     setTempColumn((prev) => ({
       id: prev?.id ?? uuidv4(),
       name: character.nickname,
-      imageUrl: getClassInfo(character.classValue).imageUrl,
+      imageUrl: getClassImageUrl(character.className),
     }));
   }
 
@@ -62,7 +62,7 @@ export default function CharacterModal(props: {
           ) : (
             <div className={styles['grid']}>
               {myCharacters.map((character) => {
-                const classData = getClassInfo(character.classValue);
+                const classImageUrl = getClassImageUrl(character.className);
                 const isSelected = tempColumn?.name === character.nickname;
                 return (
                   <button
@@ -72,7 +72,7 @@ export default function CharacterModal(props: {
                     onClick={() => handleSelectCharacter(character)}
                   >
                     <div className={styles['thumbnail']}>
-                      <img src={classData.imageUrl} alt="" />
+                      {classImageUrl && <img src={classImageUrl} alt="" />}
                     </div>
                     <span className={styles['nickname']}>{character.nickname}</span>
                   </button>

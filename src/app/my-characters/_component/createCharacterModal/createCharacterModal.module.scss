@@ -5,6 +5,109 @@
     width: 280px;
   }
 
+  .search-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .result-section {
+    padding-top: 20px;
+
+    .hint {
+      margin-bottom: 10px;
+      font-size: 12px;
+      color: $text-secondary;
+    }
+
+    .empty {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 160px;
+      border: 1px solid $gray-700;
+      border-radius: $border-radius;
+      color: $text-secondary;
+      font-size: 13px;
+    }
+
+    .character-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .character-card {
+      display: grid;
+      grid-template-columns: 20px 36px minmax(0, 1fr);
+      align-items: center;
+      gap: 10px;
+      min-height: 58px;
+      padding: 10px;
+      border: 1px solid $gray-700;
+      border-radius: $border-radius;
+      background: $gray-800;
+      color: $text-primary;
+      text-align: left;
+      cursor: pointer;
+
+      &.selected {
+        border-color: $primary;
+      }
+
+      .checkbox {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px;
+        height: 18px;
+        border: 1px solid $gray-500;
+        border-radius: 4px;
+        font-size: 12px;
+        color: $primary;
+      }
+
+      .thumbnail {
+        overflow: hidden;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: $gray-600;
+
+        >img {
+          display: block;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+      .character-info {
+        min-width: 0;
+
+        >span {
+          display: block;
+        }
+      }
+
+      .character-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 13px;
+        font-weight: 500;
+      }
+
+      .character-meta {
+        margin-top: 4px;
+        font-size: 11px;
+        color: $text-secondary;
+      }
+    }
+  }
+
   .action-buttons {
     display: flex;
     align-items: center;

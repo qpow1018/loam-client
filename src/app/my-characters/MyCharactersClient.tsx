@@ -2,10 +2,13 @@
 
 import { useState, useEffect } from 'react';
 
-import type { TMyCharacterInfo } from '@/app/my-characters/_type/myCharacters';
+import type {
+  TCreateMyCharacterInfo,
+  TMyCharacterInfo,
+} from '@/app/my-characters/_type/myCharacters';
 import {
   getMyCharacters,
-  addMyCharacter,
+  addMyCharacters,
   reorderMyCharacters,
   deleteMyCharacter,
 } from '@/app/my-characters/_util/myCharacter';
@@ -16,8 +19,6 @@ import CharacterList from './_component/CharacterList';
 import CreateCharacterModal from './_component/createCharacterModal/CreateCharacterModal';
 
 import styles from './myCharactersClient.module.scss';
-
-const NICKNAME_REGEX = /^[가-힣a-zA-Z0-9]{2,16}$/;
 
 export default function MyCharactersClient() {
   const [characters, setCharacters] = useState<TMyCharacterInfo[]>([]);
@@ -33,24 +34,15 @@ export default function MyCharactersClient() {
     reorderMyCharacters(next);
   }
 
-  function handleSubmitCharacter(nickname: string, classValue: string | null) {
-    const trimmed = nickname.trim();
-    if (!NICKNAME_REGEX.test(trimmed)) {
-      toast.error('닉네임은 한글, 영문, 숫자만 사용해 2~16자로 입력하세요.');
-      return;
-    }
-    if (characters.some((c) => c.nickname === trimmed)) {
-      toast.error('이미 추가된 캐릭터입니다.');
-      return;
-    }
-    if (classValue === null) {
-      toast.error('클래스를 선택하세요.');
+  function handleSubmitCharacters(nextCharacters: TCreateMyCharacterInfo[]) {
+    if (nextCharacters.length === 0) {
       return;
     }
 
-    addMyCharacter(trimmed, classValue);
+    addMyCharacters(nextCharacters);
     setCharacters(getMyCharacters());
     setIsCreateModalOpen(false);
+    toast.success('캐릭터를 등록했습니다.');
   }
 
   function handleDeleteCharacter(id: string) {
@@ -64,13 +56,13 @@ export default function MyCharactersClient() {
         <div className={styles['list-header']}>
           <p className={styles['title']}>내 캐릭터 목록</p>
           <Button onClick={() => setIsCreateModalOpen(true)} theme="bg-pri">
-            추가하기
+            원정대 불러오기
           </Button>
         </div>
 
         {characters.length === 0 ? (
           <div className={styles['empty']}>
-            <p className={styles['empty-message']}>내 캐릭터를 추가하세요.</p>
+            <p className={styles['empty-message']}>원정대 캐릭터를 불러오세요.</p>
           </div>
         ) : (
           <CharacterList
@@ -84,8 +76,9 @@ export default function MyCharactersClient() {
       {isCreateModalOpen && (
         <CreateCharacterModal
           isOpen={isCreateModalOpen}
+          registeredCharacters={characters}
           onClose={() => setIsCreateModalOpen(false)}
-          onSubmit={handleSubmitCharacter}
+          onSubmit={handleSubmitCharacters}
         />
       )}
     </div>

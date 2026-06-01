@@ -1,5 +1,5 @@
 import type { TMyCharacterInfo } from '@/app/my-characters/_type/myCharacters';
-import { getClassInfo } from '@/app/my-characters/_util/lostark';
+import { getClassImageUrl } from '@/app/my-characters/_util/lostark';
 
 import DraggableList from '@/components/common/draggableList/DraggableList';
 import CharacterListItem from './CharacterListItem';
@@ -17,12 +17,12 @@ export default function CharacterList(props: {
       onReorder={props.onReorder}
     >
       {(character, { dragHandleProps }) => {
-        const classData = getClassInfo(character.classValue);
         return (
           <CharacterListItem
             nickname={character.nickname}
-            className={classData.label}
-            thumbnail={classData.imageUrl}
+            className={character.className}
+            itemLevel={character.itemLevel}
+            thumbnail={getClassImageUrl(character.className)}
             dragHandleProps={dragHandleProps}
             onDelete={() => props.onDeleteItem(character.id)}
           />

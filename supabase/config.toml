@@ -1,0 +1,4 @@
+project_id = "fkltadvuqdssxrcvhcgl"
+
+[functions.lostark-sibling-characters]
+verify_jwt = false

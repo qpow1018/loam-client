@@ -1,58 +1,57 @@
 import axios from 'axios';
 
-const axiosInstance = axios.create({
-  baseURL: 'http://localhost:5500',
-  timeout: 3000,
-  // headers: {}
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+
+export const supabaseFunctionInstance = axios.create({
+  baseURL: supabaseUrl ? `${supabaseUrl}/functions/v1` : undefined,
+  timeout: 10000,
 });
 
-enum HTTPMethods {
-  GET = 'GET',
-  POST = 'POST',
-  PUT = 'PUT',
-  DELETE = 'DELETE',
-}
-
-class APIBase {
-  private static _instance: APIBase | null = null;
-  public static getInstance() {
-    if (APIBase._instance === null) {
-      APIBase._instance = new APIBase();
-    }
-    return APIBase._instance;
+supabaseFunctionInstance.interceptors.request.use((config) => {
+  if (!supabaseUrl) {
+    throw new Error('NEXT_PUBLIC_SUPABASE_URL environment variable is required.');
   }
 
-  private async apiRequest(method: HTTPMethods, url: string, data?: Object) {
-    try {
-      const resData = await axiosInstance({
-        method: method,
-        url: url,
-        data: data,
-      });
-
-      return resData.data.data;
-
-    } catch (error) {
-      console.error('api error', error);
-      throw error;
-    }
+  if (!supabasePublishableKey) {
+    throw new Error(
+      'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY environment variable is required.',
+    );
   }
 
-  public async get(url: string) {
-    return await this.apiRequest(HTTPMethods.GET, url);
-  }
+  config.headers.Authorization = `Bearer ${supabasePublishableKey}`;
+  config.headers.apikey = supabasePublishableKey;
+  config.headers['Content-Type'] = 'application/json';
 
-  public async post(url: string, data?: Object) {
-    return await this.apiRequest(HTTPMethods.POST, url, data);
-  }
+  return config;
+});
 
-  public async put(url: string, data?: Object) {
-    return await this.apiRequest(HTTPMethods.PUT, url, data);
-  }
+const apiRequest = {
+  async get<TResponse>(url: string): Promise<TResponse> {
+    const response = await supabaseFunctionInstance.get<TResponse>(url);
+    return response.data;
+  },
 
-  public async delete(url: string) {
-    return await this.apiRequest(HTTPMethods.DELETE, url);
-  }
-}
+  async post<TResponse, TBody = unknown>(
+    url: string,
+    data?: TBody,
+  ): Promise<TResponse> {
+    const response = await supabaseFunctionInstance.post<TResponse>(url, data);
+    return response.data;
+  },
 
-export default APIBase.getInstance();
+  async put<TResponse, TBody = unknown>(
+    url: string,
+    data?: TBody,
+  ): Promise<TResponse> {
+    const response = await supabaseFunctionInstance.put<TResponse>(url, data);
+    return response.data;
+  },
+
+  async delete<TResponse>(url: string): Promise<TResponse> {
+    const response = await supabaseFunctionInstance.delete<TResponse>(url);
+    return response.data;
+  },
+};
+
+export default apiRequest;

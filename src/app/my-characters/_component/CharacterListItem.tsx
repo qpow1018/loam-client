@@ -12,7 +12,8 @@ import { MdDragHandle, MdDeleteOutline } from 'react-icons/md';
 export default function CharacterListItem(props: {
   nickname: string;
   className: string;
-  thumbnail: string;
+  itemLevel: string;
+  thumbnail?: string;
   dragHandleProps: TDragHandleProps;
   onDelete: () => void;
 }) {
@@ -35,12 +36,14 @@ export default function CharacterListItem(props: {
 
         <div className={styles['info']}>
           <div className={styles['thumbnail']}>
-            <img src={props.thumbnail} alt="" />
+            {props.thumbnail && <img src={props.thumbnail} alt="" />}
           </div>
 
           <div className={styles['labels']}>
             <p className={styles['nickname']}>{props.nickname}</p>
-            <p className={styles['class-name']}>{props.className}</p>
+            <p className={styles['class-name']}>
+              {props.className} · {props.itemLevel}
+            </p>
           </div>
         </div>
 
