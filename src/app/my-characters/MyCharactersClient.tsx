@@ -11,6 +11,7 @@ import {
 } from '@/app/my-characters/_util/myCharacter';
 
 import Button from '@/components/common/button/Button';
+import toast from '@/utils/toast';
 import CharacterList from './_component/CharacterList';
 import CreateCharacterModal from './_component/createCharacterModal/CreateCharacterModal';
 
@@ -35,15 +36,15 @@ export default function MyCharactersClient() {
   function handleSubmitCharacter(nickname: string, classValue: string | null) {
     const trimmed = nickname.trim();
     if (!NICKNAME_REGEX.test(trimmed)) {
-      alert('닉네임은 한글, 영문, 숫자만 사용해 2~16자로 입력하세요.');
+      toast.error('닉네임은 한글, 영문, 숫자만 사용해 2~16자로 입력하세요.');
       return;
     }
     if (characters.some((c) => c.nickname === trimmed)) {
-      alert('이미 추가된 캐릭터입니다.');
+      toast.error('이미 추가된 캐릭터입니다.');
       return;
     }
     if (classValue === null) {
-      alert('클래스를 선택하세요.');
+      toast.error('클래스를 선택하세요.');
       return;
     }
 

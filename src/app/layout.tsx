@@ -5,6 +5,7 @@ import '@/assets/reset.scss';
 import '@/assets/global.scss';
 
 import Header from '@/components/common/header/Header';
+import ToastContainer from '@/components/common/toast/ToastContainer';
 import ServiceWorkerRegister from '@/app/_component/ServiceWorkerRegister';
 
 const notoSansKr = Noto_Sans_KR({
@@ -41,6 +42,7 @@ export default function RootLayout({
         <ServiceWorkerRegister />
 
         {children}
+        <ToastContainer />
       </body>
     </html>
   );
