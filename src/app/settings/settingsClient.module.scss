@@ -1,7 +1,11 @@
 .settings-page {
-  padding: 16px;
+  min-width: 100%;
 
-  > section:not(:first-of-type) {
-    margin-top: 16px;
+  .settings-page-container {
+    padding: 16px;
+
+    > section:not(:first-of-type) {
+      margin-top: 16px;
+    }
   }
 }

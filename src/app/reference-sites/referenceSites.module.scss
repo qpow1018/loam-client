@@ -1,5 +1,9 @@
 .reference-sites-page {
-  padding: 16px;
+  min-width: 100%;
+
+  .reference-sites-page-container {
+    padding: 16px;
+  }
 
   .reference-sites-container {
     width: 1024px;
@@ -24,7 +28,6 @@
     .site-list {
       li {
         border-bottom: 1px solid $gray-700;
-
 
         &:last-child {
           border-bottom: none;

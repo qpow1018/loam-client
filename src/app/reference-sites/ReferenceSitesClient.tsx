@@ -1,8 +1,10 @@
 'use client';
 
-import styles from './referenceSites.module.scss';
-
 import { MdOpenInNew } from 'react-icons/md';
+
+import Header from '@/components/common/header/Header';
+
+import styles from './referenceSites.module.scss';
 
 const REFERENCE_SITES = [
   {
@@ -54,39 +56,43 @@ const REFERENCE_SITES = [
 
 export default function ReferenceSitesClient() {
   return (
-    <main className={styles['reference-sites-page']}>
-      <section className={styles['reference-sites-container']}>
-        <div className={styles['section-header']}>
-          <h1 className={styles['title']}>참고 사이트</h1>
-        </div>
+    <div className={styles['reference-sites-page']}>
+      <Header />
 
-        <ul className={styles['site-list']}>
-          {REFERENCE_SITES.map((site) => (
-            <li key={site.url}>
-              <a
-                href={site.url}
-                target="_blank"
-                rel="noreferrer"
-                className={styles['site-item']}
-                aria-label={`${site.name} 새 창에서 열기`}
-              >
-                <div className={styles['site-content']}>
-                  <div className={styles['site-title-row']}>
-                    <h2>{site.name}</h2>
-                    <span>{getDisplayUrl(site.url)}</span>
+      <main className={styles['reference-sites-page-container']}>
+        <section className={styles['reference-sites-container']}>
+          <div className={styles['section-header']}>
+            <h1 className={styles['title']}>참고 사이트</h1>
+          </div>
+
+          <ul className={styles['site-list']}>
+            {REFERENCE_SITES.map((site) => (
+              <li key={site.url}>
+                <a
+                  href={site.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={styles['site-item']}
+                  aria-label={`${site.name} 새 창에서 열기`}
+                >
+                  <div className={styles['site-content']}>
+                    <div className={styles['site-title-row']}>
+                      <h2>{site.name}</h2>
+                      <span>{getDisplayUrl(site.url)}</span>
+                    </div>
+                    <p>{site.description}</p>
                   </div>
-                  <p>{site.description}</p>
-                </div>
 
-                <span className={styles['site-link-icon']}>
-                  <MdOpenInNew size={18} />
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-    </main>
+                  <span className={styles['site-link-icon']}>
+                    <MdOpenInNew size={18} />
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </main>
+    </div>
   );
 }
 

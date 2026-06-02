@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { createClient } from '@/lib/supabase/client';
+
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
@@ -8,18 +10,25 @@ export const supabaseFunctionInstance = axios.create({
   timeout: 10000,
 });
 
-supabaseFunctionInstance.interceptors.request.use((config) => {
+supabaseFunctionInstance.interceptors.request.use(async (config) => {
   if (!supabaseUrl) {
     throw new Error('NEXT_PUBLIC_SUPABASE_URL environment variable is required.');
   }
 
   if (!supabasePublishableKey) {
-    throw new Error(
-      'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY environment variable is required.',
-    );
+    throw new Error('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY environment variable is required.');
   }
 
-  config.headers.Authorization = `Bearer ${supabasePublishableKey}`;
+  const supabase = createClient();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session?.access_token) {
+    throw new Error('Login is required.');
+  }
+
+  config.headers.Authorization = `Bearer ${session.access_token}`;
   config.headers.apikey = supabasePublishableKey;
   config.headers['Content-Type'] = 'application/json';
 
@@ -32,18 +41,12 @@ const apiRequest = {
     return response.data;
   },
 
-  async post<TResponse, TBody = unknown>(
-    url: string,
-    data?: TBody,
-  ): Promise<TResponse> {
+  async post<TResponse, TBody = unknown>(url: string, data?: TBody): Promise<TResponse> {
     const response = await supabaseFunctionInstance.post<TResponse>(url, data);
     return response.data;
   },
 
-  async put<TResponse, TBody = unknown>(
-    url: string,
-    data?: TBody,
-  ): Promise<TResponse> {
+  async put<TResponse, TBody = unknown>(url: string, data?: TBody): Promise<TResponse> {
     const response = await supabaseFunctionInstance.put<TResponse>(url, data);
     return response.data;
   },

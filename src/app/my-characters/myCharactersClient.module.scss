@@ -1,5 +1,9 @@
 .my-characters-client {
-  padding: 16px;
+  min-width: 100%;
+
+  .my-characters-client-container {
+    padding: 16px;
+  }
 
   .character-list-container {
     width: 1024px;

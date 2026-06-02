@@ -16,6 +16,7 @@ import {
 } from '@/app/my-characters/_util/myCharacter';
 
 import Button from '@/components/common/button/Button';
+import Header from '@/components/common/header/Header';
 import toast from '@/utils/toast';
 import CharacterList from './_component/CharacterList';
 import CreateCharacterModal from './_component/createCharacterModal/CreateCharacterModal';
@@ -88,36 +89,40 @@ export default function MyCharactersClient() {
 
   return (
     <div className={styles['my-characters-client']}>
-      <section className={styles['character-list-container']}>
-        <div className={styles['list-header']}>
-          <p className={styles['title']}>내 캐릭터 목록</p>
-          <div className={styles['header-actions']}>
-            <Button
-              onClick={handleRefreshCharacters}
-              theme="bg-gray600"
-              isLoading={isRefreshing}
-              isDisabled={characters.length === 0}
-            >
-              원정대 갱신
-            </Button>
-            <Button onClick={() => setIsCreateModalOpen(true)} theme="bg-pri">
-              원정대 불러오기
-            </Button>
-          </div>
-        </div>
+      <Header />
 
-        {characters.length === 0 ? (
-          <div className={styles['empty']}>
-            <p className={styles['empty-message']}>원정대 캐릭터를 불러오세요.</p>
+      <main className={styles['my-characters-client-container']}>
+        <section className={styles['character-list-container']}>
+          <div className={styles['list-header']}>
+            <p className={styles['title']}>내 캐릭터 목록</p>
+            <div className={styles['header-actions']}>
+              <Button
+                onClick={handleRefreshCharacters}
+                theme="bg-gray600"
+                isLoading={isRefreshing}
+                isDisabled={characters.length === 0}
+              >
+                원정대 갱신
+              </Button>
+              <Button onClick={() => setIsCreateModalOpen(true)} theme="bg-pri">
+                원정대 불러오기
+              </Button>
+            </div>
           </div>
-        ) : (
-          <CharacterList
-            characters={characters}
-            onReorder={handleReorder}
-            onDeleteItem={handleDeleteCharacter}
-          />
-        )}
-      </section>
+
+          {characters.length === 0 ? (
+            <div className={styles['empty']}>
+              <p className={styles['empty-message']}>원정대 캐릭터를 불러오세요.</p>
+            </div>
+          ) : (
+            <CharacterList
+              characters={characters}
+              onReorder={handleReorder}
+              onDeleteItem={handleDeleteCharacter}
+            />
+          )}
+        </section>
+      </main>
 
       {isCreateModalOpen && (
         <CreateCharacterModal

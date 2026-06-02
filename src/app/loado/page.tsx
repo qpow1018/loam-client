@@ -1,5 +1,8 @@
-import LoadoClient from "./LoadoClient";
+import LoadoClient from './LoadoClient';
+import { requireAuth } from '@/lib/auth/requireAuth';
 
-export default function LoadoPage() {
+export default async function LoadoPage() {
+  await requireAuth('/loado');
+
   return <LoadoClient />;
 }

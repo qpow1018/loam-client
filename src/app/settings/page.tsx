@@ -1,5 +1,8 @@
 import SettingsClient from '@/app/settings/SettingsClient';
+import { requireAuth } from '@/lib/auth/requireAuth';
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  await requireAuth('/settings');
+
   return <SettingsClient />;
 }
