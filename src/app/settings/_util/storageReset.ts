@@ -17,7 +17,12 @@ export const RESET_TARGETS: Record<
     actionLabel: '전체 초기화',
     statusLabel: '전체 저장소',
     confirmMessage: '할일 테이블, 메모, 내 캐릭터 데이터를 모두 초기화할까요?',
-    keys: [StorageKey.LOADO_TABLE, StorageKey.LOADO_MEMOS, StorageKey.MY_CHARACTER_LIST],
+    keys: [
+      StorageKey.LOADO_TABLE,
+      StorageKey.LOADO_MEMOS,
+      StorageKey.MY_CHARACTER_LIST,
+      StorageKey.ANONYMOUS_CLIENT_ID,
+    ],
   },
   loado: {
     label: '할일',

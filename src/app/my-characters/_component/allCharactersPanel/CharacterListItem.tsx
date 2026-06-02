@@ -14,12 +14,13 @@ export default function CharacterListItem(props: {
   className: string;
   itemLevel: string;
   thumbnail?: string;
+  isMain: boolean;
+  isMainToggleLoading?: boolean;
   dragHandleProps: TDragHandleProps;
+  onToggleMain: () => void;
   onDelete: () => void;
 }) {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-
-  const lopecUrl = `https://lopec.kr/character/specPoint/${encodeURIComponent(props.nickname)}`;
 
   return (
     <>
@@ -39,7 +40,10 @@ export default function CharacterListItem(props: {
           </div>
 
           <div className={styles['labels']}>
-            <p className={styles['nickname']}>{props.nickname}</p>
+            <div className={styles['nickname-line']}>
+              <p className={styles['nickname']}>{props.nickname}</p>
+              {props.isMain && <span className={styles['main-badge']}>메인</span>}
+            </div>
             <p className={styles['class-name']}>
               {props.className} · {props.itemLevel}
             </p>
@@ -49,9 +53,10 @@ export default function CharacterListItem(props: {
         <Button
           theme="bg-gray600"
           size="small"
-          onClick={() => window.open(lopecUrl, '_blank', 'noopener,noreferrer')}
+          isLoading={props.isMainToggleLoading}
+          onClick={props.onToggleMain}
         >
-          로펙
+          {props.isMain ? '메인 해제' : '메인 등록'}
         </Button>
 
         <IconButton onClick={() => setIsConfirmOpen(true)}>

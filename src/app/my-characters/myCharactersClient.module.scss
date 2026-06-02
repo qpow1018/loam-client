@@ -6,10 +6,14 @@
   }
 
   .character-list-container {
-    width: 1024px;
+    width: min(1024px, 100%);
     padding: 16px;
     border-radius: $border-radius;
     background: $gray-800;
+
+    .tab-panel {
+      padding-top: 12px;
+    }
 
     .list-header {
       display: flex;

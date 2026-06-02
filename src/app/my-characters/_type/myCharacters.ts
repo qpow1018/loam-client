@@ -4,6 +4,7 @@ export type TMyCharacterInfo = {
   nickname: string;
   className: string;
   itemLevel: string;
-}
+  isMain?: boolean;
+};
 
-export type TCreateMyCharacterInfo = Omit<TMyCharacterInfo, 'id'>;
+export type TCreateMyCharacterInfo = Omit<TMyCharacterInfo, 'id' | 'isMain'>;

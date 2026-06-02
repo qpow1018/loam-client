@@ -4,6 +4,7 @@ export const StorageKey = {
   LOADO_TABLE: 'loado-table-state',
   LOADO_MEMOS: 'loado-memos-state',
   MY_CHARACTER_LIST: 'my-character-list',
+  ANONYMOUS_CLIENT_ID: 'anonymous-client-id',
 } as const;
 
 type TStorageKey = (typeof StorageKey)[keyof typeof StorageKey];

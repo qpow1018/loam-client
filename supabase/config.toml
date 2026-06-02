@@ -2,3 +2,9 @@ project_id = "fkltadvuqdssxrcvhcgl"
 
 [functions.lostark-sibling-characters]
 verify_jwt = false
+
+[functions.lostark-character-spec]
+verify_jwt = false
+
+[functions.main-character-specs]
+verify_jwt = false
