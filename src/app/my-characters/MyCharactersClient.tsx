@@ -28,11 +28,6 @@ export default function MyCharactersClient() {
     setCharacters(getMyCharacters());
   }, []);
 
-  // const mainCharacters = useMemo(
-  //   () => characters.filter((character) => character.isMain === true),
-  //   [characters],
-  // );
-
   return (
     <div className={styles['my-characters-client']}>
       <Header />
@@ -48,9 +43,7 @@ export default function MyCharactersClient() {
             </>
           )}
 
-          {activeTab === 'all' && (
-            <AllCharactersPanel characters={characters} onCharactersChange={setCharacters} />
-          )}
+          {activeTab === 'all' && <AllCharactersPanel />}
         </div>
       </div>
     </div>

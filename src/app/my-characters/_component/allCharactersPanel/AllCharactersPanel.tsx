@@ -28,10 +28,9 @@ import CreateCharacterModal from './CreateCharacterModal';
 
 import styles from './allCharactersPanel.module.scss';
 
-export default function AllCharactersPanel(props: {
-  characters: TMyCharacterInfo[];
-  onCharactersChange: (characters: TMyCharacterInfo[]) => void;
-}) {
+export default function AllCharactersPanel() {
+  const [characters, setCharacters] = useState<TMyCharacterInfo[]>([]);
+
   const [anonymousClientId, setAnonymousClientId] = useState('');
   const [togglingMainCharacterId, setTogglingMainCharacterId] = useState<string | null>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -39,11 +38,16 @@ export default function AllCharactersPanel(props: {
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
+    setCharacters(getMyCharacters());
+  }, []);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setAnonymousClientId(getAnonymousClientId());
   }, []);
 
   function handleReorder(next: TMyCharacterInfo[]) {
-    props.onCharactersChange(next);
+    setCharacters(next);
     reorderMyCharacters(next);
   }
 
@@ -53,28 +57,28 @@ export default function AllCharactersPanel(props: {
     }
 
     addMyCharacters(nextCharacters);
-    props.onCharactersChange(getMyCharacters());
+    setCharacters(getMyCharacters());
     setIsCreateModalOpen(false);
     toast.success('캐릭터를 등록했습니다.');
   }
 
   function handleDeleteCharacter(id: string) {
     deleteMyCharacter(id);
-    props.onCharactersChange(getMyCharacters());
+    setCharacters(getMyCharacters());
   }
 
   async function handleRefreshCharacters() {
-    if (props.characters.length === 0 || isRefreshing) return;
+    if (characters.length === 0 || isRefreshing) return;
 
     setIsRefreshing(true);
 
     try {
-      const response = await api.lostark.getSiblingCharacters(props.characters[0].nickname);
+      const response = await api.lostark.getSiblingCharacters(characters[0].nickname);
       const itemLevelByCharacterName = new Map(
         response.data.map((character) => [character.CharacterName, character.ItemAvgLevel]),
       );
 
-      const nextCharacters = props.characters.map((character) => {
+      const nextCharacters = characters.map((character) => {
         const nextItemLevel = itemLevelByCharacterName.get(character.nickname);
         if (nextItemLevel === undefined) {
           return character;
@@ -87,7 +91,7 @@ export default function AllCharactersPanel(props: {
       });
 
       updateMyCharacters(nextCharacters);
-      props.onCharactersChange(nextCharacters);
+      setCharacters(nextCharacters);
       toast.success('원정대를 갱신했습니다.');
     } catch {
       toast.error('원정대 갱신에 실패했습니다.');
@@ -108,7 +112,7 @@ export default function AllCharactersPanel(props: {
 
     try {
       const nextCharacters = toggleMainCharacter(character.id);
-      props.onCharactersChange(nextCharacters);
+      setCharacters(nextCharacters);
 
       if (character.isMain === true) {
         toast.success('메인 캐릭터를 해제했습니다.');
@@ -136,7 +140,7 @@ export default function AllCharactersPanel(props: {
       toast.success('메인 캐릭터를 등록했습니다.');
     } catch {
       const rollbackCharacters = toggleMainCharacter(character.id);
-      props.onCharactersChange(rollbackCharacters);
+      setCharacters(rollbackCharacters);
       toast.error('메인 캐릭터 등록에 실패했습니다.');
     } finally {
       setTogglingMainCharacterId(null);
@@ -152,7 +156,7 @@ export default function AllCharactersPanel(props: {
             onClick={handleRefreshCharacters}
             theme="bg-gray600"
             isLoading={isRefreshing}
-            isDisabled={props.characters.length === 0}
+            isDisabled={characters.length === 0}
           >
             원정대 갱신
           </Button>
@@ -162,13 +166,13 @@ export default function AllCharactersPanel(props: {
         </div>
       </div>
 
-      {props.characters.length === 0 ? (
+      {characters.length === 0 ? (
         <div className={styles['empty']}>
           <p className={styles['empty-message']}>원정대 캐릭터를 불러오세요.</p>
         </div>
       ) : (
         <CharacterList
-          characters={props.characters}
+          characters={characters}
           togglingMainCharacterId={togglingMainCharacterId}
           onReorder={handleReorder}
           onDeleteItem={handleDeleteCharacter}
@@ -179,7 +183,7 @@ export default function AllCharactersPanel(props: {
       {isCreateModalOpen && (
         <CreateCharacterModal
           isOpen={isCreateModalOpen}
-          registeredCharacters={props.characters}
+          registeredCharacters={characters}
           onClose={() => setIsCreateModalOpen(false)}
           onSubmit={handleSubmitCharacters}
         />
