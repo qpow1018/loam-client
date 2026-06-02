@@ -28,28 +28,31 @@ export default function MyCharactersClient() {
     setCharacters(getMyCharacters());
   }, []);
 
-  const mainCharacters = useMemo(
-    () => characters.filter((character) => character.isMain === true),
-    [characters],
-  );
+  // const mainCharacters = useMemo(
+  //   () => characters.filter((character) => character.isMain === true),
+  //   [characters],
+  // );
 
   return (
     <div className={styles['my-characters-client']}>
       <Header />
 
-      <main className={styles['my-characters-client-container']}>
-        <section className={styles['character-list-container']}>
-          <Tabs options={MY_CHARACTER_TABS} value={activeTab} onChange={setActiveTab} />
+      <div className={styles['my-characters-client-container']}>
+        <Tabs options={MY_CHARACTER_TABS} value={activeTab} onChange={setActiveTab} />
 
-          <div className={styles['tab-panel']} hidden={activeTab !== 'main'}>
-            {/* <MainCharactersPanel characters={mainCharacters} /> */}
-          </div>
+        <div className={styles['character-list-container']}>
+          {activeTab === 'main' && (
+            <>
+              TODO
+              {/* <MainCharactersPanel characters={mainCharacters} /> */}
+            </>
+          )}
 
-          <div className={styles['tab-panel']} hidden={activeTab !== 'all'}>
+          {activeTab === 'all' && (
             <AllCharactersPanel characters={characters} onCharactersChange={setCharacters} />
-          </div>
-        </section>
-      </main>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

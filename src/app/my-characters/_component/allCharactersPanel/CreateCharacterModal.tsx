@@ -17,10 +17,6 @@ import styles from './createCharacterModal.module.scss';
 
 import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md';
 
-function parseItemLevel(itemLevel: string) {
-  return Number(itemLevel.replaceAll(',', ''));
-}
-
 export default function CreateCharacterModal(props: {
   isOpen: boolean;
   registeredCharacters: TMyCharacterInfo[];
@@ -39,6 +35,10 @@ export default function CreateCharacterModal(props: {
   const unregisteredCharacters = characters
     .filter((character) => !registeredCharacterNames.has(character.CharacterName))
     .toSorted((a, b) => parseItemLevel(b.ItemAvgLevel) - parseItemLevel(a.ItemAvgLevel));
+
+  function parseItemLevel(itemLevel: string) {
+    return Number(itemLevel.replaceAll(',', ''));
+  }
 
   async function handleSearch() {
     const trimmed = characterName.trim();

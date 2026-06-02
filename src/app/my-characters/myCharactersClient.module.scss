@@ -6,43 +6,6 @@
   }
 
   .character-list-container {
-    width: min(1024px, 100%);
-    padding: 16px;
-    border-radius: $border-radius;
-    background: $gray-800;
-
-    .tab-panel {
-      padding-top: 12px;
-    }
-
-    .list-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-bottom: 12px;
-      border-bottom: 1px solid $gray-600;
-
-      .title {
-        font-size: 13px;
-        font-weight: 500;
-      }
-
-      .header-actions {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-    }
-
-    .empty {
-      display: flex;
-      justify-content: center;
-      padding: 100px 0;
-
-      .empty-message {
-        font-size: 13px;
-        color: $text-secondary;
-      }
-    }
+    margin-top: 12px;
   }
 }

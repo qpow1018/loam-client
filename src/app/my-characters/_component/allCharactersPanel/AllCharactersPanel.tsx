@@ -26,7 +26,7 @@ import toast from '@/utils/toast';
 import CharacterList from './CharacterList';
 import CreateCharacterModal from './CreateCharacterModal';
 
-import styles from '../../myCharactersClient.module.scss';
+import styles from './allCharactersPanel.module.scss';
 
 export default function AllCharactersPanel(props: {
   characters: TMyCharacterInfo[];
@@ -144,7 +144,7 @@ export default function AllCharactersPanel(props: {
   }
 
   return (
-    <>
+    <section className={styles['all-characters-panel']}>
       <div className={styles['list-header']}>
         <p className={styles['title']}>내 캐릭터 목록</p>
         <div className={styles['header-actions']}>
@@ -184,6 +184,6 @@ export default function AllCharactersPanel(props: {
           onSubmit={handleSubmitCharacters}
         />
       )}
-    </>
+    </section>
   );
 }
