@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
-import type { TMyCharacterInfo } from '@/app/my-characters/_type/myCharacters';
+import type { TLostarkMyCharacter } from '@/api/lostark/type';
 import { getMyCharacters } from '@/app/my-characters/_util/myCharacter';
 
 import Header from '@/components/common/header/Header';
@@ -20,7 +20,7 @@ const MY_CHARACTER_TABS = [
 ] as const;
 
 export default function MyCharactersClient() {
-  const [characters, setCharacters] = useState<TMyCharacterInfo[]>([]);
+  const [characters, setCharacters] = useState<TLostarkMyCharacter[]>([]);
   const [activeTab, setActiveTab] = useState<TMyCharactersTab>('main');
 
   useEffect(() => {

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import type { TLoadoColumn } from '@/app/loado/_type/loado';
-import type { TMyCharacterInfo } from '@/app/my-characters/_type/myCharacters';
+import type { TLostarkMyCharacter } from '@/api/lostark/type';
 import { getMyCharacters } from '@/app/my-characters/_util/myCharacter';
 import { getClassImageUrl } from '@/app/my-characters/_util/lostark';
 
@@ -33,7 +33,7 @@ export default function CharacterModal(props: {
   const myCharacters = getMyCharacters();
   const isSaveDisabled = tempColumn === null;
 
-  function handleSelectCharacter(character: TMyCharacterInfo) {
+  function handleSelectCharacter(character: TLostarkMyCharacter) {
     setTempColumn((prev) => ({
       id: prev?.id ?? uuidv4(),
       name: character.nickname,

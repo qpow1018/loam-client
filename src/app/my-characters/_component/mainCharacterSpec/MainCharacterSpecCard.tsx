@@ -3,7 +3,7 @@ import type {
   TCharacterSpecGemSummary,
   TCharacterSpecSectionStatusValue,
 } from '@/api/lostark/type';
-import type { TMyCharacterInfo } from '@/app/my-characters/_type/myCharacters';
+import type { TLostarkMyCharacter } from '@/api/lostark/type';
 
 import Button from '@/components/common/button/Button';
 
@@ -89,7 +89,7 @@ function getGemItems(gems: TCharacterSpec['summary']['gems']) {
 }
 
 export default function MainCharacterSpecCard(props: {
-  character: TMyCharacterInfo;
+  character: TLostarkMyCharacter;
   spec?: TCharacterSpec;
   isDirty: boolean;
   isLoading: boolean;

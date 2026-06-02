@@ -1,18 +1,18 @@
-import type { TMyCharacterInfo } from '@/app/my-characters/_type/myCharacters';
+import type { TLostarkMyCharacter } from '@/api/lostark/type';
 import { getClassImageUrl } from '@/app/my-characters/_util/lostark';
 
 import DraggableList from '@/components/common/draggableList/DraggableList';
 import CharacterListItem from './CharacterListItem';
 
 export default function CharacterList(props: {
-  characters: TMyCharacterInfo[];
+  characters: TLostarkMyCharacter[];
   togglingMainCharacterId?: string | null;
-  onReorder: (characters: TMyCharacterInfo[]) => void;
+  onReorder: (characters: TLostarkMyCharacter[]) => void;
   onDeleteItem: (id: string) => void;
-  onToggleMain: (character: TMyCharacterInfo) => void;
+  onToggleMain: (character: TLostarkMyCharacter) => void;
 }) {
   return (
-    <DraggableList<TMyCharacterInfo>
+    <DraggableList<TLostarkMyCharacter>
       items={props.characters}
       getId={(c) => c.id}
       direction="vertical"

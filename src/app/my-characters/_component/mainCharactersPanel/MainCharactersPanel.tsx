@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 
 import api from '@/api';
 import type { TCharacterSpec } from '@/api/lostark/type';
-import type { TMyCharacterInfo } from '@/app/my-characters/_type/myCharacters';
+import type { TLostarkMyCharacter } from '@/api/lostark/type';
 import { getAnonymousClientId } from '@/app/my-characters/_util/anonymousClient';
 import {
   isLostarkSpecDebugEnabled,
@@ -27,9 +27,7 @@ function removeLoadingName(setter: Dispatch<SetStateAction<Set<string>>>, name: 
   });
 }
 
-export default function MainCharactersPanel(props: {
-  characters: TMyCharacterInfo[];
-}) {
+export default function MainCharactersPanel(props: { characters: TLostarkMyCharacter[] }) {
   const [anonymousClientId, setAnonymousClientId] = useState('');
   const [specsByName, setSpecsByName] = useState<Record<string, TCharacterSpec | undefined>>({});
   const [dirtyCharacterNames, setDirtyCharacterNames] = useState<Set<string>>(new Set());
@@ -75,7 +73,7 @@ export default function MainCharactersPanel(props: {
     void loadSpecs();
   }, [anonymousClientId, props.characters]);
 
-  async function handleRefreshCharacterSpec(character: TMyCharacterInfo) {
+  async function handleRefreshCharacterSpec(character: TLostarkMyCharacter) {
     addLoadingName(setLoadingCharacterNames, character.nickname);
 
     try {
@@ -102,7 +100,7 @@ export default function MainCharactersPanel(props: {
     }
   }
 
-  async function handleSaveCharacterSpec(character: TMyCharacterInfo) {
+  async function handleSaveCharacterSpec(character: TLostarkMyCharacter) {
     if (!anonymousClientId) return;
 
     const spec = specsByName[character.nickname];

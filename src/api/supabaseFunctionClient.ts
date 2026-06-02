@@ -5,12 +5,12 @@ import { createClient } from '@/lib/supabase/client';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
-export const supabaseFunctionInstance = axios.create({
+export const supabaseFunctionAxios = axios.create({
   baseURL: supabaseUrl ? `${supabaseUrl}/functions/v1` : undefined,
   timeout: 10000,
 });
 
-supabaseFunctionInstance.interceptors.request.use(async (config) => {
+supabaseFunctionAxios.interceptors.request.use(async (config) => {
   if (!supabaseUrl) {
     throw new Error('NEXT_PUBLIC_SUPABASE_URL environment variable is required.');
   }
@@ -35,26 +35,26 @@ supabaseFunctionInstance.interceptors.request.use(async (config) => {
   return config;
 });
 
-const apiRequest = {
+const supabaseFunctionClient = {
   async get<TResponse>(url: string): Promise<TResponse> {
-    const response = await supabaseFunctionInstance.get<TResponse>(url);
+    const response = await supabaseFunctionAxios.get<TResponse>(url);
     return response.data;
   },
 
   async post<TResponse, TBody = unknown>(url: string, data?: TBody): Promise<TResponse> {
-    const response = await supabaseFunctionInstance.post<TResponse>(url, data);
+    const response = await supabaseFunctionAxios.post<TResponse>(url, data);
     return response.data;
   },
 
   async put<TResponse, TBody = unknown>(url: string, data?: TBody): Promise<TResponse> {
-    const response = await supabaseFunctionInstance.put<TResponse>(url, data);
+    const response = await supabaseFunctionAxios.put<TResponse>(url, data);
     return response.data;
   },
 
   async delete<TResponse>(url: string): Promise<TResponse> {
-    const response = await supabaseFunctionInstance.delete<TResponse>(url);
+    const response = await supabaseFunctionAxios.delete<TResponse>(url);
     return response.data;
   },
 };
 
-export default apiRequest;
+export default supabaseFunctionClient;

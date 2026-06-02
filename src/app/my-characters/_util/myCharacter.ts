@@ -2,31 +2,28 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { storage, StorageKey } from '@/utils/storage';
 
-import type {
-  TCreateMyCharacterInfo,
-  TMyCharacterInfo,
-} from '@/app/my-characters/_type/myCharacters';
+import type { TCreateLostarkMyCharacter, TLostarkMyCharacter } from '@/api/lostark/type';
 
-function normalizeMyCharacter(character: TMyCharacterInfo): TMyCharacterInfo {
+function normalizeMyCharacter(character: TLostarkMyCharacter): TLostarkMyCharacter {
   return {
     ...character,
     isMain: character.isMain === true,
   };
 }
 
-export function getMyCharacters(): TMyCharacterInfo[] {
+export function getMyCharacters(): TLostarkMyCharacter[] {
   return storage.local
-    .get<TMyCharacterInfo[]>(StorageKey.MY_CHARACTER_LIST, [])
+    .get<TLostarkMyCharacter[]>(StorageKey.MY_CHARACTER_LIST, [])
     .map(normalizeMyCharacter);
 }
 
-export function addMyCharacter(character: TCreateMyCharacterInfo): void {
+export function addMyCharacter(character: TCreateLostarkMyCharacter): void {
   const myCharacters = getMyCharacters();
-  const next: TMyCharacterInfo = { id: uuidv4(), isMain: false, ...character };
+  const next: TLostarkMyCharacter = { id: uuidv4(), isMain: false, ...character };
   storage.local.set(StorageKey.MY_CHARACTER_LIST, [...myCharacters, next]);
 }
 
-export function addMyCharacters(characters: TCreateMyCharacterInfo[]): void {
+export function addMyCharacters(characters: TCreateLostarkMyCharacter[]): void {
   const myCharacters = getMyCharacters();
   const nextCharacters = characters.map((character) => ({
     id: uuidv4(),
@@ -36,11 +33,11 @@ export function addMyCharacters(characters: TCreateMyCharacterInfo[]): void {
   storage.local.set(StorageKey.MY_CHARACTER_LIST, [...myCharacters, ...nextCharacters]);
 }
 
-export function reorderMyCharacters(characters: TMyCharacterInfo[]): void {
+export function reorderMyCharacters(characters: TLostarkMyCharacter[]): void {
   storage.local.set(StorageKey.MY_CHARACTER_LIST, characters);
 }
 
-export function updateMyCharacters(characters: TMyCharacterInfo[]): void {
+export function updateMyCharacters(characters: TLostarkMyCharacter[]): void {
   storage.local.set(StorageKey.MY_CHARACTER_LIST, characters);
 }
 
@@ -52,7 +49,7 @@ export function deleteMyCharacter(id: string): void {
   );
 }
 
-export function toggleMainCharacter(id: string): TMyCharacterInfo[] {
+export function toggleMainCharacter(id: string): TLostarkMyCharacter[] {
   const nextCharacters = getMyCharacters().map((character) => {
     if (character.id !== id) {
       return character;

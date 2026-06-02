@@ -2,10 +2,7 @@ import { useState } from 'react';
 
 import api from '@/api';
 import type { TLostarkSiblingCharacter } from '@/api/lostark/type';
-import type {
-  TCreateMyCharacterInfo,
-  TMyCharacterInfo,
-} from '@/app/my-characters/_type/myCharacters';
+import type { TCreateLostarkMyCharacter, TLostarkMyCharacter } from '@/api/lostark/type';
 import { getClassImageUrl } from '@/app/my-characters/_util/lostark';
 import toast from '@/utils/toast';
 
@@ -19,9 +16,9 @@ import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md';
 
 export default function CreateCharacterModal(props: {
   isOpen: boolean;
-  registeredCharacters: TMyCharacterInfo[];
+  registeredCharacters: TLostarkMyCharacter[];
   onClose: () => void;
-  onSubmit: (characters: TCreateMyCharacterInfo[]) => void;
+  onSubmit: (characters: TCreateLostarkMyCharacter[]) => void;
 }) {
   const [characterName, setCharacterName] = useState('');
   const [characters, setCharacters] = useState<TLostarkSiblingCharacter[]>([]);

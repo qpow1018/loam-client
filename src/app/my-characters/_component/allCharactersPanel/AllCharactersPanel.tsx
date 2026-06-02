@@ -3,24 +3,9 @@
 import { useEffect, useState } from 'react';
 
 import api from '@/api';
-import type {
-  TCreateMyCharacterInfo,
-  TMyCharacterInfo,
-} from '@/app/my-characters/_type/myCharacters';
-import { getAnonymousClientId } from '@/app/my-characters/_util/anonymousClient';
-import {
-  addMyCharacters,
-  deleteMyCharacter,
-  getMyCharacters,
-  reorderMyCharacters,
-  toggleMainCharacter,
-  updateMyCharacters,
-} from '@/app/my-characters/_util/myCharacter';
-import {
-  isLostarkSpecDebugEnabled,
-  logCharacterSpecDebug,
-} from '@/app/my-characters/_util/specDebug';
+import type { TCreateLostarkMyCharacter, TLostarkMyCharacter } from '@/api/lostark/type';
 import Button from '@/components/common/button/Button';
+import BoxLoading from '@/components/common/loading/BoxLoading';
 import toast from '@/utils/toast';
 
 import CharacterList from './CharacterList';
@@ -29,42 +14,61 @@ import CreateCharacterModal from './CreateCharacterModal';
 import styles from './allCharactersPanel.module.scss';
 
 export default function AllCharactersPanel() {
-  const [characters, setCharacters] = useState<TMyCharacterInfo[]>([]);
+  const [characters, setCharacters] = useState<TLostarkMyCharacter[]>([]);
 
-  const [anonymousClientId, setAnonymousClientId] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const [togglingMainCharacterId, setTogglingMainCharacterId] = useState<string | null>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setCharacters(getMyCharacters());
+    async function loadCharacters() {
+      try {
+        setCharacters(await api.lostark.getMyCharacters());
+      } catch {
+        toast.error('내 캐릭터 목록을 불러오지 못했습니다.');
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    void loadCharacters();
   }, []);
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setAnonymousClientId(getAnonymousClientId());
-  }, []);
-
-  function handleReorder(next: TMyCharacterInfo[]) {
+  async function handleReorder(next: TLostarkMyCharacter[]) {
+    const previous = characters;
     setCharacters(next);
-    reorderMyCharacters(next);
+
+    try {
+      setCharacters(await api.lostark.reorderMyCharacters(next));
+    } catch {
+      setCharacters(previous);
+      toast.error('캐릭터 순서 변경에 실패했습니다.');
+    }
   }
 
-  function handleSubmitCharacters(nextCharacters: TCreateMyCharacterInfo[]) {
+  async function handleSubmitCharacters(nextCharacters: TCreateLostarkMyCharacter[]) {
     if (nextCharacters.length === 0) {
       return;
     }
 
-    addMyCharacters(nextCharacters);
-    setCharacters(getMyCharacters());
-    setIsCreateModalOpen(false);
-    toast.success('캐릭터를 등록했습니다.');
+    try {
+      const savedCharacters = await api.lostark.addMyCharacters(nextCharacters, characters.length);
+      setCharacters(savedCharacters);
+      setIsCreateModalOpen(false);
+      toast.success('캐릭터를 등록했습니다.');
+    } catch {
+      toast.error('캐릭터 등록에 실패했습니다.');
+    }
   }
 
-  function handleDeleteCharacter(id: string) {
-    deleteMyCharacter(id);
-    setCharacters(getMyCharacters());
+  async function handleDeleteCharacter(id: string) {
+    try {
+      setCharacters(await api.lostark.deleteMyCharacter(id));
+      toast.success('캐릭터를 삭제했습니다.');
+    } catch {
+      toast.error('캐릭터 삭제에 실패했습니다.');
+    }
   }
 
   async function handleRefreshCharacters() {
@@ -90,8 +94,7 @@ export default function AllCharactersPanel() {
         };
       });
 
-      updateMyCharacters(nextCharacters);
-      setCharacters(nextCharacters);
+      setCharacters(await api.lostark.updateMyCharacters(nextCharacters));
       toast.success('원정대를 갱신했습니다.');
     } catch {
       toast.error('원정대 갱신에 실패했습니다.');
@@ -100,48 +103,18 @@ export default function AllCharactersPanel() {
     }
   }
 
-  async function handleToggleMainCharacter(character: TMyCharacterInfo) {
-    if (!anonymousClientId) {
-      toast.error('브라우저 식별자를 준비 중입니다.');
-      return;
-    }
-
+  async function handleToggleMainCharacter(character: TLostarkMyCharacter) {
     if (togglingMainCharacterId) return;
 
     setTogglingMainCharacterId(character.id);
 
     try {
-      const nextCharacters = toggleMainCharacter(character.id);
-      setCharacters(nextCharacters);
-
-      if (character.isMain === true) {
-        toast.success('메인 캐릭터를 해제했습니다.');
-        return;
-      }
-
-      const target = nextCharacters.find((nextCharacter) => nextCharacter.id === character.id);
-      if (!target) return;
-
-      const response = await api.lostark.getCharacterSpec({
-        characterName: target.nickname,
-        debug: isLostarkSpecDebugEnabled(),
-      });
-
-      const saveResponse = await api.lostark.saveMainCharacterSpec({
-        anonymousClientId,
-        spec: {
-          ...response.data,
-          savedAt: null,
-          updatedAt: null,
-        },
-      });
-
-      logCharacterSpecDebug('first-save', saveResponse.data);
-      toast.success('메인 캐릭터를 등록했습니다.');
+      setCharacters(await api.lostark.toggleMainCharacter(character.id));
+      toast.success(
+        character.isMain === true ? '메인 캐릭터를 해제했습니다.' : '메인 캐릭터를 등록했습니다.',
+      );
     } catch {
-      const rollbackCharacters = toggleMainCharacter(character.id);
-      setCharacters(rollbackCharacters);
-      toast.error('메인 캐릭터 등록에 실패했습니다.');
+      toast.error('메인 캐릭터 변경에 실패했습니다.');
     } finally {
       setTogglingMainCharacterId(null);
     }
@@ -166,7 +139,9 @@ export default function AllCharactersPanel() {
         </div>
       </div>
 
-      {characters.length === 0 ? (
+      {isLoading ? (
+        <BoxLoading height={240} />
+      ) : characters.length === 0 ? (
         <div className={styles['empty']}>
           <p className={styles['empty-message']}>원정대 캐릭터를 불러오세요.</p>
         </div>
