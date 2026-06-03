@@ -1,14 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
+import api from '@/api';
 import type { TResLostarkMyCharacter } from '@/api/lostark/type';
 import type { TLoadoColumn } from '@/app/loado/_type/loado';
-
-import { getMyCharacters } from '@/app/my-characters/_util/myCharacter';
 import { getClassImageUrl } from '@/utils/lostark';
+import toast from '@/utils/toast';
 
+import BoxLoading from '@/components/common/loading/BoxLoading';
 import Modal from '@/components/common/modal/Modal';
 import Confirm from '@/components/common/modal/Confirm';
 import Button from '@/components/common/button/Button';
@@ -27,12 +28,27 @@ export default function CharacterModal(props: {
 }) {
   const { isOpen, onClose, editingData, onSubmit, onDelete } = props;
 
+  const [allCharacters, setAllCharacters] = useState<TResLostarkMyCharacter[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [tempColumn, setTempColumn] = useState<TLoadoColumn | null>(editingData ?? null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const isEditMode = editingData !== undefined;
-  const myCharacters = getMyCharacters();
   const isSaveDisabled = tempColumn === null;
+
+  useEffect(() => {
+    async function getMyCharactersFromServer() {
+      try {
+        const res = await api.lostark.getMyCharacters();
+        setAllCharacters(res);
+        setIsLoading(false);
+      } catch {
+        toast.error('내 캐릭터 목록을 불러오지 못했습니다.');
+      }
+    }
+
+    getMyCharactersFromServer();
+  }, []);
 
   function handleSelectCharacter(character: TResLostarkMyCharacter) {
     setTempColumn((prev) => ({
@@ -56,13 +72,17 @@ export default function CharacterModal(props: {
         width={800}
       >
         <div className={styles['character-modal-content']}>
-          {myCharacters.length === 0 ? (
+          {isLoading && <BoxLoading height={240} />}
+
+          {!isLoading && allCharacters.length === 0 && (
             <div className={styles['empty']}>
               <p>먼저 내 캐릭터를 추가해주세요.</p>
             </div>
-          ) : (
+          )}
+
+          {!isLoading && allCharacters.length > 0 && (
             <div className={styles['grid']}>
-              {myCharacters.map((character) => {
+              {allCharacters.map((character) => {
                 const classImageUrl = getClassImageUrl(character.className);
                 const isSelected = tempColumn?.name === character.nickname;
                 return (
