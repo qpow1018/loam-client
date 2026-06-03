@@ -4,8 +4,6 @@ const BACKUP_SCHEMA_VERSION = 1;
 const BACKUP_STORAGE_KEYS = [
   StorageKey.LOADO_TABLE,
   StorageKey.LOADO_MEMOS,
-  StorageKey.MY_CHARACTER_LIST,
-  StorageKey.ANONYMOUS_CLIENT_ID,
 ] as const;
 
 export type TBackupPayload = {

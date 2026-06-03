@@ -13,7 +13,7 @@ import Confirm from '@/components/common/modal/Confirm';
 import SettingsField from '@/app/settings/_component/SettingsField';
 import SettingsSection from '@/app/settings/_component/SettingsSection';
 
-const PARTIAL_RESET_TARGETS: TResetTarget[] = ['loado', 'memo', 'characters'];
+const PARTIAL_RESET_TARGETS: TResetTarget[] = ['loado', 'memo'];
 
 export default function StorageResetSection() {
   const [resetStatus, setResetStatus] = useState<string>();
@@ -49,7 +49,7 @@ export default function StorageResetSection() {
           ))}
         </SettingsField>
 
-        <SettingsField label="전체 초기화" value="할일, 메모, 내 캐릭터 데이터를 삭제합니다.">
+        <SettingsField label="전체 초기화" value="할일, 메모 데이터를 삭제합니다.">
           <Button theme="bg-sec" size="small" onClick={() => setPendingResetTarget('all')}>
             {RESET_TARGETS.all.actionLabel}
           </Button>

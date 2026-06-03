@@ -1,6 +1,6 @@
 import { StorageKey, storage } from '@/utils/storage';
 
-export type TResetTarget = 'all' | 'loado' | 'memo' | 'characters';
+export type TResetTarget = 'all' | 'loado' | 'memo';
 
 export const RESET_TARGETS: Record<
   TResetTarget,
@@ -16,13 +16,8 @@ export const RESET_TARGETS: Record<
     label: '전체',
     actionLabel: '전체 초기화',
     statusLabel: '전체 저장소',
-    confirmMessage: '할일 테이블, 메모, 내 캐릭터 데이터를 모두 초기화할까요?',
-    keys: [
-      StorageKey.LOADO_TABLE,
-      StorageKey.LOADO_MEMOS,
-      StorageKey.MY_CHARACTER_LIST,
-      StorageKey.ANONYMOUS_CLIENT_ID,
-    ],
+    confirmMessage: '할일 테이블, 메모 데이터를 모두 초기화할까요?',
+    keys: [StorageKey.LOADO_TABLE, StorageKey.LOADO_MEMOS],
   },
   loado: {
     label: '할일',
@@ -37,13 +32,6 @@ export const RESET_TARGETS: Record<
     statusLabel: '메모',
     confirmMessage: '메모 데이터를 초기화할까요?',
     keys: [StorageKey.LOADO_MEMOS],
-  },
-  characters: {
-    label: '캐릭터',
-    actionLabel: '캐릭터',
-    statusLabel: '내 캐릭터',
-    confirmMessage: '내 캐릭터 목록을 초기화할까요?',
-    keys: [StorageKey.MY_CHARACTER_LIST],
   },
 };
 
