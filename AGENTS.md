@@ -113,7 +113,7 @@ npm run build
 ## PWA 참고사항
 
 - PWA metadata는 `src/app/layout.tsx`와 `src/app/manifest.ts`에 정의되어 있습니다.
-- 서비스 워커 `/sw.js`는 `src/app/_component/ServiceWorkerRegister.tsx`에서 등록합니다.
+- 서비스 워커 `/sw.js`는 `src/components/ServiceWorkerRegister.tsx`에서 등록합니다.
 - 브랜드와 앱 아이콘은 `public/brand/`, `public/icons/`에 있습니다.
 - PWA 동작을 바꾸면 가능하면 `npm run build`와 production serving(`npm run start`)까지 확인하세요.
 

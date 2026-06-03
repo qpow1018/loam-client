@@ -5,7 +5,7 @@ import '@/assets/reset.scss';
 import '@/assets/global.scss';
 
 import ToastContainer from '@/components/common/toast/ToastContainer';
-import ServiceWorkerRegister from '@/app/_component/ServiceWorkerRegister';
+import ServiceWorkerRegister from '@/components/ServiceWorkerRegister';
 
 const notoSansKr = Noto_Sans_KR({
   variable: '--font-noto-sans-kr',
