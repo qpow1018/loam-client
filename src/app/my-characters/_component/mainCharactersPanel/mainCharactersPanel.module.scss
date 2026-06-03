@@ -1,57 +1,13 @@
 .main-characters-panel {
-  padding: 16px;
-  border-radius: $border-radius;
-  background: $gray-800;
-
-  .list-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: 12px;
-    border-bottom: 1px solid $gray-600;
-
-    .title {
-      font-size: 13px;
-      font-weight: 500;
-    }
-  }
-
   .empty {
     display: flex;
     justify-content: center;
     padding: 100px 0;
+    border-radius: $border-radius;
+    background: $gray-800;
 
     .empty-message {
       font-size: 13px;
-      color: $text-secondary;
-    }
-  }
-
-  .character-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding-top: 12px;
-  }
-
-  .character-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 12px;
-    border: 1px solid $gray-600;
-    border-radius: $border-radius;
-    background: $gray-700;
-
-    .character-name {
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .character-meta {
-      flex-shrink: 0;
-      font-size: 12px;
       color: $text-secondary;
     }
   }

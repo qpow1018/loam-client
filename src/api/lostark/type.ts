@@ -49,9 +49,8 @@ export type TResLostarkCharacterDetails = {
     serverName: string | null;
     characterClass: string | null;
     itemLevel: string | null;
-    summary: TCharacterSpecSummary;
+    summary: unknown;
     rawPayload: Record<string, unknown>;
-    sectionStatus: TCharacterSpecSectionStatus;
   };
 };
 
@@ -60,7 +59,7 @@ export type TReqUpsertLostarkMainCharacterRow = {
   character_name: string;
   character_class: string;
   item_level: string;
-  summary: TCharacterSpecSummary;
+  summary: unknown;
   raw_payload: Record<string, unknown> | null;
 };
 
@@ -76,57 +75,3 @@ export type TResLostarkMainCharacter = {
   characterClass: string;
   itemLevel: string;
 };
-
-// TODO check
-export type TReqMainCharacterSpecs = {
-  anonymousClientId: string;
-  characterNames: string[];
-};
-
-export type TResMainCharacterSpecs = {
-  ok: boolean;
-  data: TCharacterSpec[];
-};
-
-export type TReqSaveMainCharacterSpec = {
-  anonymousClientId: string;
-  spec: TCharacterSpec;
-};
-
-export type TResSaveMainCharacterSpec = {
-  ok: boolean;
-  data: TCharacterSpec;
-};
-
-export type TCharacterSpec = {
-  characterName: string;
-  serverName: string | null;
-  characterClass: string | null;
-  itemLevel: string | null;
-  summary: TCharacterSpecSummary;
-  rawPayload: Record<string, unknown>;
-  sectionStatus: TCharacterSpecSectionStatus;
-  savedAt: string | null;
-  updatedAt: string | null;
-};
-
-export type TCharacterSpecSummary = {
-  profile: Record<string, unknown>;
-  equipment: unknown[];
-  accessories: unknown[];
-  bracelet: Record<string, unknown> | null;
-  abilityStone: Record<string, unknown> | null;
-  engravings: unknown[];
-  gems: TCharacterSpecGemSummary | unknown[];
-  legendaryAvatars: unknown[];
-  needsReview: string[];
-};
-
-export type TCharacterSpecGemSummary = {
-  items: unknown[];
-  totalBasicAttack: string | null;
-};
-
-export type TCharacterSpecSectionStatus = Record<string, TCharacterSpecSectionStatusValue>;
-
-export type TCharacterSpecSectionStatusValue = 'success' | 'failed' | 'empty' | 'needsReview';

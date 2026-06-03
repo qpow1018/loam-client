@@ -7,17 +7,11 @@ import type {
   TReqCreateLostarkMyCharacterRow,
   TReqCreateLostarkMyCharacter,
   TResLostarkSiblingCharacters,
-
   TReqLostarkCharacterDetails,
   TResLostarkCharacterDetails,
   TReqUpsertLostarkMainCharacterRow,
   TResLostarkMainCharacterRow,
   TResLostarkMainCharacter,
-
-  // TReqMainCharacterSpecs,
-  // TReqSaveMainCharacterSpec,
-  // TResMainCharacterSpecs,
-  // TResSaveMainCharacterSpec,
 } from './type';
 
 const LOSTARK_MY_CHARACTERS_TABLE = 'lostark_my_characters';
@@ -279,19 +273,3 @@ export async function getCharacterDetails(params: TReqLostarkCharacterDetails) {
     params,
   );
 }
-
-// // 저장된 메인 캐릭터 상세 스펙 목록을 조회한다.
-// export async function getMainCharacterSpecs(params: TReqMainCharacterSpecs) {
-//   return supabaseFunctionClient.post<TResMainCharacterSpecs>('/main-character-specs', {
-//     action: 'list',
-//     ...params,
-//   });
-// }
-
-// // 메인 캐릭터 상세 스펙을 저장한다.
-// export async function saveMainCharacterSpec(params: TReqSaveMainCharacterSpec) {
-//   return supabaseFunctionClient.post<TResSaveMainCharacterSpec>('/main-character-specs', {
-//     action: 'save',
-//     ...params,
-//   });
-// }
