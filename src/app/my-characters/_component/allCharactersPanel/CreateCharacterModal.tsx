@@ -4,7 +4,7 @@ import api from '@/api';
 import type {
   TResLostarkMyCharacter,
   TReqCreateLostarkMyCharacter,
-  TLostarkSiblingCharacter,
+  TResLostarkSiblingCharacter,
 } from '@/api/lostark/type';
 import { getClassImageUrl, convertItemLevelToNumber } from '@/utils/lostark';
 import toast from '@/utils/toast';
@@ -27,7 +27,7 @@ export default function CreateCharacterModal(props: {
 
   const [nickname, setNickname] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [siblings, setSiblings] = useState<TLostarkSiblingCharacter[]>([]);
+  const [siblings, setSiblings] = useState<TResLostarkSiblingCharacter[]>([]);
   const [selectedNames, setSelectedNames] = useState<Set<string>>(new Set());
 
   const isSubmitDisabled = selectedNames.size === 0;

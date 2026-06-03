@@ -78,7 +78,7 @@ export default function MainCharactersPanel() {
   //   addLoadingName(setLoadingCharacterNames, character.nickname);
 
   //   try {
-  //     const response = await api.lostark.getCharacterSpec({
+  //     const response = await api.lostark.getCharacterDetails({
   //       characterName: character.nickname,
   //       debug: isLostarkSpecDebugEnabled(),
   //     });

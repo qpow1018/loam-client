@@ -3,7 +3,7 @@ project_id = "fkltadvuqdssxrcvhcgl"
 [functions.lostark-sibling-characters]
 verify_jwt = false
 
-[functions.lostark-character-spec]
+[functions.lostark-character-details]
 verify_jwt = false
 
 [functions.main-character-specs]

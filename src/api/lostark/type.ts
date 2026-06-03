@@ -26,11 +26,10 @@ export type TReqCreateLostarkMyCharacter = Omit<TResLostarkMyCharacter, 'id' | '
 export type TResLostarkSiblingCharacters = {
   ok?: boolean;
   status?: number;
-  data: TLostarkSiblingCharacter[];
+  data: TResLostarkSiblingCharacter[];
 };
 
-// TODO check
-export type TLostarkSiblingCharacter = {
+export type TResLostarkSiblingCharacter = {
   ServerName: string;
   CharacterName: string;
   CharacterLevel: number;
@@ -38,12 +37,13 @@ export type TLostarkSiblingCharacter = {
   ItemAvgLevel: string;
 };
 
-export type TReqLostarkCharacterSpec = {
+// TODO check
+export type TReqLostarkCharacterDetails = {
   characterName: string;
   debug?: boolean;
 };
 
-export type TResLostarkCharacterSpec = {
+export type TResLostarkCharacterDetails = {
   ok: boolean;
   status: number;
   data: {

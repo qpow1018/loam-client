@@ -6,12 +6,12 @@ import type {
   TResLostarkMyCharacter,
   TReqCreateLostarkMyCharacterRow,
   TReqCreateLostarkMyCharacter,
-
   TResLostarkSiblingCharacters,
-  // TReqLostarkCharacterSpec,
+
+  // TReqLostarkCharacterDetails,
   // TReqMainCharacterSpecs,
   // TReqSaveMainCharacterSpec,
-  // TResLostarkCharacterSpec,
+  // TResLostarkCharacterDetails,
   // TResMainCharacterSpecs,
   // TResSaveMainCharacterSpec,
 } from './type';
@@ -187,9 +187,12 @@ export async function getSiblingCharacters(characterName: string) {
   });
 }
 
-// // Lost Ark API에서 캐릭터 상세 스펙을 조회한다.
-// export async function getCharacterSpec(params: TReqLostarkCharacterSpec) {
-//   return supabaseFunctionClient.post<TResLostarkCharacterSpec>('/lostark-character-spec', params);
+// // Lost Ark API에서 캐릭터 상세 정보를 조회한다.
+// export async function getCharacterDetails(params: TReqLostarkCharacterDetails) {
+//   return supabaseFunctionClient.post<TResLostarkCharacterDetails>(
+//     '/lostark-character-details',
+//     params,
+//   );
 // }
 
 // // 저장된 메인 캐릭터 상세 스펙 목록을 조회한다.
