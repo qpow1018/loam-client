@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import Header from '@/components/common/header/Header';
 import Tabs from '@/components/common/tabs/Tabs';
+import MainCharactersPanel from './_component/mainCharactersPanel/MainCharactersPanel';
 import AllCharactersPanel from './_component/allCharactersPanel/AllCharactersPanel';
-// import MainCharactersPanel from './_component/mainCharactersPanel/MainCharactersPanel';
 
 import styles from './myCharactersClient.module.scss';
 
@@ -17,14 +17,7 @@ const MY_CHARACTER_TABS = [
 ] as const;
 
 export default function MyCharactersClient() {
-  // const [characters, setCharacters] = useState<TLostarkMyCharacter[]>([]);
-  // const [activeTab, setActiveTab] = useState<TMyCharactersTab>('main');
-  const [activeTab, setActiveTab] = useState<TMyCharactersTab>('all');
-
-  // useEffect(() => {
-  //   // eslint-disable-next-line react-hooks/set-state-in-effect
-  //   setCharacters(getMyCharacters());
-  // }, []);
+  const [activeTab, setActiveTab] = useState<TMyCharactersTab>('main');
 
   return (
     <div className={styles['my-characters-client']}>
@@ -34,13 +27,7 @@ export default function MyCharactersClient() {
         <Tabs options={MY_CHARACTER_TABS} value={activeTab} onChange={setActiveTab} />
 
         <div className={styles['character-list-container']}>
-          {activeTab === 'main' && (
-            <>
-              TODO
-              {/* <MainCharactersPanel characters={mainCharacters} /> */}
-            </>
-          )}
-
+          {activeTab === 'main' && <MainCharactersPanel />}
           {activeTab === 'all' && <AllCharactersPanel />}
         </div>
       </div>
