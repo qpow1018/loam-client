@@ -1,9 +1,12 @@
 import { useState } from 'react';
 
 import api from '@/api';
-import type { TLostarkSiblingCharacter } from '@/api/lostark/type';
-import type { TCreateLostarkMyCharacter, TLostarkMyCharacter } from '@/api/lostark/type';
-import { getClassImageUrl } from '@/app/my-characters/_util/lostark';
+import type {
+  TResLostarkMyCharacter,
+  TReqCreateLostarkMyCharacter,
+  TLostarkSiblingCharacter,
+} from '@/api/lostark/type';
+import { getClassImageUrl, convertItemLevelToNumber } from '@/utils/lostark';
 import toast from '@/utils/toast';
 
 import Modal from '@/components/common/modal/Modal';
@@ -16,38 +19,38 @@ import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md';
 
 export default function CreateCharacterModal(props: {
   isOpen: boolean;
-  registeredCharacters: TLostarkMyCharacter[];
   onClose: () => void;
-  onSubmit: (characters: TCreateLostarkMyCharacter[]) => void;
+  registeredCharacters: TResLostarkMyCharacter[];
+  onSubmit: (characters: TReqCreateLostarkMyCharacter[]) => void;
 }) {
-  const [characterName, setCharacterName] = useState('');
-  const [characters, setCharacters] = useState<TLostarkSiblingCharacter[]>([]);
-  const [selectedCharacterNames, setSelectedCharacterNames] = useState<Set<string>>(new Set());
+  const { isOpen, onClose, registeredCharacters, onSubmit } = props;
+
+  const [nickname, setNickname] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [siblings, setSiblings] = useState<TLostarkSiblingCharacter[]>([]);
+  const [selectedNames, setSelectedNames] = useState<Set<string>>(new Set());
 
-  const isSubmitDisabled = selectedCharacterNames.size === 0;
+  const isSubmitDisabled = selectedNames.size === 0;
   const registeredCharacterNames = new Set(
-    props.registeredCharacters.map((character) => character.nickname),
+    registeredCharacters.map((character) => character.nickname),
   );
-  const unregisteredCharacters = characters
+  const unregisteredCharacters = siblings
     .filter((character) => !registeredCharacterNames.has(character.CharacterName))
-    .toSorted((a, b) => parseItemLevel(b.ItemAvgLevel) - parseItemLevel(a.ItemAvgLevel));
-
-  function parseItemLevel(itemLevel: string) {
-    return Number(itemLevel.replaceAll(',', ''));
-  }
+    .toSorted(
+      (a, b) => convertItemLevelToNumber(b.ItemAvgLevel) - convertItemLevelToNumber(a.ItemAvgLevel),
+    );
 
   async function handleSearch() {
-    const trimmed = characterName.trim();
+    const trimmed = nickname.trim();
     if (!trimmed || isLoading) return;
 
     setIsLoading(true);
-    setSelectedCharacterNames(new Set());
+    setSelectedNames(new Set());
 
     try {
       const response = await api.lostark.getSiblingCharacters(trimmed);
-      setCharacters(response.data);
-      setSelectedCharacterNames(
+      setSiblings(response.data);
+      setSelectedNames(
         new Set(
           response.data
             .filter((character) => !registeredCharacterNames.has(character.CharacterName))
@@ -55,7 +58,7 @@ export default function CreateCharacterModal(props: {
         ),
       );
     } catch {
-      setCharacters([]);
+      setSiblings([]);
       toast.error('원정대 캐릭터를 불러오지 못했습니다.');
     } finally {
       setIsLoading(false);
@@ -63,7 +66,7 @@ export default function CreateCharacterModal(props: {
   }
 
   function handleToggleCharacter(characterName: string) {
-    setSelectedCharacterNames((prev) => {
+    setSelectedNames((prev) => {
       const next = new Set(prev);
       if (next.has(characterName)) {
         next.delete(characterName);
@@ -76,24 +79,23 @@ export default function CreateCharacterModal(props: {
 
   function handleSubmit() {
     const selectedCharacters = unregisteredCharacters
-      .filter((character) => selectedCharacterNames.has(character.CharacterName))
+      .filter((character) => selectedNames.has(character.CharacterName))
       .map((character) => ({
         nickname: character.CharacterName,
         className: character.CharacterClassName,
         itemLevel: character.ItemAvgLevel,
       }));
-
-    props.onSubmit(selectedCharacters);
+    onSubmit(selectedCharacters);
   }
 
   return (
-    <Modal isOpen={props.isOpen} onClose={props.onClose} title="원정대 불러오기" width={760}>
+    <Modal isOpen={isOpen} onClose={onClose} title="원정대 불러오기" width={760}>
       <div className={styles['create-character-modal-content']}>
         <div className={styles['search-section']}>
           <span className={styles['label']}>대표 캐릭터</span>
           <TextInput
-            value={characterName}
-            onChange={setCharacterName}
+            value={nickname}
+            onChange={setNickname}
             onPressEnter={handleSearch}
             placeholder="캐릭터명을 입력하세요"
             className={styles['nickname-input']}
@@ -106,12 +108,12 @@ export default function CreateCharacterModal(props: {
         <div className={styles['result-section']}>
           <p className={styles['hint']}>등록되지 않은 캐릭터만 표시됩니다.</p>
 
-          {characters.length > 0 && unregisteredCharacters.length === 0 ? (
+          {siblings.length > 0 && unregisteredCharacters.length === 0 ? (
             <div className={styles['empty']}>등록할 수 있는 새 캐릭터가 없습니다.</div>
           ) : (
             <div className={styles['character-grid']}>
               {unregisteredCharacters.map((character) => {
-                const isSelected = selectedCharacterNames.has(character.CharacterName);
+                const isSelected = selectedNames.has(character.CharacterName);
                 const classImageUrl = getClassImageUrl(character.CharacterClassName);
 
                 return (
@@ -141,7 +143,7 @@ export default function CreateCharacterModal(props: {
         </div>
 
         <div className={styles['action-buttons']}>
-          <Button theme="bg-gray600" size="large" onClick={props.onClose}>
+          <Button theme="bg-gray600" size="large" onClick={onClose}>
             취소
           </Button>
           <Button

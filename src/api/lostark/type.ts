@@ -1,14 +1,4 @@
-export type TLostarkMyCharacter = {
-  id: string;
-  nickname: string;
-  className: string;
-  itemLevel: string;
-  isMain?: boolean;
-};
-
-export type TCreateLostarkMyCharacter = Omit<TLostarkMyCharacter, 'id' | 'isMain'>;
-
-export type TLostarkMyCharacterRow = {
+export type TResLostarkMyCharacterRow = {
   id: string;
   user_id: string;
   nickname: string;
@@ -18,9 +8,20 @@ export type TLostarkMyCharacterRow = {
   sort_order: number;
 };
 
-export type TLostarkMyCharacterWriteRow = Omit<TLostarkMyCharacterRow, 'id'> & {
+export type TResLostarkMyCharacter = {
+  id: string;
+  nickname: string;
+  className: string;
+  itemLevel: string;
+  isMain?: boolean;
+};
+
+export type TReqCreateLostarkMyCharacterRow = Omit<TResLostarkMyCharacterRow, 'id'> & {
   id?: string;
 };
+
+export type TReqCreateLostarkMyCharacter = Omit<TResLostarkMyCharacter, 'id' | 'isMain'>;
+
 
 export type TResLostarkSiblingCharacters = {
   ok?: boolean;
@@ -28,6 +29,7 @@ export type TResLostarkSiblingCharacters = {
   data: TLostarkSiblingCharacter[];
 };
 
+// TODO check
 export type TLostarkSiblingCharacter = {
   ServerName: string;
   CharacterName: string;

@@ -2,17 +2,18 @@ import { createClient } from '@/lib/supabase/client';
 import supabaseFunctionClient from '@/api/supabaseFunctionClient';
 
 import type {
-  TCreateLostarkMyCharacter,
-  TReqLostarkCharacterSpec,
-  TReqMainCharacterSpecs,
-  TReqSaveMainCharacterSpec,
-  TLostarkMyCharacter,
-  TLostarkMyCharacterRow,
-  TLostarkMyCharacterWriteRow,
-  TResLostarkCharacterSpec,
+  TResLostarkMyCharacterRow,
+  TResLostarkMyCharacter,
+  TReqCreateLostarkMyCharacterRow,
+  TReqCreateLostarkMyCharacter,
+
   TResLostarkSiblingCharacters,
-  TResMainCharacterSpecs,
-  TResSaveMainCharacterSpec,
+  // TReqLostarkCharacterSpec,
+  // TReqMainCharacterSpecs,
+  // TReqSaveMainCharacterSpec,
+  // TResLostarkCharacterSpec,
+  // TResMainCharacterSpecs,
+  // TResSaveMainCharacterSpec,
 } from './type';
 
 const LOSTARK_MY_CHARACTERS_TABLE = 'lostark_my_characters';
@@ -32,7 +33,7 @@ async function getCurrentUserId(): Promise<string> {
 }
 
 // 로그인한 사용자의 저장된 내 캐릭터 목록을 조회한다.
-export async function getMyCharacters(): Promise<TLostarkMyCharacter[]> {
+export async function getMyCharacters(): Promise<TResLostarkMyCharacter[]> {
   const supabase = createClient();
   const userId = await getCurrentUserId();
   const { data, error } = await supabase
@@ -46,7 +47,7 @@ export async function getMyCharacters(): Promise<TLostarkMyCharacter[]> {
     throw error;
   }
 
-  return ((data ?? []) as TLostarkMyCharacterRow[]).map((row) => ({
+  return ((data ?? []) as TResLostarkMyCharacterRow[]).map((row) => ({
     id: row.id,
     nickname: row.nickname,
     className: row.class_name,
@@ -57,16 +58,16 @@ export async function getMyCharacters(): Promise<TLostarkMyCharacter[]> {
 
 // 선택한 원정대 캐릭터들을 내 캐릭터 목록에 추가한다.
 export async function addMyCharacters(
-  characters: TCreateLostarkMyCharacter[],
+  characters: TReqCreateLostarkMyCharacter[],
   startSortOrder: number,
-): Promise<TLostarkMyCharacter[]> {
+): Promise<TResLostarkMyCharacter[]> {
   if (characters.length === 0) {
     return getMyCharacters();
   }
 
   const supabase = createClient();
   const userId = await getCurrentUserId();
-  const rows: TLostarkMyCharacterWriteRow[] = characters.map((character, index) => ({
+  const rows: TReqCreateLostarkMyCharacterRow[] = characters.map((character, index) => ({
     user_id: userId,
     nickname: character.nickname,
     class_name: character.className,
@@ -84,30 +85,13 @@ export async function addMyCharacters(
   return getMyCharacters();
 }
 
-// 내 캐릭터 목록에서 캐릭터 하나를 삭제한다.
-export async function deleteMyCharacter(id: string): Promise<TLostarkMyCharacter[]> {
+// 내 캐릭터 목록의 캐릭터 정보를 일괄 갱신한다.
+export async function updateMyCharacters(
+  characters: TResLostarkMyCharacter[],
+): Promise<TResLostarkMyCharacter[]> {
   const supabase = createClient();
   const userId = await getCurrentUserId();
-  const { error } = await supabase
-    .from(LOSTARK_MY_CHARACTERS_TABLE)
-    .delete()
-    .eq('id', id)
-    .eq('user_id', userId);
-
-  if (error) {
-    throw error;
-  }
-
-  return getMyCharacters();
-}
-
-// 내 캐릭터 목록의 표시 순서를 저장한다.
-export async function reorderMyCharacters(
-  characters: TLostarkMyCharacter[],
-): Promise<TLostarkMyCharacter[]> {
-  const supabase = createClient();
-  const userId = await getCurrentUserId();
-  const rows: TLostarkMyCharacterWriteRow[] = characters.map((character, index) => ({
+  const rows: TReqCreateLostarkMyCharacterRow[] = characters.map((character, index) => ({
     id: character.id,
     user_id: userId,
     nickname: character.nickname,
@@ -128,13 +112,13 @@ export async function reorderMyCharacters(
   return getMyCharacters();
 }
 
-// 내 캐릭터 목록의 캐릭터 정보를 일괄 갱신한다.
-export async function updateMyCharacters(
-  characters: TLostarkMyCharacter[],
-): Promise<TLostarkMyCharacter[]> {
+// 내 캐릭터 목록의 표시 순서를 저장한다.
+export async function reorderMyCharacters(
+  characters: TResLostarkMyCharacter[],
+): Promise<TResLostarkMyCharacter[]> {
   const supabase = createClient();
   const userId = await getCurrentUserId();
-  const rows: TLostarkMyCharacterWriteRow[] = characters.map((character, index) => ({
+  const rows: TReqCreateLostarkMyCharacterRow[] = characters.map((character, index) => ({
     id: character.id,
     user_id: userId,
     nickname: character.nickname,
@@ -156,7 +140,7 @@ export async function updateMyCharacters(
 }
 
 // 캐릭터의 메인 여부를 토글한다.
-export async function toggleMainCharacter(id: string): Promise<TLostarkMyCharacter[]> {
+export async function toggleMainCharacter(id: string): Promise<TResLostarkMyCharacter[]> {
   const supabase = createClient();
   const userId = await getCurrentUserId();
   const currentCharacters = await getMyCharacters();
@@ -179,6 +163,23 @@ export async function toggleMainCharacter(id: string): Promise<TLostarkMyCharact
   return getMyCharacters();
 }
 
+// 내 캐릭터 목록에서 캐릭터 하나를 삭제한다.
+export async function deleteMyCharacter(id: string): Promise<TResLostarkMyCharacter[]> {
+  const supabase = createClient();
+  const userId = await getCurrentUserId();
+  const { error } = await supabase
+    .from(LOSTARK_MY_CHARACTERS_TABLE)
+    .delete()
+    .eq('id', id)
+    .eq('user_id', userId);
+
+  if (error) {
+    throw error;
+  }
+
+  return getMyCharacters();
+}
+
 // 대표 캐릭터명으로 같은 원정대 캐릭터 목록을 조회한다.
 export async function getSiblingCharacters(characterName: string) {
   return supabaseFunctionClient.post<TResLostarkSiblingCharacters>('/lostark-sibling-characters', {
@@ -186,23 +187,23 @@ export async function getSiblingCharacters(characterName: string) {
   });
 }
 
-// Lost Ark API에서 캐릭터 상세 스펙을 조회한다.
-export async function getCharacterSpec(params: TReqLostarkCharacterSpec) {
-  return supabaseFunctionClient.post<TResLostarkCharacterSpec>('/lostark-character-spec', params);
-}
+// // Lost Ark API에서 캐릭터 상세 스펙을 조회한다.
+// export async function getCharacterSpec(params: TReqLostarkCharacterSpec) {
+//   return supabaseFunctionClient.post<TResLostarkCharacterSpec>('/lostark-character-spec', params);
+// }
 
-// 저장된 메인 캐릭터 상세 스펙 목록을 조회한다.
-export async function getMainCharacterSpecs(params: TReqMainCharacterSpecs) {
-  return supabaseFunctionClient.post<TResMainCharacterSpecs>('/main-character-specs', {
-    action: 'list',
-    ...params,
-  });
-}
+// // 저장된 메인 캐릭터 상세 스펙 목록을 조회한다.
+// export async function getMainCharacterSpecs(params: TReqMainCharacterSpecs) {
+//   return supabaseFunctionClient.post<TResMainCharacterSpecs>('/main-character-specs', {
+//     action: 'list',
+//     ...params,
+//   });
+// }
 
-// 메인 캐릭터 상세 스펙을 저장한다.
-export async function saveMainCharacterSpec(params: TReqSaveMainCharacterSpec) {
-  return supabaseFunctionClient.post<TResSaveMainCharacterSpec>('/main-character-specs', {
-    action: 'save',
-    ...params,
-  });
-}
+// // 메인 캐릭터 상세 스펙을 저장한다.
+// export async function saveMainCharacterSpec(params: TReqSaveMainCharacterSpec) {
+//   return supabaseFunctionClient.post<TResSaveMainCharacterSpec>('/main-character-specs', {
+//     action: 'save',
+//     ...params,
+//   });
+// }

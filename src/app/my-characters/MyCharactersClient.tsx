@@ -2,13 +2,10 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
-import type { TLostarkMyCharacter } from '@/api/lostark/type';
-import { getMyCharacters } from '@/app/my-characters/_util/myCharacter';
-
 import Header from '@/components/common/header/Header';
 import Tabs from '@/components/common/tabs/Tabs';
 import AllCharactersPanel from './_component/allCharactersPanel/AllCharactersPanel';
-import MainCharactersPanel from './_component/mainCharactersPanel/MainCharactersPanel';
+// import MainCharactersPanel from './_component/mainCharactersPanel/MainCharactersPanel';
 
 import styles from './myCharactersClient.module.scss';
 
@@ -20,13 +17,14 @@ const MY_CHARACTER_TABS = [
 ] as const;
 
 export default function MyCharactersClient() {
-  const [characters, setCharacters] = useState<TLostarkMyCharacter[]>([]);
-  const [activeTab, setActiveTab] = useState<TMyCharactersTab>('main');
+  // const [characters, setCharacters] = useState<TLostarkMyCharacter[]>([]);
+  // const [activeTab, setActiveTab] = useState<TMyCharactersTab>('main');
+  const [activeTab, setActiveTab] = useState<TMyCharactersTab>('all');
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setCharacters(getMyCharacters());
-  }, []);
+  // useEffect(() => {
+  //   // eslint-disable-next-line react-hooks/set-state-in-effect
+  //   setCharacters(getMyCharacters());
+  // }, []);
 
   return (
     <div className={styles['my-characters-client']}>
