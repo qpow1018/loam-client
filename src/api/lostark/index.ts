@@ -8,15 +8,20 @@ import type {
   TReqCreateLostarkMyCharacter,
   TResLostarkSiblingCharacters,
 
-  // TReqLostarkCharacterDetails,
+  TReqLostarkCharacterDetails,
+  TResLostarkCharacterDetails,
+  TReqUpsertLostarkMainCharacterRow,
+  TResLostarkMainCharacterRow,
+  TResLostarkMainCharacter,
+
   // TReqMainCharacterSpecs,
   // TReqSaveMainCharacterSpec,
-  // TResLostarkCharacterDetails,
   // TResMainCharacterSpecs,
   // TResSaveMainCharacterSpec,
 } from './type';
 
 const LOSTARK_MY_CHARACTERS_TABLE = 'lostark_my_characters';
+const LOSTARK_MAIN_CHARACTERS_TABLE = 'lostark_main_characters';
 
 async function getCurrentUserId(): Promise<string> {
   const supabase = createClient();
@@ -53,6 +58,30 @@ export async function getMyCharacters(): Promise<TResLostarkMyCharacter[]> {
     className: row.class_name,
     itemLevel: row.item_level,
     isMain: row.is_main,
+  }));
+}
+
+// 로그인한 사용자의 메인 캐릭터 목록을 조회한다.
+export async function getMainCharacters(): Promise<TResLostarkMainCharacter[]> {
+  const supabase = createClient();
+  const userId = await getCurrentUserId();
+  const { data, error } = await supabase
+    .from(LOSTARK_MAIN_CHARACTERS_TABLE)
+    .select(
+      'id, user_id, character_name, character_class, item_level, summary, raw_payload, created_at, updated_at',
+    )
+    .eq('user_id', userId)
+    .order('created_at', { ascending: true });
+
+  if (error) {
+    throw error;
+  }
+
+  return ((data ?? []) as TResLostarkMainCharacterRow[]).map((row) => ({
+    id: row.id,
+    characterName: row.character_name,
+    characterClass: row.character_class,
+    itemLevel: row.item_level,
   }));
 }
 
@@ -139,20 +168,16 @@ export async function reorderMyCharacters(
   return getMyCharacters();
 }
 
-// 캐릭터의 메인 여부를 토글한다.
-export async function toggleMainCharacter(id: string): Promise<TResLostarkMyCharacter[]> {
+async function updateMyCharacterMainStatus(
+  id: string,
+  isMain: boolean,
+): Promise<TResLostarkMyCharacter[]> {
   const supabase = createClient();
   const userId = await getCurrentUserId();
-  const currentCharacters = await getMyCharacters();
-  const target = currentCharacters.find((character) => character.id === id);
-
-  if (!target) {
-    throw new Error('Character not found.');
-  }
 
   const { error } = await supabase
     .from(LOSTARK_MY_CHARACTERS_TABLE)
-    .update({ is_main: target.isMain !== true })
+    .update({ is_main: isMain })
     .eq('id', id)
     .eq('user_id', userId);
 
@@ -161,6 +186,66 @@ export async function toggleMainCharacter(id: string): Promise<TResLostarkMyChar
   }
 
   return getMyCharacters();
+}
+
+// 캐릭터를 메인 캐릭터 목록에 등록하고 상세 정보를 저장한다.
+export async function registerMainCharacter(
+  character: TResLostarkMyCharacter,
+): Promise<TResLostarkMyCharacter[]> {
+  const supabase = createClient();
+  const userId = await getCurrentUserId();
+  const response = await getCharacterDetails({ characterName: character.nickname });
+  const details = response.data;
+
+  const row: TReqUpsertLostarkMainCharacterRow = {
+    user_id: userId,
+    character_name: details.characterName || character.nickname,
+    character_class: details.characterClass || character.className,
+    item_level: details.itemLevel || character.itemLevel,
+    summary: details.summary,
+    raw_payload: details.rawPayload ?? null,
+  };
+
+  const { error } = await supabase.from(LOSTARK_MAIN_CHARACTERS_TABLE).upsert(row, {
+    onConflict: 'user_id,character_name',
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  return updateMyCharacterMainStatus(character.id, true);
+}
+
+// 캐릭터를 메인 캐릭터 목록에서 해제한다.
+export async function unregisterMainCharacter(
+  character: TResLostarkMyCharacter,
+): Promise<TResLostarkMyCharacter[]> {
+  const supabase = createClient();
+  const userId = await getCurrentUserId();
+
+  const { error } = await supabase
+    .from(LOSTARK_MAIN_CHARACTERS_TABLE)
+    .delete()
+    .eq('user_id', userId)
+    .eq('character_name', character.nickname);
+
+  if (error) {
+    throw error;
+  }
+
+  return updateMyCharacterMainStatus(character.id, false);
+}
+
+// 캐릭터의 메인 여부를 토글한다.
+export async function toggleMainCharacter(
+  character: TResLostarkMyCharacter,
+): Promise<TResLostarkMyCharacter[]> {
+  if (character.isMain === true) {
+    return unregisterMainCharacter(character);
+  }
+
+  return registerMainCharacter(character);
 }
 
 // 내 캐릭터 목록에서 캐릭터 하나를 삭제한다.
@@ -187,13 +272,13 @@ export async function getSiblingCharacters(characterName: string) {
   });
 }
 
-// // Lost Ark API에서 캐릭터 상세 정보를 조회한다.
-// export async function getCharacterDetails(params: TReqLostarkCharacterDetails) {
-//   return supabaseFunctionClient.post<TResLostarkCharacterDetails>(
-//     '/lostark-character-details',
-//     params,
-//   );
-// }
+// Lost Ark API에서 캐릭터 상세 정보를 조회한다.
+export async function getCharacterDetails(params: TReqLostarkCharacterDetails) {
+  return supabaseFunctionClient.post<TResLostarkCharacterDetails>(
+    '/lostark-character-details',
+    params,
+  );
+}
 
 // // 저장된 메인 캐릭터 상세 스펙 목록을 조회한다.
 // export async function getMainCharacterSpecs(params: TReqMainCharacterSpecs) {

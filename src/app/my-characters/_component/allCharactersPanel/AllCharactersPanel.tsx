@@ -110,7 +110,7 @@ export default function AllCharactersPanel() {
     setTogglingMainCharacterId(character.id);
 
     try {
-      const response = await api.lostark.toggleMainCharacter(character.id);
+      const response = await api.lostark.toggleMainCharacter(character);
       setAllCharacters(response);
 
       toast.success(

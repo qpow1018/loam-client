@@ -1,4 +1,4 @@
-import { classImageUrlByName } from '@/app/my-characters/_define/classImage';
+import { classImageUrlByName } from '@/define/lostark';
 
 export function getClassImageUrl(className: string): string | undefined {
   return classImageUrlByName[className];

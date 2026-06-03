@@ -1,34 +1,20 @@
 'use client';
 
-import type { Dispatch, SetStateAction } from 'react';
 import { useEffect, useState } from 'react';
 
 import api from '@/api';
-import type { TCharacterSpec } from '@/api/lostark/type';
+import type { TResLostarkMainCharacter } from '@/api/lostark/type';
+import BoxLoading from '@/components/common/loading/BoxLoading';
 // import type { TLostarkMyCharacter } from '@/api/lostark/type';
-import { getAnonymousClientId } from '@/app/my-characters/_util/anonymousClient';
-import {
-  isLostarkSpecDebugEnabled,
-  logCharacterSpecDebug,
-} from '@/app/my-characters/_util/specDebug';
 import toast from '@/utils/toast';
 
 // import MainCharacterSpecList from '../mainCharacterSpec/MainCharacterSpecList';
 import styles from './mainCharactersPanel.module.scss';
 
-function addLoadingName(setter: Dispatch<SetStateAction<Set<string>>>, name: string) {
-  setter((current) => new Set(current).add(name));
-}
-
-function removeLoadingName(setter: Dispatch<SetStateAction<Set<string>>>, name: string) {
-  setter((current) => {
-    const next = new Set(current);
-    next.delete(name);
-    return next;
-  });
-}
-
 export default function MainCharactersPanel() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [mainCharacters, setMainCharacters] = useState<TResLostarkMainCharacter[]>([]);
+
   // const [anonymousClientId, setAnonymousClientId] = useState('');
   // const [specsByName, setSpecsByName] = useState<Record<string, TCharacterSpec | undefined>>({});
   // const [dirtyCharacterNames, setDirtyCharacterNames] = useState<Set<string>>(new Set());
@@ -136,5 +122,47 @@ export default function MainCharactersPanel() {
   //   }
   // }
 
-  return <section className={styles['main-characters-panel']}>testtest</section>;
+  useEffect(() => {
+    async function loadMainCharacters() {
+      try {
+        const response = await api.lostark.getMainCharacters();
+        setMainCharacters(response);
+      } catch {
+        toast.error('메인 캐릭터 목록을 불러오지 못했습니다.');
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    void loadMainCharacters();
+  }, []);
+
+  return (
+    <section className={styles['main-characters-panel']}>
+      <div className={styles['list-header']}>
+        <p className={styles['title']}>메인 캐릭터 목록</p>
+      </div>
+
+      {isLoading && <BoxLoading height={180} />}
+
+      {!isLoading && mainCharacters.length === 0 && (
+        <div className={styles['empty']}>
+          <p className={styles['empty-message']}>등록된 메인 캐릭터가 없습니다.</p>
+        </div>
+      )}
+
+      {!isLoading && mainCharacters.length > 0 && (
+        <ul className={styles['character-list']}>
+          {mainCharacters.map((character) => (
+            <li key={character.id} className={styles['character-item']}>
+              <p className={styles['character-name']}>{character.characterName}</p>
+              <p className={styles['character-meta']}>
+                {character.characterClass} · {character.itemLevel}
+              </p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
 }
