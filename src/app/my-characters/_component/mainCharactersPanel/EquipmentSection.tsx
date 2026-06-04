@@ -8,8 +8,6 @@ import { getEquipQualityBackground } from '@/utils/lostark';
 
 import styles from './equipmentSection.module.scss';
 
-type TEquipmentItem = TLostarkGear | TLostarkAccessory | TLostarkBracelet | TLostarkAbilityStone;
-
 export default function EquipmentSection(props: {
   gears: TLostarkGear[];
   accessories: TLostarkAccessory[];
@@ -23,7 +21,7 @@ export default function EquipmentSection(props: {
       <div className={styles['equipment-layout']}>
         <div className={styles['equipment-row']}>
           <GearGroup gears={gears} />
-          <EquipmentSingleGroup title="어빌리티 스톤" item={abilityStone} />
+          <AbilityStoneGroup abilityStone={abilityStone} />
         </div>
 
         {/* <div className={styles['equipment-row']}>
@@ -76,6 +74,51 @@ function GearGroup(props: { gears: TLostarkGear[] }) {
             </div>
           );
         })}
+      </div>
+    </div>
+  );
+}
+
+function AbilityStoneGroup(props: { abilityStone: TLostarkAbilityStone | null }) {
+  const { abilityStone } = props;
+
+  const positiveLevelSum =
+    abilityStone?.abilityStoneEngravings
+      .slice(0, 2)
+      .reduce((sum, engraving) => sum + (engraving.level ?? 0), 0) ?? 0;
+  const isNineSevenStone = positiveLevelSum >= 5;
+
+  if (!abilityStone) {
+    return null;
+  }
+
+  return (
+    <div className={styles['ability-stone-group']}>
+      <p className={styles['group-title']}>어빌리티 스톤</p>
+
+      <div className={styles['ability-stone-summary']}>
+        <div className={styles['ability-stone-icon']}>
+          {abilityStone.icon && <img src={abilityStone.icon} alt="" />}
+          {isNineSevenStone && <span className={styles['nine-seven-badge']}>97돌</span>}
+        </div>
+
+        {abilityStone.abilityStoneEngravings.length > 0 && (
+          <div className={styles['stone-engraving-list']}>
+            {abilityStone.abilityStoneEngravings.map((engraving, index) => (
+              <div
+                key={`${engraving.name}-${index}`}
+                className={`${styles['stone-engraving']} ${
+                  index >= 2 ? styles['stone-engraving--negative'] : ''
+                }`}
+              >
+                <span className={styles['stone-engraving-level']}>
+                  {engraving.level !== null ? `+${engraving.level}` : '-'}
+                </span>
+                <span className={styles['stone-engraving-name']}>{engraving.name}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -164,50 +207,4 @@ function BasicEffectList(props: { effects: string[] }) {
       ))}
     </div>
   );
-}
-
-function EquipmentSingleGroup(props: { title: string; item: TEquipmentItem | null }) {
-  return (
-    <div className={styles['equipment-group']}>
-      <p className={styles['group-title']}>{props.title}</p>
-
-      {props.item ? (
-        <EquipmentItem item={props.item} />
-      ) : (
-        <p className={styles['empty']}>정보 없음</p>
-      )}
-    </div>
-  );
-}
-
-function EquipmentItem(props: { item: TEquipmentItem }) {
-  const { item } = props;
-
-  return (
-    <div className={styles['equipment-item']}>
-      <div className={styles['icon']}>{item.icon && <img src={item.icon} alt="" />}</div>
-
-      <div className={styles['item-info']}>
-        <div className={styles['item-title-line']}>
-          <span className={styles['item-type']}>{item.type ?? '-'}</span>
-          {item.grade && <span className={styles['grade']}>{item.grade}</span>}
-        </div>
-
-        <p className={styles['item-name']}>{item.name ?? '-'}</p>
-
-        <div className={styles['item-meta']}>
-          {isGearItem(item) && item.itemLevel && <span>Lv. {item.itemLevel}</span>}
-          {hasQuality(item) && item.quality !== null && <span>품질 {item.quality}</span>}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function isGearItem(item: TEquipmentItem): item is TLostarkGear {
-  return 'itemLevel' in item;
-}
-
-function hasQuality(item: TEquipmentItem): item is TLostarkGear | TLostarkAccessory {
-  return 'quality' in item;
 }
