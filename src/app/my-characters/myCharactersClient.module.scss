@@ -1,11 +1,11 @@
 .my-characters-client {
-  min-width: 100%;
-
   .my-characters-client-container {
+    max-width: 1024px;
     padding: 16px;
   }
 
-  .character-list-container {
+  .character-section {
     margin-top: 12px;
+
   }
 }

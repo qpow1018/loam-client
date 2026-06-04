@@ -20,8 +20,6 @@ export default function MainCharactersPanel() {
       try {
         const response = await api.lostark.getMainCharacters();
         setMainCharacters(response);
-
-        console.log('response', response);
       } catch {
         toast.error('메인 캐릭터 목록을 불러오지 못했습니다.');
       } finally {
@@ -45,7 +43,7 @@ export default function MainCharactersPanel() {
       {!isLoading && mainCharacters.length > 0 && (
         <div className={styles['character-list']}>
           {mainCharacters.map((character) => (
-            <MainCharacterCard key={character.id} character={character} />
+            <MainCharacterCard key={character.id} data={character.summary} />
           ))}
         </div>
       )}

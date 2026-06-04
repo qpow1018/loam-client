@@ -26,7 +26,7 @@ export default function MyCharactersClient() {
       <div className={styles['my-characters-client-container']}>
         <Tabs options={MY_CHARACTER_TABS} value={activeTab} onChange={setActiveTab} />
 
-        <div className={styles['character-list-container']}>
+        <div className={styles['character-section']}>
           {activeTab === 'main' && <MainCharactersPanel />}
           {activeTab === 'all' && <AllCharactersPanel />}
         </div>

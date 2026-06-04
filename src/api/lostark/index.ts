@@ -7,7 +7,6 @@ import type {
   TReqCreateLostarkMyCharacterRow,
   TReqCreateLostarkMyCharacter,
   TResLostarkSiblingCharacters,
-  TReqLostarkCharacterDetails,
   TResLostarkCharacterDetails,
   TReqUpsertLostarkMainCharacterRow,
   TResLostarkMainCharacterRow,
@@ -190,7 +189,7 @@ export async function registerMainCharacter(
 ): Promise<TResLostarkMyCharacter[]> {
   const supabase = createClient();
   const userId = await getCurrentUserId();
-  const response = await getCharacterDetails({ characterName: character.nickname });
+  const response = await getCharacterDetails(character.nickname);
   const details = response.data;
 
   const row: TReqUpsertLostarkMainCharacterRow = {
@@ -269,9 +268,8 @@ export async function getSiblingCharacters(characterName: string) {
 }
 
 // Lost Ark API에서 캐릭터 상세 정보를 조회한다.
-export async function getCharacterDetails(params: TReqLostarkCharacterDetails) {
-  return supabaseFunctionClient.post<TResLostarkCharacterDetails>(
-    '/lostark-character-details',
-    params,
-  );
+export async function getCharacterDetails(characterName: string) {
+  return supabaseFunctionClient.post<TResLostarkCharacterDetails>('/lostark-character-details', {
+    characterName,
+  });
 }
