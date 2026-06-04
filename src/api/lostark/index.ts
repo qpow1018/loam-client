@@ -76,6 +76,8 @@ export async function getMainCharacters(): Promise<TResLostarkMainCharacter[]> {
     characterName: row.character_name,
     characterClass: row.character_class,
     itemLevel: row.item_level,
+    summary: row.summary,
+    rawPayload: row.raw_payload,
   }));
 }
 

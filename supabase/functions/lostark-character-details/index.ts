@@ -8,19 +8,15 @@ const corsHeaders = {
 
 type RequestBody = {
   characterName?: string;
-  debug?: boolean;
 };
-
-type SectionStatus = 'success' | 'failed' | 'empty' | 'needsReview';
 
 type SectionResult = {
   key: string;
-  status: SectionStatus;
   data: unknown;
-  error?: string;
 };
 
 type ParsedEquipmentItem = {
+  icon: string | null;
   name: string | null;
   type: string | null;
   grade: string | null;
@@ -31,14 +27,15 @@ type ParsedEquipmentItem = {
   title: string | null;
   basicEffects: string[];
   additionalEffects: string[];
-  polishEffects: string[];
+  polishEffects: ParsedPolishEffect[];
   arkPassiveEffects: string[];
-  braceletEffects: string[];
+  braceletEffects: ParsedColoredEffect[];
   abilityStoneBonusEffects: string[];
-  abilityStoneEngravings: string[];
+  abilityStoneEngravings: ParsedAbilityStoneEngraving[];
 };
 
 type ParsedAvatarItem = {
+  icon: string | null;
   name: string | null;
   type: string | null;
   grade: string | null;
@@ -48,19 +45,29 @@ type ParsedAvatarItem = {
   tendencyEffects: string[];
 };
 
+type LegendaryAvatarSummaryItem = {
+  icon: string | null;
+  name: string | null;
+  type: string | null;
+  grade: string | null;
+};
+
 type ParsedEngravingItem = {
   name: string | null;
   grade: string | null;
   level: number | null;
+  description: string | null;
   abilityStoneLevel: number | null;
 };
 
 type ParsedGemItem = {
+  icon: string | null;
   slot: number | null;
   name: string | null;
   grade: string | null;
   level: number | null;
   kind: string | null;
+  effectType: 'damage' | 'cooldown' | null;
   skillName: string | null;
   effects: string[];
   bonusEffect: string | null;
@@ -69,6 +76,82 @@ type ParsedGemItem = {
 type ParsedGemSummary = {
   items: ParsedGemItem[];
   totalBasicAttack: string | null;
+};
+
+type ParsedArkPassivePoint = {
+  name: string | null;
+  value: number | null;
+  description: string | null;
+};
+
+type ParsedArkPassiveSummary = {
+  title: string | null;
+  points: ParsedArkPassivePoint[];
+};
+
+type ParsedArkGridCore = {
+  icon: string | null;
+  name: string | null;
+  grade: string | null;
+  point: number | null;
+};
+
+type ParsedArkGridEffect = {
+  name: string | null;
+  level: number | null;
+};
+
+type ParsedArkGridSummary = {
+  cores: ParsedArkGridCore[];
+  effects: ParsedArkGridEffect[];
+};
+
+type ParsedColoredEffect = {
+  text: string;
+  color: string | null;
+};
+
+type ParsedPolishEffect = ParsedColoredEffect;
+
+type ParsedAbilityStoneEngraving = {
+  name: string;
+  level: number | null;
+};
+
+type GearSummaryItem = {
+  icon: string | null;
+  name: string | null;
+  type: string | null;
+  grade: string | null;
+  quality: number | null;
+  itemLevel: string | null;
+};
+
+type AccessorySummaryItem = {
+  icon: string | null;
+  name: string | null;
+  type: string | null;
+  grade: string | null;
+  quality: number | null;
+  basicEffects: string[];
+  polishEffects: ParsedPolishEffect[];
+};
+
+type BraceletSummaryItem = {
+  icon: string | null;
+  name: string | null;
+  type: string | null;
+  grade: string | null;
+  braceletEffects: ParsedColoredEffect[];
+};
+
+type AbilityStoneSummaryItem = {
+  icon: string | null;
+  name: string | null;
+  type: string | null;
+  grade: string | null;
+  abilityStoneBonusEffects: string[];
+  abilityStoneEngravings: ParsedAbilityStoneEngraving[];
 };
 
 const sections = [
@@ -165,6 +248,24 @@ function getPartBoxLines(value: Record<string, unknown>) {
   return splitTextLines(getString(value, 'Element_001'));
 }
 
+function getColoredEffects(value: Record<string, unknown>): ParsedColoredEffect[] {
+  const rawText = getString(value, 'Element_001');
+
+  if (!rawText) return [];
+
+  return rawText
+    .split(/<br\s*\/?>/i)
+    .map((line) => {
+      const color = line.match(/<FONT[^>]+COLOR=['"]?#?([A-Fa-f0-9]{6})['"]?[^>]*>/i)?.[1] ?? null;
+
+      return {
+        text: stripHtml(line),
+        color: color?.toUpperCase() ?? null,
+      };
+    })
+    .filter((effect) => effect.text.length > 0);
+}
+
 function collectNestedText(value: unknown, result: string[] = []) {
   if (typeof value === 'string') {
     result.push(...splitTextLines(value));
@@ -181,6 +282,51 @@ function collectNestedText(value: unknown, result: string[] = []) {
   if (value !== null && typeof value === 'object') {
     for (const nestedValue of Object.values(value)) {
       collectNestedText(nestedValue, result);
+    }
+  }
+
+  return result;
+}
+
+function parseAbilityStoneEngraving(text: string): ParsedAbilityStoneEngraving | null {
+  const normalized = stripHtml(text);
+  const name = normalized.match(/\[([^\]]+)\]/)?.[1]?.trim();
+
+  if (!name || name === '레벨 보너스') return null;
+
+  const levelText = normalized.match(/Lv\.(\d+)/)?.[1];
+
+  return {
+    name,
+    level: levelText ? Number(levelText) : null,
+  };
+}
+
+function collectAbilityStoneEngravings(
+  value: unknown,
+  result: ParsedAbilityStoneEngraving[] = [],
+) {
+  if (typeof value === 'string') {
+    const engraving = parseAbilityStoneEngraving(value);
+
+    if (engraving) {
+      result.push(engraving);
+    }
+
+    return result;
+  }
+
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      collectAbilityStoneEngravings(item, result);
+    }
+
+    return result;
+  }
+
+  if (value !== null && typeof value === 'object') {
+    for (const nestedValue of Object.values(value)) {
+      collectAbilityStoneEngravings(nestedValue, result);
     }
   }
 
@@ -212,6 +358,7 @@ function parseEquipmentItem(item: unknown): ParsedEquipmentItem {
   const itemLevelInfo = getItemLevelInfo(getString(titleData, 'leftStr2'));
   const quality = getNumber(titleData, 'qualityValue');
   const parsed: ParsedEquipmentItem = {
+    icon: getString(itemRecord, 'Icon'),
     name: getString(itemRecord, 'Name'),
     type: getString(itemRecord, 'Type'),
     grade: getString(itemRecord, 'Grade'),
@@ -242,18 +389,18 @@ function parseEquipmentItem(item: unknown): ParsedEquipmentItem {
       } else if (title.includes('추가 효과')) {
         parsed.additionalEffects.push(...lines);
       } else if (title.includes('연마 효과')) {
-        parsed.polishEffects.push(...lines);
+        parsed.polishEffects.push(...getColoredEffects(value));
       } else if (title.includes('아크 패시브 포인트 효과')) {
         parsed.arkPassiveEffects.push(...lines);
       } else if (title.includes('팔찌 효과')) {
-        parsed.braceletEffects.push(...lines);
+        parsed.braceletEffects.push(...getColoredEffects(value));
       } else if (title.includes('세공 단계 보너스')) {
         parsed.abilityStoneBonusEffects.push(...lines);
       }
     }
 
     if (type === 'IndentStringGroup') {
-      parsed.abilityStoneEngravings.push(...collectNestedText(element.value));
+      parsed.abilityStoneEngravings.push(...collectAbilityStoneEngravings(element.value));
     }
   }
 
@@ -302,11 +449,62 @@ function classifyEquipment(equipment: unknown[]) {
   return { gear, accessories, bracelet, abilityStone };
 }
 
+function buildGearSummary(item: ParsedEquipmentItem): GearSummaryItem {
+  return {
+    icon: item.icon,
+    name: item.name,
+    type: item.type,
+    grade: item.grade,
+    quality: item.quality,
+    itemLevel: item.itemLevel,
+  };
+}
+
+function buildAccessorySummary(item: ParsedEquipmentItem): AccessorySummaryItem {
+  return {
+    icon: item.icon,
+    name: item.name,
+    type: item.type,
+    grade: item.grade,
+    quality: item.quality,
+    basicEffects: item.basicEffects,
+    polishEffects: item.polishEffects,
+  };
+}
+
+function buildBraceletSummary(item: ParsedEquipmentItem | null): BraceletSummaryItem | null {
+  if (!item) return null;
+
+  return {
+    icon: item.icon,
+    name: item.name,
+    type: item.type,
+    grade: item.grade,
+    braceletEffects: item.braceletEffects,
+  };
+}
+
+function buildAbilityStoneSummary(
+  item: ParsedEquipmentItem | null,
+): AbilityStoneSummaryItem | null {
+  if (!item) return null;
+
+  return {
+    icon: item.icon,
+    name: item.name,
+    type: item.type,
+    grade: item.grade,
+    abilityStoneBonusEffects: item.abilityStoneBonusEffects,
+    abilityStoneEngravings: item.abilityStoneEngravings,
+  };
+}
+
 function parseAvatarItem(item: unknown): ParsedAvatarItem {
   const itemRecord = asRecord(item);
   const tooltip = parseTooltip(itemRecord.Tooltip);
   const elements = getTooltipElements(tooltip);
   const parsed: ParsedAvatarItem = {
+    icon: getString(itemRecord, 'Icon'),
     name: getString(itemRecord, 'Name'),
     type: getString(itemRecord, 'Type'),
     grade: getString(itemRecord, 'Grade'),
@@ -337,10 +535,16 @@ function parseAvatarItem(item: unknown): ParsedAvatarItem {
   return parsed;
 }
 
-function parseLegendaryAvatars(avatars: unknown[]) {
+function parseLegendaryAvatars(avatars: unknown[]): LegendaryAvatarSummaryItem[] {
   return avatars
     .map(parseAvatarItem)
-    .filter((avatar) => avatar.grade === '전설' && avatar.isInner === true);
+    .filter((avatar) => avatar.grade === '전설')
+    .map((avatar) => ({
+      icon: avatar.icon,
+      name: avatar.name,
+      type: avatar.type,
+      grade: avatar.grade,
+    }));
 }
 
 function parseEngravings(engravings: Record<string, unknown>): ParsedEngravingItem[] {
@@ -351,6 +555,7 @@ function parseEngravings(engravings: Record<string, unknown>): ParsedEngravingIt
       name: getString(itemRecord, 'Name'),
       grade: getString(itemRecord, 'Grade'),
       level: getNumber(itemRecord, 'Level'),
+      description: stripHtml(getString(itemRecord, 'Description') ?? '') || null,
       abilityStoneLevel: getNumber(itemRecord, 'AbilityStoneLevel'),
     };
   });
@@ -358,7 +563,20 @@ function parseEngravings(engravings: Record<string, unknown>): ParsedEngravingIt
 
 function getGemKind(name: string | null) {
   if (name?.includes('겁화')) return '겁화';
+  if (name?.includes('멸화')) return '멸화';
   if (name?.includes('작열')) return '작열';
+  if (name?.includes('홍염')) return '홍염';
+  if (name?.includes('광휘')) return '광휘';
+
+  return null;
+}
+
+function getGemEffectTypeFromEffects(effects: string[]) {
+  const hasDamage = effects.some((effect) => effect.includes('피해'));
+  const hasCooldown = effects.some((effect) => effect.includes('재사용 대기시간'));
+
+  if (hasDamage) return 'damage';
+  if (hasCooldown) return 'cooldown';
 
   return null;
 }
@@ -424,6 +642,7 @@ function parseGems(gems: Record<string, unknown>): ParsedGemSummary {
       (additionalEffectIndex >= 0 ? effectLines[additionalEffectIndex + 1] : null) ??
       null;
     const name = stripHtml(getString(itemRecord, 'Name') ?? '') || null;
+    const kind = getGemKind(name);
     const skillName =
       getString(safeSkillRecord, 'Name') ?? getGemSkillName(mainEffectLines[0] ?? null);
     const skillEffects = asStringArray(safeSkillRecord.Description);
@@ -435,11 +654,13 @@ function parseGems(gems: Record<string, unknown>): ParsedGemSummary {
             .filter((line) => line.length > 0);
 
     return {
+      icon: getString(itemRecord, 'Icon'),
       slot,
       name,
       grade: getString(itemRecord, 'Grade'),
       level: getNumber(itemRecord, 'Level'),
-      kind: getGemKind(name),
+      kind,
+      effectType: getGemEffectTypeFromEffects(effectsToUse),
       skillName,
       effects: effectsToUse,
       bonusEffect,
@@ -452,35 +673,74 @@ function parseGems(gems: Record<string, unknown>): ParsedGemSummary {
   };
 }
 
+function parseArkPassive(arkPassive: Record<string, unknown>): ParsedArkPassiveSummary {
+  return {
+    title: getString(arkPassive, 'Title'),
+    points: asArray(arkPassive.Points).map((item) => {
+      const itemRecord = asRecord(item);
+
+      return {
+        name: getString(itemRecord, 'Name'),
+        value: getNumber(itemRecord, 'Value'),
+        description: getString(itemRecord, 'Description'),
+      };
+    }),
+  };
+}
+
+function parseArkGrid(arkGrid: Record<string, unknown>): ParsedArkGridSummary {
+  return {
+    cores: asArray(arkGrid.Slots).map((item) => {
+      const itemRecord = asRecord(item);
+
+      return {
+        icon: getString(itemRecord, 'Icon'),
+        name: getString(itemRecord, 'Name'),
+        grade: getString(itemRecord, 'Grade'),
+        point: getNumber(itemRecord, 'Point'),
+      };
+    }),
+    effects: asArray(arkGrid.Effects).map((item) => {
+      const itemRecord = asRecord(item);
+
+      return {
+        name: getString(itemRecord, 'Name'),
+        level: getNumber(itemRecord, 'Level'),
+      };
+    }),
+  };
+}
+
 function buildSummary(rawPayload: Record<string, unknown>) {
   const profile = asRecord(rawPayload.profiles);
   const equipment = asArray(rawPayload.equipment);
   const engravings = asRecord(rawPayload.engravings);
   const gems = asRecord(rawPayload.gems);
   const avatars = asArray(rawPayload.avatars);
+  const arkPassive = asRecord(rawPayload.arkpassive);
+  const arkGrid = asRecord(rawPayload.arkgrid);
   const equipmentGroups = classifyEquipment(equipment);
 
   return {
-    profile: {
+    profiles: {
       characterName: getString(profile, 'CharacterName'),
       serverName: getString(profile, 'ServerName'),
       characterClassName: getString(profile, 'CharacterClassName'),
       itemAvgLevel: getString(profile, 'ItemAvgLevel'),
-      characterLevel: profile.CharacterLevel ?? null,
-      expeditionLevel: profile.ExpeditionLevel ?? null,
-      guildName: getString(profile, 'GuildName'),
-      title: getString(profile, 'Title'),
       combatPower: profile.CombatPower ?? null,
-      honorPoint: profile.HonorPoint ?? null,
+      characterImage: getString(profile, 'CharacterImage'),
     },
-    equipment: equipmentGroups.gear,
-    accessories: equipmentGroups.accessories,
-    bracelet: equipmentGroups.bracelet,
-    abilityStone: equipmentGroups.abilityStone,
+    equipment: {
+      gears: equipmentGroups.gear.map(buildGearSummary),
+      accessories: equipmentGroups.accessories.map(buildAccessorySummary),
+      bracelet: buildBraceletSummary(equipmentGroups.bracelet),
+      abilityStone: buildAbilityStoneSummary(equipmentGroups.abilityStone),
+    },
     engravings: parseEngravings(engravings),
     gems: parseGems(gems),
     legendaryAvatars: parseLegendaryAvatars(avatars),
-    needsReview: ['상급재련', '코어', '젬', '카르마'],
+    arkPassive: parseArkPassive(arkPassive),
+    arkGrid: parseArkGrid(arkGrid),
   };
 }
 
@@ -504,9 +764,7 @@ async function fetchSection(
   if (!response.ok) {
     return {
       key: section.key,
-      status: 'failed',
       data: null,
-      error: `${response.status} ${response.statusText}`,
     };
   }
 
@@ -514,7 +772,6 @@ async function fetchSection(
 
   return {
     key: section.key,
-    status: data === null || (Array.isArray(data) && data.length === 0) ? 'empty' : 'success',
     data,
   };
 }
@@ -553,15 +810,9 @@ Deno.serve(async (req) => {
     );
 
     const rawPayload: Record<string, unknown> = {};
-    const sectionStatus: Record<string, SectionStatus> = {};
 
     for (const result of results) {
       rawPayload[result.key] = result.data;
-      sectionStatus[result.key] = result.status;
-    }
-
-    if (sectionStatus.arkgrid === 'success') {
-      sectionStatus.arkgrid = 'needsReview';
     }
 
     const summary = buildSummary(rawPayload);
@@ -578,8 +829,6 @@ Deno.serve(async (req) => {
           itemLevel: getString(profile, 'ItemAvgLevel'),
           summary,
           rawPayload,
-          sectionStatus,
-          debug: body.debug === true ? results : undefined,
         },
       },
       { status: 200, headers: corsHeaders },

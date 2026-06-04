@@ -38,8 +38,140 @@ export type TResLostarkSiblingCharacter = {
 
 export type TReqLostarkCharacterDetails = {
   characterName: string;
-  debug?: boolean;
 };
+
+export type TLostarkColoredEffect = {
+  text: string;
+  color: string | null;
+};
+
+export type TLostarkAbilityStoneEngraving = {
+  name: string;
+  level: number | null;
+};
+
+export type TLostarkCharacterSummary = {
+  profiles: {
+    characterName: string | null;
+    serverName: string | null;
+    characterClassName: string | null;
+    itemAvgLevel: string | null;
+    combatPower: unknown;
+    characterImage: string | null;
+  };
+  equipment: {
+    gears: TLostarkGearSummaryItem[];
+    accessories: TLostarkAccessorySummaryItem[];
+    bracelet: TLostarkBraceletSummaryItem | null;
+    abilityStone: TLostarkAbilityStoneSummaryItem | null;
+  };
+  engravings: TLostarkEngravingSummaryItem[];
+  gems: TLostarkGemSummary;
+  legendaryAvatars: TLostarkLegendaryAvatarSummaryItem[];
+  arkPassive: TLostarkArkPassiveSummary;
+  arkGrid: TLostarkArkGridSummary;
+};
+
+export type TLostarkGearSummaryItem = {
+  icon: string | null;
+  name: string | null;
+  type: string | null;
+  grade: string | null;
+  quality: number | null;
+  itemLevel: string | null;
+};
+
+export type TLostarkAccessorySummaryItem = {
+  icon: string | null;
+  name: string | null;
+  type: string | null;
+  grade: string | null;
+  quality: number | null;
+  basicEffects: string[];
+  polishEffects: TLostarkColoredEffect[];
+};
+
+export type TLostarkBraceletSummaryItem = {
+  icon: string | null;
+  name: string | null;
+  type: string | null;
+  grade: string | null;
+  braceletEffects: TLostarkColoredEffect[];
+};
+
+export type TLostarkAbilityStoneSummaryItem = {
+  icon: string | null;
+  name: string | null;
+  type: string | null;
+  grade: string | null;
+  abilityStoneBonusEffects: string[];
+  abilityStoneEngravings: TLostarkAbilityStoneEngraving[];
+};
+
+export type TLostarkEngravingSummaryItem = {
+  name: string | null;
+  grade: string | null;
+  level: number | null;
+  description: string | null;
+  abilityStoneLevel: number | null;
+};
+
+export type TLostarkGemEffectType = 'damage' | 'cooldown' | null;
+
+export type TLostarkGemSummaryItem = {
+  icon: string | null;
+  slot: number | null;
+  name: string | null;
+  grade: string | null;
+  level: number | null;
+  kind: string | null;
+  effectType: TLostarkGemEffectType;
+  skillName: string | null;
+  effects: string[];
+  bonusEffect: string | null;
+};
+
+export type TLostarkGemSummary = {
+  items: TLostarkGemSummaryItem[];
+  totalBasicAttack: string | null;
+};
+
+export type TLostarkLegendaryAvatarSummaryItem = {
+  icon: string | null;
+  name: string | null;
+  type: string | null;
+  grade: string | null;
+};
+
+export type TLostarkArkPassiveSummary = {
+  title: string | null;
+  points: TLostarkArkPassivePoint[];
+};
+
+export type TLostarkArkPassivePoint = {
+  name: string | null;
+  value: number | null;
+  description: string | null;
+};
+
+export type TLostarkArkGridSummary = {
+  cores: TLostarkArkGridCore[];
+  effects: TLostarkArkGridEffect[];
+};
+
+export type TLostarkArkGridCore = {
+  icon: string | null;
+  name: string | null;
+  grade: string | null;
+  point: number | null;
+};
+
+export type TLostarkArkGridEffect = {
+  name: string | null;
+  level: number | null;
+};
+
+export type TLostarkCharacterRawPayload = Record<string, unknown>;
 
 export type TResLostarkCharacterDetails = {
   ok: boolean;
@@ -49,8 +181,8 @@ export type TResLostarkCharacterDetails = {
     serverName: string | null;
     characterClass: string | null;
     itemLevel: string | null;
-    summary: unknown;
-    rawPayload: Record<string, unknown>;
+    summary: TLostarkCharacterSummary;
+    rawPayload: TLostarkCharacterRawPayload;
   };
 };
 
@@ -59,8 +191,8 @@ export type TReqUpsertLostarkMainCharacterRow = {
   character_name: string;
   character_class: string;
   item_level: string;
-  summary: unknown;
-  raw_payload: Record<string, unknown> | null;
+  summary: TLostarkCharacterSummary;
+  raw_payload: TLostarkCharacterRawPayload | null;
 };
 
 export type TResLostarkMainCharacterRow = TReqUpsertLostarkMainCharacterRow & {
@@ -74,4 +206,6 @@ export type TResLostarkMainCharacter = {
   characterName: string;
   characterClass: string;
   itemLevel: string;
+  summary: TLostarkCharacterSummary;
+  rawPayload: TLostarkCharacterRawPayload | null;
 };
