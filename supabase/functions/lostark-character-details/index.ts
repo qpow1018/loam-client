@@ -73,11 +73,6 @@ type ParsedGemItem = {
   bonusEffect: string | null;
 };
 
-type ParsedGemSummary = {
-  items: ParsedGemItem[];
-  totalBasicAttack: string | null;
-};
-
 type ParsedArkPassivePoint = {
   name: string | null;
   value: number | null;
@@ -125,6 +120,7 @@ type GearSummaryItem = {
   grade: string | null;
   quality: number | null;
   itemLevel: string | null;
+  enhancement: number | null;
 };
 
 type AccessorySummaryItem = {
@@ -457,6 +453,7 @@ function buildGearSummary(item: ParsedEquipmentItem): GearSummaryItem {
     grade: item.grade,
     quality: item.quality,
     itemLevel: item.itemLevel,
+    enhancement: item.enhancement,
   };
 }
 
@@ -614,7 +611,7 @@ function getGemEffect(effectLine: string, skillName: string | null) {
   return normalized;
 }
 
-function parseGems(gems: Record<string, unknown>): ParsedGemSummary {
+function parseGems(gems: Record<string, unknown>): ParsedGemItem[] {
   const effects = asRecord(gems.Effects);
   const skills = asArray(effects.Skills);
   const skillByGemSlot = new Map<number, Record<string, unknown>>();
@@ -628,7 +625,7 @@ function parseGems(gems: Record<string, unknown>): ParsedGemSummary {
     }
   }
 
-  const items = asArray(gems.Gems).map((item) => {
+  return asArray(gems.Gems).map((item) => {
     const itemRecord = asRecord(item);
     const slot = getNumber(itemRecord, 'Slot');
     const skillRecord = slot !== null ? skillByGemSlot.get(slot) : undefined;
@@ -666,11 +663,6 @@ function parseGems(gems: Record<string, unknown>): ParsedGemSummary {
       bonusEffect,
     };
   });
-
-  return {
-    items,
-    totalBasicAttack: stripHtml(getString(effects, 'Description') ?? '') || null,
-  };
 }
 
 function parseArkPassive(arkPassive: Record<string, unknown>): ParsedArkPassiveSummary {

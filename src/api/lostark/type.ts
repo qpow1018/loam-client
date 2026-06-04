@@ -75,50 +75,45 @@ export type TResLostarkMainCharacter = {
   rawPayload: TLostarkCharacterRawPayload | null;
 };
 
-// TODO
+
 export type TResLostarkCharacterSummary = {
   profiles: {
     characterName: string | null;
     serverName: string | null;
     characterClassName: string | null;
     itemAvgLevel: string | null;
-    combatPower: unknown;
+    combatPower: string | null;
     characterImage: string | null;
   };
   equipment: {
-    gears: TLostarkGearSummaryItem[];
-    accessories: TLostarkAccessorySummaryItem[];
-    bracelet: TLostarkBraceletSummaryItem | null;
-    abilityStone: TLostarkAbilityStoneSummaryItem | null;
+    gears: TLostarkGear[];
+    accessories: TLostarkAccessory[];
+    bracelet: TLostarkBracelet | null;
+    abilityStone: TLostarkAbilityStone | null;
   };
-  engravings: TLostarkEngravingSummaryItem[];
-  gems: TLostarkGemSummary;
-  legendaryAvatars: TLostarkLegendaryAvatarSummaryItem[];
-  arkPassive: TLostarkArkPassiveSummary;
-  arkGrid: TLostarkArkGridSummary;
+  engravings: TLostarkEngraving[];
+  gems: TLostarkGem[];
+  arkPassive: TLostarkArkPassive;
+  arkGrid: TLostarkArkGrid;
+  legendaryAvatars: TLostarkLegendaryAvatar[];
 };
-
 
 export type TLostarkColoredEffect = {
   text: string;
   color: string | null;
 };
 
-export type TLostarkAbilityStoneEngraving = {
-  name: string;
-  level: number | null;
-};
-
-export type TLostarkGearSummaryItem = {
+export type TLostarkGear = {
   icon: string | null;
   name: string | null;
   type: string | null;
   grade: string | null;
   quality: number | null;
   itemLevel: string | null;
+  enhancement: number | null;
 };
 
-export type TLostarkAccessorySummaryItem = {
+export type TLostarkAccessory = {
   icon: string | null;
   name: string | null;
   type: string | null;
@@ -128,7 +123,7 @@ export type TLostarkAccessorySummaryItem = {
   polishEffects: TLostarkColoredEffect[];
 };
 
-export type TLostarkBraceletSummaryItem = {
+export type TLostarkBracelet = {
   icon: string | null;
   name: string | null;
   type: string | null;
@@ -136,16 +131,19 @@ export type TLostarkBraceletSummaryItem = {
   braceletEffects: TLostarkColoredEffect[];
 };
 
-export type TLostarkAbilityStoneSummaryItem = {
+export type TLostarkAbilityStone = {
   icon: string | null;
   name: string | null;
   type: string | null;
   grade: string | null;
   abilityStoneBonusEffects: string[];
-  abilityStoneEngravings: TLostarkAbilityStoneEngraving[];
+  abilityStoneEngravings: {
+    name: string;
+    level: number | null;
+  }[];
 };
 
-export type TLostarkEngravingSummaryItem = {
+export type TLostarkEngraving = {
   name: string | null;
   grade: string | null;
   level: number | null;
@@ -153,60 +151,44 @@ export type TLostarkEngravingSummaryItem = {
   abilityStoneLevel: number | null;
 };
 
-export type TLostarkGemEffectType = 'damage' | 'cooldown' | null;
-
-export type TLostarkGemSummaryItem = {
+export type TLostarkGem = {
   icon: string | null;
   slot: number | null;
   name: string | null;
   grade: string | null;
   level: number | null;
   kind: string | null;
-  effectType: TLostarkGemEffectType;
+  effectType: 'damage' | 'cooldown' | null;
   skillName: string | null;
   effects: string[];
   bonusEffect: string | null;
 };
 
-export type TLostarkGemSummary = {
-  items: TLostarkGemSummaryItem[];
-  totalBasicAttack: string | null;
+export type TLostarkArkPassive = {
+  title: string | null;
+  points: {
+    name: string | null;
+    value: number | null;
+    description: string | null;
+  }[];
 };
 
-export type TLostarkLegendaryAvatarSummaryItem = {
+export type TLostarkArkGrid = {
+  cores: {
+    icon: string | null;
+    name: string | null;
+    grade: string | null;
+    point: number | null;
+  }[];
+  effects: {
+    name: string | null;
+    level: number | null;
+  }[];
+};
+
+export type TLostarkLegendaryAvatar = {
   icon: string | null;
   name: string | null;
   type: string | null;
   grade: string | null;
 };
-
-export type TLostarkArkPassiveSummary = {
-  title: string | null;
-  points: TLostarkArkPassivePoint[];
-};
-
-export type TLostarkArkPassivePoint = {
-  name: string | null;
-  value: number | null;
-  description: string | null;
-};
-
-export type TLostarkArkGridSummary = {
-  cores: TLostarkArkGridCore[];
-  effects: TLostarkArkGridEffect[];
-};
-
-export type TLostarkArkGridCore = {
-  icon: string | null;
-  name: string | null;
-  grade: string | null;
-  point: number | null;
-};
-
-export type TLostarkArkGridEffect = {
-  name: string | null;
-  level: number | null;
-};
-
-
-

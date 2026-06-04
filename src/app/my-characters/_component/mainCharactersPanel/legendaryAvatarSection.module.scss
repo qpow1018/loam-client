@@ -1,0 +1,103 @@
+.legendary-avatar-section {
+  border-top: 1px solid $gray-700;
+  padding-top: 14px;
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .title {
+    font-size: 14px;
+    font-weight: 700;
+    color: $text-primary;
+  }
+
+  .count {
+    flex-shrink: 0;
+    font-size: 11px;
+    color: $text-secondary;
+  }
+
+  .avatar-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .avatar-item {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 8px;
+    min-width: 0;
+    border: 1px solid $gray-700;
+    border-radius: $border-radius;
+    background: $gray-800;
+    padding: 8px;
+  }
+
+  .avatar-icon {
+    overflow: hidden;
+    width: 40px;
+    height: 40px;
+    border: 1px solid $gray-600;
+    border-radius: 4px;
+    background: $gray-700;
+
+    >img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .avatar-info {
+    min-width: 0;
+  }
+
+  .type-line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    margin-bottom: 4px;
+  }
+
+  .type {
+    flex-shrink: 0;
+    font-size: 10px;
+    color: $text-secondary;
+  }
+
+  .grade {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 10px;
+    color: $mint-400;
+  }
+
+  .name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 11px;
+    font-weight: 600;
+    color: $text-primary;
+  }
+
+  .empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 54px;
+    border: 1px dashed $gray-700;
+    border-radius: $border-radius;
+    font-size: 11px;
+    color: $text-secondary;
+  }
+}

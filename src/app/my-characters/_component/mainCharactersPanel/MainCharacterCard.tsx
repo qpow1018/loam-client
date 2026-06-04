@@ -1,11 +1,81 @@
 import type { TResLostarkCharacterSummary } from '@/api/lostark/type';
 
+import ArkGridSection from './ArkGridSection';
+import Button from '@/components/common/button/Button';
+import ArkPassiveSection from './ArkPassiveSection';
+import EngravingSection from './EngravingSection';
+import EquipmentSection from './EquipmentSection';
+import GemSection from './GemSection';
+import LegendaryAvatarSection from './LegendaryAvatarSection';
+
 import styles from './mainCharacterCard.module.scss';
 
-export default function MainCharacterCard(props: { data: TResLostarkCharacterSummary }) {
-  const { data } = props;
+export default function MainCharacterCard(props: {
+  summary: TResLostarkCharacterSummary;
+  isRefreshing?: boolean;
+  isSaving?: boolean;
+  hasUnsavedChanges?: boolean;
+  onRefresh: () => void;
+  onSave: () => void;
+}) {
+  const { summary } = props;
 
-  console.log('data', data);
+  const { profiles } = summary;
 
-  return <div className={styles['main-character-card']}></div>;
+  return (
+    <div className={styles['main-character-card']}>
+      <div className={styles['card-header']}>
+        <div className={styles['character-info']}>
+          <p className={styles['nickname']}>{profiles.characterName ?? '-'}</p>
+          <p className={styles['summary']}>
+            {profiles.characterClassName ?? '-'} · {profiles.itemAvgLevel ?? '-'} · 전투력{' '}
+            {profiles.combatPower ?? '-'}
+          </p>
+        </div>
+
+        <div className={styles['actions']}>
+          {props.hasUnsavedChanges && <span className={styles['status']}>저장 안 됨</span>}
+
+          <Button
+            theme="bg-gray600"
+            size="small"
+            isLoading={props.isRefreshing}
+            isDisabled={props.isSaving}
+            onClick={props.onRefresh}
+          >
+            갱신
+          </Button>
+          <Button
+            theme="bg-pri"
+            size="small"
+            isLoading={props.isSaving}
+            isDisabled={props.isRefreshing || !props.hasUnsavedChanges}
+            onClick={props.onSave}
+          >
+            저장
+          </Button>
+        </div>
+      </div>
+
+      <div className={styles['card-content']}>
+        <div className={styles['profile-image']}>
+          {profiles.characterImage && <img src={profiles.characterImage} alt="" />}
+        </div>
+
+        <div className={styles['content-box']}>
+          <EquipmentSection
+            gears={summary.equipment.gears}
+            accessories={summary.equipment.accessories}
+            bracelet={summary.equipment.bracelet}
+            abilityStone={summary.equipment.abilityStone}
+          />
+          <EngravingSection engravings={summary.engravings} />
+          <GemSection gems={summary.gems} />
+          <ArkPassiveSection arkPassive={summary.arkPassive} />
+          <ArkGridSection arkGrid={summary.arkGrid} />
+          <LegendaryAvatarSection legendaryAvatars={summary.legendaryAvatars} />
+        </div>
+      </div>
+    </div>
+  );
 }

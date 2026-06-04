@@ -80,6 +80,45 @@ export async function getMainCharacters(): Promise<TResLostarkMainCharacter[]> {
   }));
 }
 
+// 메인 캐릭터의 현재 상세 정보를 저장한다.
+export async function saveMainCharacter(
+  character: TResLostarkMainCharacter,
+): Promise<TResLostarkMainCharacter> {
+  const supabase = createClient();
+  const userId = await getCurrentUserId();
+  const row: TReqUpsertLostarkMainCharacterRow = {
+    user_id: userId,
+    character_name: character.characterName,
+    character_class: character.characterClass,
+    item_level: character.itemLevel,
+    summary: character.summary,
+    raw_payload: character.rawPayload,
+  };
+
+  const { data, error } = await supabase
+    .from(LOSTARK_MAIN_CHARACTERS_TABLE)
+    .update(row)
+    .eq('id', character.id)
+    .eq('user_id', userId)
+    .select('id, user_id, character_name, character_class, item_level, summary, raw_payload, created_at, updated_at')
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  const saved = data as TResLostarkMainCharacterRow;
+
+  return {
+    id: saved.id,
+    characterName: saved.character_name,
+    characterClass: saved.character_class,
+    itemLevel: saved.item_level,
+    summary: saved.summary,
+    rawPayload: saved.raw_payload,
+  };
+}
+
 // 선택한 원정대 캐릭터들을 내 캐릭터 목록에 추가한다.
 export async function addMyCharacters(
   characters: TReqCreateLostarkMyCharacter[],
