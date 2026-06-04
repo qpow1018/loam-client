@@ -19,8 +19,7 @@ export default function MainCharacterCard(props: {
   onSave: () => void;
 }) {
   const { summary } = props;
-
-  const { profiles } = summary;
+  const { profiles, equipment } = summary;
 
   return (
     <div className={styles['main-character-card']}>
@@ -64,10 +63,10 @@ export default function MainCharacterCard(props: {
 
         <div className={styles['content-box']}>
           <EquipmentSection
-            gears={summary.equipment.gears}
-            accessories={summary.equipment.accessories}
-            bracelet={summary.equipment.bracelet}
-            abilityStone={summary.equipment.abilityStone}
+            gears={equipment.gears}
+            accessories={equipment.accessories}
+            bracelet={equipment.bracelet}
+            abilityStone={equipment.abilityStone}
           />
           <EngravingSection engravings={summary.engravings} />
           <GemSection gems={summary.gems} />
