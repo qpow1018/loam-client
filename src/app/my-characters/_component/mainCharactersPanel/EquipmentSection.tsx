@@ -4,14 +4,11 @@ import type {
   TLostarkBracelet,
   TLostarkGear,
 } from '@/api/lostark/type';
+import { getEquipQualityBackground } from '@/utils/lostark';
 
 import styles from './equipmentSection.module.scss';
 
-type TEquipmentItem =
-  | TLostarkGear
-  | TLostarkAccessory
-  | TLostarkBracelet
-  | TLostarkAbilityStone;
+type TEquipmentItem = TLostarkGear | TLostarkAccessory | TLostarkBracelet | TLostarkAbilityStone;
 
 export default function EquipmentSection(props: {
   gears: TLostarkGear[];
@@ -21,20 +18,18 @@ export default function EquipmentSection(props: {
 }) {
   const { gears, accessories, bracelet, abilityStone } = props;
 
-  const specialItems = [bracelet, abilityStone].filter(
-    (item): item is TLostarkBracelet | TLostarkAbilityStone => item !== null,
-  );
-
   return (
     <section className={styles['equipment-section']}>
-      <div className={styles['section-header']}>
-        <h3 className={styles['title']}>장비</h3>
-      </div>
+      <div className={styles['equipment-layout']}>
+        <div className={styles['equipment-row']}>
+          <GearGroup gears={gears} />
+          <EquipmentSingleGroup title="어빌리티 스톤" item={abilityStone} />
+        </div>
 
-      <div className={styles['equipment-groups']}>
-        <GearGroup gears={gears} />
-        <AccessoryGroup accessories={accessories} />
-        <EquipmentGroup title="특수 장비" items={specialItems} />
+        {/* <div className={styles['equipment-row']}>
+          <AccessoryGroup accessories={accessories} />
+          <EquipmentSingleGroup title="팔찌" item={bracelet} />
+        </div> */}
       </div>
     </section>
   );
@@ -42,45 +37,45 @@ export default function EquipmentSection(props: {
 
 function GearGroup(props: { gears: TLostarkGear[] }) {
   return (
-    <div className={styles['equipment-group']}>
+    <div className={styles['gear-group']}>
       <p className={styles['group-title']}>장비</p>
 
-      {props.gears.length > 0 ? (
-        <div className={styles['gear-grid']}>
-          {props.gears.map((gear, index) => (
-            <GearItem key={`${gear.type ?? 'gear'}-${gear.name ?? index}`} gear={gear} />
-          ))}
-        </div>
-      ) : (
-        <p className={styles['empty']}>정보 없음</p>
-      )}
-    </div>
-  );
-}
+      <div className={styles['gear-list']}>
+        {props.gears.map((gear, index) => {
+          return (
+            <div key={index} className={styles['gear-item']}>
+              <div className={styles['gear-icon']}>
+                <img src={gear.icon || ''} alt="" />
+                {gear.quality !== null && (
+                  <span
+                    className={styles['quality']}
+                    style={{
+                      backgroundColor: getEquipQualityBackground(gear.quality),
+                    }}
+                  >
+                    {gear.quality}
+                  </span>
+                )}
+              </div>
 
-function GearItem(props: { gear: TLostarkGear }) {
-  const { gear } = props;
+              <p className={styles['enhancement']}>
+                {gear.type ?? '-'} {gear.enhancement !== null ? `+${gear.enhancement}` : '-'}
+              </p>
 
-  return (
-    <div className={styles['gear-item']}>
-      <div className={styles['gear-icon']}>
-        {gear.enhancement !== null && (
-          <span className={styles['enhancement']}>{gear.enhancement}강</span>
-        )}
-        {gear.icon && <img src={gear.icon} alt="" />}
-        {gear.quality !== null && <span className={styles['quality']}>{gear.quality}</span>}
-      </div>
-
-      <div className={styles['gear-tooltip']}>
-        <div className={styles['item-title-line']}>
-          <span className={styles['item-type']}>{gear.type ?? '-'}</span>
-          {gear.grade && <span className={styles['grade']}>{gear.grade}</span>}
-        </div>
-        <p className={styles['item-name']}>{gear.name ?? '-'}</p>
-        <div className={styles['item-meta']}>
-          {gear.itemLevel && <span>Lv. {gear.itemLevel}</span>}
-          {gear.quality !== null && <span>품질 {gear.quality}</span>}
-        </div>
+              <div className={styles['gear-tooltip']}>
+                <div className={styles['item-title-line']}>
+                  <span className={styles['item-type']}>{gear.type ?? '-'}</span>
+                  {gear.grade && <span className={styles['grade']}>{gear.grade}</span>}
+                </div>
+                <p className={styles['item-name']}>{gear.name ?? '-'}</p>
+                <div className={styles['item-meta']}>
+                  {gear.itemLevel && <span>Lv. {gear.itemLevel}</span>}
+                  {gear.quality !== null && <span>품질 {gear.quality}</span>}
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -171,17 +166,13 @@ function BasicEffectList(props: { effects: string[] }) {
   );
 }
 
-function EquipmentGroup(props: { title: string; items: TEquipmentItem[] }) {
+function EquipmentSingleGroup(props: { title: string; item: TEquipmentItem | null }) {
   return (
     <div className={styles['equipment-group']}>
       <p className={styles['group-title']}>{props.title}</p>
 
-      {props.items.length > 0 ? (
-        <div className={styles['item-list']}>
-          {props.items.map((item, index) => (
-            <EquipmentItem key={`${item.type ?? props.title}-${item.name ?? index}`} item={item} />
-          ))}
-        </div>
+      {props.item ? (
+        <EquipmentItem item={props.item} />
       ) : (
         <p className={styles['empty']}>정보 없음</p>
       )}

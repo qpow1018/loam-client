@@ -25,16 +25,19 @@ export default function MainCharacterCard(props: {
     <div className={styles['main-character-card']}>
       <div className={styles['card-header']}>
         <div className={styles['character-info']}>
-          <p className={styles['nickname']}>{profiles.characterName ?? '-'}</p>
-          <p className={styles['summary']}>
-            {profiles.characterClassName ?? '-'} · {profiles.itemAvgLevel ?? '-'} · 전투력{' '}
-            {profiles.combatPower ?? '-'}
-          </p>
+          <div className={styles['label-line']}>
+            <span>{profiles.characterClassName ?? '-'}</span>
+            <span>레벨</span>
+            <span>전투력</span>
+          </div>
+          <div className={styles['value-line']}>
+            <p className={styles['nickname']}>{profiles.characterName ?? '-'}</p>
+            <p className={styles['item-level']}>{profiles.itemAvgLevel ?? '-'}</p>
+            <p className={styles['combat-power']}>{profiles.combatPower ?? '-'}</p>
+          </div>
         </div>
 
         <div className={styles['actions']}>
-          {props.hasUnsavedChanges && <span className={styles['status']}>저장 안 됨</span>}
-
           <Button
             theme="bg-gray600"
             size="small"

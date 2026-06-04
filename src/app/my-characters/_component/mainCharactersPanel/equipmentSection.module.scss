@@ -1,49 +1,106 @@
 .equipment-section {
-  height: 100%;
+  // box-shadow: 0 0 1px red;
 
-  .section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
-
-    .title {
-      font-size: 14px;
-      font-weight: 700;
-      color: $text-primary;
-    }
-
-    .count {
-      font-size: 11px;
-      color: $text-secondary;
-    }
-  }
-
-  .equipment-groups {
+  .equipment-row {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr) minmax(160px, 220px);
     gap: 10px;
   }
 
-  .equipment-group {
-    min-width: 0;
+  .group-title {
+    margin-bottom: 8px;
+    font-size: 10px;
+    color: $text-secondary;
+  }
 
-    .group-title {
-      margin-bottom: 8px;
-      font-size: 11px;
-      font-weight: 600;
-      color: $gray-300;
+  .gear-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    .gear-item {
+      position: relative;
+      flex: 0 0 auto;
+
+      &:hover {
+        .gear-tooltip {
+          opacity: 1;
+          visibility: visible;
+          transform: translateY(0);
+        }
+      }
+
+      .gear-icon {
+        position: relative;
+        overflow: hidden;
+        width: 68px;
+        height: 80px;
+        padding: 8px 12px 24px 12px;
+        background: $gray-700;
+        border: 1px solid $gray-600;
+        border-radius: $border-radius;
+
+        > img {
+          display: block;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .quality {
+          position: absolute;
+          bottom: 2px;
+          left: 50%;
+          z-index: 1;
+          transform: translateX(-50%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 28px;
+          height: 16px;
+          padding: 0 6px;
+          font-size: 10px;
+          font-weight: 700;
+          border: 1px solid $gray-600;
+          border-radius: 999px;
+          color: $text-primary;
+        }
+      }
+
+      .enhancement {
+        text-align: center;
+        margin-top: 6px;
+        font-size: 12px;
+        font-weight: 500;
+        color: $text-primary;
+      }
+
+      .gear-tooltip {
+        position: absolute;
+        top: 66px;
+        left: 0;
+        z-index: 2;
+        visibility: hidden;
+        width: 180px;
+        border: 1px solid $gray-600;
+        border-radius: $border-radius;
+        background: $gray-800;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+        opacity: 0;
+        padding: 10px;
+        transform: translateY(-4px);
+        transition:
+          opacity $transition,
+          transform $transition,
+          visibility $transition;
+      }
     }
+  }
 
+  .equipment-group {
     .item-list {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-    }
-
-    .gear-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 44px);
       gap: 8px;
     }
 
@@ -56,78 +113,6 @@
       border-radius: $border-radius;
       font-size: 11px;
       color: $text-secondary;
-    }
-  }
-
-  .gear-item {
-    position: relative;
-
-    &:hover {
-      .gear-tooltip {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-      }
-    }
-
-    .gear-icon {
-      position: relative;
-      overflow: hidden;
-      width: 44px;
-      height: 44px;
-      border: 1px solid $gray-600;
-      border-radius: 4px;
-      background: $gray-700;
-
-      >img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-    }
-
-    .enhancement,
-    .quality {
-      position: absolute;
-      left: 0;
-      z-index: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 15px;
-      background: rgba(0, 0, 0, 0.72);
-      font-size: 9px;
-      font-weight: 700;
-      line-height: 1;
-      color: $text-primary;
-    }
-
-    .enhancement {
-      top: 0;
-    }
-
-    .quality {
-      bottom: 0;
-      background: $gray-600;
-    }
-
-    .gear-tooltip {
-      position: absolute;
-      top: 50px;
-      left: 0;
-      z-index: 2;
-      visibility: hidden;
-      width: 180px;
-      border: 1px solid $gray-600;
-      border-radius: $border-radius;
-      background: $gray-800;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
-      opacity: 0;
-      padding: 10px;
-      transform: translateY(-4px);
-      transition: opacity $transition, transform $transition, visibility $transition;
     }
   }
 
@@ -156,7 +141,7 @@
       border-radius: 4px;
       background: $gray-700;
 
-      >img {
+      > img {
         display: block;
         width: 100%;
         height: 100%;
@@ -291,7 +276,7 @@
       border-radius: 4px;
       background: $gray-700;
 
-      >img {
+      > img {
         display: block;
         width: 100%;
         height: 100%;
