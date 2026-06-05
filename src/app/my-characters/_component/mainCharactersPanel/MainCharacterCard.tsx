@@ -61,21 +61,25 @@ export default function MainCharacterCard(props: {
       </div>
 
       <div className={styles['card-content']}>
-        <div className={styles['profile-image']}>
-          {profiles.characterImage && <img src={profiles.characterImage} alt="" />}
+        <div className={styles['left-box']}>
+          <div className={styles['profile-image']}>
+            {profiles.characterImage && <img src={profiles.characterImage} alt="" />}
+          </div>
+          <EngravingSection engravings={summary.engravings} />
+          전설아바타
         </div>
 
-        <div className={styles['content-box']}>
+        <div className={styles['right-box']}>
           <EquipmentSection gears={equipment.gears} accessories={equipment.accessories} />
           <ExtraEquipmentSection
             abilityStone={equipment.abilityStone}
             bracelet={equipment.bracelet}
           />
-
-          {/* <ArkPassiveSection arkPassive={summary.arkPassive} />
-          <ArkGridSection arkGrid={summary.arkGrid} />
-          <EngravingSection engravings={summary.engravings} />
-          <GemSection gems={summary.gems} /> */}
+          <GemSection gems={summary.gems} />
+          <div className={styles['ark-summary-box']}>
+            <ArkPassiveSection arkPassive={summary.arkPassive} />
+            <ArkGridSection arkGrid={summary.arkGrid} />
+          </div>
         </div>
       </div>
     </div>
