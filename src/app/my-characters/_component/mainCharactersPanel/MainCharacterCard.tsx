@@ -1,13 +1,15 @@
 import type { TResLostarkCharacterSummary } from '@/api/lostark/type';
 
 import Button from '@/components/common/button/Button';
+
+import EngravingSection from './section/EngravingSection';
+
 import EquipmentSection from './section/EquipmentSection';
 import ExtraEquipmentSection from './section/ExtraEquipmentSection';
-
-import ArkGridSection from './section/ArkGridSection';
-import ArkPassiveSection from './section/ArkPassiveSection';
-import EngravingSection from './section/EngravingSection';
 import GemSection from './section/GemSection';
+import ArkPassiveSection from './section/ArkPassiveSection';
+import ArkGridSection from './section/ArkGridSection';
+import ProfileImageSection from './section/ProfileImageSection';
 
 import styles from './mainCharacterCard.module.scss';
 
@@ -62,9 +64,7 @@ export default function MainCharacterCard(props: {
 
       <div className={styles['card-content']}>
         <div className={styles['left-box']}>
-          <div className={styles['profile-image']}>
-            {profiles.characterImage && <img src={profiles.characterImage} alt="" />}
-          </div>
+          <ProfileImageSection imageUrl={profiles.characterImage} />
           <EngravingSection engravings={summary.engravings} />
           전설아바타
         </div>
