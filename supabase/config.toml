@@ -5,6 +5,3 @@ verify_jwt = false
 
 [functions.lostark-character-details]
 verify_jwt = false
-
-[functions.main-character-specs]
-verify_jwt = false
