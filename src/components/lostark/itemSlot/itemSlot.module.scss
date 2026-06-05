@@ -1,0 +1,39 @@
+.item-slot {
+  overflow: hidden;
+  flex-shrink: 0;
+  padding: 4px;
+  background: $gray-700;
+  border: 1px solid $gray-600;
+  border-radius: $border-radius;
+
+  >img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &.item-slot-rare {
+    background: linear-gradient(135deg, #111b27, #113f5f);
+  }
+
+  &.item-slot-epic {
+    background: linear-gradient(135deg, #21142c, #520f68);
+  }
+
+  &.item-slot-legendary {
+    background: linear-gradient(135deg, #311d01, #b16800);
+  }
+
+  &.item-slot-relic {
+    background: linear-gradient(135deg, #2e1708, #ab4102);
+  }
+
+  &.item-slot-ancient {
+    background: linear-gradient(135deg, #433829, #f5dfab);
+  }
+
+  &.item-slot-esther {
+    background: linear-gradient(135deg, #0c2e2c, #2faba8);
+  }
+}

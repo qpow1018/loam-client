@@ -1,12 +1,13 @@
 import type { TResLostarkCharacterSummary } from '@/api/lostark/type';
 
-import ArkGridSection from './ArkGridSection';
 import Button from '@/components/common/button/Button';
-import ArkPassiveSection from './ArkPassiveSection';
-import EngravingSection from './EngravingSection';
-import EquipmentSection from './EquipmentSection';
-import GemSection from './GemSection';
-import LegendaryAvatarSection from './LegendaryAvatarSection';
+import EquipmentSection from './section/EquipmentSection';
+
+import ArkGridSection from './section/ArkGridSection';
+import ArkPassiveSection from './section/ArkPassiveSection';
+import EngravingSection from './section/EngravingSection';
+import ExtraEquipmentSection from './section/ExtraEquipmentSection';
+import GemSection from './section/GemSection';
 
 import styles from './mainCharacterCard.module.scss';
 
@@ -68,14 +69,16 @@ export default function MainCharacterCard(props: {
           <EquipmentSection
             gears={equipment.gears}
             accessories={equipment.accessories}
-            bracelet={equipment.bracelet}
-            abilityStone={equipment.abilityStone}
           />
-          <EngravingSection engravings={summary.engravings} />
-          <GemSection gems={summary.gems} />
+          {/* <ExtraEquipmentSection
+            bracelet={equipment.bracelet}
+            legendaryAvatars={summary.legendaryAvatars}
+          />
+
           <ArkPassiveSection arkPassive={summary.arkPassive} />
           <ArkGridSection arkGrid={summary.arkGrid} />
-          <LegendaryAvatarSection legendaryAvatars={summary.legendaryAvatars} />
+          <EngravingSection engravings={summary.engravings} />
+          <GemSection gems={summary.gems} /> */}
         </div>
       </div>
     </div>

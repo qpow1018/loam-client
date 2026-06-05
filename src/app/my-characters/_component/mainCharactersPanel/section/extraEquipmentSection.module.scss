@@ -1,34 +1,54 @@
-.legendary-avatar-section {
-  border-top: 1px solid $gray-700;
-  padding-top: 14px;
+.extra-equipment-section {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  min-width: 0;
 
-  .section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 10px;
+  .bracelet-group {
+    flex: 0 0 220px;
+    min-width: 0;
   }
 
-  .title {
-    font-size: 14px;
-    font-weight: 700;
-    color: $text-primary;
+  .bracelet-item {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 8px;
+    min-height: 100%;
+    border: 1px solid $gray-700;
+    border-radius: $border-radius;
+    background: $gray-800;
+    padding: 8px;
   }
 
-  .count {
-    flex-shrink: 0;
-    font-size: 11px;
-    color: $text-secondary;
+  .bracelet-image {
+    overflow: hidden;
+    width: 42px;
+    height: 42px;
+    border: 1px solid $gray-600;
+    border-radius: 4px;
+    background: $gray-700;
+
+    > img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 
-  .avatar-list {
+  .bracelet-info {
+    min-width: 0;
+  }
+
+  .legendary-avatar-group {
+    flex: 1 1 auto;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
+    min-width: 0;
   }
 
-  .avatar-item {
+  .legendary-avatar-item {
     display: grid;
     grid-template-columns: 40px minmax(0, 1fr);
     gap: 8px;
@@ -39,7 +59,7 @@
     padding: 8px;
   }
 
-  .avatar-icon {
+  .legendary-avatar-image {
     overflow: hidden;
     width: 40px;
     height: 40px;
@@ -47,7 +67,7 @@
     border-radius: 4px;
     background: $gray-700;
 
-    >img {
+    > img {
       display: block;
       width: 100%;
       height: 100%;
@@ -55,19 +75,19 @@
     }
   }
 
-  .avatar-info {
+  .legendary-avatar-info {
     min-width: 0;
   }
 
-  .type-line {
+  .item-title-line {
     display: flex;
     align-items: center;
     gap: 6px;
     min-width: 0;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
   }
 
-  .type {
+  .item-type {
     flex-shrink: 0;
     font-size: 10px;
     color: $text-secondary;
@@ -81,12 +101,13 @@
     color: $mint-400;
   }
 
-  .name {
+  .item-name {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    margin-bottom: 4px;
     font-size: 11px;
-    font-weight: 600;
+    font-weight: 500;
     color: $text-primary;
   }
 
