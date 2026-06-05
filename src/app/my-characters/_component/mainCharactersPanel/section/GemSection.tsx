@@ -1,77 +1,94 @@
 import type { TLostarkGem } from '@/api/lostark/type';
 
+import ItemSlot from '@/components/lostark/itemSlot/ItemSlot';
+
 import styles from './gemSection.module.scss';
 
 export default function GemSection(props: { gems: TLostarkGem[] }) {
-  const sortedGems = [...props.gems].sort((a, b) => (a.slot ?? 0) - (b.slot ?? 0));
+  const GEM_LEVEL_GROUPS = [
+    { label: '10렙', level: 10 },
+    { label: '9렙', level: 9 },
+    { label: '8렙', level: 8 },
+    { label: '7렙 이하', maxLevel: 7 },
+  ];
+
+  function sortGemLevel(gems: TLostarkGem[]) {
+    return [...gems].sort((a, b) => {
+      const levelOrder = (b.level ?? 0) - (a.level ?? 0);
+
+      if (levelOrder !== 0) {
+        return levelOrder;
+      }
+
+      return (a.slot ?? 0) - (b.slot ?? 0);
+    });
+  }
+
+  function divideGemByEffectType() {
+    const sortedGems = sortGemLevel(props.gems);
+
+    return {
+      damageGems: sortedGems.filter((gem) => gem.effectType === 'damage'),
+      cooldownGems: sortedGems.filter((gem) => gem.effectType === 'cooldown'),
+    };
+  }
+
+  function getGemLevelCount(levelValue?: number, maxLevel?: number) {
+    return props.gems.filter((gem) => {
+      const level = gem.level ?? 0;
+
+      if (levelValue !== undefined) {
+        return level === levelValue;
+      }
+
+      if (maxLevel !== undefined) {
+        return level <= maxLevel;
+      }
+
+      return false;
+    }).length;
+  }
+
+  const { damageGems, cooldownGems } = divideGemByEffectType();
+  const gemLevelCounts = GEM_LEVEL_GROUPS.map((levelGroup) => ({
+    label: levelGroup.label,
+    count: getGemLevelCount(levelGroup.level, levelGroup.maxLevel),
+  })).filter((levelGroup) => levelGroup.count > 0);
 
   return (
     <section className={styles['gem-section']}>
-      <div className={styles['section-header']}>
-        <h3 className={styles['title']}>보석</h3>
-        <span className={styles['count']}>{props.gems.length}개</span>
+      <div className={styles['level-count-list']}>
+        {gemLevelCounts.map((levelGroup) => (
+          <span key={levelGroup.label} className={styles['level-count']}>
+            <span className={styles['level-label']}>{levelGroup.label}</span>
+            <span className={styles['level-value']}>{levelGroup.count}개</span>
+          </span>
+        ))}
       </div>
 
-      {sortedGems.length > 0 ? (
-        <div className={styles['gem-list']}>
-          {sortedGems.map((gem, index) => (
-            <GemItem key={`${gem.slot ?? index}-${gem.name ?? 'gem'}`} gem={gem} />
-          ))}
-        </div>
-      ) : (
-        <p className={styles['empty']}>정보 없음</p>
-      )}
+      <div className={styles['gem-box']}>
+        {damageGems.map((gem, index) => (
+          <GemItem key={index} gem={gem} />
+        ))}
+        <div className={styles['blank']} />
+        {cooldownGems.map((gem, index) => (
+          <GemItem key={index} gem={gem} />
+        ))}
+      </div>
     </section>
   );
 }
 
 function GemItem(props: { gem: TLostarkGem }) {
   const { gem } = props;
-  const effectLabel = getEffectLabel(gem);
 
   return (
     <div className={styles['gem-item']}>
-      <div className={styles['gem-icon']}>
-        {gem.icon && <img src={gem.icon} alt="" />}
-        {gem.level !== null && <span className={styles['gem-level']}>Lv.{gem.level}</span>}
-      </div>
+      <ItemSlot imageUrl={gem.icon} grade={gem.grade} />
 
-      <div className={styles['gem-info']}>
-        <div className={styles['name-line']}>
-          <span className={styles['skill-name']}>{gem.skillName ?? gem.kind ?? '-'}</span>
-          {effectLabel && (
-            <span className={`${styles['effect-type']} ${styles[`type-${gem.effectType}`]}`}>
-              {effectLabel}
-            </span>
-          )}
-        </div>
-
-        <div className={styles['effect-list']}>
-          {gem.effects.length > 0 ? (
-            gem.effects.map((effect, index) => (
-              <span key={`${effect}-${index}`} className={styles['effect']}>
-                {effect}
-              </span>
-            ))
-          ) : (
-            <span className={styles['effect']}>{gem.name ?? '-'}</span>
-          )}
-        </div>
-
-        {gem.bonusEffect && <p className={styles['bonus-effect']}>{gem.bonusEffect}</p>}
-      </div>
+      <p className={styles['gem-title']}>
+        {gem.level} {gem.kind}
+      </p>
     </div>
   );
-}
-
-function getEffectLabel(gem: TLostarkGem) {
-  if (gem.effectType === 'damage') {
-    return '피해';
-  }
-
-  if (gem.effectType === 'cooldown') {
-    return '쿨감';
-  }
-
-  return null;
 }
