@@ -37,7 +37,6 @@ export default function EquipmentSection(props: {
 
   const gears = sortGears(props.gears);
   const accessories = sortAccessories(props.accessories);
-  console.log('accessories', accessories);
 
   return (
     <section className={styles['equipment-section']}>

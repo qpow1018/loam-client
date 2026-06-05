@@ -1,76 +1,109 @@
-import type { TLostarkBracelet, TLostarkLegendaryAvatar } from '@/api/lostark/type';
+import type {
+  TLostarkAbilityStone,
+  TLostarkBracelet,
+  TLostarkColoredEffect,
+} from '@/api/lostark/type';
 
-import EffectList from './EffectList';
+import ItemSlot from '@/components/lostark/itemSlot/ItemSlot';
+
 import styles from './extraEquipmentSection.module.scss';
 
 export default function ExtraEquipmentSection(props: {
+  abilityStone: TLostarkAbilityStone | null;
   bracelet: TLostarkBracelet | null;
-  legendaryAvatars: TLostarkLegendaryAvatar[];
 }) {
   return (
     <section className={styles['extra-equipment-section']}>
+      <AbilityStoneGroup abilityStone={props.abilityStone} />
       <BraceletGroup bracelet={props.bracelet} />
-      <LegendaryAvatarGroup legendaryAvatars={props.legendaryAvatars} />
     </section>
   );
 }
 
-function BraceletGroup(props: { bracelet: TLostarkBracelet | null }) {
-  const { bracelet } = props;
+function AbilityStoneGroup(props: { abilityStone: TLostarkAbilityStone | null }) {
+  const { abilityStone } = props;
 
-  if (!bracelet) {
-    return (
-      <div className={styles['bracelet-group']}>
-        <p className={styles['empty']}>팔찌 정보 없음</p>
-      </div>
-    );
+  if (!abilityStone) {
+    return null;
   }
 
+  const positiveLevelSum = abilityStone.abilityStoneEngravings
+    .slice(0, 2)
+    .reduce((sum, engraving) => sum + (engraving.level ?? 0), 0);
+  const isNineSevenStone = positiveLevelSum >= 5;
+
   return (
-    <div className={styles['bracelet-group']}>
-      <div className={styles['bracelet-item']}>
-        <div className={styles['bracelet-image']}>
-          {bracelet.icon && <img src={bracelet.icon} alt="" />}
+    <div className={styles['ability-stone-item']}>
+      <ItemSlot imageUrl={abilityStone.icon} grade={abilityStone.grade} />
+
+      <div className={styles['info-box']}>
+        <div className={styles['name-box']}>
+          <p className={styles['name']}>어빌리티 스톤</p>
+          {isNineSevenStone && <span className={styles['stone-chip']}>97돌</span>}
         </div>
 
-        <div className={styles['bracelet-info']}>
-          <div className={styles['item-title-line']}>
-            <span className={styles['item-type']}>{bracelet.type ?? '팔찌'}</span>
-            {bracelet.grade && <span className={styles['grade']}>{bracelet.grade}</span>}
-          </div>
-
-          <EffectList title="팔찌 효과" effects={bracelet.braceletEffects} />
+        <div className={styles['stone-engraving-list']}>
+          {abilityStone.abilityStoneEngravings.map((engraving, index) => (
+            <div
+              key={`${engraving.name}-${index}`}
+              className={`${styles['stone-engraving']} ${index >= 2 ? styles['negative'] : ''}`}
+            >
+              <span className={styles['level']}>{`+${engraving.level}`}</span>
+              <span className={styles['name']}>{engraving.name}</span>
+            </div>
+          ))}
         </div>
       </div>
     </div>
   );
 }
 
-function LegendaryAvatarGroup(props: { legendaryAvatars: TLostarkLegendaryAvatar[] }) {
-  return (
-    <div className={styles['legendary-avatar-group']}>
-      {props.legendaryAvatars.length > 0 ? (
-        props.legendaryAvatars.map((avatar, index) => (
-          <div
-            key={`${avatar.type ?? 'avatar'}-${avatar.name ?? 'item'}-${index}`}
-            className={styles['legendary-avatar-item']}
-          >
-            <div className={styles['legendary-avatar-image']}>
-              {avatar.icon && <img src={avatar.icon} alt="" />}
-            </div>
+function BraceletGroup(props: { bracelet: TLostarkBracelet | null }) {
+  const { bracelet } = props;
 
-            <div className={styles['legendary-avatar-info']}>
-              <div className={styles['item-title-line']}>
-                <span className={styles['item-type']}>{avatar.type ?? '-'}</span>
-                {avatar.grade && <span className={styles['grade']}>{avatar.grade}</span>}
-              </div>
-              <p className={styles['item-name']}>{avatar.name ?? '-'}</p>
-            </div>
-          </div>
-        ))
-      ) : (
-        <p className={styles['empty']}>전설 아바타 정보 없음</p>
-      )}
+  if (!bracelet) return null;
+
+  function isBraceletCombinedOption(effect: TLostarkColoredEffect) {
+    return effect.color?.replace('#', '').toUpperCase() === '99FF99';
+  }
+
+  function getBraceletEffects(effects: TLostarkColoredEffect[]) {
+    return effects.reduce<TLostarkColoredEffect[]>((combinedEffects, effect) => {
+      const previousEffect = combinedEffects[combinedEffects.length - 1];
+
+      if (isBraceletCombinedOption(effect) && previousEffect) {
+        previousEffect.text = `${previousEffect.text}\n${effect.text}`;
+        return combinedEffects;
+      }
+
+      combinedEffects.push({ ...effect });
+      return combinedEffects;
+    }, []);
+  }
+
+  const braceletEffects = getBraceletEffects(bracelet.braceletEffects);
+
+  return (
+    <div className={styles['bracelet-item']}>
+      <ItemSlot imageUrl={bracelet.icon} grade={bracelet.grade} />
+
+      <div className={styles['info-box']}>
+        <div className={styles['name-box']}>
+          <p className={styles['name']}>팔찌</p>
+        </div>
+      </div>
+
+      <div className={styles['item-effect']}>
+        {braceletEffects.map((effect, index) => (
+          <p key={index} className={styles['effect']}>
+            <span
+              className={styles['effect-marker']}
+              style={{ backgroundColor: `#${effect.color}` }}
+            />
+            <span className={styles['effect-text']}>{effect.text}</span>
+          </p>
+        ))}
+      </div>
     </div>
   );
 }

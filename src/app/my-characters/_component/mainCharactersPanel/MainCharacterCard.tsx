@@ -2,11 +2,11 @@ import type { TResLostarkCharacterSummary } from '@/api/lostark/type';
 
 import Button from '@/components/common/button/Button';
 import EquipmentSection from './section/EquipmentSection';
+import ExtraEquipmentSection from './section/ExtraEquipmentSection';
 
 import ArkGridSection from './section/ArkGridSection';
 import ArkPassiveSection from './section/ArkPassiveSection';
 import EngravingSection from './section/EngravingSection';
-import ExtraEquipmentSection from './section/ExtraEquipmentSection';
 import GemSection from './section/GemSection';
 
 import styles from './mainCharacterCard.module.scss';
@@ -66,16 +66,13 @@ export default function MainCharacterCard(props: {
         </div>
 
         <div className={styles['content-box']}>
-          <EquipmentSection
-            gears={equipment.gears}
-            accessories={equipment.accessories}
-          />
-          {/* <ExtraEquipmentSection
+          <EquipmentSection gears={equipment.gears} accessories={equipment.accessories} />
+          <ExtraEquipmentSection
+            abilityStone={equipment.abilityStone}
             bracelet={equipment.bracelet}
-            legendaryAvatars={summary.legendaryAvatars}
           />
 
-          <ArkPassiveSection arkPassive={summary.arkPassive} />
+          {/* <ArkPassiveSection arkPassive={summary.arkPassive} />
           <ArkGridSection arkGrid={summary.arkGrid} />
           <EngravingSection engravings={summary.engravings} />
           <GemSection gems={summary.gems} /> */}

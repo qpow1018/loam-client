@@ -1,124 +1,120 @@
 .extra-equipment-section {
   display: flex;
-  align-items: stretch;
   gap: 12px;
-  min-width: 0;
+  margin-top: 12px;
 
-  .bracelet-group {
-    flex: 0 0 220px;
-    min-width: 0;
+  .ability-stone-item {
+    flex: 1;
+    display: flex;
+    gap: 12px;
+
+    .name-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 18px;
+      margin-bottom: 4px;
+
+      .name {
+        font-size: 13px;
+        font-weight: 500;
+        color: $text-primary;
+      }
+
+      .stone-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        height: 18px;
+        padding: 0 6px;
+        border: 1px solid rgba($mint-300, 0.4);
+        border-radius: 100px;
+        background: rgba($mint-800, 0.7);
+        font-size: 10px;
+        font-weight: 700;
+        color: $mint-200;
+      }
+    }
+
+    .stone-engraving-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      .stone-engraving {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        color: $text-primary;
+
+        &.negative {
+          color: $text-secondary;
+        }
+
+        .level {
+          width: 24px;
+          flex-shrink: 0;
+          font-size: 12px;
+          font-weight: 700;
+        }
+
+        .name {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          font-size: 12px;
+        }
+      }
+    }
   }
 
   .bracelet-item {
-    display: grid;
-    grid-template-columns: 42px minmax(0, 1fr);
-    gap: 8px;
-    min-height: 100%;
-    border: 1px solid $gray-700;
-    border-radius: $border-radius;
-    background: $gray-800;
-    padding: 8px;
-  }
-
-  .bracelet-image {
-    overflow: hidden;
-    width: 42px;
-    height: 42px;
-    border: 1px solid $gray-600;
-    border-radius: 4px;
-    background: $gray-700;
-
-    > img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
-
-  .bracelet-info {
-    min-width: 0;
-  }
-
-  .legendary-avatar-group {
-    flex: 1 1 auto;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
-    min-width: 0;
-  }
-
-  .legendary-avatar-item {
-    display: grid;
-    grid-template-columns: 40px minmax(0, 1fr);
-    gap: 8px;
-    min-width: 0;
-    border: 1px solid $gray-700;
-    border-radius: $border-radius;
-    background: $gray-800;
-    padding: 8px;
-  }
-
-  .legendary-avatar-image {
-    overflow: hidden;
-    width: 40px;
-    height: 40px;
-    border: 1px solid $gray-600;
-    border-radius: 4px;
-    background: $gray-700;
-
-    > img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
-
-  .legendary-avatar-info {
-    min-width: 0;
-  }
-
-  .item-title-line {
+    flex: 1.8;
     display: flex;
-    align-items: center;
-    gap: 6px;
-    min-width: 0;
-    margin-bottom: 3px;
-  }
+    gap: 12px;
 
-  .item-type {
-    flex-shrink: 0;
-    font-size: 10px;
-    color: $text-secondary;
-  }
+    .info-box {
+      width: 52px;
 
-  .grade {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 10px;
-    color: $mint-400;
-  }
+      .name-box {
+        display: flex;
+        align-items: center;
+        height: 18px;
+        margin-bottom: 2px;
 
-  .item-name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    margin-bottom: 4px;
-    font-size: 11px;
-    font-weight: 500;
-    color: $text-primary;
-  }
+        .name {
+          font-size: 13px;
+          font-weight: 500;
+          color: $text-primary;
+        }
+      }
+    }
 
-  .empty {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 54px;
-    border: 1px dashed $gray-700;
-    border-radius: $border-radius;
-    font-size: 11px;
-    color: $text-secondary;
+    .item-effect {
+      flex: 1;
+      font-size: 11px;
+      color: $text-secondary;
+
+      .effect {
+        display: flex;
+        gap: 4px;
+        min-width: 0;
+
+        .effect-marker {
+          flex-shrink: 0;
+          width: 8px;
+          height: 8px;
+          margin-top: 2px;
+          border-radius: 50%;
+        }
+
+        .effect-text {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: pre-line;
+        }
+      }
+    }
   }
 }
