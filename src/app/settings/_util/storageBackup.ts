@@ -1,16 +1,13 @@
 import { StorageKey } from '@/utils/storage';
 
 const BACKUP_SCHEMA_VERSION = 1;
-const BACKUP_STORAGE_KEYS = [
-  StorageKey.LOADO_TABLE,
-  StorageKey.LOADO_MEMOS,
-] as const;
+const BACKUP_STORAGE_KEYS = [StorageKey.LOADO_TABLE, StorageKey.LOADO_MEMOS] as const;
 
 export type TBackupPayload = {
   app: 'loam-client';
   version: number;
   exportedAt: string;
-  data: Partial<Record<(typeof BACKUP_STORAGE_KEYS)[number], unknown>>;
+  data: Partial<Record<string, unknown>>;
 };
 
 function formatLocalDate(date: Date) {

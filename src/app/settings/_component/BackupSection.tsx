@@ -9,9 +9,11 @@ import {
   restoreBackupPayload,
   type TBackupPayload,
 } from '@/app/settings/_util/storageBackup';
+import api from '@/api';
 
 import Button from '@/components/common/button/Button';
 import Confirm from '@/components/common/modal/Confirm';
+import SettingsField from '@/app/settings/_component/SettingsField';
 import SettingsSection from '@/app/settings/_component/SettingsSection';
 
 import styles from '@/app/settings/_component/backupSection.module.scss';
@@ -21,6 +23,9 @@ export default function BackupSection() {
 
   const [backupStatus, setBackupStatus] = useState<string>();
   const [pendingBackup, setPendingBackup] = useState<TBackupPayload | null>(null);
+  const [isCloudBackupLoading, setIsCloudBackupLoading] = useState(false);
+  const [isCloudRestoreLoading, setIsCloudRestoreLoading] = useState(false);
+  const [isCloudRestoreConfirmOpen, setIsCloudRestoreConfirmOpen] = useState(false);
 
   function handleExportClick() {
     downloadBackupPayload(createBackupPayload());
@@ -29,6 +34,24 @@ export default function BackupSection() {
 
   function handleImportClick() {
     backupInputRef.current?.click();
+  }
+
+  async function handleCloudBackupClick() {
+    if (isCloudBackupLoading) return;
+
+    setIsCloudBackupLoading(true);
+    try {
+      await api.backup.saveStorageBackup(createBackupPayload());
+      setBackupStatus('현재 저장 데이터를 클라우드에 백업했습니다.');
+    } catch {
+      setBackupStatus('클라우드 백업에 실패했습니다. 로그인 상태를 확인해주세요.');
+    } finally {
+      setIsCloudBackupLoading(false);
+    }
+  }
+
+  function handleCloudRestoreClick() {
+    setIsCloudRestoreConfirmOpen(true);
   }
 
   async function handleBackupFileChange(e: ChangeEvent<HTMLInputElement>) {
@@ -57,34 +80,70 @@ export default function BackupSection() {
     setBackupStatus('백업 데이터를 복원했습니다. 다른 화면은 새로고침 후 반영됩니다.');
   }
 
+  async function handleCloudRestoreConfirm() {
+    if (isCloudRestoreLoading) return;
+
+    setIsCloudRestoreLoading(true);
+    try {
+      const backup = await api.backup.getStorageBackup();
+
+      if (backup === null) {
+        setBackupStatus('클라우드에 저장된 백업이 없습니다.');
+        setIsCloudRestoreConfirmOpen(false);
+        return;
+      }
+
+      if (!isBackupPayload(backup)) {
+        setBackupStatus('클라우드 백업 데이터 형식이 올바르지 않습니다.');
+        setIsCloudRestoreConfirmOpen(false);
+        return;
+      }
+
+      restoreBackupPayload(backup);
+      setBackupStatus('클라우드 백업 데이터를 복원했습니다. 다른 화면은 새로고침 후 반영됩니다.');
+      setIsCloudRestoreConfirmOpen(false);
+    } catch {
+      setBackupStatus('클라우드 복원에 실패했습니다. 로그인 상태를 확인해주세요.');
+    } finally {
+      setIsCloudRestoreLoading(false);
+    }
+  }
+
   return (
     <>
       <SettingsSection
         title="백업/복원"
-        description="할일 테이블, 메모, 내 캐릭터 데이터를 JSON 파일로 내보내고 다시 가져옵니다."
+        description="할일 테이블과 메모 데이터를 JSON 파일 또는 클라우드 백업으로 보관합니다."
         status={backupStatus}
         variant="primary"
       >
-        <div className={styles['backup-actions']}>
+        <SettingsField label="파일 백업" value="JSON 파일로 보관합니다.">
+          <Button theme="bg-pri" size="small" onClick={handleExportClick}>
+            내보내기
+          </Button>
+          <Button theme="bd-gray" size="small" onClick={handleImportClick}>
+            가져오기
+          </Button>
+        </SettingsField>
+
+        <SettingsField label="클라우드" value="로그인 계정에 최신 백업 1개를 저장합니다.">
           <Button
             theme="bg-pri"
-            size="large"
-            isFullWidth
-            className={styles['backup-action']}
-            onClick={handleExportClick}
+            size="small"
+            isLoading={isCloudBackupLoading}
+            onClick={() => void handleCloudBackupClick()}
           >
-            백업 파일 내보내기
+            백업
           </Button>
           <Button
             theme="bd-gray"
-            size="large"
-            isFullWidth
-            className={styles['backup-action']}
-            onClick={handleImportClick}
+            size="small"
+            isLoading={isCloudRestoreLoading}
+            onClick={handleCloudRestoreClick}
           >
-            백업 파일 가져오기
+            복원
           </Button>
-        </div>
+        </SettingsField>
       </SettingsSection>
 
       <input
@@ -99,7 +158,7 @@ export default function BackupSection() {
         isOpen={pendingBackup !== null}
         onClose={() => setPendingBackup(null)}
         title="백업 복원"
-        message="현재 저장된 할일 테이블, 메모, 내 캐릭터 데이터를 백업 파일 내용으로 교체할까요?"
+        message="현재 저장된 할일 테이블과 메모 데이터를 백업 파일 내용으로 교체할까요?"
         buttons={[
           {
             label: '취소',
@@ -110,6 +169,27 @@ export default function BackupSection() {
             label: '복원',
             theme: 'bg-pri',
             onClick: handleRestoreConfirm,
+          },
+        ]}
+      />
+
+      <Confirm
+        isOpen={isCloudRestoreConfirmOpen}
+        onClose={() => setIsCloudRestoreConfirmOpen(false)}
+        title="클라우드 백업 복원"
+        message="현재 저장된 할일 테이블과 메모 데이터를 클라우드 백업 내용으로 교체할까요?"
+        buttons={[
+          {
+            label: '취소',
+            theme: 'bd-gray',
+            isDisabled: isCloudRestoreLoading,
+            onClick: () => setIsCloudRestoreConfirmOpen(false),
+          },
+          {
+            label: '복원',
+            theme: 'bg-pri',
+            isDisabled: isCloudRestoreLoading,
+            onClick: () => void handleCloudRestoreConfirm(),
           },
         ]}
       />
