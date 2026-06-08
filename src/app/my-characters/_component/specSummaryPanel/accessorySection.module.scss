@@ -16,7 +16,7 @@
   .section-title {
     margin-bottom: 4px;
     font-size: 15px;
-    font-weight: 700;
+    font-weight: 500;
     color: $text-primary;
   }
 
@@ -73,7 +73,7 @@
     }
   }
 
-  .accessory-matrix > :nth-last-child(-n + 6) {
+  .accessory-matrix> :nth-last-child(-n + 6) {
     border-bottom: 0;
   }
 
@@ -82,7 +82,7 @@
     align-items: center;
     padding: 0 10px;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 400;
     color: $text-secondary;
     background: $gray-900;
   }
@@ -101,7 +101,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     font-size: 13px;
-    font-weight: 700;
+    font-weight: 500;
     color: $text-primary;
   }
 
@@ -127,7 +127,7 @@
 
   .polish-label {
     font-size: 12px;
-    font-weight: 800;
+    font-weight: 500;
     color: $text-primary;
   }
 
