@@ -34,6 +34,9 @@ yarn-error.log*
 # supabase
 supabase/.temp/
 
+# local brainstorming mockups
+.superpowers/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

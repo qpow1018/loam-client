@@ -12,20 +12,21 @@ import BoxLoading from '@/components/common/loading/BoxLoading';
 import Tabs from '@/components/common/tabs/Tabs';
 import MainCharacterOrderModal from './_component/MainCharacterOrderModal';
 import MainCharactersPanel from './_component/mainCharactersPanel/MainCharactersPanel';
+import SpecSummaryPanel from './_component/specSummaryPanel/SpecSummaryPanel';
 
 import styles from './myCharactersClient.module.scss';
 
-type TMyCharactersTab = 'main';
+type TMyCharactersTab = 'main' | 'spec-summary';
 
-const MY_CHARACTER_TABS = [{ value: 'main', label: '메인캐릭터' }] as const;
-
-function handleTabChange(_next: TMyCharactersTab) {
-  return undefined;
-}
+const MY_CHARACTER_TABS = [
+  { value: 'main', label: '메인캐릭터' },
+  { value: 'spec-summary', label: '스펙요약' },
+] as const;
 
 export default function MyCharactersClient() {
   const [isLoading, setIsLoading] = useState(true);
   const [mainCharacters, setMainCharacters] = useState<TResLostarkMainCharacter[]>([]);
+  const [activeTab, setActiveTab] = useState<TMyCharactersTab>('main');
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
   const [isReordering, setIsReordering] = useState(false);
 
@@ -65,11 +66,13 @@ export default function MyCharactersClient() {
 
       <div className={styles['my-characters-client-container']}>
         <div className={styles['tab-section']}>
-          <Tabs<TMyCharactersTab>
-            options={MY_CHARACTER_TABS}
-            value="main"
-            onChange={handleTabChange}
-          />
+          <div className={styles['tab-box']}>
+            <Tabs<TMyCharactersTab>
+              options={MY_CHARACTER_TABS}
+              value={activeTab}
+              onChange={(next) => setActiveTab(next)}
+            />
+          </div>
 
           <Button
             theme="bg-gray600"
@@ -89,11 +92,15 @@ export default function MyCharactersClient() {
             </div>
           )}
 
-          {!isLoading && mainCharacters.length > 0 && (
+          {!isLoading && mainCharacters.length > 0 && activeTab === 'main' && (
             <MainCharactersPanel
               characters={mainCharacters}
               onChangeCharacters={setMainCharacters}
             />
+          )}
+
+          {!isLoading && mainCharacters.length > 0 && activeTab === 'spec-summary' && (
+            <SpecSummaryPanel characters={mainCharacters} />
           )}
         </div>
       </div>
