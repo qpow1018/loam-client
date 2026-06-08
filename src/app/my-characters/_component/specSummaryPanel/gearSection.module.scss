@@ -105,14 +105,6 @@
     color: $text-primary;
   }
 
-  .character-class {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 11px;
-    color: $text-secondary;
-  }
-
   .quality-cell {
     display: flex;
     align-items: center;

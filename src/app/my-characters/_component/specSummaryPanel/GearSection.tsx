@@ -58,7 +58,6 @@ function CharacterQualityRow(props: { character: TResLostarkMainCharacter }) {
     <>
       <div className={styles['character-cell']}>
         <strong className={styles['character-name']}>{character.characterName}</strong>
-        <span className={styles['character-class']}>{character.characterClass}</span>
       </div>
 
       {GEAR_SLOTS.map((slot) => {
