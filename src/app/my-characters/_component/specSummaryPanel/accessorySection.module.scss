@@ -1,0 +1,153 @@
+.accessory-section {
+  overflow: hidden;
+  border: 1px solid $gray-700;
+  border-radius: $border-radius;
+  background: $gray-800;
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px;
+    border-bottom: 1px solid $gray-700;
+  }
+
+  .section-title {
+    margin-bottom: 4px;
+    font-size: 15px;
+    font-weight: 700;
+    color: $text-primary;
+  }
+
+  .grade-legend {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    font-size: 11px;
+    color: $text-secondary;
+  }
+
+  .legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+  }
+
+  .legend-dot-top,
+  .legend-dot-middle,
+  .legend-dot-low {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .legend-dot-top {
+    background: #fe9600;
+  }
+
+  .legend-dot-middle {
+    background: #ce43fc;
+  }
+
+  .legend-dot-low {
+    background: #00b5ff;
+  }
+
+  .accessory-matrix {
+    display: grid;
+    grid-template-columns: minmax(160px, 1.2fr) repeat(5, minmax(104px, 1fr));
+  }
+
+  .matrix-head-cell,
+  .character-cell,
+  .accessory-cell {
+    min-height: 44px;
+    border-right: 1px solid $gray-700;
+    border-bottom: 1px solid $gray-700;
+
+    &:nth-child(6n) {
+      border-right: 0;
+    }
+  }
+
+  .accessory-matrix > :nth-last-child(-n + 6) {
+    border-bottom: 0;
+  }
+
+  .matrix-head-cell {
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: $text-secondary;
+    background: $gray-900;
+  }
+
+  .character-cell {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    min-width: 0;
+    padding: 8px 10px;
+  }
+
+  .character-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+    font-weight: 700;
+    color: $text-primary;
+  }
+
+  .character-class {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 11px;
+    color: $text-secondary;
+  }
+
+  .accessory-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+  }
+
+  .polish-summary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 74px;
+    height: 26px;
+    padding: 0 8px;
+    border: 1px solid $gray-600;
+    border-radius: 4px;
+    background: $gray-700;
+  }
+
+  .polish-label {
+    font-size: 12px;
+    font-weight: 800;
+    color: $text-primary;
+  }
+
+  .polish-dots {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .polish-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+}
