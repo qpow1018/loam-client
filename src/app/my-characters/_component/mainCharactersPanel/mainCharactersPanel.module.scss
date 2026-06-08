@@ -4,17 +4,4 @@
     flex-direction: column;
     gap: 12px;
   }
-
-  .empty {
-    display: flex;
-    justify-content: center;
-    padding: 100px 0;
-    border-radius: $border-radius;
-    background: $gray-800;
-
-    .empty-message {
-      font-size: 13px;
-      color: $text-secondary;
-    }
-  }
 }
