@@ -1,28 +1,60 @@
 'use client';
 
+import { useState } from 'react';
+
 import type { TResLostarkMainCharacter } from '@/api/lostark/type';
 
-import AbilityStoneSection from './AbilityStoneSection';
+import ButtonGroup from '@/components/common/buttonGroup/ButtonGroup';
+import GearSection from './GearSection';
 import AccessorySection from './AccessorySection';
 import BraceletSection from './BraceletSection';
-import EngravingSummarySection from './EngravingSummarySection';
+import AbilityStoneSection from './AbilityStoneSection';
 import GemAvatarSection from './GemAvatarSection';
-import GearSection from './GearSection';
+import EngravingSummarySection from './EngravingSummarySection';
 
 import styles from './specSummaryPanel.module.scss';
 
+type TSpecTab =
+  | 'gear'
+  | 'accessory'
+  | 'bracelet'
+  | 'abilityStone'
+  | 'gemAndAvatar'
+  | 'engraving'
+  | 'arkPassive'
+  | 'arkGrid';
+
+export const SPEC_OPTIONS: { value: TSpecTab; label: string }[] = [
+  { value: 'gear', label: '장비 품질' },
+  { value: 'accessory', label: '악세사리' },
+  { value: 'bracelet', label: '필찌' },
+  { value: 'abilityStone', label: '어빌스톤' },
+  { value: 'gemAndAvatar', label: '보석/전압' },
+  { value: 'engraving', label: '각인' },
+  { value: 'arkPassive', label: '아크패시브' },
+  { value: 'arkGrid', label: '아크그리드' },
+];
+
 export default function SpecSummaryPanel(props: { characters: TResLostarkMainCharacter[] }) {
+  const [specTab, setSpecTab] = useState<TSpecTab>('gear');
+
   return (
     <section className={styles['spec-summary-panel']}>
-      <GearSection characters={props.characters} />
-      <AccessorySection characters={props.characters} />
-      <BraceletSection characters={props.characters} />
-      <AbilityStoneSection characters={props.characters} />
-      <GemAvatarSection characters={props.characters} />
-      <EngravingSummarySection characters={props.characters} />
-      <p>아크패시브 레벨</p>
-      <p>코어 - 고대코어, 활성화 포인트</p>
-      <p>젬 효과 - 보피</p>
+      <ButtonGroup options={SPEC_OPTIONS} value={specTab} onChange={(value) => setSpecTab(value)} />
+
+      {specTab === 'gear' && <GearSection characters={props.characters} />}
+      {specTab === 'accessory' && <AccessorySection characters={props.characters} />}
+      {specTab === 'bracelet' && <BraceletSection characters={props.characters} />}
+      {specTab === 'abilityStone' && <AbilityStoneSection characters={props.characters} />}
+      {specTab === 'gemAndAvatar' && <GemAvatarSection characters={props.characters} />}
+      {specTab === 'engraving' && <EngravingSummarySection characters={props.characters} />}
+      {specTab === 'arkPassive' && <>아크패시브 레벨</>}
+      {specTab === 'arkGrid' && (
+        <>
+          <p>코어 - 고대코어, 활성화 포인트</p>
+          <p>젬 효과 - 보피</p>
+        </>
+      )}
     </section>
   );
 }
