@@ -59,7 +59,7 @@
 
   .card-content {
     display: grid;
-    grid-template-columns: 240px minmax(0, 1fr) 460px;
+    grid-template-columns: 240px minmax(0, 1fr) 480px;
     gap: 12px;
     padding: 12px;
 
@@ -73,6 +73,12 @@
 
     .ark-column {
       min-width: 0;
+
+      .build-summary-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
     }
   }
 }

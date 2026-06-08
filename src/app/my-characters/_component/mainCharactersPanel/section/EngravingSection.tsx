@@ -2,11 +2,12 @@ import type { TLostarkEngraving } from '@/api/lostark/type';
 
 import styles from './engravingSection.module.scss';
 
-export default function EngravingSection(props: { engravings: TLostarkEngraving[] }) {
+export default function EngravingSection(props: {
+  engravings: TLostarkEngraving[];
+  className?: string;
+}) {
   return (
     <section className={styles['engraving-section']}>
-      {/* <h3 className={styles['title']}>각인</h3> */}
-
       <div className={styles['engraving-list']}>
         {props.engravings.map((engraving, index) => (
           <div key={index} className={styles['engraving-item']}>

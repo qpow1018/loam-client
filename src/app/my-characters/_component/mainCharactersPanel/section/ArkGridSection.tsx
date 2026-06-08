@@ -4,10 +4,21 @@ import ItemSlot from '@/components/lostark/itemSlot/ItemSlot';
 
 import styles from './arkGridSection.module.scss';
 
+const CORE_ORDER = ['질서의 해', '질서의 달', '질서의 별', '혼돈의 해', '혼돈의 달', '혼돈의 별'];
 const EFFECT_ORDER = ['보스 피해', '추가 피해', '공격력'];
 
 export default function ArkGridSection(props: { arkGrid: TLostarkArkGrid }) {
   const { arkGrid } = props;
+
+  function getCoreOrder(name: string | null) {
+    const orderIndex = CORE_ORDER.findIndex((coreName) => name?.includes(coreName));
+
+    return orderIndex === -1 ? Number.MAX_SAFE_INTEGER : orderIndex;
+  }
+
+  function getCoreDisplayName(name: string | null) {
+    return name?.split(':').at(-1)?.trim() || '-';
+  }
 
   function getEffectOrder(name: string | null) {
     const orderIndex = EFFECT_ORDER.findIndex((effectName) => effectName === name);
@@ -15,6 +26,9 @@ export default function ArkGridSection(props: { arkGrid: TLostarkArkGrid }) {
     return orderIndex === -1 ? Number.MAX_SAFE_INTEGER : orderIndex;
   }
 
+  const sortedCores = [...arkGrid.cores].sort(
+    (a, b) => getCoreOrder(a.name) - getCoreOrder(b.name),
+  );
   const sortedEffects = [...arkGrid.effects].sort(
     (a, b) => getEffectOrder(a.name) - getEffectOrder(b.name),
   );
@@ -23,12 +37,12 @@ export default function ArkGridSection(props: { arkGrid: TLostarkArkGrid }) {
   return (
     <section className={styles['ark-grid-section']}>
       <div className={styles['core-list']}>
-        {arkGrid.cores.map((core, index) => (
+        {sortedCores.map((core, index) => (
           <div key={index} className={styles['core-item']}>
-            <ItemSlot imageUrl={core.icon} grade={core.grade} size={36} />
+            <ItemSlot imageUrl={core.icon} grade={core.grade} size={44} />
 
             <div className={styles['core-info']}>
-              <p className={styles['core-name']}>{core.name}</p>
+              <p className={styles['core-name']}>{getCoreDisplayName(core.name)}</p>
               <p className={styles['core-point']}>{core.point}P</p>
             </div>
           </div>

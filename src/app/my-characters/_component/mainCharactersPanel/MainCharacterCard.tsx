@@ -77,8 +77,10 @@ export default function MainCharacterCard(props: {
         </div>
 
         <div className={styles['ark-column']}>
-          <EngravingSection engravings={summary.engravings} />
-          <ArkPassiveSection arkPassive={summary.arkPassive} />
+          <div className={styles['build-summary-row']}>
+            <ArkPassiveSection arkPassive={summary.arkPassive} />
+            <EngravingSection engravings={summary.engravings} />
+          </div>
           <ArkGridSection arkGrid={summary.arkGrid} />
         </div>
       </div>
