@@ -3,17 +3,18 @@
 import { useEffect, useState } from 'react';
 
 import api from '@/api';
-import type { TResLostarkMyCharacter, TReqCreateLostarkMyCharacter } from '@/api/lostark/type';
+import type { TReqCreateLostarkMyCharacter, TResLostarkMyCharacter } from '@/api/lostark/type';
 import toast from '@/utils/toast';
 
-import BoxLoading from '@/components/common/loading/BoxLoading';
+import Header from '@/components/common/header/Header';
 import Button from '@/components/common/button/Button';
-import CharacterList from './CharacterList';
-import CreateCharacterModal from './CreateCharacterModal';
+import BoxLoading from '@/components/common/loading/BoxLoading';
+import CharacterList from './_component/CharacterList';
+import CreateCharacterModal from './_component/CreateCharacterModal';
 
-import styles from './allCharactersPanel.module.scss';
+import styles from './allCharactersClient.module.scss';
 
-export default function AllCharactersPanel() {
+export default function AllCharactersClient() {
   const [isLoading, setIsLoading] = useState(true);
   const [allCharacters, setAllCharacters] = useState<TResLostarkMyCharacter[]>([]);
 
@@ -134,51 +135,57 @@ export default function AllCharactersPanel() {
   }
 
   return (
-    <section className={styles['all-characters-panel']}>
-      <div className={styles['list-header']}>
-        <p className={styles['title']}>내 캐릭터 목록</p>
-        <div className={styles['header-actions']}>
-          <Button
-            onClick={handleRefreshCharacters}
-            theme="bg-gray600"
-            isLoading={isRefreshing}
-            isDisabled={allCharacters.length === 0}
-          >
-            원정대 갱신
-          </Button>
+    <div className={styles['all-characters-client']}>
+      <Header />
 
-          <Button onClick={() => setIsCreateModalOpen(true)} theme="bg-pri">
-            원정대 불러오기
-          </Button>
-        </div>
+      <div className={styles['all-characters-client-container']}>
+        <section className={styles['character-section']}>
+          <div className={styles['list-header']}>
+            <p className={styles['title']}>내 캐릭터 목록</p>
+            <div className={styles['header-actions']}>
+              <Button
+                onClick={handleRefreshCharacters}
+                theme="bg-gray600"
+                isLoading={isRefreshing}
+                isDisabled={allCharacters.length === 0}
+              >
+                원정대 갱신
+              </Button>
+
+              <Button onClick={() => setIsCreateModalOpen(true)} theme="bg-pri">
+                원정대 불러오기
+              </Button>
+            </div>
+          </div>
+
+          {isLoading && <BoxLoading height={240} />}
+
+          {!isLoading && allCharacters.length === 0 && (
+            <div className={styles['empty']}>
+              <p className={styles['empty-message']}>원정대 캐릭터를 불러오세요.</p>
+            </div>
+          )}
+
+          {!isLoading && allCharacters.length > 0 && (
+            <CharacterList
+              characters={allCharacters}
+              togglingMainCharacterId={togglingMainCharacterId}
+              onReorder={handleReorder}
+              onToggleMain={handleToggleMainCharacter}
+              onDeleteItem={handleDeleteCharacter}
+            />
+          )}
+
+          {isCreateModalOpen && (
+            <CreateCharacterModal
+              isOpen={isCreateModalOpen}
+              onClose={() => setIsCreateModalOpen(false)}
+              registeredCharacters={allCharacters}
+              onSubmit={handleSubmitCharacters}
+            />
+          )}
+        </section>
       </div>
-
-      {isLoading && <BoxLoading height={240} />}
-
-      {!isLoading && allCharacters.length === 0 && (
-        <div className={styles['empty']}>
-          <p className={styles['empty-message']}>원정대 캐릭터를 불러오세요.</p>
-        </div>
-      )}
-
-      {!isLoading && allCharacters.length > 0 && (
-        <CharacterList
-          characters={allCharacters}
-          togglingMainCharacterId={togglingMainCharacterId}
-          onReorder={handleReorder}
-          onToggleMain={handleToggleMainCharacter}
-          onDeleteItem={handleDeleteCharacter}
-        />
-      )}
-
-      {isCreateModalOpen && (
-        <CreateCharacterModal
-          isOpen={isCreateModalOpen}
-          onClose={() => setIsCreateModalOpen(false)}
-          registeredCharacters={allCharacters}
-          onSubmit={handleSubmitCharacters}
-        />
-      )}
-    </section>
+    </div>
   );
 }

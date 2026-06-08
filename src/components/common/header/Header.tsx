@@ -8,8 +8,12 @@ const LOA_MAIN_MENUS = [
     link: '/loado',
   },
   {
-    name: '내 캐릭터',
+    name: '메인캐릭터',
     link: '/my-characters',
+  },
+  {
+    name: '전체캐릭터',
+    link: '/all-characters',
   },
   {
     name: '참고 사이트',
