@@ -56,6 +56,7 @@ export type TReqUpsertLostarkMainCharacterRow = {
   character_name: string;
   character_class: string;
   item_level: string;
+  sort_order: number;
   summary: TResLostarkCharacterSummary;
   raw_payload: TLostarkCharacterRawPayload | null;
 };
@@ -71,10 +72,10 @@ export type TResLostarkMainCharacter = {
   characterName: string;
   characterClass: string;
   itemLevel: string;
+  sortOrder: number;
   summary: TResLostarkCharacterSummary;
   rawPayload: TLostarkCharacterRawPayload | null;
 };
-
 
 export type TResLostarkCharacterSummary = {
   profiles: {

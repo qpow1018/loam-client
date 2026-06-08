@@ -4,6 +4,13 @@
     padding: 16px;
   }
 
+  .tab-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
   .character-section {
     margin-top: 12px;
   }

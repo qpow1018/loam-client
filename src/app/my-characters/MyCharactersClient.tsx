@@ -6,18 +6,18 @@ import api from '@/api';
 import type { TResLostarkMainCharacter } from '@/api/lostark/type';
 import toast from '@/utils/toast';
 
+import Button from '@/components/common/button/Button';
 import Header from '@/components/common/header/Header';
 import BoxLoading from '@/components/common/loading/BoxLoading';
 import Tabs from '@/components/common/tabs/Tabs';
+import MainCharacterOrderModal from './_component/MainCharacterOrderModal';
 import MainCharactersPanel from './_component/mainCharactersPanel/MainCharactersPanel';
 
 import styles from './myCharactersClient.module.scss';
 
 type TMyCharactersTab = 'main';
 
-const MY_CHARACTER_TABS = [
-  { value: 'main', label: '메인캐릭터' },
-] as const;
+const MY_CHARACTER_TABS = [{ value: 'main', label: '메인캐릭터' }] as const;
 
 function handleTabChange(_next: TMyCharactersTab) {
   return undefined;
@@ -26,6 +26,8 @@ function handleTabChange(_next: TMyCharactersTab) {
 export default function MyCharactersClient() {
   const [isLoading, setIsLoading] = useState(true);
   const [mainCharacters, setMainCharacters] = useState<TResLostarkMainCharacter[]>([]);
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+  const [isReordering, setIsReordering] = useState(false);
 
   useEffect(() => {
     async function loadMainCharacters() {
@@ -42,16 +44,41 @@ export default function MyCharactersClient() {
     void loadMainCharacters();
   }, []);
 
+  async function handleSubmitMainCharacterOrder(nextCharacters: TResLostarkMainCharacter[]) {
+    setIsReordering(true);
+
+    try {
+      const response = await api.lostark.reorderMainCharacters(nextCharacters);
+      setMainCharacters(response);
+      setIsOrderModalOpen(false);
+      toast.success('메인 캐릭터 순서를 저장했습니다.');
+    } catch {
+      toast.error('메인 캐릭터 순서를 저장하지 못했습니다.');
+    } finally {
+      setIsReordering(false);
+    }
+  }
+
   return (
     <div className={styles['my-characters-client']}>
       <Header />
 
       <div className={styles['my-characters-client-container']}>
-        <Tabs<TMyCharactersTab>
-          options={MY_CHARACTER_TABS}
-          value="main"
-          onChange={handleTabChange}
-        />
+        <div className={styles['tab-section']}>
+          <Tabs<TMyCharactersTab>
+            options={MY_CHARACTER_TABS}
+            value="main"
+            onChange={handleTabChange}
+          />
+
+          <Button
+            theme="bg-gray600"
+            onClick={() => setIsOrderModalOpen(true)}
+            isDisabled={isLoading || mainCharacters.length === 0}
+          >
+            순서변경
+          </Button>
+        </div>
 
         <div className={styles['character-section']}>
           {isLoading && <BoxLoading height={180} />}
@@ -70,6 +97,16 @@ export default function MyCharactersClient() {
           )}
         </div>
       </div>
+
+      {isOrderModalOpen && (
+        <MainCharacterOrderModal
+          isOpen={isOrderModalOpen}
+          isSaving={isReordering}
+          characters={mainCharacters}
+          onClose={() => setIsOrderModalOpen(false)}
+          onSubmit={handleSubmitMainCharacterOrder}
+        />
+      )}
     </div>
   );
 }

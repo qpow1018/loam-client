@@ -61,9 +61,10 @@ export async function getMainCharacters(): Promise<TResLostarkMainCharacter[]> {
   const { data, error } = await supabase
     .from(LOSTARK_MAIN_CHARACTERS_TABLE)
     .select(
-      'id, user_id, character_name, character_class, item_level, summary, raw_payload, created_at, updated_at',
+      'id, user_id, character_name, character_class, item_level, sort_order, summary, raw_payload, created_at, updated_at',
     )
     .eq('user_id', userId)
+    .order('sort_order', { ascending: true })
     .order('created_at', { ascending: true });
 
   if (error) {
@@ -75,6 +76,7 @@ export async function getMainCharacters(): Promise<TResLostarkMainCharacter[]> {
     characterName: row.character_name,
     characterClass: row.character_class,
     itemLevel: row.item_level,
+    sortOrder: row.sort_order,
     summary: row.summary,
     rawPayload: row.raw_payload,
   }));
@@ -91,6 +93,7 @@ export async function saveMainCharacter(
     character_name: character.characterName,
     character_class: character.characterClass,
     item_level: character.itemLevel,
+    sort_order: character.sortOrder,
     summary: character.summary,
     raw_payload: character.rawPayload,
   };
@@ -100,7 +103,9 @@ export async function saveMainCharacter(
     .update(row)
     .eq('id', character.id)
     .eq('user_id', userId)
-    .select('id, user_id, character_name, character_class, item_level, summary, raw_payload, created_at, updated_at')
+    .select(
+      'id, user_id, character_name, character_class, item_level, sort_order, summary, raw_payload, created_at, updated_at',
+    )
     .single();
 
   if (error) {
@@ -114,9 +119,37 @@ export async function saveMainCharacter(
     characterName: saved.character_name,
     characterClass: saved.character_class,
     itemLevel: saved.item_level,
+    sortOrder: saved.sort_order,
     summary: saved.summary,
     rawPayload: saved.raw_payload,
   };
+}
+
+// 메인 캐릭터 목록의 표시 순서를 저장한다.
+export async function reorderMainCharacters(
+  characters: TResLostarkMainCharacter[],
+): Promise<TResLostarkMainCharacter[]> {
+  const supabase = createClient();
+  const userId = await getCurrentUserId();
+  const rows: TReqUpsertLostarkMainCharacterRow[] = characters.map((character, index) => ({
+    user_id: userId,
+    character_name: character.characterName,
+    character_class: character.characterClass,
+    item_level: character.itemLevel,
+    sort_order: index,
+    summary: character.summary,
+    raw_payload: character.rawPayload,
+  }));
+
+  const { error } = await supabase.from(LOSTARK_MAIN_CHARACTERS_TABLE).upsert(rows, {
+    onConflict: 'user_id,character_name',
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  return getMainCharacters();
 }
 
 // 선택한 원정대 캐릭터들을 내 캐릭터 목록에 추가한다.
@@ -230,12 +263,14 @@ export async function registerMainCharacter(
   const userId = await getCurrentUserId();
   const response = await getCharacterDetails(character.nickname);
   const details = response.data;
+  const mainCharacters = await getMainCharacters();
 
   const row: TReqUpsertLostarkMainCharacterRow = {
     user_id: userId,
     character_name: details.characterName || character.nickname,
     character_class: details.characterClass || character.className,
     item_level: details.itemLevel || character.itemLevel,
+    sort_order: mainCharacters.length,
     summary: details.summary,
     raw_payload: details.rawPayload ?? null,
   };
