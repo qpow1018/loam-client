@@ -1,4 +1,6 @@
 .ark-passive-section {
+  margin-top: 16px;
+
   .section-header {
     display: flex;
     align-items: center;
@@ -22,8 +24,8 @@
   }
 
   .point-list {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
 
     .point-item {
@@ -43,9 +45,9 @@
 
     .description {
       margin-top: 8px;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 500;
-      color: $mint-400;
+      color: $text-primary;
     }
   }
 }

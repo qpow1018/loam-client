@@ -1,16 +1,13 @@
 .ark-grid-section {
   display: flex;
   gap: 12px;
-  height: 100%;
-  padding: 12px;
-  background-color: $gray-700;
-  border-radius: $border-radius;
+  margin-top: 20px;
 
   .core-list {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    width: 240px;
+    width: 260px;
     min-width: 0;
 
     .core-item {
@@ -36,7 +33,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    min-width: 164px;
+    min-width: 180px;
 
     .effect-list {
       display: flex;

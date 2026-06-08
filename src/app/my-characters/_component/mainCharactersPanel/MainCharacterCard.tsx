@@ -1,11 +1,9 @@
 import type { TResLostarkCharacterSummary } from '@/api/lostark/type';
 
 import Button from '@/components/common/button/Button';
-
 import ProfileImageSection from './section/ProfileImageSection';
 import EngravingSection from './section/EngravingSection';
 import LegendaryAvatarSection from './section/LegendaryAvatarSection';
-
 import EquipmentSection from './section/EquipmentSection';
 import ExtraEquipmentSection from './section/ExtraEquipmentSection';
 import GemSection from './section/GemSection';
@@ -64,23 +62,24 @@ export default function MainCharacterCard(props: {
       </div>
 
       <div className={styles['card-content']}>
-        <div className={styles['left-box']}>
+        <div className={styles['profile-column']}>
           <ProfileImageSection imageUrl={profiles.characterImage} />
-          <EngravingSection engravings={summary.engravings} />
           <LegendaryAvatarSection avatars={summary.legendaryAvatars} />
         </div>
 
-        <div className={styles['right-box']}>
+        <div className={styles['equipment-column']}>
           <EquipmentSection gears={equipment.gears} accessories={equipment.accessories} />
           <ExtraEquipmentSection
             abilityStone={equipment.abilityStone}
             bracelet={equipment.bracelet}
           />
           <GemSection gems={summary.gems} />
-          <div className={styles['ark-summary-box']}>
-            <ArkPassiveSection arkPassive={summary.arkPassive} />
-            <ArkGridSection arkGrid={summary.arkGrid} />
-          </div>
+        </div>
+
+        <div className={styles['ark-column']}>
+          <EngravingSection engravings={summary.engravings} />
+          <ArkPassiveSection arkPassive={summary.arkPassive} />
+          <ArkGridSection arkGrid={summary.arkGrid} />
         </div>
       </div>
     </div>

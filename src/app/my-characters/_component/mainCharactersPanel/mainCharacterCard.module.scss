@@ -58,23 +58,21 @@
   }
 
   .card-content {
-    display: flex;
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr) 460px;
     gap: 12px;
     padding: 12px;
 
-    .left-box {
+    .profile-column {
       width: 240px;
     }
 
-    .right-box {
-      flex: 1;
+    .equipment-column {
+      min-width: 0;
     }
 
-    .ark-summary-box {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      gap: 12px;
-      margin-top: 24px;
+    .ark-column {
+      min-width: 0;
     }
   }
 }
