@@ -2,6 +2,7 @@
 
 import type { TResLostarkMainCharacter } from '@/api/lostark/type';
 
+import AbilityStoneSection from './AbilityStoneSection';
 import AccessorySection from './AccessorySection';
 import BraceletSection from './BraceletSection';
 import GearSection from './GearSection';
@@ -14,7 +15,7 @@ export default function SpecSummaryPanel(props: { characters: TResLostarkMainCha
       <GearSection characters={props.characters} />
       <AccessorySection characters={props.characters} />
       <BraceletSection characters={props.characters} />
-      <p>97돌 여부</p>
+      <AbilityStoneSection characters={props.characters} />
       <p>보석 갯수</p>
       <p>전압 갯수</p>
       <p>아크패시브 레벨</p>
