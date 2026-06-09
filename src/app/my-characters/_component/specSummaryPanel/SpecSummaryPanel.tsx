@@ -11,6 +11,8 @@ import BraceletSection from './BraceletSection';
 import AbilityStoneSection from './AbilityStoneSection';
 import GemAvatarSection from './GemAvatarSection';
 import EngravingSummarySection from './EngravingSummarySection';
+import ArkPassiveSummarySection from './ArkPassiveSummarySection';
+import ArkGridSummarySection from './ArkGridSummarySection';
 
 import styles from './specSummaryPanel.module.scss';
 
@@ -48,13 +50,8 @@ export default function SpecSummaryPanel(props: { characters: TResLostarkMainCha
       {specTab === 'abilityStone' && <AbilityStoneSection characters={props.characters} />}
       {specTab === 'gemAndAvatar' && <GemAvatarSection characters={props.characters} />}
       {specTab === 'engraving' && <EngravingSummarySection characters={props.characters} />}
-      {specTab === 'arkPassive' && <>아크패시브 레벨</>}
-      {specTab === 'arkGrid' && (
-        <>
-          <p>코어 - 고대코어, 활성화 포인트</p>
-          <p>젬 효과 - 보피</p>
-        </>
-      )}
+      {specTab === 'arkPassive' && <ArkPassiveSummarySection characters={props.characters} />}
+      {specTab === 'arkGrid' && <ArkGridSummarySection characters={props.characters} />}
     </section>
   );
 }
