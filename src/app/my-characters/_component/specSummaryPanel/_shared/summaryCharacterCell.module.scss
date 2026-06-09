@@ -1,8 +1,8 @@
 .character-cell {
   display: flex;
   align-items: center;
-  min-width: 0;
   padding: 8px 10px;
+  width: $loa-summary-label-cell-width;
 
   .character-name {
     overflow: hidden;

@@ -42,16 +42,24 @@ export default function SpecSummaryPanel(props: { characters: TResLostarkMainCha
 
   return (
     <section className={styles['spec-summary-panel']}>
-      <ButtonGroup options={SPEC_OPTIONS} value={specTab} onChange={(value) => setSpecTab(value)} />
+      <div className={styles['button-group-container']}>
+        <ButtonGroup
+          options={SPEC_OPTIONS}
+          value={specTab}
+          onChange={(value) => setSpecTab(value)}
+        />
+      </div>
 
-      {specTab === 'gear' && <GearSection characters={props.characters} />}
-      {specTab === 'accessory' && <AccessorySection characters={props.characters} />}
-      {specTab === 'bracelet' && <BraceletSection characters={props.characters} />}
-      {specTab === 'abilityStone' && <AbilityStoneSection characters={props.characters} />}
-      {specTab === 'gemAndAvatar' && <GemAvatarSection characters={props.characters} />}
-      {specTab === 'engraving' && <EngravingSummarySection characters={props.characters} />}
-      {specTab === 'arkPassive' && <ArkPassiveSummarySection characters={props.characters} />}
-      {specTab === 'arkGrid' && <ArkGridSummarySection characters={props.characters} />}
+      <div className={styles['section-container']}>
+        {specTab === 'gear' && <GearSection characters={props.characters} />}
+        {specTab === 'accessory' && <AccessorySection characters={props.characters} />}
+        {specTab === 'bracelet' && <BraceletSection characters={props.characters} />}
+        {specTab === 'abilityStone' && <AbilityStoneSection characters={props.characters} />}
+        {specTab === 'gemAndAvatar' && <GemAvatarSection characters={props.characters} />}
+        {specTab === 'engraving' && <EngravingSummarySection characters={props.characters} />}
+        {specTab === 'arkPassive' && <ArkPassiveSummarySection characters={props.characters} />}
+        {specTab === 'arkGrid' && <ArkGridSummarySection characters={props.characters} />}
+      </div>
     </section>
   );
 }

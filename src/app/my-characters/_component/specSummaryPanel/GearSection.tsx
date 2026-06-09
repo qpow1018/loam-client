@@ -1,9 +1,10 @@
 import type { TLostarkGear, TResLostarkMainCharacter } from '@/api/lostark/type';
 
-import SummaryCell from './_shared/SummaryCell';
-import SummaryCharacterCell from './_shared/SummaryCharacterCell';
+import CellValueChip from './_shared/CellValueChip';
 import SummarySection from './_shared/SummarySection';
 import SummaryTable from './_shared/SummaryTable';
+import SummaryCharacterRow from './_shared/SummaryCharacterRow';
+import SummaryCell from './_shared/SummaryCell';
 
 import styles from './gearSection.module.scss';
 
@@ -17,26 +18,21 @@ const GEAR_SLOTS = [
 ] as const;
 
 type TGearSlot = (typeof GEAR_SLOTS)[number];
-type TQualityTier = 'perfect' | 'high' | 'normal' | 'empty';
 
 export default function GearSection(props: { characters: TResLostarkMainCharacter[] }) {
   return (
     <SummarySection
-      title="무기, 방어구 품질"
-      className={styles['gear-section']}
+      title="장비 품질"
       legendItems={[
         { label: '100', color: '#f59e0b' },
         { label: '95+', color: '#94a3b8' },
         { label: '그 아래', color: '#62636c' },
       ]}
+      className={styles['gear-section']}
     >
       <SummaryTable
-        className={styles['quality-matrix']}
-        headCellClassName={styles['matrix-head-cell']}
-        columns={[
-          { key: 'character', label: '캐릭터' },
-          ...GEAR_SLOTS.map((slot) => ({ key: slot.key, label: slot.label })),
-        ]}
+        columns={GEAR_SLOTS.map((slot) => ({ key: slot.key, label: slot.label }))}
+        gridClassName={styles['gear-grid']}
       >
         {props.characters.map((character) => (
           <CharacterQualityRow key={character.id} character={character} />
@@ -49,45 +45,41 @@ export default function GearSection(props: { characters: TResLostarkMainCharacte
 function CharacterQualityRow(props: { character: TResLostarkMainCharacter }) {
   const { character } = props;
 
-  return (
-    <>
-      <SummaryCharacterCell name={character.characterName} className={styles['character-cell']} />
+  function findGearBySlot(gears: TLostarkGear[], slot: TGearSlot) {
+    return gears.find((gear) =>
+      slot.typeLabels.some((typeLabel) => gear.type?.includes(typeLabel)),
+    );
+  }
 
+  function getQualityGrade(quality: number | null | undefined) {
+    if (quality === null || quality === undefined) {
+      return 'none';
+    }
+
+    if (quality >= 100) {
+      return 'high';
+    }
+
+    if (quality >= 95) {
+      return 'middle';
+    }
+
+    return 'low';
+  }
+
+  return (
+    <SummaryCharacterRow name={character.characterName} className={styles['gear-grid']}>
       {GEAR_SLOTS.map((slot) => {
         const gear = findGearBySlot(character.summary.equipment.gears, slot);
 
         return (
-          <SummaryCell key={slot.key} className={styles['quality-cell']}>
-            <QualityValue quality={gear?.quality} />
+          <SummaryCell key={slot.key}>
+            <CellValueChip grade={getQualityGrade(gear?.quality)}>
+              {gear?.quality ?? '-'}
+            </CellValueChip>
           </SummaryCell>
         );
       })}
-    </>
+    </SummaryCharacterRow>
   );
-}
-
-function QualityValue(props: { quality: number | null | undefined }) {
-  const tier = getQualityTier(props.quality);
-
-  return <span className={styles[`quality-value-${tier}`]}>{props.quality ?? '-'}</span>;
-}
-
-function findGearBySlot(gears: TLostarkGear[], slot: TGearSlot) {
-  return gears.find((gear) => slot.typeLabels.some((typeLabel) => gear.type?.includes(typeLabel)));
-}
-
-function getQualityTier(quality: number | null | undefined): TQualityTier {
-  if (quality === null || quality === undefined) {
-    return 'empty';
-  }
-
-  if (quality >= 100) {
-    return 'perfect';
-  }
-
-  if (quality >= 95) {
-    return 'high';
-  }
-
-  return 'normal';
 }

@@ -2,24 +2,25 @@ import type { ReactNode } from 'react';
 
 import styles from './summaryTable.module.scss';
 
-type TSummaryTableColumn = {
-  key: string;
-  label: ReactNode;
-};
-
 export default function SummaryTable(props: {
-  columns: TSummaryTableColumn[];
-  className: string;
-  headCellClassName: string;
+  columns: {
+    key: string;
+    label: ReactNode;
+  }[];
+  gridClassName?: string;
   children: ReactNode;
 }) {
   return (
-    <div className={`${styles['summary-table']} ${props.className}`}>
-      {props.columns.map((column) => (
-        <div key={column.key} className={`${styles['head-cell']} ${props.headCellClassName}`}>
-          {column.label}
-        </div>
-      ))}
+    <div className={styles['summary-table']}>
+      <div className={`${styles['head-grid']} ${props.gridClassName}`}>
+        <div className={styles['head-cell']}>캐릭터</div>
+
+        {props.columns.map((column) => (
+          <div key={column.key} className={styles['head-cell']}>
+            {column.label}
+          </div>
+        ))}
+      </div>
 
       {props.children}
     </div>

@@ -1,0 +1,31 @@
+.cell-value-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+
+  &.high {
+    color: $gray-900;
+    background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%);
+    box-shadow: 0 0 14px rgba(245, 158, 11, 0.32);
+  }
+
+  &.middle {
+    color: $gray-900;
+    background: linear-gradient(180deg, #cbd5e1 0%, #94a3b8 100%);
+  }
+
+  &.low {
+    color: $text-primary;
+    background: $gray-600;
+  }
+
+  &.none {
+    background: transparent;
+    color: $text-secondary;
+  }
+}
