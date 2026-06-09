@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: 'LoaM',
     short_name: 'LoaM',
     description: 'Lost Ark checklist and character memo app',
-    start_url: '/loado',
+    start_url: '/lostark/loado',
     scope: '/',
     display: 'standalone',
     background_color: '#18181b',
