@@ -1,0 +1,44 @@
+.summary-section {
+  overflow: hidden;
+  border: 1px solid $gray-700;
+  border-radius: $border-radius;
+  background: $gray-800;
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px;
+    border-bottom: 1px solid $gray-700;
+  }
+
+  .section-title {
+    margin-bottom: 4px;
+    font-size: 15px;
+    font-weight: 500;
+    color: $text-primary;
+  }
+
+  .section-legend {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    font-size: 11px;
+    color: $text-secondary;
+  }
+
+  .legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+}

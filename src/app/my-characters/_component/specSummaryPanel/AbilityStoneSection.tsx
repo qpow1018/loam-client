@@ -1,25 +1,19 @@
 import type { TLostarkAbilityStone, TResLostarkMainCharacter } from '@/api/lostark/type';
 
+import SummarySection from './SummarySection';
+
 import styles from './abilityStoneSection.module.scss';
 
 export default function AbilityStoneSection(props: { characters: TResLostarkMainCharacter[] }) {
   return (
-    <section className={styles['ability-stone-section']}>
-      <div className={styles['section-header']}>
-        <h2 className={styles['section-title']}>어빌리티 스톤</h2>
-
-        <div className={styles['level-legend']} aria-label="어빌리티 스톤 합레벨 범례">
-          <span className={styles['legend-item']}>
-            <span className={styles['legend-dot-high']} />
-            합 5+
-          </span>
-          <span className={styles['legend-item']}>
-            <span className={styles['legend-dot-normal']} />
-            합 4-
-          </span>
-        </div>
-      </div>
-
+    <SummarySection
+      title="어빌리티 스톤"
+      className={styles['ability-stone-section']}
+      legendItems={[
+        { label: '합 5+', color: '#f59e0b' },
+        { label: '합 4-', color: '#62636c' },
+      ]}
+    >
       <div className={styles['stone-table']}>
         <div className={styles['matrix-head-cell']}>캐릭터</div>
         <div className={styles['matrix-head-cell']}>효과 1</div>
@@ -30,7 +24,7 @@ export default function AbilityStoneSection(props: { characters: TResLostarkMain
           <CharacterStoneRow key={character.id} character={character} />
         ))}
       </div>
-    </section>
+    </SummarySection>
   );
 }
 

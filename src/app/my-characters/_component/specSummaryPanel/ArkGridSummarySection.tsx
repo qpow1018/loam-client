@@ -1,5 +1,7 @@
 import type { TLostarkArkGrid, TResLostarkMainCharacter } from '@/api/lostark/type';
 
+import SummarySection from './SummarySection';
+
 import styles from './arkGridSummarySection.module.scss';
 
 const CORE_SLOTS = [
@@ -16,26 +18,15 @@ type TCoreTier = 'high' | 'middle' | 'low' | 'empty';
 
 export default function ArkGridSummarySection(props: { characters: TResLostarkMainCharacter[] }) {
   return (
-    <section className={styles['ark-grid-summary-section']}>
-      <div className={styles['section-header']}>
-        <h2 className={styles['section-title']}>아크그리드</h2>
-
-        <div className={styles['core-legend']} aria-label="아크그리드 코어 등급 범례">
-          <span className={styles['legend-item']}>
-            <span className={styles['legend-dot-high']} />
-            고대 17P+
-          </span>
-          <span className={styles['legend-item']}>
-            <span className={styles['legend-dot-middle']} />
-            유물 17P+
-          </span>
-          <span className={styles['legend-item']}>
-            <span className={styles['legend-dot-low']} />
-            그 아래
-          </span>
-        </div>
-      </div>
-
+    <SummarySection
+      title="아크그리드"
+      className={styles['ark-grid-summary-section']}
+      legendItems={[
+        { label: '고대 17P+', color: '#f59e0b' },
+        { label: '유물 17P+', color: '#94a3b8' },
+        { label: '그 아래', color: '#62636c' },
+      ]}
+    >
       <div className={styles['summary-table']}>
         <div className={styles['matrix-head-cell']}>캐릭터</div>
         {CORE_SLOTS.map((slot) => (
@@ -49,7 +40,7 @@ export default function ArkGridSummarySection(props: { characters: TResLostarkMa
           <CharacterArkGridRow key={character.id} character={character} />
         ))}
       </div>
-    </section>
+    </SummarySection>
   );
 }
 

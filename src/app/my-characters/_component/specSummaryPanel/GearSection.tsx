@@ -1,5 +1,7 @@
 import type { TLostarkGear, TResLostarkMainCharacter } from '@/api/lostark/type';
 
+import SummarySection from './SummarySection';
+
 import styles from './gearSection.module.scss';
 
 const GEAR_SLOTS = [
@@ -16,25 +18,15 @@ type TQualityTier = 'perfect' | 'high' | 'normal' | 'empty';
 
 export default function GearSection(props: { characters: TResLostarkMainCharacter[] }) {
   return (
-    <section className={styles['gear-section']}>
-      <div className={styles['section-header']}>
-        <h2 className={styles['section-title']}>무기, 방어구 품질</h2>
-
-        <div className={styles['quality-legend']} aria-label="품질 등급 범례">
-          <span className={styles['legend-item']}>
-            <span className={styles['legend-dot-perfect']} />
-            100
-          </span>
-          <span className={styles['legend-item']}>
-            <span className={styles['legend-dot-high']} />
-            95+
-          </span>
-          <span className={styles['legend-item']}>
-            <span className={styles['legend-dot-normal']} />그 아래
-          </span>
-        </div>
-      </div>
-
+    <SummarySection
+      title="무기, 방어구 품질"
+      className={styles['gear-section']}
+      legendItems={[
+        { label: '100', color: '#f59e0b' },
+        { label: '95+', color: '#94a3b8' },
+        { label: '그 아래', color: '#62636c' },
+      ]}
+    >
       <div className={styles['quality-matrix']}>
         <div className={styles['matrix-head-cell']}>캐릭터</div>
         {GEAR_SLOTS.map((slot) => (
@@ -47,7 +39,7 @@ export default function GearSection(props: { characters: TResLostarkMainCharacte
           <CharacterQualityRow key={character.id} character={character} />
         ))}
       </div>
-    </section>
+    </SummarySection>
   );
 }
 

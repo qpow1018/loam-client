@@ -1,25 +1,4 @@
 .bracelet-section {
-  overflow: hidden;
-  border: 1px solid $gray-700;
-  border-radius: $border-radius;
-  background: $gray-800;
-
-  .section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 12px;
-    border-bottom: 1px solid $gray-700;
-  }
-
-  .section-title {
-    margin-bottom: 4px;
-    font-size: 15px;
-    font-weight: 500;
-    color: $text-primary;
-  }
-
   .bracelet-table {
     display: flex;
     flex-direction: column;

@@ -4,6 +4,8 @@ import type {
   TResLostarkMainCharacter,
 } from '@/api/lostark/type';
 
+import SummarySection from './SummarySection';
+
 import styles from './accessorySection.module.scss';
 
 const ACCESSORY_SLOTS = [
@@ -37,26 +39,15 @@ const POLISH_GRADE_ORDER: Record<TPolishGrade, number> = {
 
 export default function AccessorySection(props: { characters: TResLostarkMainCharacter[] }) {
   return (
-    <section className={styles['accessory-section']}>
-      <div className={styles['section-header']}>
-        <h2 className={styles['section-title']}>장신구 연마효과</h2>
-
-        <div className={styles['grade-legend']} aria-label="연마효과 등급 범례">
-          <span className={styles['legend-item']}>
-            <span className={styles['legend-dot-top']} />
-            상옵
-          </span>
-          <span className={styles['legend-item']}>
-            <span className={styles['legend-dot-middle']} />
-            중옵
-          </span>
-          <span className={styles['legend-item']}>
-            <span className={styles['legend-dot-low']} />
-            하옵
-          </span>
-        </div>
-      </div>
-
+    <SummarySection
+      title="장신구 연마효과"
+      className={styles['accessory-section']}
+      legendItems={[
+        { label: '상옵', color: '#fe9600' },
+        { label: '중옵', color: '#ce43fc' },
+        { label: '하옵', color: '#00b5ff' },
+      ]}
+    >
       <div className={styles['accessory-matrix']}>
         <div className={styles['matrix-head-cell']}>캐릭터</div>
         {ACCESSORY_SLOTS.map((slot) => (
@@ -69,7 +60,7 @@ export default function AccessorySection(props: { characters: TResLostarkMainCha
           <CharacterAccessoryRow key={character.id} character={character} />
         ))}
       </div>
-    </section>
+    </SummarySection>
   );
 }
 

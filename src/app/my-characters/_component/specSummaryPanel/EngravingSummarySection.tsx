@@ -1,25 +1,19 @@
 import type { TLostarkEngraving, TResLostarkMainCharacter } from '@/api/lostark/type';
 
+import SummarySection from './SummarySection';
+
 import styles from './engravingSummarySection.module.scss';
 
 export default function EngravingSummarySection(props: { characters: TResLostarkMainCharacter[] }) {
   return (
-    <section className={styles['engraving-summary-section']}>
-      <div className={styles['section-header']}>
-        <h2 className={styles['section-title']}>각인</h2>
-
-        <div className={styles['level-legend']} aria-label="각인 레벨 범례">
-          <span className={styles['legend-item']}>
-            <span className={styles['legend-dot-max']} />
-            4레벨
-          </span>
-          <span className={styles['legend-item']}>
-            <span className={styles['legend-dot-normal']} />
-            0-3레벨
-          </span>
-        </div>
-      </div>
-
+    <SummarySection
+      title="각인"
+      className={styles['engraving-summary-section']}
+      legendItems={[
+        { label: '4레벨', color: '#f59e0b' },
+        { label: '0-3레벨', color: '#62636c' },
+      ]}
+    >
       <div className={styles['engraving-table']}>
         {props.characters.map((character) => (
           <div key={character.id} className={styles['character-row']}>
@@ -31,7 +25,7 @@ export default function EngravingSummarySection(props: { characters: TResLostark
           </div>
         ))}
       </div>
-    </section>
+    </SummarySection>
   );
 }
 

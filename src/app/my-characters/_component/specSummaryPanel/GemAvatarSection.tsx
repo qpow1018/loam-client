@@ -1,5 +1,7 @@
 import type { TLostarkGem, TResLostarkMainCharacter } from '@/api/lostark/type';
 
+import SummarySection from './SummarySection';
+
 import styles from './gemAvatarSection.module.scss';
 
 const GEM_LEVEL_GROUPS = [
@@ -11,11 +13,7 @@ const GEM_LEVEL_GROUPS = [
 
 export default function GemAvatarSection(props: { characters: TResLostarkMainCharacter[] }) {
   return (
-    <section className={styles['gem-avatar-section']}>
-      <div className={styles['section-header']}>
-        <h2 className={styles['section-title']}>보석 / 전설 아바타</h2>
-      </div>
-
+    <SummarySection title="보석 / 전설 아바타" className={styles['gem-avatar-section']}>
       <div className={styles['summary-table']}>
         <div className={styles['matrix-head-cell']}>캐릭터</div>
         <div className={styles['matrix-head-cell']}>10렙</div>
@@ -28,7 +26,7 @@ export default function GemAvatarSection(props: { characters: TResLostarkMainCha
           <CharacterGemAvatarRow key={character.id} character={character} />
         ))}
       </div>
-    </section>
+    </SummarySection>
   );
 }
 

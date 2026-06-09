@@ -1,5 +1,7 @@
 import type { TLostarkArkPassive, TResLostarkMainCharacter } from '@/api/lostark/type';
 
+import SummarySection from './SummarySection';
+
 import styles from './arkPassiveSummarySection.module.scss';
 
 const ARK_PASSIVE_POINTS = ['진화', '깨달음', '도약'] as const;
@@ -11,26 +13,15 @@ export default function ArkPassiveSummarySection(props: {
   characters: TResLostarkMainCharacter[];
 }) {
   return (
-    <section className={styles['ark-passive-summary-section']}>
-      <div className={styles['section-header']}>
-        <h2 className={styles['section-title']}>아크패시브</h2>
-
-        <div className={styles['level-legend']} aria-label="아크패시브 레벨 범례">
-          <span className={styles['legend-item']}>
-            <span className={styles['legend-dot-high']} />
-            26+
-          </span>
-          <span className={styles['legend-item']}>
-            <span className={styles['legend-dot-middle']} />
-            21+
-          </span>
-          <span className={styles['legend-item']}>
-            <span className={styles['legend-dot-low']} />
-            그 아래
-          </span>
-        </div>
-      </div>
-
+    <SummarySection
+      title="아크패시브"
+      className={styles['ark-passive-summary-section']}
+      legendItems={[
+        { label: '26+', color: '#f59e0b' },
+        { label: '21+', color: '#94a3b8' },
+        { label: '그 아래', color: '#62636c' },
+      ]}
+    >
       <div className={styles['summary-table']}>
         <div className={styles['matrix-head-cell']}>캐릭터</div>
         {ARK_PASSIVE_POINTS.map((pointName) => (
@@ -43,7 +34,7 @@ export default function ArkPassiveSummarySection(props: {
           <CharacterArkPassiveRow key={character.id} character={character} />
         ))}
       </div>
-    </section>
+    </SummarySection>
   );
 }
 

@@ -4,15 +4,13 @@ import type {
   TResLostarkMainCharacter,
 } from '@/api/lostark/type';
 
+import SummarySection from './SummarySection';
+
 import styles from './braceletSection.module.scss';
 
 export default function BraceletSection(props: { characters: TResLostarkMainCharacter[] }) {
   return (
-    <section className={styles['bracelet-section']}>
-      <div className={styles['section-header']}>
-        <h2 className={styles['section-title']}>팔찌</h2>
-      </div>
-
+    <SummarySection title="팔찌" className={styles['bracelet-section']}>
       <div className={styles['bracelet-table']}>
         {props.characters.map((character) => (
           <div key={character.id} className={styles['character-row']}>
@@ -24,7 +22,7 @@ export default function BraceletSection(props: { characters: TResLostarkMainChar
           </div>
         ))}
       </div>
-    </section>
+    </SummarySection>
   );
 }
 
