@@ -4,43 +4,42 @@ import type {
   TResLostarkMainCharacter,
 } from '@/api/lostark/type';
 
-import SummaryCharacterCell from './_shared/SummaryCharacterCell';
 import SummarySection from './_shared/SummarySection';
+import SummaryTable from './_shared/SummaryTable';
+import SummaryCharacterRow from './_shared/SummaryCharacterRow';
+import SummaryCell from './_shared/SummaryCell';
 
 import styles from './braceletSection.module.scss';
 
 export default function BraceletSection(props: { characters: TResLostarkMainCharacter[] }) {
   return (
     <SummarySection title="팔찌" className={styles['bracelet-section']}>
-      <div className={styles['bracelet-table']}>
+      <SummaryTable columns={[]} gridClassName={styles['bracelet-grid']}>
         {props.characters.map((character) => (
-          <div key={character.id} className={styles['character-row']}>
-            <SummaryCharacterCell
-              name={character.characterName}
-              className={styles['character-cell']}
-            />
-
+          <SummaryCharacterRow
+            key={character.id}
+            name={character.characterName}
+            className={styles['bracelet-grid']}
+          >
             <BraceletEffects bracelet={character.summary.equipment.bracelet} />
-          </div>
+          </SummaryCharacterRow>
         ))}
-      </div>
+      </SummaryTable>
     </SummarySection>
   );
 }
 
 function BraceletEffects(props: { bracelet: TLostarkBracelet | null }) {
-  if (!props.bracelet) {
-    return <div className={styles['empty-cell']}>-</div>;
+  const { bracelet } = props;
+
+  if (!bracelet) {
+    return null;
   }
 
-  const braceletEffects = getBraceletEffects(props.bracelet.braceletEffects);
-
-  if (braceletEffects.length === 0) {
-    return <div className={styles['empty-cell']}>-</div>;
-  }
+  const braceletEffects = getBraceletEffects(bracelet.braceletEffects);
 
   return (
-    <div className={styles['effect-list']}>
+    <SummaryCell className={styles['effect-list']}>
       {braceletEffects.map((effect, index) => (
         <p key={`${effect.text}-${index}`} className={styles['effect']}>
           <span
@@ -50,7 +49,7 @@ function BraceletEffects(props: { bracelet: TLostarkBracelet | null }) {
           <span className={styles['effect-text']}>{effect.text}</span>
         </p>
       ))}
-    </div>
+    </SummaryCell>
   );
 }
 

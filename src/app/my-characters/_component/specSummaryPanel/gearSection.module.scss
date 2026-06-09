@@ -1,5 +1,5 @@
 .gear-section {
   .gear-grid {
-    grid-template-columns: minmax(160px, 1.2fr) repeat(6, minmax(88px, 1fr));
+    grid-template-columns: $loa-summary-label-cell-width repeat(6, 120px);
   }
 }

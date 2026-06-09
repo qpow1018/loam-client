@@ -8,10 +8,15 @@
   font-size: 12px;
   font-weight: 500;
 
-  &.high {
+  &.perfect {
     color: $gray-900;
     background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%);
     box-shadow: 0 0 14px rgba(245, 158, 11, 0.32);
+  }
+
+  &.high {
+    color: $gray-900;
+    background: linear-gradient(180deg, #a7f3d0 0%, #34d399 100%);
   }
 
   &.middle {

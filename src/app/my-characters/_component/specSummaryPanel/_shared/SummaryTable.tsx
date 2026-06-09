@@ -12,15 +12,17 @@ export default function SummaryTable(props: {
 }) {
   return (
     <div className={styles['summary-table']}>
-      <div className={`${styles['head-grid']} ${props.gridClassName}`}>
-        <div className={styles['head-cell']}>캐릭터</div>
+      {props.columns.length > 0 && (
+        <div className={`${styles['head-grid']} ${props.gridClassName}`}>
+          <div className={styles['head-cell']}>캐릭터</div>
 
-        {props.columns.map((column) => (
-          <div key={column.key} className={styles['head-cell']}>
-            {column.label}
-          </div>
-        ))}
-      </div>
+          {props.columns.map((column) => (
+            <div key={column.key} className={styles['head-cell']}>
+              {column.label}
+            </div>
+          ))}
+        </div>
+      )}
 
       {props.children}
     </div>

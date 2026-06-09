@@ -1,10 +1,10 @@
 import type { TLostarkGear, TResLostarkMainCharacter } from '@/api/lostark/type';
 
-import CellValueChip from './_shared/CellValueChip';
 import SummarySection from './_shared/SummarySection';
 import SummaryTable from './_shared/SummaryTable';
 import SummaryCharacterRow from './_shared/SummaryCharacterRow';
 import SummaryCell from './_shared/SummaryCell';
+import CellValueChip from './_shared/CellValueChip';
 
 import styles from './gearSection.module.scss';
 
@@ -24,7 +24,7 @@ export default function GearSection(props: { characters: TResLostarkMainCharacte
     <SummarySection
       title="장비 품질"
       legendItems={[
-        { label: '100', color: '#f59e0b' },
+        { label: '100', color: '#34d399' },
         { label: '95+', color: '#94a3b8' },
         { label: '그 아래', color: '#62636c' },
       ]}

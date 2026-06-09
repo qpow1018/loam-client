@@ -1,9 +1,10 @@
 import type { TLostarkGem, TResLostarkMainCharacter } from '@/api/lostark/type';
 
-import SummaryCell from './_shared/SummaryCell';
-import SummaryCharacterCell from './_shared/SummaryCharacterCell';
-import SummarySection from './_shared/SummarySection';
 import SummaryTable from './_shared/SummaryTable';
+import SummarySection from './_shared/SummarySection';
+import SummaryCharacterRow from './_shared/SummaryCharacterRow';
+import SummaryCell from './_shared/SummaryCell';
+import CellValueChip from './_shared/CellValueChip';
 
 import styles from './gemAvatarSection.module.scss';
 
@@ -18,16 +19,14 @@ export default function GemAvatarSection(props: { characters: TResLostarkMainCha
   return (
     <SummarySection title="보석 / 전설 아바타" className={styles['gem-avatar-section']}>
       <SummaryTable
-        className={styles['summary-table']}
-        headCellClassName={styles['matrix-head-cell']}
         columns={[
-          { key: 'character', label: '캐릭터' },
           { key: 'level-10', label: '10렙' },
           { key: 'level-9', label: '9렙' },
           { key: 'level-8', label: '8렙' },
           { key: 'level-7', label: '7렙 이하' },
           { key: 'legendary-avatar', label: '전설 아바타' },
         ]}
+        gridClassName={styles['gem-grid']}
       >
         {props.characters.map((character) => (
           <CharacterGemAvatarRow key={character.id} character={character} />
@@ -39,48 +38,48 @@ export default function GemAvatarSection(props: { characters: TResLostarkMainCha
 
 function CharacterGemAvatarRow(props: { character: TResLostarkMainCharacter }) {
   const { character } = props;
+
   const avatarCount = character.summary.legendaryAvatars.length;
 
-  return (
-    <>
-      <SummaryCharacterCell name={character.characterName} className={styles['character-cell']} />
+  function getGemLevelCount(gems: TLostarkGem[], levelValue?: number, maxLevel?: number) {
+    return gems.filter((gem) => {
+      const level = gem.level ?? 0;
 
-      {GEM_LEVEL_GROUPS.map((levelGroup) => (
-        <SummaryCell key={levelGroup.key} className={styles['count-cell']}>
-          <CountChip
-            count={getGemLevelCount(character.summary.gems, levelGroup.level, levelGroup.maxLevel)}
-            tier={levelGroup.tier}
-          />
-        </SummaryCell>
-      ))}
+      if (levelValue !== undefined) {
+        return level === levelValue;
+      }
 
-      <SummaryCell className={styles['count-cell']}>
-        <CountChip count={avatarCount} tier={avatarCount >= 4 ? 'high' : 'normal'} />
-      </SummaryCell>
-    </>
-  );
-}
+      if (maxLevel !== undefined) {
+        return level <= maxLevel;
+      }
 
-function CountChip(props: { count: number; tier: string }) {
-  if (props.count === 0) {
-    return <span className={styles['count-chip-empty']}>-</span>;
+      return false;
+    }).length;
   }
 
-  return <span className={styles[`count-chip-${props.tier}`]}>{props.count}</span>;
-}
+  return (
+    <SummaryCharacterRow name={character.characterName} className={styles['gem-grid']}>
+      {GEM_LEVEL_GROUPS.map((levelGroup) => {
+        const count = getGemLevelCount(
+          character.summary.gems,
+          levelGroup.level,
+          levelGroup.maxLevel,
+        );
 
-function getGemLevelCount(gems: TLostarkGem[], levelValue?: number, maxLevel?: number) {
-  return gems.filter((gem) => {
-    const level = gem.level ?? 0;
+        return (
+          <SummaryCell key={levelGroup.key} className={styles['count-cell']}>
+            <CellValueChip grade={count === 0 ? 'none' : levelGroup.tier}>
+              {count === 0 ? '-' : count}
+            </CellValueChip>
+          </SummaryCell>
+        );
+      })}
 
-    if (levelValue !== undefined) {
-      return level === levelValue;
-    }
-
-    if (maxLevel !== undefined) {
-      return level <= maxLevel;
-    }
-
-    return false;
-  }).length;
+      <SummaryCell>
+        <CellValueChip grade={avatarCount >= 4 ? 'high' : avatarCount >= 1 ? 'middle' : 'none'}>
+          {avatarCount === 0 ? '-' : avatarCount}
+        </CellValueChip>
+      </SummaryCell>
+    </SummaryCharacterRow>
+  );
 }

@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import styles from './cellValueChip.module.scss';
 
-type TCellValueGrade = 'high' | 'middle' | 'low' | 'none';
+type TCellValueGrade = 'perfect' | 'high' | 'middle' | 'low' | 'none';
 
 export default function CellValueChip(props: {
   grade?: TCellValueGrade;
@@ -14,5 +14,5 @@ export default function CellValueChip(props: {
     .filter(Boolean)
     .join(' ');
 
-  return <span className={chipClassName}>{children ?? '-'}</span>;
+  return <div className={chipClassName}>{children ?? '-'}</div>;
 }

@@ -4,12 +4,20 @@ import type {
   TResLostarkMainCharacter,
 } from '@/api/lostark/type';
 
-import SummaryCell from './_shared/SummaryCell';
-import SummaryCharacterCell from './_shared/SummaryCharacterCell';
 import SummarySection from './_shared/SummarySection';
 import SummaryTable from './_shared/SummaryTable';
+import SummaryCharacterRow from './_shared/SummaryCharacterRow';
+import SummaryCell from './_shared/SummaryCell';
 
 import styles from './accessorySection.module.scss';
+
+type TAccessorySlot = (typeof ACCESSORY_SLOTS)[number];
+
+type TPolishSummary = {
+  color: string;
+  label: string;
+  order: number;
+};
 
 const ACCESSORY_SLOTS = [
   { key: 'necklace', label: '목걸이', typeLabel: '목걸이', index: 0 },
@@ -19,45 +27,38 @@ const ACCESSORY_SLOTS = [
   { key: 'ring-2', label: '반지2', typeLabel: '반지', index: 1 },
 ] as const;
 
-type TAccessorySlot = (typeof ACCESSORY_SLOTS)[number];
-type TPolishGrade = 'top' | 'middle' | 'low';
-
-const POLISH_GRADE_BY_COLOR: Record<string, TPolishGrade> = {
-  FE9600: 'top',
-  CE43FC: 'middle',
-  '00B5FF': 'low',
-};
-
-const POLISH_GRADE_LABEL: Record<TPolishGrade, string> = {
-  top: '상',
-  middle: '중',
-  low: '하',
-};
-
-const POLISH_GRADE_ORDER: Record<TPolishGrade, number> = {
-  top: 0,
-  middle: 1,
-  low: 2,
-};
+const POLISH_GRADE_DATA: Record<string, TPolishSummary> = {
+  ['FE9600']: {
+    color: 'FE9600',
+    label: '상',
+    order: 0,
+  },
+  ['CE43FC']: {
+    color: 'CE43FC',
+    label: '중',
+    order: 1,
+  },
+  ['00B5FF']: {
+    color: '00B5FF',
+    label: '하',
+    order: 2,
+  },
+} as const;
 
 export default function AccessorySection(props: { characters: TResLostarkMainCharacter[] }) {
   return (
     <SummarySection
-      title="장신구 연마효과"
-      className={styles['accessory-section']}
+      title="악세사리"
       legendItems={[
         { label: '상옵', color: '#fe9600' },
         { label: '중옵', color: '#ce43fc' },
         { label: '하옵', color: '#00b5ff' },
       ]}
+      className={styles['accessory-section']}
     >
       <SummaryTable
-        className={styles['accessory-matrix']}
-        headCellClassName={styles['matrix-head-cell']}
-        columns={[
-          { key: 'character', label: '캐릭터' },
-          ...ACCESSORY_SLOTS.map((slot) => ({ key: slot.key, label: slot.label })),
-        ]}
+        gridClassName={styles['accessory-grid']}
+        columns={ACCESSORY_SLOTS.map((slot) => ({ key: slot.key, label: slot.label }))}
       >
         {props.characters.map((character) => (
           <CharacterAccessoryRow key={character.id} character={character} />
@@ -70,13 +71,42 @@ export default function AccessorySection(props: { characters: TResLostarkMainCha
 function CharacterAccessoryRow(props: { character: TResLostarkMainCharacter }) {
   const { character } = props;
 
-  return (
-    <>
-      <SummaryCharacterCell name={character.characterName} className={styles['character-cell']} />
+  function findAccessoryBySlot(accessories: TLostarkAccessory[], slot: TAccessorySlot) {
+    return accessories.filter((accessory) => accessory.type?.includes(slot.typeLabel))[slot.index];
+  }
 
+  function getPolishSummary(accessory?: TLostarkAccessory): TPolishSummary[] {
+    if (!accessory) {
+      return [];
+    }
+
+    const validPolishEffect = accessory.polishEffects.filter((item) => isValidPolishEffect(item));
+    return convertPolishSummary(validPolishEffect);
+  }
+
+  function isValidPolishEffect(effect: TLostarkColoredEffect) {
+    const text = effect.text;
+
+    return (
+      text.includes('적에게 주는 피해') ||
+      text.includes('추가 피해') ||
+      /^(공격력|무기 공격력)\s*\+.*%/.test(text) ||
+      text.includes('치명타 적중률') ||
+      text.includes('치명타 피해')
+    );
+  }
+
+  function convertPolishSummary(effects: TLostarkColoredEffect[]) {
+    return effects
+      .map((item) => POLISH_GRADE_DATA[item.color?.toUpperCase() || ''])
+      .sort((a, b) => a.order - b.order);
+  }
+
+  return (
+    <SummaryCharacterRow name={character.characterName} className={styles['accessory-grid']}>
       {ACCESSORY_SLOTS.map((slot) => {
         const accessory = findAccessoryBySlot(character.summary.equipment.accessories, slot);
-        const polishSummary = getPolishSummary(slot, accessory);
+        const polishSummary = getPolishSummary(accessory);
 
         return (
           <SummaryCell key={slot.key} className={styles['accessory-cell']}>
@@ -84,109 +114,31 @@ function CharacterAccessoryRow(props: { character: TResLostarkMainCharacter }) {
           </SummaryCell>
         );
       })}
-    </>
+    </SummaryCharacterRow>
   );
 }
 
-function PolishSummary(props: { summary: TPolishSummary }) {
+function PolishSummary(props: { summary: TPolishSummary[] }) {
+  const { summary } = props;
+
+  const polishLabel =
+    summary.length === 1 ? `${summary[0].label}단일` : summary.map((item) => item.label).join('');
+
   return (
     <div className={styles['polish-summary']}>
-      <span className={styles['polish-label']}>{props.summary.label}</span>
+      <span className={styles['polish-label']}>{polishLabel}</span>
 
-      {props.summary.effects.length > 0 && (
-        <span className={styles['polish-dots']} aria-label={props.summary.label}>
-          {props.summary.effects.map((effect, index) => (
-            <span
-              key={`${effect.text}-${index}`}
-              className={styles['polish-dot']}
-              style={{
-                backgroundColor: `#${effect.color}`,
-              }}
-            />
-          ))}
-        </span>
-      )}
+      <span className={styles['polish-dots']}>
+        {summary.map((item, index) => (
+          <span
+            key={index}
+            className={styles['polish-dot']}
+            style={{
+              backgroundColor: `#${item.color}`,
+            }}
+          />
+        ))}
+      </span>
     </div>
   );
-}
-
-type TPolishSummary = {
-  label: string;
-  effects: TLostarkColoredEffect[];
-};
-
-function findAccessoryBySlot(accessories: TLostarkAccessory[], slot: TAccessorySlot) {
-  return accessories.filter((accessory) => accessory.type?.includes(slot.typeLabel))[slot.index];
-}
-
-function getPolishSummary(slot: TAccessorySlot, accessory: TLostarkAccessory | undefined) {
-  if (!accessory) {
-    return {
-      label: '-',
-      effects: [],
-    };
-  }
-
-  const validEffects = accessory.polishEffects
-    .filter((effect) => isValidPolishEffect(slot, effect.text))
-    .filter((effect) => getPolishGrade(effect.color) !== null)
-    .sort((a, b) => {
-      const gradeA = getPolishGrade(a.color);
-      const gradeB = getPolishGrade(b.color);
-
-      if (!gradeA || !gradeB) {
-        return 0;
-      }
-
-      return POLISH_GRADE_ORDER[gradeA] - POLISH_GRADE_ORDER[gradeB];
-    });
-
-  if (validEffects.length === 0) {
-    return {
-      label: '-',
-      effects: [],
-    };
-  }
-
-  return {
-    label: getPolishLabel(validEffects),
-    effects: validEffects,
-  };
-}
-
-function isValidPolishEffect(slot: TAccessorySlot, text: string) {
-  if (slot.typeLabel === '목걸이') {
-    return text.includes('적에게 주는 피해') || text.includes('추가 피해');
-  }
-
-  if (slot.typeLabel === '귀걸이') {
-    return /^(공격력|무기 공격력)\s*\+.*%/.test(text);
-  }
-
-  if (slot.typeLabel === '반지') {
-    return text.includes('치명타 적중률') || text.includes('치명타 피해');
-  }
-
-  return false;
-}
-
-function getPolishLabel(effects: TLostarkColoredEffect[]) {
-  const labels = effects
-    .map((effect) => getPolishGrade(effect.color))
-    .filter((grade): grade is TPolishGrade => grade !== null)
-    .map((grade) => POLISH_GRADE_LABEL[grade]);
-
-  if (labels.length === 1) {
-    return `${labels[0]}단일`;
-  }
-
-  return labels.join('');
-}
-
-function getPolishGrade(color: string | null) {
-  if (!color) {
-    return null;
-  }
-
-  return POLISH_GRADE_BY_COLOR[color.toUpperCase()] ?? null;
 }

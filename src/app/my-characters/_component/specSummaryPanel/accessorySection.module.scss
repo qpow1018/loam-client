@@ -1,52 +1,36 @@
 .accessory-section {
-  .accessory-matrix {
-    grid-template-columns: minmax(160px, 1.2fr) repeat(5, minmax(104px, 1fr));
-  }
-
-  .matrix-head-cell,
-  .character-cell,
-  .accessory-cell {
-    min-height: 44px;
-    border-right: 1px solid $gray-700;
-    border-bottom: 1px solid $gray-700;
-
-    &:nth-child(6n) {
-      border-right: 0;
-    }
-  }
-
-  .accessory-matrix> :nth-last-child(-n + 6) {
-    border-bottom: 0;
+  .accessory-grid {
+    grid-template-columns: $loa-summary-label-cell-width repeat(5, 120px);
   }
 
   .polish-summary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 8px;
     min-width: 74px;
-    height: 26px;
+    height: 28px;
     padding: 0 8px;
     border: 1px solid $gray-600;
     border-radius: 4px;
     background: $gray-700;
-  }
 
-  .polish-label {
-    font-size: 12px;
-    font-weight: 500;
-    color: $text-primary;
-  }
+    .polish-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: $text-primary;
+    }
 
-  .polish-dots {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-  }
+    .polish-dots {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
 
-  .polish-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
+    .polish-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
   }
 }

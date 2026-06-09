@@ -1,16 +1,16 @@
 import type { TLostarkArkPassive, TResLostarkMainCharacter } from '@/api/lostark/type';
 
-import SummaryCell from './_shared/SummaryCell';
-import SummaryCharacterCell from './_shared/SummaryCharacterCell';
 import SummarySection from './_shared/SummarySection';
 import SummaryTable from './_shared/SummaryTable';
+import SummaryCharacterRow from './_shared/SummaryCharacterRow';
+import SummaryCell from './_shared/SummaryCell';
+import CellValueChip from './_shared/CellValueChip';
 
 import styles from './arkPassiveSummarySection.module.scss';
 
 const ARK_PASSIVE_POINTS = ['진화', '깨달음', '도약'] as const;
 
 type TArkPassivePointName = (typeof ARK_PASSIVE_POINTS)[number];
-type TArkPassiveTier = 'high' | 'middle' | 'low' | 'empty';
 
 export default function ArkPassiveSummarySection(props: {
   characters: TResLostarkMainCharacter[];
@@ -18,20 +18,16 @@ export default function ArkPassiveSummarySection(props: {
   return (
     <SummarySection
       title="아크패시브"
-      className={styles['ark-passive-summary-section']}
       legendItems={[
-        { label: '26+', color: '#f59e0b' },
+        { label: '26+', color: '#34d399' },
         { label: '21+', color: '#94a3b8' },
-        { label: '그 아래', color: '#62636c' },
+        { label: '이하', color: '#62636c' },
       ]}
+      className={styles['ark-passive-summary-section']}
     >
       <SummaryTable
-        className={styles['summary-table']}
-        headCellClassName={styles['matrix-head-cell']}
-        columns={[
-          { key: 'character', label: '캐릭터' },
-          ...ARK_PASSIVE_POINTS.map((pointName) => ({ key: pointName, label: pointName })),
-        ]}
+        columns={ARK_PASSIVE_POINTS.map((pointName) => ({ key: pointName, label: pointName }))}
+        gridClassName={styles['ark-passive-grid']}
       >
         {props.characters.map((character) => (
           <CharacterArkPassiveRow key={character.id} character={character} />
@@ -45,15 +41,15 @@ function CharacterArkPassiveRow(props: { character: TResLostarkMainCharacter }) 
   const { character } = props;
 
   return (
-    <>
-      <SummaryCharacterCell name={character.characterName} className={styles['character-cell']} />
-
-      {ARK_PASSIVE_POINTS.map((pointName) => (
-        <SummaryCell key={pointName} className={styles['point-cell']}>
-          <ArkPassivePointValue arkPassive={character.summary.arkPassive} pointName={pointName} />
-        </SummaryCell>
+    <SummaryCharacterRow name={character.characterName} className={styles['ark-passive-grid']}>
+      {ARK_PASSIVE_POINTS.map((pointName, index) => (
+        <ArkPassivePointValue
+          key={index}
+          arkPassive={character.summary.arkPassive}
+          pointName={pointName}
+        />
       ))}
-    </>
+    </SummaryCharacterRow>
   );
 }
 
@@ -61,36 +57,26 @@ function ArkPassivePointValue(props: {
   arkPassive: TLostarkArkPassive;
   pointName: TArkPassivePointName;
 }) {
-  const point = props.arkPassive.points.find((item) => item.name === props.pointName);
-  const description = point?.description?.trim() || '-';
-  const level = getArkPassiveLevel(description);
-  const tier = getArkPassiveTier(level);
+  const { arkPassive, pointName } = props;
 
-  return <span className={styles[`point-value-${tier}`]}>{description}</span>;
-}
+  const point = arkPassive.points.find((item) => item.name === pointName);
+  const level = getArkPassiveLevel(point?.description?.trim() || '');
 
-function getArkPassiveLevel(description: string) {
-  const matched = description.match(/(\d+)레벨/);
+  function getArkPassiveLevel(description: string) {
+    const matched = description.match(/(\d+)레벨/);
 
-  if (!matched) {
-    return null;
+    if (!matched) {
+      return 0;
+    }
+
+    return Number(matched[1]);
   }
 
-  return Number(matched[1]);
-}
-
-function getArkPassiveTier(level: number | null): TArkPassiveTier {
-  if (level === null) {
-    return 'empty';
-  }
-
-  if (level >= 26) {
-    return 'high';
-  }
-
-  if (level >= 21) {
-    return 'middle';
-  }
-
-  return 'low';
+  return (
+    <SummaryCell>
+      <CellValueChip grade={level >= 26 ? 'high' : level >= 21 ? 'middle' : 'low'}>
+        {level}
+      </CellValueChip>
+    </SummaryCell>
+  );
 }

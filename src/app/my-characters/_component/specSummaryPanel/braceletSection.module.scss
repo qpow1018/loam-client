@@ -1,59 +1,37 @@
 .bracelet-section {
-  .bracelet-table {
-    display: flex;
-    flex-direction: column;
-  }
+  width: 100%;
 
-  .character-row {
-    display: grid;
-    grid-template-columns: minmax(160px, 1.2fr) minmax(0, 5fr);
-    min-height: 44px;
-    border-bottom: 1px solid $gray-700;
-
-    &:last-child {
-      border-bottom: 0;
-    }
-  }
-
-  .character-cell {
-    border-right: 1px solid $gray-700;
+  .bracelet-grid {
+    grid-template-columns: $loa-summary-label-cell-width 1fr;
   }
 
   .effect-list {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     gap: 4px;
-    padding: 8px 10px;
-  }
+    padding-left: 20px;
 
-  .effect {
-    display: flex;
-    gap: 4px;
-    min-width: 0;
-    font-size: 11px;
-    color: $text-primary;
-  }
+    .effect {
+      display: flex;
+      gap: 4px;
+      min-width: 0;
+      font-size: 11px;
+      color: $text-primary;
+    }
 
-  .effect-marker {
-    flex-shrink: 0;
-    width: 8px;
-    height: 8px;
-    margin-top: 2px;
-    border-radius: 50%;
-  }
+    .effect-marker {
+      flex-shrink: 0;
+      width: 8px;
+      height: 8px;
+      margin-top: 2px;
+      border-radius: 50%;
+    }
 
-  .effect-text {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: pre-line;
-  }
-
-  .empty-cell {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px 10px;
-    font-size: 12px;
-    color: $text-primary;
+    .effect-text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: pre-line;
+    }
   }
 }

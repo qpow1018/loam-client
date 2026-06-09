@@ -1,103 +1,24 @@
 .ark-grid-summary-section {
+  width: 100%;
+
   .summary-table {
-    grid-template-columns:
-      minmax(160px, 1.2fr)
-      repeat(6, minmax(116px, 1fr))
-      minmax(92px, 0.8fr);
+    grid-template-columns: $loa-summary-label-cell-width repeat(7, 1fr);
   }
 
-  .matrix-head-cell,
-  .character-cell,
-  .core-cell,
-  .effect-cell {
-    min-height: 54px;
-    border-right: 1px solid $gray-700;
-    border-bottom: 1px solid $gray-700;
-
-    &:nth-child(8n) {
-      border-right: 0;
-    }
-  }
-
-  .summary-table > :nth-last-child(-n + 8) {
-    border-bottom: 0;
-  }
-
-  .core-summary-high,
-  .core-summary-middle,
-  .core-summary-low,
-  .core-summary-empty {
-    display: flex;
+  .core {
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-    width: 100%;
-    min-height: 38px;
-    padding: 5px 6px;
-    border-radius: 4px;
-    text-align: center;
-  }
+    gap: 2px;
 
-  .core-summary-high {
-    color: $gray-900;
-    background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%);
-    box-shadow: 0 0 14px rgba(245, 158, 11, 0.28);
-
-    .core-name,
-    .core-meta {
-      color: $gray-900;
+    .core-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 100%;
+      font-size: 11px;
     }
-  }
 
-  .core-summary-middle {
-    background: linear-gradient(180deg, #cbd5e1 0%, #94a3b8 100%);
-
-    .core-name,
     .core-meta {
-      color: $gray-900;
+      font-size: 11px;
     }
-  }
-
-  .core-summary-low {
-    background: $gray-600;
-  }
-
-  .core-summary-empty {
-    background: transparent;
-  }
-
-  .core-name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 100%;
-    font-size: 11px;
-    font-weight: 700;
-    color: $text-primary;
-  }
-
-  .core-meta {
-    font-size: 10px;
-    color: $text-secondary;
-  }
-
-  .core-empty,
-  .effect-empty {
-    font-size: 12px;
-    color: $text-secondary;
-  }
-
-  .effect-level {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 54px;
-    height: 26px;
-    border-radius: 4px;
-    background: $gray-600;
-    font-size: 12px;
-    font-weight: 700;
-    color: $text-primary;
   }
 }
