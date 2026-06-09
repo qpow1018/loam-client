@@ -4,12 +4,13 @@
 
 LoaM은 로스트아크 유틸리티용 한국어 Next.js 앱입니다. 주요 라우트는 다음과 같습니다.
 
-- `/loado`: 체크리스트/테이블과 메모 기능.
-- `/my-characters`: 저장된 로스트아크 캐릭터 목록.
+- `/lostark/loado`: 체크리스트/테이블과 메모 기능.
+- `/lostark/my-characters`: 저장된 로스트아크 메인 캐릭터 목록.
+- `/lostark/all-characters`: 저장된 로스트아크 전체 캐릭터 목록.
+- `/lostark/reference-sites`: 로스트아크 참고 사이트 링크.
 - `/settings`: PWA 설치, 백업/복원, 저장소 초기화.
-- `/reference-sites`: 참고 사이트 링크.
 
-루트 페이지는 `/loado`로 리다이렉트됩니다.
+루트 페이지는 `/lostark/loado`로 리다이렉트됩니다.
 
 ## 기술 스택
 
@@ -30,13 +31,17 @@ npm run dev
 npm run lint
 npm run format:check
 npm run build
+npm run build:webpack
 ```
 
 참고:
 
 - 현재 `package.json`에는 별도 테스트 스크립트가 없습니다.
 - 일반적인 코드 변경 후에는 `npm run lint`를 실행하세요.
-- 라우팅, PWA, 환경 변수, 빌드 설정에 영향이 있으면 `npm run build`도 실행하세요.
+- 기존 `npm run build`는 Next 16 기본 Turbopack production build입니다.
+- 현재 로컬 환경에서는 Turbopack build가 `Creating an optimized production build ...` 단계에서 멈출 수 있습니다.
+- 라우팅, PWA, 환경 변수, 빌드 설정에 영향이 있으면 일반 검증에는 `npm run build:webpack`을 우선 실행하세요.
+- Turbopack 자체를 확인해야 하는 작업일 때만 `npm run build`를 사용하고, 멈추면 해당 사실을 보고하세요.
 - `npm run format`은 사용자가 요청했거나 수정한 파일 포맷팅이 필요한 경우에만 사용하세요.
 
 ## 저장소 구조
@@ -115,7 +120,7 @@ npm run build
 - PWA metadata는 `src/app/layout.tsx`와 `src/app/manifest.ts`에 정의되어 있습니다.
 - 서비스 워커 `/sw.js`는 `src/components/ServiceWorkerRegister.tsx`에서 등록합니다.
 - 브랜드와 앱 아이콘은 `public/brand/`, `public/icons/`에 있습니다.
-- PWA 동작을 바꾸면 가능하면 `npm run build`와 production serving(`npm run start`)까지 확인하세요.
+- PWA 동작을 바꾸면 가능하면 `npm run build:webpack`와 production serving(`npm run start`)까지 확인하세요.
 
 ## Next.js 설정 참고사항
 
@@ -128,7 +133,7 @@ npm run build
 
 - TypeScript, React, SCSS 관련 소스 변경: `npm run lint`.
 - 포맷팅 영향이 있거나 많은 파일을 수정한 경우: `npm run format:check`.
-- Next 설정, 라우팅, metadata, PWA, Supabase 환경 연동, production-sensitive 변경: `npm run build`.
+- Next 설정, 라우팅, metadata, PWA, Supabase 환경 연동, production-sensitive 변경: `npm run build:webpack`.
 - 시각적 라우트를 바꾼 경우 가능하면 로컬에서 해당 페이지를 열고 desktop/mobile 폭을 확인하세요.
 
 검증 명령을 실행하지 못했다면 이유를 명확히 보고하세요.
