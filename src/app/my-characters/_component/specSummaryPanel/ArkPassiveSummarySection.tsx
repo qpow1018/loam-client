@@ -1,6 +1,9 @@
 import type { TLostarkArkPassive, TResLostarkMainCharacter } from '@/api/lostark/type';
 
-import SummarySection from './SummarySection';
+import SummaryCell from './_shared/SummaryCell';
+import SummaryCharacterCell from './_shared/SummaryCharacterCell';
+import SummarySection from './_shared/SummarySection';
+import SummaryTable from './_shared/SummaryTable';
 
 import styles from './arkPassiveSummarySection.module.scss';
 
@@ -22,18 +25,18 @@ export default function ArkPassiveSummarySection(props: {
         { label: '그 아래', color: '#62636c' },
       ]}
     >
-      <div className={styles['summary-table']}>
-        <div className={styles['matrix-head-cell']}>캐릭터</div>
-        {ARK_PASSIVE_POINTS.map((pointName) => (
-          <div key={pointName} className={styles['matrix-head-cell']}>
-            {pointName}
-          </div>
-        ))}
-
+      <SummaryTable
+        className={styles['summary-table']}
+        headCellClassName={styles['matrix-head-cell']}
+        columns={[
+          { key: 'character', label: '캐릭터' },
+          ...ARK_PASSIVE_POINTS.map((pointName) => ({ key: pointName, label: pointName })),
+        ]}
+      >
         {props.characters.map((character) => (
           <CharacterArkPassiveRow key={character.id} character={character} />
         ))}
-      </div>
+      </SummaryTable>
     </SummarySection>
   );
 }
@@ -43,14 +46,12 @@ function CharacterArkPassiveRow(props: { character: TResLostarkMainCharacter }) 
 
   return (
     <>
-      <div className={styles['character-cell']}>
-        <strong className={styles['character-name']}>{character.characterName}</strong>
-      </div>
+      <SummaryCharacterCell name={character.characterName} className={styles['character-cell']} />
 
       {ARK_PASSIVE_POINTS.map((pointName) => (
-        <div key={pointName} className={styles['point-cell']}>
+        <SummaryCell key={pointName} className={styles['point-cell']}>
           <ArkPassivePointValue arkPassive={character.summary.arkPassive} pointName={pointName} />
-        </div>
+        </SummaryCell>
       ))}
     </>
   );

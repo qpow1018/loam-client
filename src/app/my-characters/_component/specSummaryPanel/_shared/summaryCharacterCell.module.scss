@@ -1,0 +1,15 @@
+.character-cell {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding: 8px 10px;
+
+  .character-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+    font-weight: 500;
+    color: $text-primary;
+  }
+}

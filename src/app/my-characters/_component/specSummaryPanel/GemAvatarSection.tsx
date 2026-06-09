@@ -1,6 +1,9 @@
 import type { TLostarkGem, TResLostarkMainCharacter } from '@/api/lostark/type';
 
-import SummarySection from './SummarySection';
+import SummaryCell from './_shared/SummaryCell';
+import SummaryCharacterCell from './_shared/SummaryCharacterCell';
+import SummarySection from './_shared/SummarySection';
+import SummaryTable from './_shared/SummaryTable';
 
 import styles from './gemAvatarSection.module.scss';
 
@@ -14,18 +17,22 @@ const GEM_LEVEL_GROUPS = [
 export default function GemAvatarSection(props: { characters: TResLostarkMainCharacter[] }) {
   return (
     <SummarySection title="보석 / 전설 아바타" className={styles['gem-avatar-section']}>
-      <div className={styles['summary-table']}>
-        <div className={styles['matrix-head-cell']}>캐릭터</div>
-        <div className={styles['matrix-head-cell']}>10렙</div>
-        <div className={styles['matrix-head-cell']}>9렙</div>
-        <div className={styles['matrix-head-cell']}>8렙</div>
-        <div className={styles['matrix-head-cell']}>7렙 이하</div>
-        <div className={styles['matrix-head-cell']}>전설 아바타</div>
-
+      <SummaryTable
+        className={styles['summary-table']}
+        headCellClassName={styles['matrix-head-cell']}
+        columns={[
+          { key: 'character', label: '캐릭터' },
+          { key: 'level-10', label: '10렙' },
+          { key: 'level-9', label: '9렙' },
+          { key: 'level-8', label: '8렙' },
+          { key: 'level-7', label: '7렙 이하' },
+          { key: 'legendary-avatar', label: '전설 아바타' },
+        ]}
+      >
         {props.characters.map((character) => (
           <CharacterGemAvatarRow key={character.id} character={character} />
         ))}
-      </div>
+      </SummaryTable>
     </SummarySection>
   );
 }
@@ -36,22 +43,20 @@ function CharacterGemAvatarRow(props: { character: TResLostarkMainCharacter }) {
 
   return (
     <>
-      <div className={styles['character-cell']}>
-        <strong className={styles['character-name']}>{character.characterName}</strong>
-      </div>
+      <SummaryCharacterCell name={character.characterName} className={styles['character-cell']} />
 
       {GEM_LEVEL_GROUPS.map((levelGroup) => (
-        <div key={levelGroup.key} className={styles['count-cell']}>
+        <SummaryCell key={levelGroup.key} className={styles['count-cell']}>
           <CountChip
             count={getGemLevelCount(character.summary.gems, levelGroup.level, levelGroup.maxLevel)}
             tier={levelGroup.tier}
           />
-        </div>
+        </SummaryCell>
       ))}
 
-      <div className={styles['count-cell']}>
+      <SummaryCell className={styles['count-cell']}>
         <CountChip count={avatarCount} tier={avatarCount >= 4 ? 'high' : 'normal'} />
-      </div>
+      </SummaryCell>
     </>
   );
 }

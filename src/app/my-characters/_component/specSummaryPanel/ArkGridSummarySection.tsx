@@ -1,6 +1,9 @@
 import type { TLostarkArkGrid, TResLostarkMainCharacter } from '@/api/lostark/type';
 
-import SummarySection from './SummarySection';
+import SummaryCell from './_shared/SummaryCell';
+import SummaryCharacterCell from './_shared/SummaryCharacterCell';
+import SummarySection from './_shared/SummarySection';
+import SummaryTable from './_shared/SummaryTable';
 
 import styles from './arkGridSummarySection.module.scss';
 
@@ -27,19 +30,19 @@ export default function ArkGridSummarySection(props: { characters: TResLostarkMa
         { label: '그 아래', color: '#62636c' },
       ]}
     >
-      <div className={styles['summary-table']}>
-        <div className={styles['matrix-head-cell']}>캐릭터</div>
-        {CORE_SLOTS.map((slot) => (
-          <div key={slot.key} className={styles['matrix-head-cell']}>
-            {slot.label}
-          </div>
-        ))}
-        <div className={styles['matrix-head-cell']}>보스 피해</div>
-
+      <SummaryTable
+        className={styles['summary-table']}
+        headCellClassName={styles['matrix-head-cell']}
+        columns={[
+          { key: 'character', label: '캐릭터' },
+          ...CORE_SLOTS.map((slot) => ({ key: slot.key, label: slot.label })),
+          { key: 'boss-damage', label: '보스 피해' },
+        ]}
+      >
         {props.characters.map((character) => (
           <CharacterArkGridRow key={character.id} character={character} />
         ))}
-      </div>
+      </SummaryTable>
     </SummarySection>
   );
 }
@@ -49,19 +52,17 @@ function CharacterArkGridRow(props: { character: TResLostarkMainCharacter }) {
 
   return (
     <>
-      <div className={styles['character-cell']}>
-        <strong className={styles['character-name']}>{character.characterName}</strong>
-      </div>
+      <SummaryCharacterCell name={character.characterName} className={styles['character-cell']} />
 
       {CORE_SLOTS.map((slot) => (
-        <div key={slot.key} className={styles['core-cell']}>
+        <SummaryCell key={slot.key} className={styles['core-cell']}>
           <CoreSummary arkGrid={character.summary.arkGrid} slot={slot} />
-        </div>
+        </SummaryCell>
       ))}
 
-      <div className={styles['effect-cell']}>
+      <SummaryCell className={styles['effect-cell']}>
         <BossDamageLevel arkGrid={character.summary.arkGrid} />
-      </div>
+      </SummaryCell>
     </>
   );
 }

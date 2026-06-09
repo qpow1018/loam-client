@@ -1,6 +1,7 @@
 import type { TLostarkEngraving, TResLostarkMainCharacter } from '@/api/lostark/type';
 
-import SummarySection from './SummarySection';
+import SummaryCharacterCell from './_shared/SummaryCharacterCell';
+import SummarySection from './_shared/SummarySection';
 
 import styles from './engravingSummarySection.module.scss';
 
@@ -17,9 +18,10 @@ export default function EngravingSummarySection(props: { characters: TResLostark
       <div className={styles['engraving-table']}>
         {props.characters.map((character) => (
           <div key={character.id} className={styles['character-row']}>
-            <div className={styles['character-cell']}>
-              <strong className={styles['character-name']}>{character.characterName}</strong>
-            </div>
+            <SummaryCharacterCell
+              name={character.characterName}
+              className={styles['character-cell']}
+            />
 
             <EngravingList engravings={character.summary.engravings} />
           </div>

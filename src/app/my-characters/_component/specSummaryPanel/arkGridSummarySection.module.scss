@@ -1,6 +1,5 @@
 .ark-grid-summary-section {
   .summary-table {
-    display: grid;
     grid-template-columns:
       minmax(160px, 1.2fr)
       repeat(6, minmax(116px, 1fr))
@@ -22,39 +21,6 @@
 
   .summary-table > :nth-last-child(-n + 8) {
     border-bottom: 0;
-  }
-
-  .matrix-head-cell {
-    display: flex;
-    align-items: center;
-    padding: 0 10px;
-    font-size: 12px;
-    color: $text-secondary;
-    background: $gray-900;
-  }
-
-  .character-cell {
-    display: flex;
-    align-items: center;
-    min-width: 0;
-    padding: 8px 10px;
-  }
-
-  .character-name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 13px;
-    font-weight: 500;
-    color: $text-primary;
-  }
-
-  .core-cell,
-  .effect-cell {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
   }
 
   .core-summary-high,

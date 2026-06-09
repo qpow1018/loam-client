@@ -1,6 +1,9 @@
 import type { TLostarkAbilityStone, TResLostarkMainCharacter } from '@/api/lostark/type';
 
-import SummarySection from './SummarySection';
+import SummaryCell from './_shared/SummaryCell';
+import SummaryCharacterCell from './_shared/SummaryCharacterCell';
+import SummarySection from './_shared/SummarySection';
+import SummaryTable from './_shared/SummaryTable';
 
 import styles from './abilityStoneSection.module.scss';
 
@@ -14,16 +17,20 @@ export default function AbilityStoneSection(props: { characters: TResLostarkMain
         { label: '합 4-', color: '#62636c' },
       ]}
     >
-      <div className={styles['stone-table']}>
-        <div className={styles['matrix-head-cell']}>캐릭터</div>
-        <div className={styles['matrix-head-cell']}>효과 1</div>
-        <div className={styles['matrix-head-cell']}>효과 2</div>
-        <div className={styles['matrix-head-cell']}>합레벨</div>
-
+      <SummaryTable
+        className={styles['stone-table']}
+        headCellClassName={styles['matrix-head-cell']}
+        columns={[
+          { key: 'character', label: '캐릭터' },
+          { key: 'effect-1', label: '효과 1' },
+          { key: 'effect-2', label: '효과 2' },
+          { key: 'level-sum', label: '합레벨' },
+        ]}
+      >
         {props.characters.map((character) => (
           <CharacterStoneRow key={character.id} character={character} />
         ))}
-      </div>
+      </SummaryTable>
     </SummarySection>
   );
 }
@@ -34,21 +41,19 @@ function CharacterStoneRow(props: { character: TResLostarkMainCharacter }) {
 
   return (
     <>
-      <div className={styles['character-cell']}>
-        <strong className={styles['character-name']}>{character.characterName}</strong>
-      </div>
+      <SummaryCharacterCell name={character.characterName} className={styles['character-cell']} />
       <StoneEngravingCell engraving={summary.positiveEngravings[0]} />
       <StoneEngravingCell engraving={summary.positiveEngravings[1]} />
-      <div className={styles['level-sum-cell']}>
+      <SummaryCell className={styles['level-sum-cell']}>
         <span className={styles[`level-sum-${summary.tier}`]}>{summary.label}</span>
-      </div>
+      </SummaryCell>
     </>
   );
 }
 
 function StoneEngravingCell(props: { engraving: TStoneEngravingSummary | undefined }) {
   if (!props.engraving) {
-    return <div className={styles['empty-cell']}>-</div>;
+    return <SummaryCell className={styles['empty-cell']}>-</SummaryCell>;
   }
 
   return (

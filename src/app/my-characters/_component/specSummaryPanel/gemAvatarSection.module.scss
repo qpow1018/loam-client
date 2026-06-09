@@ -1,6 +1,5 @@
 .gem-avatar-section {
   .summary-table {
-    display: grid;
     grid-template-columns: minmax(160px, 1.2fr) repeat(4, minmax(88px, 0.8fr)) minmax(
         112px,
         1fr
@@ -21,38 +20,6 @@
 
   .summary-table > :nth-last-child(-n + 6) {
     border-bottom: 0;
-  }
-
-  .matrix-head-cell {
-    display: flex;
-    align-items: center;
-    padding: 0 10px;
-    font-size: 12px;
-    color: $text-secondary;
-    background: $gray-900;
-  }
-
-  .character-cell {
-    display: flex;
-    align-items: center;
-    min-width: 0;
-    padding: 8px 10px;
-  }
-
-  .character-name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 13px;
-    font-weight: 500;
-    color: $text-primary;
-  }
-
-  .count-cell {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px 10px;
   }
 
   .count-chip-perfect,

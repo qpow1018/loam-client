@@ -4,7 +4,10 @@ import type {
   TResLostarkMainCharacter,
 } from '@/api/lostark/type';
 
-import SummarySection from './SummarySection';
+import SummaryCell from './_shared/SummaryCell';
+import SummaryCharacterCell from './_shared/SummaryCharacterCell';
+import SummarySection from './_shared/SummarySection';
+import SummaryTable from './_shared/SummaryTable';
 
 import styles from './accessorySection.module.scss';
 
@@ -48,18 +51,18 @@ export default function AccessorySection(props: { characters: TResLostarkMainCha
         { label: '하옵', color: '#00b5ff' },
       ]}
     >
-      <div className={styles['accessory-matrix']}>
-        <div className={styles['matrix-head-cell']}>캐릭터</div>
-        {ACCESSORY_SLOTS.map((slot) => (
-          <div key={slot.key} className={styles['matrix-head-cell']}>
-            {slot.label}
-          </div>
-        ))}
-
+      <SummaryTable
+        className={styles['accessory-matrix']}
+        headCellClassName={styles['matrix-head-cell']}
+        columns={[
+          { key: 'character', label: '캐릭터' },
+          ...ACCESSORY_SLOTS.map((slot) => ({ key: slot.key, label: slot.label })),
+        ]}
+      >
         {props.characters.map((character) => (
           <CharacterAccessoryRow key={character.id} character={character} />
         ))}
-      </div>
+      </SummaryTable>
     </SummarySection>
   );
 }
@@ -69,18 +72,16 @@ function CharacterAccessoryRow(props: { character: TResLostarkMainCharacter }) {
 
   return (
     <>
-      <div className={styles['character-cell']}>
-        <strong className={styles['character-name']}>{character.characterName}</strong>
-      </div>
+      <SummaryCharacterCell name={character.characterName} className={styles['character-cell']} />
 
       {ACCESSORY_SLOTS.map((slot) => {
         const accessory = findAccessoryBySlot(character.summary.equipment.accessories, slot);
         const polishSummary = getPolishSummary(slot, accessory);
 
         return (
-          <div key={slot.key} className={styles['accessory-cell']}>
+          <SummaryCell key={slot.key} className={styles['accessory-cell']}>
             <PolishSummary summary={polishSummary} />
-          </div>
+          </SummaryCell>
         );
       })}
     </>

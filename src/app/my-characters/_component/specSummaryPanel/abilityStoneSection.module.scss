@@ -1,6 +1,5 @@
 .ability-stone-section {
   .stone-table {
-    display: grid;
     grid-template-columns: minmax(160px, 1.2fr) repeat(2, minmax(180px, 1.4fr)) minmax(
         88px,
         0.7fr
@@ -23,31 +22,6 @@
 
   .stone-table > :nth-last-child(-n + 4) {
     border-bottom: 0;
-  }
-
-  .matrix-head-cell {
-    display: flex;
-    align-items: center;
-    padding: 0 10px;
-    font-size: 12px;
-    color: $text-secondary;
-    background: $gray-900;
-  }
-
-  .character-cell {
-    display: flex;
-    align-items: center;
-    min-width: 0;
-    padding: 8px 10px;
-  }
-
-  .character-name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 13px;
-    font-weight: 500;
-    color: $text-primary;
   }
 
   .engraving-cell {
@@ -78,14 +52,6 @@
     white-space: nowrap;
     font-size: 12px;
     color: $text-primary;
-  }
-
-  .level-sum-cell,
-  .empty-cell {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px 10px;
   }
 
   .level-sum-high,

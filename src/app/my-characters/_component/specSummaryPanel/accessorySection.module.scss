@@ -1,6 +1,5 @@
 .accessory-section {
   .accessory-matrix {
-    display: grid;
     grid-template-columns: minmax(160px, 1.2fr) repeat(5, minmax(104px, 1fr));
   }
 
@@ -18,41 +17,6 @@
 
   .accessory-matrix> :nth-last-child(-n + 6) {
     border-bottom: 0;
-  }
-
-  .matrix-head-cell {
-    display: flex;
-    align-items: center;
-    padding: 0 10px;
-    font-size: 12px;
-    font-weight: 400;
-    color: $text-secondary;
-    background: $gray-900;
-  }
-
-  .character-cell {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 2px;
-    min-width: 0;
-    padding: 8px 10px;
-  }
-
-  .character-name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 13px;
-    font-weight: 500;
-    color: $text-primary;
-  }
-
-  .accessory-cell {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
   }
 
   .polish-summary {

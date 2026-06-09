@@ -1,6 +1,9 @@
 import type { TLostarkGear, TResLostarkMainCharacter } from '@/api/lostark/type';
 
-import SummarySection from './SummarySection';
+import SummaryCell from './_shared/SummaryCell';
+import SummaryCharacterCell from './_shared/SummaryCharacterCell';
+import SummarySection from './_shared/SummarySection';
+import SummaryTable from './_shared/SummaryTable';
 
 import styles from './gearSection.module.scss';
 
@@ -27,18 +30,18 @@ export default function GearSection(props: { characters: TResLostarkMainCharacte
         { label: '그 아래', color: '#62636c' },
       ]}
     >
-      <div className={styles['quality-matrix']}>
-        <div className={styles['matrix-head-cell']}>캐릭터</div>
-        {GEAR_SLOTS.map((slot) => (
-          <div key={slot.key} className={styles['matrix-head-cell']}>
-            {slot.label}
-          </div>
-        ))}
-
+      <SummaryTable
+        className={styles['quality-matrix']}
+        headCellClassName={styles['matrix-head-cell']}
+        columns={[
+          { key: 'character', label: '캐릭터' },
+          ...GEAR_SLOTS.map((slot) => ({ key: slot.key, label: slot.label })),
+        ]}
+      >
         {props.characters.map((character) => (
           <CharacterQualityRow key={character.id} character={character} />
         ))}
-      </div>
+      </SummaryTable>
     </SummarySection>
   );
 }
@@ -48,17 +51,15 @@ function CharacterQualityRow(props: { character: TResLostarkMainCharacter }) {
 
   return (
     <>
-      <div className={styles['character-cell']}>
-        <strong className={styles['character-name']}>{character.characterName}</strong>
-      </div>
+      <SummaryCharacterCell name={character.characterName} className={styles['character-cell']} />
 
       {GEAR_SLOTS.map((slot) => {
         const gear = findGearBySlot(character.summary.equipment.gears, slot);
 
         return (
-          <div key={slot.key} className={styles['quality-cell']}>
+          <SummaryCell key={slot.key} className={styles['quality-cell']}>
             <QualityValue quality={gear?.quality} />
-          </div>
+          </SummaryCell>
         );
       })}
     </>
