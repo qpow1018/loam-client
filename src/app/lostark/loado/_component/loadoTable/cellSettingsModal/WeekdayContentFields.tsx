@@ -4,7 +4,7 @@ import type { TTaskTableCellValueWeekdayContent } from '@/types/taskTable';
 
 import ButtonGroup from '@/components/common/buttonGroup/ButtonGroup';
 import TextInput from '@/components/common/form/TextInput';
-import FormRow from '@/app/lostark/loado/_component/loadoTable/FormRow';
+import FormRow from '@/components/taskTable/FormRow';
 
 import styles from './weekdayContentFields.module.scss';
 

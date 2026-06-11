@@ -13,7 +13,7 @@ import Button from '@/components/common/button/Button';
 import IconButton from '@/components/common/button/IconButton';
 import TextInput from '@/components/common/form/TextInput';
 import IconPickerModal from '@/app/lostark/loado/_component/loadoTable/iconPickerModal/IconPickerModal';
-import FormRow from '@/app/lostark/loado/_component/loadoTable/FormRow';
+import FormRow from '@/components/taskTable/FormRow';
 
 import styles from './taskModal.module.scss';
 

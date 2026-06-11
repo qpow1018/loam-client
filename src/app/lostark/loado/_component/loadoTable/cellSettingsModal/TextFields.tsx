@@ -3,7 +3,7 @@
 import type { TTaskTableCellValueText } from '@/types/taskTable';
 
 import TextInput from '@/components/common/form/TextInput';
-import FormRow from '@/app/lostark/loado/_component/loadoTable/FormRow';
+import FormRow from '@/components/taskTable/FormRow';
 
 export default function TextFields(props: {
   cell: TTaskTableCellValueText;
