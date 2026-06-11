@@ -25,7 +25,7 @@ import {
 } from '@/app/lostark/loado/_util/loadoTableData';
 
 import DraggableList from '@/components/common/draggableList/DraggableList';
-import CornerCell from './CornerCell';
+import LoaCornerCell from './LoaCornerCell';
 import HeaderCell from './HeaderCell';
 import RowLabelCell from './RowLabelCell';
 import RowDivider from './RowDivider';
@@ -101,7 +101,7 @@ function LoadoTableContent(props: {
   return (
     <div className={styles['loado-table']}>
       <div className={styles['header-row']}>
-        <CornerCell
+        <LoaCornerCell
           onAddCharacter={handleAddColumn}
           onAddTask={handleAddRow}
           onAddDivider={() => handleAddRow({ kind: 'divider', id: uuidv4() })}

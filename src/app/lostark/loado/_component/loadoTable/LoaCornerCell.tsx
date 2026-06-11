@@ -4,16 +4,11 @@ import { useState } from 'react';
 
 import type { TTaskTableColumn, TTaskTableDataRow } from '@/types/taskTable';
 
-import IconButton from '@/components/common/button/IconButton';
-import DropdownMenu from '@/components/common/dropdownMenu/DropdownMenu';
+import CornerCell from '@/components/taskTable/CornerCell';
 import CharacterModal from './characterModal/CharacterModal';
 import TaskModal from './taskModal/TaskModal';
 
-import styles from './cornerCell.module.scss';
-
-import { MdAdd } from 'react-icons/md';
-
-export default function CornerCell(props: {
+export default function LoaCornerCell(props: {
   onAddCharacter: (column: TTaskTableColumn) => void;
   onAddTask: (row: TTaskTableDataRow) => void;
   onAddDivider: () => void;
@@ -35,20 +30,13 @@ export default function CornerCell(props: {
 
   return (
     <>
-      <div className={styles['corner-cell']}>
-        <DropdownMenu
-          trigger={({ toggle }) => (
-            <IconButton size="small" onClick={toggle}>
-              <MdAdd />
-            </IconButton>
-          )}
-          items={[
-            { label: '캐릭터 추가', onClick: () => setIsCharacterModalOpen(true) },
-            { label: '할일 추가', onClick: () => setIsTaskModalOpen(true) },
-            { label: '할일 구분선 추가', onClick: onAddDivider },
-          ]}
-        />
-      </div>
+      <CornerCell
+        items={[
+          { label: '캐릭터 추가', onClick: () => setIsCharacterModalOpen(true) },
+          { label: '할일 추가', onClick: () => setIsTaskModalOpen(true) },
+          { label: '할일 구분선 추가', onClick: onAddDivider },
+        ]}
+      />
 
       {isCharacterModalOpen && (
         <CharacterModal
