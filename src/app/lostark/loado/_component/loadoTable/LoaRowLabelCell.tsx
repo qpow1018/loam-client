@@ -5,11 +5,10 @@ import { useState } from 'react';
 import type { TTaskTableDataRow } from '@/types/taskTable';
 
 import type { TDragHandleProps } from '@/components/common/draggableList/DraggableList';
+import RowLabelCell from '@/components/taskTable/RowLabelCell';
 import TaskModal from './taskModal/TaskModal';
 
-import styles from './rowLabelCell.module.scss';
-
-export default function RowLabelCell(props: {
+export default function LoaRowLabelCell(props: {
   dragHandleProps: TDragHandleProps;
   row: TTaskTableDataRow;
   onChange: (next: TTaskTableDataRow) => void;
@@ -18,11 +17,6 @@ export default function RowLabelCell(props: {
   const { dragHandleProps, row, onChange, onDelete } = props;
 
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
-
-  function handleContextMenu(e: React.MouseEvent) {
-    e.preventDefault();
-    setIsTaskModalOpen(true);
-  }
 
   function handleSubmit(next: TTaskTableDataRow) {
     onChange(next);
@@ -36,15 +30,11 @@ export default function RowLabelCell(props: {
 
   return (
     <>
-      <div
-        {...dragHandleProps}
-        className={styles['row-label-cell']}
-        onContextMenu={handleContextMenu}
-      >
-        <div className={styles['icon-box']}>{row.iconUrl && <img src={row.iconUrl} alt="" />}</div>
-
-        {row.name}
-      </div>
+      <RowLabelCell
+        dragHandleProps={dragHandleProps}
+        row={row}
+        onEdit={() => setIsTaskModalOpen(true)}
+      />
 
       {isTaskModalOpen && (
         <TaskModal

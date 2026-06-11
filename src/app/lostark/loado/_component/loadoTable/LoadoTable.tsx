@@ -25,10 +25,10 @@ import {
 } from '@/app/lostark/loado/_util/loadoTableData';
 
 import DraggableList from '@/components/common/draggableList/DraggableList';
+import RowDivider from '@/components/taskTable/RowDivider';
 import LoaCornerCell from './LoaCornerCell';
 import LoaHeaderCell from './LoaHeaderCell';
-import RowLabelCell from './RowLabelCell';
-import RowDivider from './RowDivider';
+import LoaRowLabelCell from './LoaRowLabelCell';
 import ContentCell from './ContentCell';
 
 import styles from './loadoTable.module.scss';
@@ -138,7 +138,7 @@ function LoadoTableContent(props: {
             />
           ) : (
             <div className={styles['row']}>
-              <RowLabelCell
+              <LoaRowLabelCell
                 dragHandleProps={dragHandleProps}
                 row={row}
                 onChange={handleUpdateRow}
