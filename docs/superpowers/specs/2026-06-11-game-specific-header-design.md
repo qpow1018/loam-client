@@ -13,7 +13,10 @@
 - `LostarkHeader`: 로스트아크 메뉴와 mint 배경을 구성해 `Header`를 사용한다.
 - `MaplestoryHeader`: 메이플스토리 메뉴와 rose 배경을 구성해 `Header`를 사용한다.
 
-각 게임 라우트는 게임 값을 직접 다루지 않고 자신의 전용 헤더만 렌더링한다. 게임별 컴포넌트는 공용 헤더와 같은 `src/components/common/header/` 아래에 둔다.
+각 게임 라우트는 게임 값을 직접 다루지 않고 자신의 전용 헤더만 렌더링한다. 공용 `Header`는 `src/components/common/header/`에 유지하고, 게임별 헤더는 도메인에 따라 배치한다.
+
+- `LostarkHeader`: `src/components/lostark/header/`
+- `MaplestoryHeader`: `src/components/maplestory/header/`
 
 ## Navigation
 
