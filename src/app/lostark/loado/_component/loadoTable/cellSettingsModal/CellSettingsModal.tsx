@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import type { TLoadoCellValue } from '@/app/lostark/loado/_type/loado';
+import type { TTaskTableCellValue } from '@/types/taskTable';
 import { PERIOD_OPTIONS, TYPE_OPTIONS } from '@/app/lostark/loado/_define/options';
 import { changeCellRole, commitCellWrite } from '@/app/lostark/loado/_util/cell';
 
@@ -20,15 +20,15 @@ import styles from './cellSettingsModal.module.scss';
 
 export default function CellSettingsModal(props: {
   isOpen: boolean;
-  cell: TLoadoCellValue;
+  cell: TTaskTableCellValue;
   onClose: () => void;
-  onSubmit: (next: TLoadoCellValue) => void;
+  onSubmit: (next: TTaskTableCellValue) => void;
 }) {
   const { isOpen, cell, onClose, onSubmit } = props;
 
-  const [tempCellValue, setTempCellValue] = useState<TLoadoCellValue>(cell);
+  const [tempCellValue, setTempCellValue] = useState<TTaskTableCellValue>(cell);
 
-  function trimCellValue(cell: TLoadoCellValue): TLoadoCellValue {
+  function trimCellValue(cell: TTaskTableCellValue): TTaskTableCellValue {
     switch (cell.role) {
       case 'text':
         return { ...cell, text: cell.text.trim() };

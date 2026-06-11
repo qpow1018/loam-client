@@ -1,14 +1,14 @@
 'use client';
 
-import type { TLoadoCellValueCheckbox } from '@/app/lostark/loado/_type/loado';
+import type { TTaskTableCellValueCheckbox } from '@/types/taskTable';
 
 import ButtonGroup from '@/components/common/buttonGroup/ButtonGroup';
 import TextInput from '@/components/common/form/TextInput';
 import FormRow from '@/app/lostark/loado/_component/loadoTable/FormRow';
 
 export default function CheckboxFields(props: {
-  cell: TLoadoCellValueCheckbox;
-  onChange: (next: TLoadoCellValueCheckbox) => void;
+  cell: TTaskTableCellValueCheckbox;
+  onChange: (next: TTaskTableCellValueCheckbox) => void;
 }) {
   const { cell, onChange } = props;
 

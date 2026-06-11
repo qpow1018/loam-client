@@ -1,31 +1,31 @@
 import { storage, StorageKey } from '@/utils/storage';
 
 import type {
-  TLoadoTableData,
-  TLoadoColumn,
-  TLoadoRow,
-  TLoadoCellValue,
-} from '@/app/lostark/loado/_type/loado';
+  TTaskTableData,
+  TTaskTableColumn,
+  TTaskTableRow,
+  TTaskTableCellValue,
+} from '@/types/taskTable';
 import { createEmptyCell, syncCells } from './cell';
 
-const EMPTY_DATA: TLoadoTableData = {
+const EMPTY_DATA: TTaskTableData = {
   columns: [],
   rows: [],
   cells: {},
 };
 
 // Storage I/O
-export function getLoadoTableData(): TLoadoTableData {
-  const base = storage.local.get<TLoadoTableData>(StorageKey.LOADO_TABLE, EMPTY_DATA);
+export function getLoadoTableData(): TTaskTableData {
+  const base = storage.local.get<TTaskTableData>(StorageKey.LOADO_TABLE, EMPTY_DATA);
   return syncCells(base);
 }
 
-export function saveLoadoTableData(data: TLoadoTableData): void {
+export function saveLoadoTableData(data: TTaskTableData): void {
   storage.local.set(StorageKey.LOADO_TABLE, data);
 }
 
 // Column mutations
-export function addColumn(data: TLoadoTableData, next: TLoadoColumn): TLoadoTableData {
+export function addColumn(data: TTaskTableData, next: TTaskTableColumn): TTaskTableData {
   const nextCells = { ...data.cells };
   for (const row of data.rows) {
     if (row.kind !== 'data') continue;
@@ -38,7 +38,7 @@ export function addColumn(data: TLoadoTableData, next: TLoadoColumn): TLoadoTabl
   return { ...data, columns: [...data.columns, next], cells: nextCells };
 }
 
-export function updateColumn(data: TLoadoTableData, next: TLoadoColumn): TLoadoTableData {
+export function updateColumn(data: TTaskTableData, next: TTaskTableColumn): TTaskTableData {
   if (!data.columns.some((c) => c.id === next.id)) return data;
   return {
     ...data,
@@ -46,7 +46,7 @@ export function updateColumn(data: TLoadoTableData, next: TLoadoColumn): TLoadoT
   };
 }
 
-export function deleteColumn(data: TLoadoTableData, colId: string): TLoadoTableData {
+export function deleteColumn(data: TTaskTableData, colId: string): TTaskTableData {
   const nextCells: typeof data.cells = {};
   for (const [rowId, rowCells] of Object.entries(data.cells)) {
     const { [colId]: _removed, ...rest } = rowCells;
@@ -59,15 +59,15 @@ export function deleteColumn(data: TLoadoTableData, colId: string): TLoadoTableD
   };
 }
 
-export function reorderColumns(data: TLoadoTableData, columns: TLoadoColumn[]): TLoadoTableData {
+export function reorderColumns(data: TTaskTableData, columns: TTaskTableColumn[]): TTaskTableData {
   return { ...data, columns };
 }
 
 // Row mutations
-export function addRow(data: TLoadoTableData, next: TLoadoRow): TLoadoTableData {
+export function addRow(data: TTaskTableData, next: TTaskTableRow): TTaskTableData {
   if (next.kind !== 'data') return { ...data, rows: [...data.rows, next] };
 
-  const nextRowCells: Record<string, TLoadoCellValue> = {};
+  const nextRowCells: Record<string, TTaskTableCellValue> = {};
   for (const col of data.columns) {
     nextRowCells[col.id] = createEmptyCell(next);
   }
@@ -79,7 +79,7 @@ export function addRow(data: TLoadoTableData, next: TLoadoRow): TLoadoTableData 
   };
 }
 
-export function updateRow(data: TLoadoTableData, next: TLoadoRow): TLoadoTableData {
+export function updateRow(data: TTaskTableData, next: TTaskTableRow): TTaskTableData {
   if (!data.rows.some((r) => r.id === next.id)) return data;
   return {
     ...data,
@@ -87,7 +87,7 @@ export function updateRow(data: TLoadoTableData, next: TLoadoRow): TLoadoTableDa
   };
 }
 
-export function deleteRow(data: TLoadoTableData, rowId: string): TLoadoTableData {
+export function deleteRow(data: TTaskTableData, rowId: string): TTaskTableData {
   const restCells = { ...data.cells };
   delete restCells[rowId];
   return {
@@ -97,17 +97,17 @@ export function deleteRow(data: TLoadoTableData, rowId: string): TLoadoTableData
   };
 }
 
-export function reorderRows(data: TLoadoTableData, rows: TLoadoRow[]): TLoadoTableData {
+export function reorderRows(data: TTaskTableData, rows: TTaskTableRow[]): TTaskTableData {
   return { ...data, rows };
 }
 
 // Cell mutations
 export function updateCell(
-  data: TLoadoTableData,
+  data: TTaskTableData,
   rowId: string,
   colId: string,
-  next: TLoadoCellValue,
-): TLoadoTableData {
+  next: TTaskTableCellValue,
+): TTaskTableData {
   const prevRow = data.cells[rowId] ?? {};
   return {
     ...data,

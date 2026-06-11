@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import type { TLoadoDataRow } from '@/app/lostark/loado/_type/loado';
+import type { TTaskTableDataRow } from '@/types/taskTable';
 
 import type { TDragHandleProps } from '@/components/common/draggableList/DraggableList';
 import TaskModal from './taskModal/TaskModal';
@@ -11,8 +11,8 @@ import styles from './rowLabelCell.module.scss';
 
 export default function RowLabelCell(props: {
   dragHandleProps: TDragHandleProps;
-  row: TLoadoDataRow;
-  onChange: (next: TLoadoDataRow) => void;
+  row: TTaskTableDataRow;
+  onChange: (next: TTaskTableDataRow) => void;
   onDelete: () => void;
 }) {
   const { dragHandleProps, row, onChange, onDelete } = props;
@@ -24,7 +24,7 @@ export default function RowLabelCell(props: {
     setIsTaskModalOpen(true);
   }
 
-  function handleSubmit(next: TLoadoDataRow) {
+  function handleSubmit(next: TTaskTableDataRow) {
     onChange(next);
     setIsTaskModalOpen(false);
   }

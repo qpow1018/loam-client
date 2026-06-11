@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import type {
-  TLoadoTableData,
-  TLoadoColumn,
-  TLoadoRow,
-  TLoadoCellValue,
-} from '@/app/lostark/loado/_type/loado';
+  TTaskTableData,
+  TTaskTableColumn,
+  TTaskTableRow,
+  TTaskTableCellValue,
+} from '@/types/taskTable';
 import { createEmptyCell, syncCells } from '@/app/lostark/loado/_util/cell';
 import {
   getLoadoTableData,
@@ -34,7 +34,7 @@ import ContentCell from './ContentCell';
 import styles from './loadoTable.module.scss';
 
 export default function LoadoTable() {
-  const [data, setData] = useState<TLoadoTableData | null>(null);
+  const [data, setData] = useState<TTaskTableData | null>(null);
 
   // localStorage는 클라이언트에서만 접근 가능하므로 마운트 이후에 읽어 상태에 반영한다.
   // 추가로 탭 visibility / focus / 주기적 polling으로 06:00 KST 사이클 경계를 넘었을 때 자동 재동기화.
@@ -64,11 +64,11 @@ export default function LoadoTable() {
   }, [data]);
 
   // children에는 non-null setter를 노출 — 핸들러마다 null 가드를 반복하지 않기 위함.
-  function setNonNullData(action: React.SetStateAction<TLoadoTableData>) {
+  function setNonNullData(action: React.SetStateAction<TTaskTableData>) {
     setData((prev) => {
       if (prev === null) return prev;
       return typeof action === 'function'
-        ? (action as (p: TLoadoTableData) => TLoadoTableData)(prev)
+        ? (action as (p: TTaskTableData) => TTaskTableData)(prev)
         : action;
     });
   }
@@ -79,23 +79,23 @@ export default function LoadoTable() {
 }
 
 function LoadoTableContent(props: {
-  data: TLoadoTableData;
-  setData: React.Dispatch<React.SetStateAction<TLoadoTableData>>;
+  data: TTaskTableData;
+  setData: React.Dispatch<React.SetStateAction<TTaskTableData>>;
 }) {
   const { data, setData } = props;
 
-  const handleAddColumn = (next: TLoadoColumn) => setData((prev) => addColumn(prev, next));
-  const handleUpdateColumn = (next: TLoadoColumn) => setData((prev) => updateColumn(prev, next));
+  const handleAddColumn = (next: TTaskTableColumn) => setData((prev) => addColumn(prev, next));
+  const handleUpdateColumn = (next: TTaskTableColumn) => setData((prev) => updateColumn(prev, next));
   const handleDeleteColumn = (colId: string) => setData((prev) => deleteColumn(prev, colId));
-  const handleReorderColumns = (columns: TLoadoColumn[]) =>
+  const handleReorderColumns = (columns: TTaskTableColumn[]) =>
     setData((prev) => reorderColumns(prev, columns));
 
-  const handleAddRow = (next: TLoadoRow) => setData((prev) => addRow(prev, next));
-  const handleUpdateRow = (next: TLoadoRow) => setData((prev) => updateRow(prev, next));
+  const handleAddRow = (next: TTaskTableRow) => setData((prev) => addRow(prev, next));
+  const handleUpdateRow = (next: TTaskTableRow) => setData((prev) => updateRow(prev, next));
   const handleDeleteRow = (rowId: string) => setData((prev) => deleteRow(prev, rowId));
-  const handleReorderRows = (rows: TLoadoRow[]) => setData((prev) => reorderRows(prev, rows));
+  const handleReorderRows = (rows: TTaskTableRow[]) => setData((prev) => reorderRows(prev, rows));
 
-  const handleUpdateCell = (rowId: string, colId: string, next: TLoadoCellValue) =>
+  const handleUpdateCell = (rowId: string, colId: string, next: TTaskTableCellValue) =>
     setData((prev) => updateCell(prev, rowId, colId, next));
 
   return (
@@ -107,7 +107,7 @@ function LoadoTableContent(props: {
           onAddDivider={() => handleAddRow({ kind: 'divider', id: uuidv4() })}
         />
 
-        <DraggableList<TLoadoColumn>
+        <DraggableList<TTaskTableColumn>
           items={data.columns}
           getId={(c) => c.id}
           direction="horizontal"
@@ -124,7 +124,7 @@ function LoadoTableContent(props: {
         </DraggableList>
       </div>
 
-      <DraggableList<TLoadoRow>
+      <DraggableList<TTaskTableRow>
         items={data.rows}
         getId={(r) => r.id}
         direction="vertical"

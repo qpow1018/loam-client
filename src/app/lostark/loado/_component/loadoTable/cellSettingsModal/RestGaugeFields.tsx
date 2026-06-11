@@ -1,6 +1,6 @@
 'use client';
 
-import type { TLoadoCellValueRestGauge } from '@/app/lostark/loado/_type/loado';
+import type { TTaskTableCellValueRestGauge } from '@/types/taskTable';
 
 import ButtonGroup from '@/components/common/buttonGroup/ButtonGroup';
 import TextInput from '@/components/common/form/TextInput';
@@ -9,8 +9,8 @@ import FormRow from '@/app/lostark/loado/_component/loadoTable/FormRow';
 type TNumericField = 'restGauge' | 'restGaugeSkipThreshold';
 
 export default function RestGaugeFields(props: {
-  cell: TLoadoCellValueRestGauge;
-  onChange: (next: TLoadoCellValueRestGauge) => void;
+  cell: TTaskTableCellValueRestGauge;
+  onChange: (next: TTaskTableCellValueRestGauge) => void;
 }) {
   const { cell, onChange } = props;
 

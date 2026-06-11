@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import type { TLoadoColumn } from '@/app/lostark/loado/_type/loado';
+import type { TTaskTableColumn } from '@/types/taskTable';
 
 import type { TDragHandleProps } from '@/components/common/draggableList/DraggableList';
 import CharacterModal from './characterModal/CharacterModal';
@@ -10,9 +10,9 @@ import CharacterModal from './characterModal/CharacterModal';
 import styles from './headerCell.module.scss';
 
 export default function HeaderCell(props: {
-  column: TLoadoColumn;
+  column: TTaskTableColumn;
   dragHandleProps: TDragHandleProps;
-  onChange: (next: TLoadoColumn) => void;
+  onChange: (next: TTaskTableColumn) => void;
   onDelete: () => void;
 }) {
   const { column, dragHandleProps, onChange, onDelete } = props;
@@ -24,7 +24,7 @@ export default function HeaderCell(props: {
     setIsModalOpen(true);
   }
 
-  function handleSubmit(next: TLoadoColumn) {
+  function handleSubmit(next: TTaskTableColumn) {
     onChange(next);
     setIsModalOpen(false);
   }

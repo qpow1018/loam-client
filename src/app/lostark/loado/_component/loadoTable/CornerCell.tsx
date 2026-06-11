@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import type { TLoadoColumn, TLoadoDataRow } from '@/app/lostark/loado/_type/loado';
+import type { TTaskTableColumn, TTaskTableDataRow } from '@/types/taskTable';
 
 import IconButton from '@/components/common/button/IconButton';
 import DropdownMenu from '@/components/common/dropdownMenu/DropdownMenu';
@@ -14,8 +14,8 @@ import styles from './cornerCell.module.scss';
 import { MdAdd } from 'react-icons/md';
 
 export default function CornerCell(props: {
-  onAddCharacter: (column: TLoadoColumn) => void;
-  onAddTask: (row: TLoadoDataRow) => void;
+  onAddCharacter: (column: TTaskTableColumn) => void;
+  onAddTask: (row: TTaskTableDataRow) => void;
   onAddDivider: () => void;
 }) {
   const { onAddCharacter, onAddTask, onAddDivider } = props;
@@ -23,12 +23,12 @@ export default function CornerCell(props: {
   const [isCharacterModalOpen, setIsCharacterModalOpen] = useState(false);
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
 
-  function handleCharacterSubmit(next: TLoadoColumn) {
+  function handleCharacterSubmit(next: TTaskTableColumn) {
     onAddCharacter(next);
     setIsCharacterModalOpen(false);
   }
 
-  function handleTaskSubmit(next: TLoadoDataRow) {
+  function handleTaskSubmit(next: TTaskTableDataRow) {
     onAddTask(next);
     setIsTaskModalOpen(false);
   }

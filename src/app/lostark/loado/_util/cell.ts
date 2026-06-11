@@ -1,25 +1,25 @@
 import type {
-  TLoadoCellRole,
-  TLoadoCellValue,
-  TLoadoCheckboxState,
-  TLoadoDataRow,
-  TLoadoTableData,
-} from '@/app/lostark/loado/_type/loado';
+  TTaskTableCellRole,
+  TTaskTableCellValue,
+  TTaskTableCheckboxState,
+  TTaskTableDataRow,
+  TTaskTableData,
+} from '@/types/taskTable';
 
 import { cyclesBetween, getCurrentCycleKey } from './cycleKey';
 import { getNextRestGauge } from './restGauge';
 
 // 사용자 write 시점에 cycleKey/lastAccumulatedCycleKey를 모두 현재 사이클로 맞춰주는 헬퍼.
 // 둘 중 하나만 갱신하면 다음 syncCells가 셀을 "사이클 미스매치"로 보고 wipe해버린다.
-export function commitCellWrite<T extends TLoadoCellValue>(updated: T): T {
+export function commitCellWrite<T extends TTaskTableCellValue>(updated: T): T {
   const cycleKey = getCurrentCycleKey(updated.resetPeriod);
   return { ...updated, cycleKey, lastAccumulatedCycleKey: cycleKey };
 }
 
 export function createEmptyCell(
-  row: TLoadoDataRow,
+  row: TTaskTableDataRow,
   now: Date = new Date(),
-): TLoadoCellValue {
+): TTaskTableCellValue {
   const cycleKey = getCurrentCycleKey(row.resetPeriod, now);
   const base = {
     cycleKey,
@@ -58,14 +58,14 @@ export function createEmptyCell(
 
 // 셀의 role을 다른 role로 변경하면서 가능한 한 기존 필드 값을 유지한다.
 // 사용자가 CellSettingsModal에서 role을 바꿀 때, 라벨 같은 정보가 날아가지 않게 함.
-export function changeCellRole(cell: TLoadoCellValue, newRole: TLoadoCellRole): TLoadoCellValue {
+export function changeCellRole(cell: TTaskTableCellValue, newRole: TTaskTableCellRole): TTaskTableCellValue {
   if (cell.role === newRole) return cell;
   const base = {
     cycleKey: cell.cycleKey,
     lastAccumulatedCycleKey: cell.lastAccumulatedCycleKey,
     resetPeriod: cell.resetPeriod,
   };
-  const checkboxState: TLoadoCheckboxState =
+  const checkboxState: TTaskTableCheckboxState =
     cell.role === 'text' ? 'unchecked' : cell.checkboxState;
   const checkboxLabel = cell.role === 'text' ? '' : cell.checkboxLabel;
   switch (newRole) {
@@ -100,9 +100,9 @@ export function changeCellRole(cell: TLoadoCellValue, newRole: TLoadoCellRole): 
 // - permanent resetPeriod: getCurrentCycleKey가 항상 같은 값을 돌려줘 자동 스킵됨
 // 주의: state.rows에 없는 rowId의 cells entry는 결과에서 자동으로 제거된다.
 export function syncCells(
-  state: TLoadoTableData,
+  state: TTaskTableData,
   now: Date = new Date(),
-): TLoadoTableData {
+): TTaskTableData {
   let changed = false;
   const nextCells: typeof state.cells = {};
 
@@ -115,7 +115,7 @@ export function syncCells(
     const rowCells = state.cells[row.id] ?? {};
     const colIds = new Set(state.columns.map((col) => col.id));
 
-    const nextRow: Record<string, TLoadoCellValue> = {};
+    const nextRow: Record<string, TTaskTableCellValue> = {};
     let rowChanged = Object.keys(rowCells).some((colId) => !colIds.has(colId));
 
     for (const col of state.columns) {
@@ -144,7 +144,7 @@ export function syncCells(
   return { ...state, cells: nextCells };
 }
 
-function syncCell(cell: TLoadoCellValue, currentCycleKey: string): TLoadoCellValue {
+function syncCell(cell: TTaskTableCellValue, currentCycleKey: string): TTaskTableCellValue {
   switch (cell.role) {
     case 'restGauge': {
       const cycles = cyclesBetween(

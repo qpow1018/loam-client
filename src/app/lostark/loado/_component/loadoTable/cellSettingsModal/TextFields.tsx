@@ -1,13 +1,13 @@
 'use client';
 
-import type { TLoadoCellValueText } from '@/app/lostark/loado/_type/loado';
+import type { TTaskTableCellValueText } from '@/types/taskTable';
 
 import TextInput from '@/components/common/form/TextInput';
 import FormRow from '@/app/lostark/loado/_component/loadoTable/FormRow';
 
 export default function TextFields(props: {
-  cell: TLoadoCellValueText;
-  onChange: (next: TLoadoCellValueText) => void;
+  cell: TTaskTableCellValueText;
+  onChange: (next: TTaskTableCellValueText) => void;
 }) {
   const { cell, onChange } = props;
 

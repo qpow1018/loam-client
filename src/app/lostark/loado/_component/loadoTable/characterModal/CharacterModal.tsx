@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import api from '@/api';
 import type { TResLostarkMyCharacter } from '@/api/lostark/type';
-import type { TLoadoColumn } from '@/app/lostark/loado/_type/loado';
+import type { TTaskTableColumn } from '@/types/taskTable';
 import { getClassImageUrl } from '@/utils/lostark';
 import toast from '@/utils/toast';
 
@@ -22,15 +22,15 @@ import { MdDeleteOutline } from 'react-icons/md';
 export default function CharacterModal(props: {
   isOpen: boolean;
   onClose: () => void;
-  editingData?: TLoadoColumn;
-  onSubmit: (column: TLoadoColumn) => void;
+  editingData?: TTaskTableColumn;
+  onSubmit: (column: TTaskTableColumn) => void;
   onDelete?: () => void;
 }) {
   const { isOpen, onClose, editingData, onSubmit, onDelete } = props;
 
   const [allCharacters, setAllCharacters] = useState<TResLostarkMyCharacter[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [tempColumn, setTempColumn] = useState<TLoadoColumn | null>(editingData ?? null);
+  const [tempColumn, setTempColumn] = useState<TTaskTableColumn | null>(editingData ?? null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const isEditMode = editingData !== undefined;

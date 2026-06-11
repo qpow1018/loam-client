@@ -1,6 +1,6 @@
 'use client';
 
-import type { TLoadoCellValueWeekdayContent } from '@/app/lostark/loado/_type/loado';
+import type { TTaskTableCellValueWeekdayContent } from '@/types/taskTable';
 
 import ButtonGroup from '@/components/common/buttonGroup/ButtonGroup';
 import TextInput from '@/components/common/form/TextInput';
@@ -11,8 +11,8 @@ import styles from './weekdayContentFields.module.scss';
 const WEEKDAY_LABELS = ['월', '화', '수', '목', '금', '토', '일'];
 
 export default function WeekdayContentFields(props: {
-  cell: TLoadoCellValueWeekdayContent;
-  onChange: (next: TLoadoCellValueWeekdayContent) => void;
+  cell: TTaskTableCellValueWeekdayContent;
+  onChange: (next: TTaskTableCellValueWeekdayContent) => void;
 }) {
   const { cell, onChange } = props;
 

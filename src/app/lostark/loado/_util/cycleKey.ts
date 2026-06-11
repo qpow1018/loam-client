@@ -1,4 +1,4 @@
-import type { TLoadoResetPeriod } from '@/app/lostark/loado/_type/loado';
+import type { TTaskTableResetPeriod } from '@/types/taskTable';
 
 // 로스트아크 리셋 규칙
 const KST_OFFSET_MIN = 9 * 60;
@@ -37,7 +37,7 @@ function alignToWeeklyReset(shifted: Date): Date {
 }
 
 export function getCurrentCycleKey(
-  resetPeriod: TLoadoResetPeriod,
+  resetPeriod: TTaskTableResetPeriod,
   now: Date = new Date(),
 ): string {
   switch (resetPeriod) {
@@ -72,7 +72,7 @@ function daysBetweenCycleKeys(from: string, to: string): number {
 export function cyclesBetween(
   from: string,
   to: string,
-  period: TLoadoResetPeriod,
+  period: TTaskTableResetPeriod,
 ): number {
   if (period === 'permanent') return 0;
   const days = daysBetweenCycleKeys(from, to);

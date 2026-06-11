@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import type { TLoadoDataRow } from '@/app/lostark/loado/_type/loado';
+import type { TTaskTableDataRow } from '@/types/taskTable';
 import { PERIOD_OPTIONS, TYPE_OPTIONS } from '@/app/lostark/loado/_define/options';
 
 import Modal from '@/components/common/modal/Modal';
@@ -19,7 +19,7 @@ import styles from './taskModal.module.scss';
 
 import { MdDeleteOutline } from 'react-icons/md';
 
-const EMPTY_ROW: TLoadoDataRow = {
+const EMPTY_ROW: TTaskTableDataRow = {
   kind: 'data',
   id: '',
   name: '',
@@ -30,13 +30,13 @@ const EMPTY_ROW: TLoadoDataRow = {
 export default function TaskModal(props: {
   isOpen: boolean;
   onClose: () => void;
-  editingData?: TLoadoDataRow;
-  onSubmit: (row: TLoadoDataRow) => void;
+  editingData?: TTaskTableDataRow;
+  onSubmit: (row: TTaskTableDataRow) => void;
   onDelete?: () => void;
 }) {
   const { isOpen, onClose, editingData, onSubmit, onDelete } = props;
 
-  const [tempRow, setTempRow] = useState<TLoadoDataRow>(editingData ?? EMPTY_ROW);
+  const [tempRow, setTempRow] = useState<TTaskTableDataRow>(editingData ?? EMPTY_ROW);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isIconPickerOpen, setIsIconPickerOpen] = useState(false);
 
@@ -44,7 +44,7 @@ export default function TaskModal(props: {
   const trimmedName = tempRow.name.trim();
   const isSaveDisabled = trimmedName === '';
 
-  function handleChangeTempRow(updates: Partial<TLoadoDataRow>) {
+  function handleChangeTempRow(updates: Partial<TTaskTableDataRow>) {
     setTempRow((prev) => ({ ...prev, ...updates }));
   }
 

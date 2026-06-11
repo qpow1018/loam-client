@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import type { TLoadoCellValue } from '@/app/lostark/loado/_type/loado';
+import type { TTaskTableCellValue } from '@/types/taskTable';
 import { isWeekdayActive } from '@/app/lostark/loado/_util/cycleKey';
 import { commitCellWrite } from '@/app/lostark/loado/_util/cell';
 
@@ -16,8 +16,8 @@ import { MdCheckBox, MdCheckBoxOutlineBlank, MdPause } from 'react-icons/md';
 type TDisplayState = 'checked' | 'unchecked' | 'skip' | null;
 
 export default function ContentCell(props: {
-  cell: TLoadoCellValue;
-  onChange: (next: TLoadoCellValue) => void;
+  cell: TTaskTableCellValue;
+  onChange: (next: TTaskTableCellValue) => void;
 }) {
   const { cell, onChange } = props;
 
@@ -59,7 +59,7 @@ export default function ContentCell(props: {
     setIsCellSettingsModalOpen(true);
   }
 
-  function handleCellSettingsSubmit(next: TLoadoCellValue) {
+  function handleCellSettingsSubmit(next: TTaskTableCellValue) {
     onChange(next);
     setIsCellSettingsModalOpen(false);
   }
