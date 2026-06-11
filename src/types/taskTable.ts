@@ -1,4 +1,10 @@
-export type TTaskTableResetPeriod = 'permanent' | 'daily' | 'weekly';
+export type TTaskTableResetPeriod = 'permanent' | 'daily' | 'weekly' | 'monthly';
+
+export type TTaskTableCyclePolicy = {
+  utcOffsetMinutes: number;
+  dailyResetHour: number;
+  weeklyResetDay: number;
+};
 
 export type TTaskTableCellRole = 'checkbox' | 'text' | 'restGauge' | 'weekdayContent';
 
@@ -71,5 +77,3 @@ export type TTaskTableCellValueWeekdayContent = {
   checkboxLabel: string;
   weekdays: number[];
 };
-
-

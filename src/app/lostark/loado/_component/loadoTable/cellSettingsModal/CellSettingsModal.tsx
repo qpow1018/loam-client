@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import type { TTaskTableCellValue } from '@/types/taskTable';
 import { PERIOD_OPTIONS, TYPE_OPTIONS } from '@/app/lostark/loado/_define/options';
-import { changeCellRole, commitCellWrite } from '@/app/lostark/loado/_util/cell';
+import { changeCellRole } from '@/utils/taskTableCell';
 
 import Modal from '@/components/common/modal/Modal';
 import ButtonGroup from '@/components/common/buttonGroup/ButtonGroup';
@@ -40,7 +40,7 @@ export default function CellSettingsModal(props: {
   }
 
   function handleSubmit() {
-    onSubmit(commitCellWrite(trimCellValue(tempCellValue)));
+    onSubmit(trimCellValue(tempCellValue));
   }
 
   return (
@@ -50,9 +50,7 @@ export default function CellSettingsModal(props: {
           <ButtonGroup
             options={PERIOD_OPTIONS}
             value={tempCellValue.resetPeriod}
-            onChange={(resetPeriod) =>
-              setTempCellValue((prev) => commitCellWrite({ ...prev, resetPeriod }))
-            }
+            onChange={(resetPeriod) => setTempCellValue((prev) => ({ ...prev, resetPeriod }))}
           />
         </FormRow>
 

@@ -1,3 +1,5 @@
+import type { TTaskTableCellValueRestGauge } from '@/types/taskTable';
+
 // 로스트아크 휴식게이지 수치 (카오스 던전, 가디언 토벌 통일).
 export const REST_GAUGE = {
   max: 200,
@@ -11,9 +13,18 @@ export const REST_GAUGE = {
 export function getNextRestGauge(args: { current: number; didPerform: boolean }): number {
   const { current, didPerform } = args;
   if (didPerform) {
-    return current >= REST_GAUGE.consumeThreshold
-      ? current - REST_GAUGE.consumeAmount
-      : current;
+    return current >= REST_GAUGE.consumeThreshold ? current - REST_GAUGE.consumeAmount : current;
   }
   return Math.min(REST_GAUGE.max, current + REST_GAUGE.accumPerDay);
+}
+
+export function syncRestGauge(cell: TTaskTableCellValueRestGauge, cycles: number): number {
+  let value = cell.restGauge;
+
+  for (let index = 0; index < cycles; index++) {
+    const didPerform = index === 0 && cell.checkboxState === 'checked';
+    value = getNextRestGauge({ current: value, didPerform });
+  }
+
+  return value;
 }

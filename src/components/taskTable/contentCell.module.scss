@@ -1,8 +1,8 @@
 .content-cell {
   position: relative;
   flex-shrink: 0;
-  width: $loado-cell-width;
-  min-height: $loado-cell-height;
+  width: $task-table-cell-width;
+  min-height: $task-table-cell-height;
   display: flex;
   align-items: center;
   justify-content: center;

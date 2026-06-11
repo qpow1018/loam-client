@@ -1,31 +1,41 @@
 import type {
   TTaskTableCellRole,
   TTaskTableCellValue,
+  TTaskTableCellValueRestGauge,
   TTaskTableCheckboxState,
-  TTaskTableDataRow,
+  TTaskTableCyclePolicy,
   TTaskTableData,
+  TTaskTableDataRow,
 } from '@/types/taskTable';
+import { cyclesBetween, getCurrentCycleKey } from '@/utils/taskTableCycle';
 
-import { cyclesBetween, getCurrentCycleKey } from './cycleKey';
-import { getNextRestGauge } from './restGauge';
+type TSyncRestGauge = (cell: TTaskTableCellValueRestGauge, cycles: number) => number;
 
-// 사용자 write 시점에 cycleKey/lastAccumulatedCycleKey를 모두 현재 사이클로 맞춰주는 헬퍼.
-// 둘 중 하나만 갱신하면 다음 syncCells가 셀을 "사이클 미스매치"로 보고 wipe해버린다.
-export function commitCellWrite<T extends TTaskTableCellValue>(updated: T): T {
-  const cycleKey = getCurrentCycleKey(updated.resetPeriod);
+type TSyncCellsOptions = {
+  cyclePolicy: TTaskTableCyclePolicy;
+  syncRestGauge?: TSyncRestGauge;
+};
+
+export function commitCellWrite<T extends TTaskTableCellValue>(
+  updated: T,
+  cyclePolicy: TTaskTableCyclePolicy,
+): T {
+  const cycleKey = getCurrentCycleKey(updated.resetPeriod, cyclePolicy);
   return { ...updated, cycleKey, lastAccumulatedCycleKey: cycleKey };
 }
 
 export function createEmptyCell(
   row: TTaskTableDataRow,
+  cyclePolicy: TTaskTableCyclePolicy,
   now: Date = new Date(),
 ): TTaskTableCellValue {
-  const cycleKey = getCurrentCycleKey(row.resetPeriod, now);
+  const cycleKey = getCurrentCycleKey(row.resetPeriod, cyclePolicy, now);
   const base = {
     cycleKey,
     lastAccumulatedCycleKey: cycleKey,
     resetPeriod: row.resetPeriod,
   };
+
   switch (row.role) {
     case 'text':
       return { ...base, role: 'text', text: '' };
@@ -56,10 +66,12 @@ export function createEmptyCell(
   }
 }
 
-// 셀의 role을 다른 role로 변경하면서 가능한 한 기존 필드 값을 유지한다.
-// 사용자가 CellSettingsModal에서 role을 바꿀 때, 라벨 같은 정보가 날아가지 않게 함.
-export function changeCellRole(cell: TTaskTableCellValue, newRole: TTaskTableCellRole): TTaskTableCellValue {
+export function changeCellRole(
+  cell: TTaskTableCellValue,
+  newRole: TTaskTableCellRole,
+): TTaskTableCellValue {
   if (cell.role === newRole) return cell;
+
   const base = {
     cycleKey: cell.cycleKey,
     lastAccumulatedCycleKey: cell.lastAccumulatedCycleKey,
@@ -68,6 +80,7 @@ export function changeCellRole(cell: TTaskTableCellValue, newRole: TTaskTableCel
   const checkboxState: TTaskTableCheckboxState =
     cell.role === 'text' ? 'unchecked' : cell.checkboxState;
   const checkboxLabel = cell.role === 'text' ? '' : cell.checkboxLabel;
+
   switch (newRole) {
     case 'text':
       return { ...base, role: 'text', text: '' };
@@ -93,16 +106,12 @@ export function changeCellRole(cell: TTaskTableCellValue, newRole: TTaskTableCel
   }
 }
 
-// state 안의 모든 셀을 현재 사이클까지 진행시킨다.
-// - restGauge: 누적/소모를 사이클 수만큼 시뮬레이션
-// - checkbox / weekdayContent: 사이클이 바뀌면 unchecked로 리셋
-// - text: 사이클이 바뀌면 빈 문자열로 리셋
-// - permanent resetPeriod: getCurrentCycleKey가 항상 같은 값을 돌려줘 자동 스킵됨
-// 주의: state.rows에 없는 rowId의 cells entry는 결과에서 자동으로 제거된다.
 export function syncCells(
   state: TTaskTableData,
+  options: TSyncCellsOptions,
   now: Date = new Date(),
 ): TTaskTableData {
+  const { cyclePolicy, syncRestGauge } = options;
   let changed = false;
   const nextCells: typeof state.cells = {};
 
@@ -112,23 +121,23 @@ export function syncCells(
       if (existing) nextCells[row.id] = existing;
       continue;
     }
+
     const rowCells = state.cells[row.id] ?? {};
     const colIds = new Set(state.columns.map((col) => col.id));
-
     const nextRow: Record<string, TTaskTableCellValue> = {};
     let rowChanged = Object.keys(rowCells).some((colId) => !colIds.has(colId));
 
     for (const col of state.columns) {
-      const cell = rowCells[col.id] ?? createEmptyCell(row, now);
+      const cell = rowCells[col.id] ?? createEmptyCell(row, cyclePolicy, now);
       if (rowCells[col.id] === undefined) rowChanged = true;
-      const currentCycleKey = getCurrentCycleKey(cell.resetPeriod, now);
 
+      const currentCycleKey = getCurrentCycleKey(cell.resetPeriod, cyclePolicy, now);
       if (cell.lastAccumulatedCycleKey === currentCycleKey) {
         nextRow[col.id] = cell;
         continue;
       }
 
-      nextRow[col.id] = syncCell(cell, currentCycleKey);
+      nextRow[col.id] = syncCell(cell, currentCycleKey, syncRestGauge);
       rowChanged = true;
     }
 
@@ -144,23 +153,17 @@ export function syncCells(
   return { ...state, cells: nextCells };
 }
 
-function syncCell(cell: TTaskTableCellValue, currentCycleKey: string): TTaskTableCellValue {
+function syncCell(
+  cell: TTaskTableCellValue,
+  currentCycleKey: string,
+  syncRestGauge?: TSyncRestGauge,
+): TTaskTableCellValue {
   switch (cell.role) {
     case 'restGauge': {
-      const cycles = cyclesBetween(
-        cell.lastAccumulatedCycleKey,
-        currentCycleKey,
-        cell.resetPeriod,
-      );
-      let value = cell.restGauge;
-      for (let i = 0; i < cycles; i++) {
-        // 첫 사이클만 직전 수행 여부를 반영. 그 이전은 데이터 없음 → 미수행으로 가정.
-        const didPerform = i === 0 && cell.checkboxState === 'checked';
-        value = getNextRestGauge({ current: value, didPerform });
-      }
+      const cycles = cyclesBetween(cell.lastAccumulatedCycleKey, currentCycleKey, cell.resetPeriod);
       return {
         ...cell,
-        restGauge: value,
+        restGauge: syncRestGauge?.(cell, cycles) ?? cell.restGauge,
         cycleKey: currentCycleKey,
         lastAccumulatedCycleKey: currentCycleKey,
         checkboxState: 'unchecked',

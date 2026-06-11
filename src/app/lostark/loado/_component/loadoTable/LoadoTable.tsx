@@ -9,10 +9,9 @@ import type {
   TTaskTableRow,
   TTaskTableCellValue,
 } from '@/types/taskTable';
-import { createEmptyCell, syncCells } from '@/app/lostark/loado/_util/cell';
+import { TASK_TABLE_CYCLE_POLICIES } from '@/define/taskTable';
+import { createEmptyCell, syncCells } from '@/utils/taskTableCell';
 import {
-  getLoadoTableData,
-  saveLoadoTableData,
   addColumn,
   updateColumn,
   deleteColumn,
@@ -22,7 +21,9 @@ import {
   deleteRow,
   reorderRows,
   updateCell,
-} from '@/app/lostark/loado/_util/loadoTableData';
+} from '@/utils/taskTableData';
+import { syncRestGauge } from '@/app/lostark/loado/_util/restGauge';
+import { getLoadoTableData, saveLoadoTableData } from '@/app/lostark/loado/_util/loadoTableData';
 
 import DraggableList from '@/components/common/draggableList/DraggableList';
 import RowDivider from '@/components/taskTable/RowDivider';
@@ -32,6 +33,9 @@ import LoaRowLabelCell from './LoaRowLabelCell';
 import LoaContentCell from './LoaContentCell';
 
 import styles from './loadoTable.module.scss';
+
+const CYCLE_POLICY = TASK_TABLE_CYCLE_POLICIES.lostark;
+const SYNC_OPTIONS = { cyclePolicy: CYCLE_POLICY, syncRestGauge };
 
 export default function LoadoTable() {
   const [data, setData] = useState<TTaskTableData | null>(null);
@@ -43,7 +47,7 @@ export default function LoadoTable() {
     setData(getLoadoTableData());
 
     function resync() {
-      setData((prev) => (prev === null ? prev : syncCells(prev)));
+      setData((prev) => (prev === null ? prev : syncCells(prev, SYNC_OPTIONS)));
     }
 
     document.addEventListener('visibilitychange', resync);
@@ -84,13 +88,15 @@ function LoadoTableContent(props: {
 }) {
   const { data, setData } = props;
 
-  const handleAddColumn = (next: TTaskTableColumn) => setData((prev) => addColumn(prev, next));
-  const handleUpdateColumn = (next: TTaskTableColumn) => setData((prev) => updateColumn(prev, next));
+  const handleAddColumn = (next: TTaskTableColumn) =>
+    setData((prev) => addColumn(prev, next, CYCLE_POLICY));
+  const handleUpdateColumn = (next: TTaskTableColumn) =>
+    setData((prev) => updateColumn(prev, next));
   const handleDeleteColumn = (colId: string) => setData((prev) => deleteColumn(prev, colId));
   const handleReorderColumns = (columns: TTaskTableColumn[]) =>
     setData((prev) => reorderColumns(prev, columns));
 
-  const handleAddRow = (next: TTaskTableRow) => setData((prev) => addRow(prev, next));
+  const handleAddRow = (next: TTaskTableRow) => setData((prev) => addRow(prev, next, CYCLE_POLICY));
   const handleUpdateRow = (next: TTaskTableRow) => setData((prev) => updateRow(prev, next));
   const handleDeleteRow = (rowId: string) => setData((prev) => deleteRow(prev, rowId));
   const handleReorderRows = (rows: TTaskTableRow[]) => setData((prev) => reorderRows(prev, rows));
@@ -147,7 +153,7 @@ function LoadoTableContent(props: {
               {data.columns.map((col) => (
                 <LoaContentCell
                   key={col.id}
-                  cell={data.cells[row.id]?.[col.id] ?? createEmptyCell(row)}
+                  cell={data.cells[row.id]?.[col.id] ?? createEmptyCell(row, CYCLE_POLICY)}
                   onChange={(next) => handleUpdateCell(row.id, col.id, next)}
                 />
               ))}
