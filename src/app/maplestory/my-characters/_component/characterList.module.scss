@@ -1,0 +1,64 @@
+.character-list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 58px;
+  padding: 12px 0;
+  border-bottom: 1px solid $gray-700;
+
+  .drag-handle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border: none;
+    background: transparent;
+    color: $text-secondary;
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+
+    >svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .character-info {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    gap: 16px;
+
+    .class-name {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 8px;
+      min-width: 56px;
+      font-size: 12px;
+      font-weight: 700;
+      color: $text-primary;
+      background-color: rgba($mint-500, 0.3);
+      border-radius: $border-radius;
+    }
+
+    .nickname {
+      font-size: 14px;
+      font-weight: 500;
+    }
+  }
+
+  .scouter-button-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+
+    >svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+}
