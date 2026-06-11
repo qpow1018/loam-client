@@ -3,10 +3,7 @@
 import { useState } from 'react';
 
 import type { TTaskTableCellValue } from '@/types/taskTable';
-import { isWeekdayActive } from '@/app/lostark/loado/_util/cycleKey';
-import { commitCellWrite } from '@/app/lostark/loado/_util/cell';
 
-import CellSettingsModal from './cellSettingsModal/CellSettingsModal';
 import TextEditModal from './textEditModal/TextEditModal';
 
 import styles from './contentCell.module.scss';
@@ -17,21 +14,17 @@ type TDisplayState = 'checked' | 'unchecked' | 'skip' | null;
 
 export default function ContentCell(props: {
   cell: TTaskTableCellValue;
+  isSkipped: boolean;
+  tooltip?: string;
   onChange: (next: TTaskTableCellValue) => void;
+  onEdit: () => void;
 }) {
-  const { cell, onChange } = props;
+  const { cell, isSkipped, tooltip, onChange, onEdit } = props;
 
   const [isTextEditModalOpen, setIsTextEditModalOpen] = useState(false);
-  const [isCellSettingsModalOpen, setIsCellSettingsModalOpen] = useState(false);
 
-  const isInactiveWeekday = cell.role === 'weekdayContent' && !isWeekdayActive(cell.weekdays);
-  const isRestGaugeBelowThreshold =
-    cell.role === 'restGauge' && cell.restGauge < cell.restGaugeSkipThreshold;
-
-  const shouldSkip = isInactiveWeekday || isRestGaugeBelowThreshold;
   const displayedState: TDisplayState =
-    cell.role === 'text' ? null : shouldSkip ? 'skip' : cell.checkboxState;
-
+    cell.role === 'text' ? null : isSkipped ? 'skip' : cell.checkboxState;
   const displayedText = cell.role === 'text' ? cell.text : cell.checkboxLabel;
 
   function handleClick() {
@@ -39,29 +32,23 @@ export default function ContentCell(props: {
       setIsTextEditModalOpen(true);
       return;
     }
-    if (shouldSkip) return;
-    onChange(
-      commitCellWrite({
-        ...cell,
-        checkboxState: cell.checkboxState === 'checked' ? 'unchecked' : 'checked',
-      }),
-    );
+    if (isSkipped) return;
+
+    onChange({
+      ...cell,
+      checkboxState: cell.checkboxState === 'checked' ? 'unchecked' : 'checked',
+    });
   }
 
   function handleSaveText(next: string) {
     if (cell.role !== 'text') return;
-    onChange(commitCellWrite({ ...cell, text: next }));
+    onChange({ ...cell, text: next });
     setIsTextEditModalOpen(false);
   }
 
   function handleContextMenu(e: React.MouseEvent) {
     e.preventDefault();
-    setIsCellSettingsModalOpen(true);
-  }
-
-  function handleCellSettingsSubmit(next: TTaskTableCellValue) {
-    onChange(next);
-    setIsCellSettingsModalOpen(false);
+    onEdit();
   }
 
   return (
@@ -75,9 +62,7 @@ export default function ContentCell(props: {
 
         {displayedText && <span className={styles['text']}>{displayedText}</span>}
 
-        {cell.role === 'restGauge' && (
-          <span className={styles['tooltip']}>휴식게이지 {cell.restGauge}</span>
-        )}
+        {tooltip && <span className={styles['tooltip']}>{tooltip}</span>}
       </div>
 
       {isTextEditModalOpen && cell.role === 'text' && (
@@ -86,15 +71,6 @@ export default function ContentCell(props: {
           onClose={() => setIsTextEditModalOpen(false)}
           initialText={cell.text}
           onSubmit={handleSaveText}
-        />
-      )}
-
-      {isCellSettingsModalOpen && (
-        <CellSettingsModal
-          isOpen={isCellSettingsModalOpen}
-          cell={cell}
-          onClose={() => setIsCellSettingsModalOpen(false)}
-          onSubmit={handleCellSettingsSubmit}
         />
       )}
     </>

@@ -29,7 +29,7 @@ import RowDivider from '@/components/taskTable/RowDivider';
 import LoaCornerCell from './LoaCornerCell';
 import LoaHeaderCell from './LoaHeaderCell';
 import LoaRowLabelCell from './LoaRowLabelCell';
-import ContentCell from './ContentCell';
+import LoaContentCell from './LoaContentCell';
 
 import styles from './loadoTable.module.scss';
 
@@ -145,7 +145,7 @@ function LoadoTableContent(props: {
                 onDelete={() => handleDeleteRow(row.id)}
               />
               {data.columns.map((col) => (
-                <ContentCell
+                <LoaContentCell
                   key={col.id}
                   cell={data.cells[row.id]?.[col.id] ?? createEmptyCell(row)}
                   onChange={(next) => handleUpdateCell(row.id, col.id, next)}
