@@ -1,10 +1,11 @@
+import type { TSettingsGame } from '@/app/settings/_type/settings';
+import LostarkHeader from '@/components/lostark/header/LostarkHeader';
+import MaplestoryHeader from '@/components/maplestory/header/MaplestoryHeader';
+
 import BackupSection from '@/app/settings/_component/BackupSection';
 import StorageResetSection from '@/app/settings/_component/StorageResetSection';
 import PwaInstallSection from '@/app/settings/_component/PwaInstallSection';
 import AuthSection from '@/app/settings/_component/AuthSection';
-import type { TSettingsGame } from '@/app/settings/_type/settings';
-import LostarkHeader from '@/components/lostark/header/LostarkHeader';
-import MaplestoryHeader from '@/components/maplestory/header/MaplestoryHeader';
 
 import styles from '@/app/settings/settingsClient.module.scss';
 
