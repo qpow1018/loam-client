@@ -26,7 +26,7 @@ import {
 
 import DraggableList from '@/components/common/draggableList/DraggableList';
 import LoaCornerCell from './LoaCornerCell';
-import HeaderCell from './HeaderCell';
+import LoaHeaderCell from './LoaHeaderCell';
 import RowLabelCell from './RowLabelCell';
 import RowDivider from './RowDivider';
 import ContentCell from './ContentCell';
@@ -114,7 +114,7 @@ function LoadoTableContent(props: {
           onReorder={handleReorderColumns}
         >
           {(col, { dragHandleProps }) => (
-            <HeaderCell
+            <LoaHeaderCell
               column={col}
               dragHandleProps={dragHandleProps}
               onChange={handleUpdateColumn}

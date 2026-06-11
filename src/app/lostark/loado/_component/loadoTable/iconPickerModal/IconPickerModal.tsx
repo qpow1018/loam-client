@@ -1,6 +1,6 @@
 'use client';
 
-import { LOADO_ICONS } from '@/app/lostark/loado/_define/loadoIcons';
+import { LOADO_ICONS } from './loadoIcons';
 
 import Modal from '@/components/common/modal/Modal';
 

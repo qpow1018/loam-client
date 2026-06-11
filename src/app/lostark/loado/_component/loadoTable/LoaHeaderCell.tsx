@@ -5,11 +5,10 @@ import { useState } from 'react';
 import type { TTaskTableColumn } from '@/types/taskTable';
 
 import type { TDragHandleProps } from '@/components/common/draggableList/DraggableList';
+import HeaderCell from '@/components/taskTable/HeaderCell';
 import CharacterModal from './characterModal/CharacterModal';
 
-import styles from './headerCell.module.scss';
-
-export default function HeaderCell(props: {
+export default function LoaHeaderCell(props: {
   column: TTaskTableColumn;
   dragHandleProps: TDragHandleProps;
   onChange: (next: TTaskTableColumn) => void;
@@ -18,11 +17,6 @@ export default function HeaderCell(props: {
   const { column, dragHandleProps, onChange, onDelete } = props;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  function handleContextMenu(e: React.MouseEvent) {
-    e.preventDefault();
-    setIsModalOpen(true);
-  }
 
   function handleSubmit(next: TTaskTableColumn) {
     onChange(next);
@@ -36,14 +30,11 @@ export default function HeaderCell(props: {
 
   return (
     <>
-      <div {...dragHandleProps} className={styles['header-cell']} onContextMenu={handleContextMenu}>
-        {column.imageUrl && (
-          <div className={styles['icon-box']}>
-            <img src={column.imageUrl} alt="" />
-          </div>
-        )}
-        {column.name}
-      </div>
+      <HeaderCell
+        column={column}
+        dragHandleProps={dragHandleProps}
+        onEdit={() => setIsModalOpen(true)}
+      />
 
       {isModalOpen && (
         <CharacterModal
