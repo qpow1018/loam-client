@@ -6,9 +6,9 @@ import api from '@/api';
 import type { TReqCreateLostarkMyCharacter, TResLostarkMyCharacter } from '@/api/lostark/type';
 import toast from '@/utils/toast';
 
-import Header from '@/components/common/header/Header';
 import Button from '@/components/common/button/Button';
 import BoxLoading from '@/components/common/loading/BoxLoading';
+import LostarkHeader from '@/components/lostark/header/LostarkHeader';
 import CharacterList from './_component/CharacterList';
 import CreateCharacterModal from './_component/CreateCharacterModal';
 
@@ -136,7 +136,7 @@ export default function AllCharactersClient() {
 
   return (
     <div className={styles['all-characters-client']}>
-      <Header />
+      <LostarkHeader />
 
       <div className={styles['all-characters-client-container']}>
         <section className={styles['character-section']}>

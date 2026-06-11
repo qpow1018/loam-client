@@ -2,7 +2,7 @@
 
 import { MdOpenInNew } from 'react-icons/md';
 
-import Header from '@/components/common/header/Header';
+import LostarkHeader from '@/components/lostark/header/LostarkHeader';
 
 import styles from './referenceSites.module.scss';
 
@@ -57,7 +57,7 @@ const REFERENCE_SITES = [
 export default function ReferenceSitesClient() {
   return (
     <div className={styles['reference-sites-page']}>
-      <Header />
+      <LostarkHeader />
 
       <main className={styles['reference-sites-page-container']}>
         <section className={styles['reference-sites-container']}>

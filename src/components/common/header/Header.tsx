@@ -2,43 +2,38 @@ import Link from 'next/link';
 
 import styles from './header.module.scss';
 
-const LOA_MAIN_MENUS = [
-  {
-    name: '할일',
-    link: '/lostark/loado',
-  },
-  {
-    name: '메인캐릭터',
-    link: '/lostark/my-characters',
-  },
-  {
-    name: '전체캐릭터',
-    link: '/lostark/all-characters',
-  },
-  {
-    name: '참고 사이트',
-    link: '/lostark/reference-sites',
-  },
-  {
-    name: '설정',
-    link: '/settings',
-  },
-];
+export type THeaderMenu = {
+  name: string;
+  link: string;
+};
 
-export default function Header() {
+type THeaderProps = {
+  theme: 'mint' | 'rose';
+  primaryMenus: THeaderMenu[];
+  secondaryMenus: THeaderMenu[];
+};
+
+export default function Header(props: THeaderProps) {
+  const { theme, primaryMenus, secondaryMenus } = props;
+  const hasDivider = primaryMenus.length > 0 && secondaryMenus.length > 0;
+
+  function renderMenu(menu: THeaderMenu) {
+    return (
+      <Link key={menu.link} href={menu.link} className={styles['navigation-link']}>
+        {menu.name}
+      </Link>
+    );
+  }
+
   return (
-    <header className={styles['header']}>
+    <header className={`${styles['header']} ${styles[`is-${theme}`]}`}>
       <div className={styles['logo']}>LoaM</div>
 
       <nav className={styles['navigation']}>
-        {LOA_MAIN_MENUS.map((item) => (
-          <Link key={item.link} href={item.link} className={styles['navigation-link']}>
-            {item.name}
-          </Link>
-        ))}
+        {primaryMenus.map(renderMenu)}
+        {hasDivider && <span aria-hidden="true" className={styles['navigation-divider']} />}
+        {secondaryMenus.map(renderMenu)}
       </nav>
-
-      {/* <div className={styles['sub-menu']}>서브메뉴</div> */}
     </header>
   );
 }

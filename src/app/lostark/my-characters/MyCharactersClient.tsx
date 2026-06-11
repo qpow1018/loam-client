@@ -7,9 +7,9 @@ import type { TResLostarkMainCharacter } from '@/api/lostark/type';
 import toast from '@/utils/toast';
 
 import Button from '@/components/common/button/Button';
-import Header from '@/components/common/header/Header';
 import BoxLoading from '@/components/common/loading/BoxLoading';
 import Tabs from '@/components/common/tabs/Tabs';
+import LostarkHeader from '@/components/lostark/header/LostarkHeader';
 import MainCharacterOrderModal from './_component/MainCharacterOrderModal';
 import MainCharactersPanel from './_component/mainCharactersPanel/MainCharactersPanel';
 import SpecSummaryPanel from './_component/specSummaryPanel/SpecSummaryPanel';
@@ -62,7 +62,7 @@ export default function MyCharactersClient() {
 
   return (
     <div className={styles['my-characters-client']}>
-      <Header />
+      <LostarkHeader />
 
       <div className={styles['my-characters-client-container']}>
         <div className={styles['tab-section']}>

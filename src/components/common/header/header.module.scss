@@ -7,7 +7,22 @@
   gap: 24px;
   padding: 0 16px;
   height: $header-height;
-  background-color: $mint-700;
+
+  &.is-mint {
+    background-color: $mint-700;
+
+    .navigation-link:hover {
+      background-color: $mint-800;
+    }
+  }
+
+  &.is-rose {
+    background-color: $rose-700;
+
+    .navigation-link:hover {
+      background-color: $rose-800;
+    }
+  }
 
   .logo {
     font-size: 16px;
@@ -33,14 +48,12 @@
       color: $text-primary;
       border-radius: $border-radius;
       text-decoration: none;
-
-      &:hover {
-        background-color: $mint-800;
-      }
     }
   }
 
-  .sub-menu {
-    box-shadow: 0 0 1px red;
+  .navigation-divider {
+    width: 1px;
+    height: 24px;
+    background-color: rgba($white, 0.35);
   }
 }
