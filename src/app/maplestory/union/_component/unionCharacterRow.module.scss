@@ -1,0 +1,68 @@
+.union-character-row {
+  display: grid;
+  grid-template-columns: 36px 160px 220px 1fr 92px 72px;
+  align-items: center;
+  min-height: 44px;
+  padding: 6px 12px;
+  font-size: 12px;
+  transition: background-color $transition;
+
+  &.is-high-level {
+    background-color: rgba($rose-900, 0.35);
+
+    .class-name,
+    .level-status {
+      color: $rose-300;
+    }
+  }
+
+  .drag-handle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 32px;
+    border: 0;
+    background: transparent;
+    color: $gray-400;
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  .class-name {
+    font-weight: 500;
+  }
+
+  .effect {
+    overflow: hidden;
+    padding-right: 16px;
+    color: $gray-300;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .level-input {
+    width: 76px;
+    height: 32px;
+    padding: 0 8px;
+    border: 1px solid $gray-500;
+    border-radius: $border-radius;
+    outline: none;
+    background: $gray-700;
+    font-size: 12px;
+    color: $text-primary;
+
+    &:focus {
+      border-color: $rose-400;
+    }
+  }
+
+  .level-status {
+    font-size: 11px;
+    font-weight: 500;
+    color: $gray-300;
+  }
+}

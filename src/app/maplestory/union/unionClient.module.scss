@@ -1,0 +1,13 @@
+.union-client {
+  .union-client-container {
+    width: 100%;
+    padding: 16px;
+  }
+
+  .group-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 1024px;
+  }
+}

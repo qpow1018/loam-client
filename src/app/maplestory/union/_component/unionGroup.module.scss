@@ -1,0 +1,40 @@
+.union-group {
+  overflow: hidden;
+  border-radius: $border-radius;
+  background: $gray-800;
+
+  .group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid $gray-600;
+
+    .group-name {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .character-count {
+      font-size: 11px;
+      color: $text-secondary;
+    }
+  }
+
+  .column-header {
+    display: grid;
+    grid-template-columns: 36px 160px 220px 1fr 92px 72px;
+    align-items: center;
+    min-height: 34px;
+    padding: 0 12px;
+    border-bottom: 1px solid $gray-700;
+    font-size: 11px;
+    color: $text-secondary;
+  }
+
+  .character-list {
+    > div + div {
+      border-top: 1px solid $gray-700;
+    }
+  }
+}

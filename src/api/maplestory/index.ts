@@ -2,12 +2,18 @@ import { createClient } from '@/lib/supabase/client';
 
 import type {
   TReqCreateMaplestoryMyCharacter,
+  TReqUpsertMaplestoryUnionUserStateRow,
   TReqUpsertMaplestoryMyCharacterRow,
   TResMaplestoryMyCharacter,
   TResMaplestoryMyCharacterRow,
+  TResMaplestoryUnionCharacter,
+  TResMaplestoryUnionCharacterRow,
+  TResMaplestoryUnionUserStateRow,
 } from './type';
 
 const MAPLESTORY_MY_CHARACTERS_TABLE = 'maplestory_my_characters';
+const MAPLESTORY_UNION_CHARACTERS_TABLE = 'maplestory_union_characters';
+const MAPLESTORY_UNION_USER_STATES_TABLE = 'maplestory_union_user_states';
 
 async function getCurrentUserId(): Promise<string> {
   const supabase = createClient();
@@ -112,4 +118,89 @@ export async function deleteMyCharacter(id: string): Promise<TResMaplestoryMyCha
 
   const remainingCharacters = await getMyCharacters();
   return reorderMyCharacters(remainingCharacters);
+}
+
+export async function getUnionCharacters(): Promise<TResMaplestoryUnionCharacter[]> {
+  const supabase = createClient();
+  const userId = await getCurrentUserId();
+  const [charactersResult, statesResult] = await Promise.all([
+    supabase
+      .from(MAPLESTORY_UNION_CHARACTERS_TABLE)
+      .select('id, class_name, union_effect, link_effect, group_key, default_sort_order'),
+    supabase
+      .from(MAPLESTORY_UNION_USER_STATES_TABLE)
+      .select('user_id, character_id, level, sort_order')
+      .eq('user_id', userId),
+  ]);
+
+  if (charactersResult.error) {
+    throw charactersResult.error;
+  }
+
+  if (statesResult.error) {
+    throw statesResult.error;
+  }
+
+  const states = new Map(
+    ((statesResult.data ?? []) as TResMaplestoryUnionUserStateRow[]).map((state) => [
+      state.character_id,
+      state,
+    ]),
+  );
+
+  return ((charactersResult.data ?? []) as TResMaplestoryUnionCharacterRow[]).map((character) => {
+    const state = states.get(character.id);
+
+    return {
+      id: character.id,
+      className: character.class_name,
+      unionEffect: character.union_effect,
+      linkEffect: character.link_effect,
+      group: character.group_key,
+      level: state?.level ?? null,
+      sortOrder: state?.sort_order ?? character.default_sort_order,
+    };
+  });
+}
+
+export async function saveUnionCharacterLevel(
+  character: TResMaplestoryUnionCharacter,
+): Promise<void> {
+  const supabase = createClient();
+  const userId = await getCurrentUserId();
+  const row: TReqUpsertMaplestoryUnionUserStateRow = {
+    user_id: userId,
+    character_id: character.id,
+    level: character.level,
+    sort_order: character.sortOrder,
+  };
+  const { error } = await supabase.from(MAPLESTORY_UNION_USER_STATES_TABLE).upsert(row, {
+    onConflict: 'user_id,character_id',
+  });
+
+  if (error) {
+    throw error;
+  }
+}
+
+export async function reorderUnionCharacters(
+  characters: TResMaplestoryUnionCharacter[],
+): Promise<void> {
+  if (characters.length === 0) return;
+
+  const supabase = createClient();
+  const userId = await getCurrentUserId();
+  const rows: TReqUpsertMaplestoryUnionUserStateRow[] = characters.map((character, index) => ({
+    user_id: userId,
+    character_id: character.id,
+    level: character.level,
+    sort_order: index,
+  }));
+  const { error } = await supabase.from(MAPLESTORY_UNION_USER_STATES_TABLE).upsert(rows, {
+    onConflict: 'user_id,character_id',
+  });
+
+  if (error) {
+    throw error;
+  }
 }

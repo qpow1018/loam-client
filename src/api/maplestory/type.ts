@@ -27,3 +27,38 @@ export type TReqUpsertMaplestoryMyCharacterRow = {
   class_name: string;
   sort_order: number;
 };
+
+export type TMaplestoryUnionGroup = 'special1' | 'luk' | 'str' | 'dex' | 'int' | 'special2';
+
+export type TResMaplestoryUnionCharacterRow = {
+  id: string;
+  class_name: string;
+  union_effect: string;
+  link_effect: string;
+  group_key: TMaplestoryUnionGroup;
+  default_sort_order: number;
+};
+
+export type TResMaplestoryUnionUserStateRow = {
+  user_id: string;
+  character_id: string;
+  level: number | null;
+  sort_order: number;
+};
+
+export type TResMaplestoryUnionCharacter = {
+  id: string;
+  className: string;
+  unionEffect: string;
+  linkEffect: string;
+  group: TMaplestoryUnionGroup;
+  level: number | null;
+  sortOrder: number;
+};
+
+export type TReqUpsertMaplestoryUnionUserStateRow = {
+  user_id: string;
+  character_id: string;
+  level: number | null;
+  sort_order: number;
+};
