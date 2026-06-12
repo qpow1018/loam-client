@@ -32,6 +32,8 @@ export default function Modal(props: {
   useBodyScrollLock(isOpen);
 
   const onCloseRef = useRef(onClose);
+  const isBackdropPointerDownRef = useRef(false);
+
   useEffect(() => {
     onCloseRef.current = onClose;
   }, [onClose]);
@@ -58,13 +60,27 @@ export default function Modal(props: {
 
   if (!isOpen) return null;
 
+  function handleBackdropPointerDown(e: React.PointerEvent<HTMLDivElement>) {
+    isBackdropPointerDownRef.current = e.target === e.currentTarget;
+  }
+
   function handleBackdropClick(e: React.MouseEvent<HTMLDivElement>) {
     if (!isDismissable) return;
-    if (e.target === e.currentTarget) onClose();
+
+    const isBackdropClick =
+      isBackdropPointerDownRef.current && e.target === e.currentTarget;
+
+    isBackdropPointerDownRef.current = false;
+
+    if (isBackdropClick) onClose();
   }
 
   return (
-    <div className={styles['modal-backdrop']} onClick={handleBackdropClick}>
+    <div
+      className={styles['modal-backdrop']}
+      onPointerDown={handleBackdropPointerDown}
+      onClick={handleBackdropClick}
+    >
       <div className={styles['modal']} style={{ width }}>
         {title !== undefined && (
           <div className={styles['header']}>
