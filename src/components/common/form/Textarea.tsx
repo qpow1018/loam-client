@@ -8,6 +8,7 @@ export default function Textarea(props: {
   placeholder?: string;
   rows?: number;
   autoFocus?: boolean;
+  isCursorAtEndOnAutoFocus?: boolean;
   isAutoHeight?: boolean;
   className?: string;
   ref?: React.Ref<HTMLTextAreaElement>;
@@ -18,6 +19,7 @@ export default function Textarea(props: {
     placeholder,
     rows = 4,
     autoFocus,
+    isCursorAtEndOnAutoFocus,
     isAutoHeight,
     className,
     ref,
@@ -44,6 +46,14 @@ export default function Textarea(props: {
     el.style.height = 'auto';
     el.style.height = `${el.scrollHeight}px`;
   }, [value, isAutoHeight]);
+
+  useLayoutEffect(() => {
+    const el = internalRef.current;
+    if (!el || !autoFocus || !isCursorAtEndOnAutoFocus) return;
+
+    const cursorPosition = el.value.length;
+    el.setSelectionRange(cursorPosition, cursorPosition);
+  }, [autoFocus, isCursorAtEndOnAutoFocus]);
 
   return (
     <div className={`${styles['textarea']} ${className ?? ''}`}>

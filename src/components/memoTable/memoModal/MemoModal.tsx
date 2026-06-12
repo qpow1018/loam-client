@@ -49,6 +49,7 @@ export default function MemoModal(props: {
         <div className={styles['memo-modal-content']}>
           <Textarea
             autoFocus
+            isCursorAtEndOnAutoFocus
             rows={8}
             placeholder="메모를 입력하세요"
             value={content}

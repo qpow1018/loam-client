@@ -25,7 +25,14 @@ export default function TextEditModal(props: {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="텍스트 수정" width={480}>
       <div className={styles['text-edit-modal-content']}>
-        <Textarea autoFocus isAutoHeight rows={2} value={value} onChange={setValue} />
+        <Textarea
+          autoFocus
+          isCursorAtEndOnAutoFocus
+          isAutoHeight
+          rows={2}
+          value={value}
+          onChange={setValue}
+        />
 
         <div className={styles['action-buttons']}>
           <Button theme="bg-gray600" size="large" onClick={onClose}>
