@@ -45,7 +45,6 @@ export default function UnionCharacterRow(props: {
   }
 
   const level = props.character.level;
-  const isLevelVisible = level !== null && level > 200;
   const isHighLevel = level !== null && level >= 250;
 
   return (
@@ -76,7 +75,7 @@ export default function UnionCharacterRow(props: {
         onBlur={handleLevelBlur}
       />
 
-      <span className={styles['level-status']}>{isLevelVisible ? '완료' : ''}</span>
+      <span className={styles['level-status']}>{isHighLevel ? '완료' : ''}</span>
     </div>
   );
 }
