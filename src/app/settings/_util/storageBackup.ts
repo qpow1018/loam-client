@@ -1,11 +1,17 @@
 import { StorageKey } from '@/utils/storage';
 
-const BACKUP_SCHEMA_VERSION = 1;
-const BACKUP_STORAGE_KEYS = [StorageKey.LOADO_TABLE, StorageKey.LOADO_MEMOS] as const;
+const BACKUP_SCHEMA_VERSION = 2;
+
+const BACKUP_STORAGE_KEYS_BY_VERSION = {
+  1: [StorageKey.LOADO_TABLE, StorageKey.LOADO_MEMOS],
+  2: [StorageKey.LOADO_TABLE, StorageKey.LOADO_MEMOS, StorageKey.MAPLEDO_TABLE],
+} as const;
+
+const BACKUP_STORAGE_KEYS = BACKUP_STORAGE_KEYS_BY_VERSION[BACKUP_SCHEMA_VERSION];
 
 export type TBackupPayload = {
   app: 'loam-client';
-  version: number;
+  version: keyof typeof BACKUP_STORAGE_KEYS_BY_VERSION;
   exportedAt: string;
   data: Partial<Record<string, unknown>>;
 };
@@ -70,14 +76,16 @@ export function isBackupPayload(value: unknown): value is TBackupPayload {
   const candidate = value as Partial<TBackupPayload>;
   return (
     candidate.app === 'loam-client' &&
-    candidate.version === BACKUP_SCHEMA_VERSION &&
+    (candidate.version === 1 || candidate.version === BACKUP_SCHEMA_VERSION) &&
     candidate.data !== null &&
     typeof candidate.data === 'object'
   );
 }
 
 export function restoreBackupPayload(backup: TBackupPayload): void {
-  for (const key of BACKUP_STORAGE_KEYS) {
+  const storageKeys = BACKUP_STORAGE_KEYS_BY_VERSION[backup.version];
+
+  for (const key of storageKeys) {
     const value = backup.data[key];
     if (value === undefined) {
       window.localStorage.removeItem(key);

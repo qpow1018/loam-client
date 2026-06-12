@@ -3,4 +3,14 @@
   padding: 12px;
   border-radius: 8px;
   background-color: $gray-800;
+
+  .header-row {
+    display: flex;
+    border-bottom: 1px solid $gray-600;
+  }
+
+  .row {
+    display: flex;
+    border-bottom: 1px solid $gray-700;
+  }
 }

@@ -3,6 +3,7 @@ import { isClient } from './common';
 export const StorageKey = {
   LOADO_TABLE: 'loado-table-state',
   LOADO_MEMOS: 'loado-memos-state',
+  MAPLEDO_TABLE: 'mapledo-table-state',
 } as const;
 
 type TStorageKey = (typeof StorageKey)[keyof typeof StorageKey];

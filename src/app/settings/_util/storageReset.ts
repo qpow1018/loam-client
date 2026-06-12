@@ -1,6 +1,6 @@
 import { StorageKey, storage } from '@/utils/storage';
 
-export type TResetTarget = 'all' | 'loado' | 'memo';
+export type TResetTarget = 'lostark' | 'loado' | 'memo' | 'maplestory';
 
 export const RESET_TARGETS: Record<
   TResetTarget,
@@ -12,11 +12,11 @@ export const RESET_TARGETS: Record<
     keys: Array<(typeof StorageKey)[keyof typeof StorageKey]>;
   }
 > = {
-  all: {
-    label: '전체',
-    actionLabel: '전체 초기화',
-    statusLabel: '전체 저장소',
-    confirmMessage: '할일 테이블, 메모 데이터를 모두 초기화할까요?',
+  lostark: {
+    label: '로스트아크 전체',
+    actionLabel: '로스트아크 전체 초기화',
+    statusLabel: '로스트아크 저장소',
+    confirmMessage: 'Loado 할일 테이블과 메모 데이터를 모두 초기화할까요?',
     keys: [StorageKey.LOADO_TABLE, StorageKey.LOADO_MEMOS],
   },
   loado: {
@@ -32,6 +32,13 @@ export const RESET_TARGETS: Record<
     statusLabel: '메모',
     confirmMessage: '메모 데이터를 초기화할까요?',
     keys: [StorageKey.LOADO_MEMOS],
+  },
+  maplestory: {
+    label: '메이플스토리 전체',
+    actionLabel: '메이플스토리 전체 초기화',
+    statusLabel: '메이플스토리 저장소',
+    confirmMessage: 'Mapledo 할일 테이블 데이터를 모두 초기화할까요?',
+    keys: [StorageKey.MAPLEDO_TABLE],
   },
 };
 

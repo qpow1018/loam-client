@@ -1,0 +1,19 @@
+.task-modal-content {
+  padding: 24px;
+
+  .action-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 12px;
+
+    .delete-btn {
+      margin-right: auto;
+    }
+
+    .submit-btn {
+      width: 120px;
+    }
+  }
+}

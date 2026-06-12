@@ -1,0 +1,20 @@
+.cell-settings-modal-content {
+  padding: 24px;
+  min-height: 240px;
+
+  .tabs-section {
+    margin-bottom: 24px;
+  }
+
+  .action-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 12px;
+
+    .submit-btn {
+      width: 120px;
+    }
+  }
+}

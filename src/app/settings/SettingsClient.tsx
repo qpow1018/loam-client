@@ -18,7 +18,7 @@ export default function SettingsClient(props: { game: TSettingsGame }) {
 
       <main className={styles['settings-page-container']}>
         <BackupSection />
-        <StorageResetSection />
+        <StorageResetSection game={game} />
         <PwaInstallSection />
         <AuthSection />
       </main>
