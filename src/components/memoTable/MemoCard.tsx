@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import type { TMemo } from '@/app/lostark/loado/_type/memo';
+import type { TMemo } from '@/types/memo';
 
 import type { TDragHandleProps } from '@/components/common/draggableList/DraggableList';
 import MemoModal from './memoModal/MemoModal';

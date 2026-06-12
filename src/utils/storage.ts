@@ -4,6 +4,7 @@ export const StorageKey = {
   LOADO_TABLE: 'loado-table-state',
   LOADO_MEMOS: 'loado-memos-state',
   MAPLEDO_TABLE: 'mapledo-table-state',
+  MAPLEDO_MEMOS: 'mapledo-memos-state',
 } as const;
 
 type TStorageKey = (typeof StorageKey)[keyof typeof StorageKey];

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { MdDeleteOutline } from 'react-icons/md';
 
-import type { TMemo } from '@/app/lostark/loado/_type/memo';
+import type { TMemo } from '@/types/memo';
 
 import Modal from '@/components/common/modal/Modal';
 import Confirm from '@/components/common/modal/Confirm';

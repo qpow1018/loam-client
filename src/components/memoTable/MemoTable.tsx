@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { MdAdd } from 'react-icons/md';
 
-import type { TMemo, TMemoData } from '@/app/lostark/loado/_type/memo';
+import type { TMemo, TMemoData } from '@/types/memo';
 import {
   getMemoData,
   saveMemoData,
@@ -11,7 +11,8 @@ import {
   updateMemo,
   deleteMemo,
   reorderMemos,
-} from '@/app/lostark/loado/_util/memoData';
+  type TMemoStorageKey,
+} from '@/utils/memoData';
 
 import DraggableList from '@/components/common/draggableList/DraggableList';
 import Button from '@/components/common/button/Button';
@@ -20,19 +21,21 @@ import MemoModal from './memoModal/MemoModal';
 
 import styles from './memoTable.module.scss';
 
-export default function MemoTable() {
+export default function MemoTable(props: { storageKey: TMemoStorageKey }) {
+  const { storageKey } = props;
+
   const [data, setData] = useState<TMemoData | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setData(getMemoData());
-  }, []);
+    setData(getMemoData(storageKey));
+  }, [storageKey]);
 
   useEffect(() => {
     if (data === null) return;
-    saveMemoData(data);
-  }, [data]);
+    saveMemoData(storageKey, data);
+  }, [data, storageKey]);
 
   function handleAdd(next: TMemo) {
     setData((prev) => (prev === null ? prev : addMemo(prev, next)));

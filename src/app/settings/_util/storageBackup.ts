@@ -4,7 +4,12 @@ const BACKUP_SCHEMA_VERSION = 2;
 
 const BACKUP_STORAGE_KEYS_BY_VERSION = {
   1: [StorageKey.LOADO_TABLE, StorageKey.LOADO_MEMOS],
-  2: [StorageKey.LOADO_TABLE, StorageKey.LOADO_MEMOS, StorageKey.MAPLEDO_TABLE],
+  2: [
+    StorageKey.LOADO_TABLE,
+    StorageKey.LOADO_MEMOS,
+    StorageKey.MAPLEDO_TABLE,
+    StorageKey.MAPLEDO_MEMOS,
+  ],
 } as const;
 
 const BACKUP_STORAGE_KEYS = BACKUP_STORAGE_KEYS_BY_VERSION[BACKUP_SCHEMA_VERSION];

@@ -1,17 +1,19 @@
 import { storage, StorageKey } from '@/utils/storage';
 
-import type { TMemo, TMemoData } from '@/app/lostark/loado/_type/memo';
+import type { TMemo, TMemoData } from '@/types/memo';
 
 const EMPTY_DATA: TMemoData = {
   memos: [],
 };
 
-export function getMemoData(): TMemoData {
-  return storage.local.get<TMemoData>(StorageKey.LOADO_MEMOS, EMPTY_DATA);
+export type TMemoStorageKey = typeof StorageKey.LOADO_MEMOS | typeof StorageKey.MAPLEDO_MEMOS;
+
+export function getMemoData(storageKey: TMemoStorageKey): TMemoData {
+  return storage.local.get<TMemoData>(storageKey, EMPTY_DATA);
 }
 
-export function saveMemoData(data: TMemoData): void {
-  storage.local.set(StorageKey.LOADO_MEMOS, data);
+export function saveMemoData(storageKey: TMemoStorageKey, data: TMemoData): void {
+  storage.local.set(storageKey, data);
 }
 
 export function addMemo(data: TMemoData, next: TMemo): TMemoData {

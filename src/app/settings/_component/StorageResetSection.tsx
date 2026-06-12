@@ -19,14 +19,14 @@ const RESET_TARGETS_BY_GAME: Record<
   { partial: TResetTarget[]; all: TResetTarget; allDescription: string }
 > = {
   lostark: {
-    partial: ['loado', 'memo'],
+    partial: ['loado', 'loadoMemo'],
     all: 'lostark',
     allDescription: 'Loado 할일과 메모 데이터를 삭제합니다.',
   },
   maplestory: {
-    partial: [],
+    partial: ['mapledo', 'mapledoMemo'],
     all: 'maplestory',
-    allDescription: 'Mapledo 할일 데이터를 삭제합니다.',
+    allDescription: 'Mapledo 할일과 메모 데이터를 삭제합니다.',
   },
 };
 
