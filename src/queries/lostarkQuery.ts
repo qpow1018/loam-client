@@ -3,9 +3,14 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import api from '@/api';
-import type { TReqCreateLostarkMyCharacter, TResLostarkMyCharacter } from '@/api/lostark/type';
+import type {
+  TReqCreateLostarkMyCharacter,
+  TResLostarkMainCharacter,
+  TResLostarkMyCharacter,
+} from '@/api/lostark/type';
 
 const MY_CHARACTERS_QUERY_KEY = ['lostark', 'myCharacters'] as const;
+const MAIN_CHARACTERS_QUERY_KEY = ['lostark', 'mainCharacters'] as const;
 
 function useMyCharactersMutation<TVariables>(
   mutationFn: (variables: TVariables) => Promise<TResLostarkMyCharacter[]>,
@@ -33,6 +38,13 @@ const lostarkQuery = {
       queryKey: ['lostark', 'siblingCharacters', searchNickname],
       queryFn: () => api.lostark.getSiblingCharacters(searchNickname),
       enabled: searchNickname.length > 0,
+    });
+  },
+
+  useGetMainCharacters() {
+    return useQuery({
+      queryKey: MAIN_CHARACTERS_QUERY_KEY,
+      queryFn: api.lostark.getMainCharacters,
     });
   },
 
@@ -70,11 +82,63 @@ const lostarkQuery = {
   },
 
   useToggleMainCharacter() {
-    return useMyCharactersMutation(api.lostark.toggleMainCharacter);
+    const queryClient = useQueryClient();
+
+    return useMutation({
+      mutationFn: api.lostark.toggleMainCharacter,
+      async onSuccess(characters) {
+        queryClient.setQueryData(MY_CHARACTERS_QUERY_KEY, characters);
+        await queryClient.invalidateQueries({ queryKey: MAIN_CHARACTERS_QUERY_KEY });
+      },
+    });
   },
 
   useDeleteMyCharacter() {
     return useMyCharactersMutation(api.lostark.deleteMyCharacter);
+  },
+
+  useReorderMainCharacters() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+      mutationFn: api.lostark.reorderMainCharacters,
+      onSuccess(characters) {
+        queryClient.setQueryData(MAIN_CHARACTERS_QUERY_KEY, characters);
+      },
+    });
+  },
+
+  useRefreshMainCharacter() {
+    return useMutation({
+      async mutationFn(character: TResLostarkMainCharacter) {
+        const response = await api.lostark.getCharacterDetails(character.characterName);
+        const details = response.data;
+
+        return {
+          ...character,
+          characterName: details.characterName || character.characterName,
+          characterClass: details.characterClass || character.characterClass,
+          itemLevel: details.itemLevel || character.itemLevel,
+          summary: details.summary,
+          rawPayload: details.rawPayload ?? null,
+        };
+      },
+    });
+  },
+
+  useSaveMainCharacter() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+      mutationFn: api.lostark.saveMainCharacter,
+      onSuccess(character) {
+        queryClient.setQueryData<TResLostarkMainCharacter[]>(
+          MAIN_CHARACTERS_QUERY_KEY,
+          (characters = []) =>
+            characters.map((item) => (item.id === character.id ? character : item)),
+        );
+      },
+    });
   },
 };
 

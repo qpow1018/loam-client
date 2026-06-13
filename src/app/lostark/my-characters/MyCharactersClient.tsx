@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
-import api from '@/api';
 import type { TResLostarkMainCharacter } from '@/api/lostark/type';
+import lostarkQuery from '@/queries/lostarkQuery';
 import toast from '@/utils/toast';
 
 import Button from '@/components/common/button/Button';
@@ -24,40 +24,50 @@ const MY_CHARACTER_TABS = [
 ] as const;
 
 export default function MyCharactersClient() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [mainCharacters, setMainCharacters] = useState<TResLostarkMainCharacter[]>([]);
   const [activeTab, setActiveTab] = useState<TMyCharactersTab>('main');
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
-  const [isReordering, setIsReordering] = useState(false);
+  const [draftCharacters, setDraftCharacters] = useState<Record<string, TResLostarkMainCharacter>>(
+    {},
+  );
+  const {
+    data: savedMainCharacters = [],
+    isLoading,
+    isError,
+  } = lostarkQuery.useGetMainCharacters();
+  const reorderMainCharacters = lostarkQuery.useReorderMainCharacters();
+  const mainCharacters = savedMainCharacters.map(
+    (character) => draftCharacters[character.id] ?? character,
+  );
 
   useEffect(() => {
-    async function loadMainCharacters() {
-      try {
-        const response = await api.lostark.getMainCharacters();
-        setMainCharacters(response);
-      } catch {
-        toast.error('메인 캐릭터 목록을 불러오지 못했습니다.');
-      } finally {
-        setIsLoading(false);
-      }
+    if (isError) {
+      toast.error('메인 캐릭터 목록을 불러오지 못했습니다.');
     }
-
-    void loadMainCharacters();
-  }, []);
+  }, [isError]);
 
   async function handleSubmitMainCharacterOrder(nextCharacters: TResLostarkMainCharacter[]) {
-    setIsReordering(true);
-
     try {
-      const response = await api.lostark.reorderMainCharacters(nextCharacters);
-      setMainCharacters(response);
+      await reorderMainCharacters.mutateAsync(nextCharacters);
       setIsOrderModalOpen(false);
       toast.success('메인 캐릭터 순서를 저장했습니다.');
     } catch {
       toast.error('메인 캐릭터 순서를 저장하지 못했습니다.');
-    } finally {
-      setIsReordering(false);
     }
+  }
+
+  function handleChangeMainCharacter(character: TResLostarkMainCharacter) {
+    setDraftCharacters((prev) => ({
+      ...prev,
+      [character.id]: character,
+    }));
+  }
+
+  function handleSaveMainCharacter(characterId: string) {
+    setDraftCharacters((prev) => {
+      const next = { ...prev };
+      delete next[characterId];
+      return next;
+    });
   }
 
   return (
@@ -86,7 +96,7 @@ export default function MyCharactersClient() {
         <div className={styles['character-section']}>
           {isLoading && <BoxLoading height={180} />}
 
-          {!isLoading && mainCharacters.length === 0 && (
+          {!isLoading && !isError && mainCharacters.length === 0 && (
             <div className={styles['empty']}>
               <p className={styles['empty-message']}>등록된 메인 캐릭터가 없습니다.</p>
             </div>
@@ -95,7 +105,9 @@ export default function MyCharactersClient() {
           {!isLoading && mainCharacters.length > 0 && activeTab === 'main' && (
             <MainCharactersPanel
               characters={mainCharacters}
-              onChangeCharacters={setMainCharacters}
+              unsavedCharacterIds={new Set(Object.keys(draftCharacters))}
+              onChangeCharacter={handleChangeMainCharacter}
+              onSaveCharacter={handleSaveMainCharacter}
             />
           )}
 
@@ -108,7 +120,7 @@ export default function MyCharactersClient() {
       {isOrderModalOpen && (
         <MainCharacterOrderModal
           isOpen={isOrderModalOpen}
-          isSaving={isReordering}
+          isSaving={reorderMainCharacters.isPending}
           characters={mainCharacters}
           onClose={() => setIsOrderModalOpen(false)}
           onSubmit={handleSubmitMainCharacterOrder}
