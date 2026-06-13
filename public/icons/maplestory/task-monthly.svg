@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22">
+  <defs>
+    <linearGradient id="monthly-gradient" x1="4" y1="3" x2="18" y2="19" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6d28d9" />
+      <stop offset="1" stop-color="#3b0764" />
+    </linearGradient>
+  </defs>
+  <circle cx="11" cy="11" r="10" fill="url(#monthly-gradient)" />
+  <circle cx="11" cy="11" r="9.5" fill="none" stroke="#a78bfa" stroke-opacity="0.25" />
+  <text x="11" y="11.3" fill="#f4f4f6" font-family="sans-serif" font-size="10" font-weight="700" text-anchor="middle" dominant-baseline="middle">월</text>
+</svg>

@@ -7,6 +7,12 @@ import type { TDragHandleProps } from '@/components/common/draggableList/Draggab
 import RowLabelCell from '@/components/taskTable/RowLabelCell';
 import TaskModal from './taskModal/TaskModal';
 
+const PERIOD_ICON_URLS: Partial<Record<TTaskTableDataRow['resetPeriod'], string>> = {
+  daily: '/icons/maplestory/task-daily.svg',
+  weekly: '/icons/maplestory/task-weekly.svg',
+  monthly: '/icons/maplestory/task-monthly.svg',
+};
+
 export default function MapleRowLabelCell(props: {
   row: TTaskTableDataRow;
   dragHandleProps: TDragHandleProps;
@@ -27,10 +33,15 @@ export default function MapleRowLabelCell(props: {
     onDelete();
   }
 
+  const displayRow = {
+    ...row,
+    iconUrl: PERIOD_ICON_URLS[row.resetPeriod],
+  };
+
   return (
     <>
       <RowLabelCell
-        row={row}
+        row={displayRow}
         dragHandleProps={dragHandleProps}
         onEdit={() => setIsModalOpen(true)}
       />
