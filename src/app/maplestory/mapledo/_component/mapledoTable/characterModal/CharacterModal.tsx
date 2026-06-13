@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { MdDeleteOutline } from 'react-icons/md';
 import { v4 as uuidv4 } from 'uuid';
 
-import api from '@/api';
 import type { TResMaplestoryMyCharacter } from '@/api/maplestory/type';
+import maplestoryQuery from '@/queries/maplestoryQuery';
 import type { TTaskTableColumn } from '@/types/taskTable';
 import toast from '@/utils/toast';
 
@@ -26,28 +26,19 @@ export default function CharacterModal(props: {
 }) {
   const { isOpen, onClose, editingData, onSubmit, onDelete } = props;
 
-  const [allCharacters, setAllCharacters] = useState<TResMaplestoryMyCharacter[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [tempColumn, setTempColumn] = useState<TTaskTableColumn | null>(editingData ?? null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+  const { data: allCharacters = [], isLoading, isError } = maplestoryQuery.useGetMyCharacters();
 
   const isEditMode = editingData !== undefined;
   const isSaveDisabled = tempColumn === null;
 
   useEffect(() => {
-    async function getMyCharactersFromServer() {
-      try {
-        const response = await api.maplestory.getMyCharacters();
-        setAllCharacters(response);
-      } catch {
-        toast.error('내 캐릭터 목록을 불러오지 못했습니다.');
-      } finally {
-        setIsLoading(false);
-      }
+    if (isError) {
+      toast.error('내 캐릭터 목록을 불러오지 못했습니다.');
     }
-
-    getMyCharactersFromServer();
-  }, []);
+  }, [isError]);
 
   function handleSelectCharacter(character: TResMaplestoryMyCharacter) {
     setTempColumn((prev) => ({
@@ -73,7 +64,7 @@ export default function CharacterModal(props: {
         <div className={styles['character-modal-content']}>
           {isLoading && <BoxLoading height={240} />}
 
-          {!isLoading && allCharacters.length === 0 && (
+          {!isLoading && !isError && allCharacters.length === 0 && (
             <div className={styles['empty']}>
               <p>먼저 내 캐릭터를 추가해주세요.</p>
             </div>

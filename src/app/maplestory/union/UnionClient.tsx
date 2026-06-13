@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-import api from '@/api';
 import type { TMaplestoryUnionGroup, TResMaplestoryUnionCharacter } from '@/api/maplestory/type';
+import maplestoryQuery from '@/queries/maplestoryQuery';
 import toast from '@/utils/toast';
 
 import BoxLoading from '@/components/common/loading/BoxLoading';
@@ -22,68 +22,34 @@ const UNION_GROUPS: { value: TMaplestoryUnionGroup; label: string }[] = [
 ];
 
 export default function UnionClient() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [characters, setCharacters] = useState<TResMaplestoryUnionCharacter[]>([]);
+  const { data: characters = [], isLoading, isError } = maplestoryQuery.useGetUnionCharacters();
+  const saveUnionCharacterLevel = maplestoryQuery.useSaveUnionCharacterLevel();
+  const reorderUnionCharacters = maplestoryQuery.useReorderUnionCharacters();
 
   useEffect(() => {
-    async function loadUnionCharacters() {
-      try {
-        const response = await api.maplestory.getUnionCharacters();
-        setCharacters(response);
-      } catch {
-        toast.error('유니온 목록을 불러오지 못했습니다.');
-      } finally {
-        setIsLoading(false);
-      }
+    if (isError) {
+      toast.error('유니온 목록을 불러오지 못했습니다.');
     }
-
-    loadUnionCharacters();
-  }, []);
+  }, [isError]);
 
   async function handleLevelChange(characterId: string, level: number | null): Promise<boolean> {
-    const previousCharacters = characters;
-    const nextCharacters = characters.map((character) =>
-      character.id === characterId ? { ...character, level } : character,
-    );
-    const nextCharacter = nextCharacters.find((character) => character.id === characterId);
+    const character = characters.find((item) => item.id === characterId);
 
-    if (nextCharacter === undefined) return false;
-
-    setCharacters(nextCharacters);
+    if (character === undefined) return false;
 
     try {
-      await api.maplestory.saveUnionCharacterLevel(nextCharacter);
+      await saveUnionCharacterLevel.mutateAsync({ ...character, level });
       return true;
     } catch {
-      setCharacters(previousCharacters);
       toast.error('레벨 저장에 실패했습니다.');
       return false;
     }
   }
 
-  async function handleReorder(
-    group: TMaplestoryUnionGroup,
-    reorderedCharacters: TResMaplestoryUnionCharacter[],
-  ) {
-    const previousCharacters = characters;
-    const nextOrderById = new Map(
-      reorderedCharacters.map((character, index) => [character.id, index]),
-    );
-    const nextCharacters = characters.map((character) => {
-      if (character.group !== group) return character;
-
-      return {
-        ...character,
-        sortOrder: nextOrderById.get(character.id) ?? character.sortOrder,
-      };
-    });
-
-    setCharacters(nextCharacters);
-
+  async function handleReorder(reorderedCharacters: TResMaplestoryUnionCharacter[]) {
     try {
-      await api.maplestory.reorderUnionCharacters(reorderedCharacters);
+      await reorderUnionCharacters.mutateAsync(reorderedCharacters);
     } catch {
-      setCharacters(previousCharacters);
       toast.error('유니온 순서 변경에 실패했습니다.');
     }
   }
@@ -95,7 +61,7 @@ export default function UnionClient() {
       <main className={styles['union-client-container']}>
         {isLoading && <BoxLoading height={360} />}
 
-        {!isLoading && (
+        {!isLoading && !isError && (
           <div className={styles['group-list']}>
             {UNION_GROUPS.map((group) => {
               const groupCharacters = characters
@@ -108,7 +74,7 @@ export default function UnionClient() {
                   label={group.label}
                   characters={groupCharacters}
                   onLevelChange={handleLevelChange}
-                  onReorder={(nextCharacters) => handleReorder(group.value, nextCharacters)}
+                  onReorder={handleReorder}
                 />
               );
             })}

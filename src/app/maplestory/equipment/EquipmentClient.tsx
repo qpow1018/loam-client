@@ -1,12 +1,10 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-import api from '@/api';
 import type {
   TMaplestoryEquipmentState,
   TMaplestoryEquipmentStatePatch,
-  TResMaplestoryMyCharacter,
 } from '@/api/maplestory/type';
 import type { TMaplestoryEquipmentSlot } from '@/app/maplestory/equipment/_define/equipmentSlots';
 import { MAPLESTORY_EQUIPMENT_GROUPS } from '@/app/maplestory/equipment/_define/equipmentSlots';
@@ -14,6 +12,7 @@ import type {
   TEquipmentEditor,
   TEquipmentEditorKind,
 } from '@/app/maplestory/equipment/_type/equipmentEditor';
+import maplestoryQuery from '@/queries/maplestoryQuery';
 import toast from '@/utils/toast';
 
 import BoxLoading from '@/components/common/loading/BoxLoading';
@@ -25,67 +24,35 @@ import EquipmentEditorModal from './_component/editor/EquipmentEditorModal';
 import styles from './equipmentClient.module.scss';
 
 export default function EquipmentClient() {
-  const [isCharacterLoading, setIsCharacterLoading] = useState(true);
-  const [characters, setCharacters] = useState<TResMaplestoryMyCharacter[]>([]);
   const [selectedCharacterId, setSelectedCharacterId] = useState<string | null>(null);
-  const [isEquipmentLoading, setIsEquipmentLoading] = useState(true);
-  const [isEquipmentLoadError, setIsEquipmentLoadError] = useState(false);
-  const [equipmentStates, setEquipmentStates] = useState<TMaplestoryEquipmentState[]>([]);
   const [editor, setEditor] = useState<TEquipmentEditor | null>(null);
-  const selectedCharacterIdRef = useRef<string | null>(null);
+  const {
+    data: characters = [],
+    isLoading: isCharacterLoading,
+    isError: isCharacterLoadError,
+  } = maplestoryQuery.useGetMyCharacters();
+  const activeCharacterId = characters.some((character) => character.id === selectedCharacterId)
+    ? selectedCharacterId
+    : (characters[0]?.id ?? null);
+  const {
+    data: equipmentStates = [],
+    isLoading: isEquipmentLoading,
+    isError: isEquipmentLoadError,
+  } = maplestoryQuery.useGetEquipmentStates(activeCharacterId);
+  const saveEquipmentState = maplestoryQuery.useSaveEquipmentState();
+  const toggleEquipmentHighlight = maplestoryQuery.useToggleEquipmentHighlight();
 
   useEffect(() => {
-    async function loadCharacters() {
-      try {
-        const response = await api.maplestory.getMyCharacters();
-        const firstCharacterId = response[0]?.id ?? null;
-        setCharacters(response);
-        selectedCharacterIdRef.current = firstCharacterId;
-        setSelectedCharacterId(firstCharacterId);
-      } catch {
-        toast.error('내 캐릭터 목록을 불러오지 못했습니다.');
-      } finally {
-        setIsCharacterLoading(false);
-      }
+    if (isCharacterLoadError) {
+      toast.error('내 캐릭터 목록을 불러오지 못했습니다.');
     }
-
-    loadCharacters();
-  }, []);
+  }, [isCharacterLoadError]);
 
   useEffect(() => {
-    if (selectedCharacterId === null) return;
-
-    let isCancelled = false;
-
-    async function loadEquipmentStates() {
-      setIsEquipmentLoading(true);
-      setIsEquipmentLoadError(false);
-      setEditor(null);
-
-      try {
-        const response = await api.maplestory.getEquipmentStates(selectedCharacterId!);
-        if (!isCancelled) {
-          setEquipmentStates(response);
-        }
-      } catch {
-        if (!isCancelled) {
-          setEquipmentStates([]);
-          setIsEquipmentLoadError(true);
-          toast.error('장비 정보를 불러오지 못했습니다.');
-        }
-      } finally {
-        if (!isCancelled) {
-          setIsEquipmentLoading(false);
-        }
-      }
+    if (isEquipmentLoadError) {
+      toast.error('장비 정보를 불러오지 못했습니다.');
     }
-
-    loadEquipmentStates();
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [selectedCharacterId]);
+  }, [isEquipmentLoadError]);
 
   const characterTabs = useMemo(
     () => characters.map((character) => ({ value: character.id, label: character.nickname })),
@@ -101,7 +68,7 @@ export default function EquipmentClient() {
   }
 
   function handleCharacterChange(characterId: string) {
-    selectedCharacterIdRef.current = characterId;
+    setEditor(null);
     setSelectedCharacterId(characterId);
   }
 
@@ -109,30 +76,22 @@ export default function EquipmentClient() {
     slotKey: string,
     patch: TMaplestoryEquipmentStatePatch,
   ): Promise<boolean> {
-    const characterId = selectedCharacterId;
+    const characterId = activeCharacterId;
     if (characterId === null) return false;
 
     try {
-      const response = await api.maplestory.saveEquipmentState(characterId, slotKey, patch);
-      if (selectedCharacterIdRef.current !== characterId) return true;
-
-      setEquipmentStates((previousStates) =>
-        replaceEquipmentState(previousStates, slotKey, response),
-      );
+      await saveEquipmentState.mutateAsync({ characterId, slotKey, patch });
       return true;
     } catch {
-      if (selectedCharacterIdRef.current === characterId) {
-        toast.error('장비 정보 저장에 실패했습니다.');
-      }
+      toast.error('장비 정보 저장에 실패했습니다.');
       return false;
     }
   }
 
   async function handleToggleHighlight(slot: TMaplestoryEquipmentSlot) {
-    const characterId = selectedCharacterId;
+    const characterId = activeCharacterId;
     if (characterId === null) return;
 
-    const previousStates = equipmentStates;
     const previousState = stateMap.get(slot.key);
     const nextValue = !(previousState?.isHighlighted ?? false);
     const optimisticState = createOptimisticEquipmentState(
@@ -142,22 +101,14 @@ export default function EquipmentClient() {
       nextValue,
     );
 
-    setEquipmentStates(replaceEquipmentState(previousStates, slot.key, optimisticState));
-
     try {
-      const response = await api.maplestory.saveEquipmentState(characterId, slot.key, {
-        isHighlighted: nextValue,
+      await toggleEquipmentHighlight.mutateAsync({
+        characterId,
+        slotKey: slot.key,
+        state: optimisticState,
       });
-      if (selectedCharacterIdRef.current !== characterId) return;
-
-      setEquipmentStates((currentStates) =>
-        replaceEquipmentState(currentStates, slot.key, response),
-      );
     } catch {
-      if (selectedCharacterIdRef.current === characterId) {
-        setEquipmentStates(previousStates);
-        toast.error('장비 강조 표시 저장에 실패했습니다.');
-      }
+      toast.error('장비 강조 표시 저장에 실패했습니다.');
     }
   }
 
@@ -168,15 +119,15 @@ export default function EquipmentClient() {
       <main className={styles['equipment-client-container']}>
         {isCharacterLoading && <BoxLoading height={320} />}
 
-        {!isCharacterLoading && characters.length === 0 && (
+        {!isCharacterLoading && !isCharacterLoadError && characters.length === 0 && (
           <div className={styles['empty-state']}>내 캐릭터를 먼저 등록해 주세요.</div>
         )}
 
-        {!isCharacterLoading && selectedCharacterId !== null && (
+        {!isCharacterLoading && activeCharacterId !== null && (
           <>
             <Tabs
               options={characterTabs}
-              value={selectedCharacterId}
+              value={activeCharacterId}
               onChange={handleCharacterChange}
             />
 
@@ -216,15 +167,6 @@ export default function EquipmentClient() {
       )}
     </div>
   );
-}
-
-function replaceEquipmentState(
-  states: TMaplestoryEquipmentState[],
-  slotKey: string,
-  nextState: TMaplestoryEquipmentState | null,
-): TMaplestoryEquipmentState[] {
-  const nextStates = states.filter((state) => state.slotKey !== slotKey);
-  return nextState === null ? nextStates : [...nextStates, nextState];
 }
 
 function createOptimisticEquipmentState(

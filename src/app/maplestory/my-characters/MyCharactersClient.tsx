@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react';
 
-import api from '@/api';
 import type {
   TReqCreateMaplestoryMyCharacter,
   TResMaplestoryMyCharacter,
 } from '@/api/maplestory/type';
+import maplestoryQuery from '@/queries/maplestoryQuery';
 import toast from '@/utils/toast';
 
 import Button from '@/components/common/button/Button';
@@ -18,32 +18,24 @@ import CreateCharacterModal from './_component/CreateCharacterModal';
 import styles from './myCharactersClient.module.scss';
 
 export default function MyCharactersClient() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [characters, setCharacters] = useState<TResMaplestoryMyCharacter[]>([]);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [deletingCharacterId, setDeletingCharacterId] = useState<string | null>(null);
+
+  const { data: characters = [], isLoading, isError } = maplestoryQuery.useGetMyCharacters();
+  const addMyCharacter = maplestoryQuery.useAddMyCharacter();
+  const reorderMyCharacters = maplestoryQuery.useReorderMyCharacters();
+  const deleteMyCharacter = maplestoryQuery.useDeleteMyCharacter();
 
   useEffect(() => {
-    async function loadMyCharacters() {
-      try {
-        const response = await api.maplestory.getMyCharacters();
-        setCharacters(response);
-      } catch {
-        toast.error('내 캐릭터 목록을 불러오지 못했습니다.');
-      } finally {
-        setIsLoading(false);
-      }
+    if (isError) {
+      toast.error('내 캐릭터 목록을 불러오지 못했습니다.');
     }
-
-    loadMyCharacters();
-  }, []);
+  }, [isError]);
 
   async function handleCreateCharacter(
     character: TReqCreateMaplestoryMyCharacter,
   ): Promise<boolean> {
     try {
-      const response = await api.maplestory.addMyCharacter(character, characters.length);
-      setCharacters(response);
+      await addMyCharacter.mutateAsync({ character, sortOrder: characters.length });
       setIsCreateModalOpen(false);
       toast.success('캐릭터를 등록했습니다.');
       return true;
@@ -54,31 +46,21 @@ export default function MyCharactersClient() {
   }
 
   async function handleReorder(nextCharacters: TResMaplestoryMyCharacter[]) {
-    const previousCharacters = characters;
-    setCharacters(nextCharacters);
-
     try {
-      const response = await api.maplestory.reorderMyCharacters(nextCharacters);
-      setCharacters(response);
+      await reorderMyCharacters.mutateAsync(nextCharacters);
     } catch {
-      setCharacters(previousCharacters);
       toast.error('캐릭터 순서 변경에 실패했습니다.');
     }
   }
 
   async function handleDeleteCharacter(id: string) {
-    if (deletingCharacterId !== null) return;
-
-    setDeletingCharacterId(id);
+    if (deleteMyCharacter.isPending) return;
 
     try {
-      const response = await api.maplestory.deleteMyCharacter(id);
-      setCharacters(response);
+      await deleteMyCharacter.mutateAsync(id);
       toast.success('캐릭터를 삭제했습니다.');
     } catch {
       toast.error('캐릭터 삭제에 실패했습니다.');
-    } finally {
-      setDeletingCharacterId(null);
     }
   }
 
@@ -97,7 +79,7 @@ export default function MyCharactersClient() {
 
           {isLoading && <BoxLoading height={240} />}
 
-          {!isLoading && characters.length === 0 && (
+          {!isLoading && !isError && characters.length === 0 && (
             <div className={styles['empty']}>
               <p className={styles['empty-message']}>캐릭터를 등록해 주세요.</p>
             </div>
@@ -106,7 +88,9 @@ export default function MyCharactersClient() {
           {!isLoading && characters.length > 0 && (
             <CharacterList
               characters={characters}
-              deletingCharacterId={deletingCharacterId}
+              deletingCharacterId={
+                deleteMyCharacter.isPending ? (deleteMyCharacter.variables ?? null) : null
+              }
               onReorder={handleReorder}
               onDeleteItem={handleDeleteCharacter}
             />
