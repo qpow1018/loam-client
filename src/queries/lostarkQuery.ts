@@ -38,6 +38,8 @@ const lostarkQuery = {
       queryKey: ['lostark', 'siblingCharacters', searchNickname],
       queryFn: () => api.lostark.getSiblingCharacters(searchNickname),
       enabled: searchNickname.length > 0,
+      staleTime: 0,
+      gcTime: 0,
     });
   },
 
