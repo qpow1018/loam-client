@@ -1,0 +1,104 @@
+.equipment-table-section {
+  overflow: hidden;
+  border-radius: $border-radius;
+  background-color: $gray-800;
+
+  .equipment-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+
+    .highlight-column {
+      width: 42px;
+    }
+
+    .name-column {
+      width: 160px;
+    }
+
+    .content-column {
+      width: 324px;
+    }
+
+    .price-column {
+      width: 120px;
+    }
+
+    th {
+      height: 34px;
+      padding: 0 12px;
+      background-color: $gray-700;
+      border-right: 1px solid $gray-600;
+      color: $text-secondary;
+      font-size: 11px;
+      font-weight: 500;
+      text-align: left;
+
+      &:last-child {
+        border-right: 0;
+        text-align: right;
+      }
+    }
+
+    td {
+      height: 44px;
+      padding: 0;
+      background-color: $gray-800;
+      border-top: 1px solid $gray-700;
+      border-right: 1px solid $gray-700;
+      transition: background-color $transition;
+
+      &:last-child {
+        border-right: 0;
+      }
+    }
+
+    .highlighted td {
+      background-color: rgba($rose-900, 0.58);
+    }
+  }
+
+  .highlight-cell {
+    text-align: center;
+
+    .highlight-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border: 1px solid $gray-500;
+      border-radius: 4px;
+      color: $rose-300;
+      font-size: 15px;
+
+      &:hover {
+        border-color: $rose-400;
+      }
+    }
+  }
+
+  .cell-button {
+    display: block;
+    width: 100%;
+    min-height: 43px;
+    padding: 10px 12px;
+    color: $text-primary;
+    font-size: 12px;
+    line-height: 1.5;
+    text-align: left;
+    word-break: break-word;
+
+    &:hover {
+      background-color: rgba($white, 0.04);
+    }
+
+    &.placeholder {
+      color: $text-secondary;
+    }
+
+    &.right-aligned {
+      text-align: right;
+    }
+  }
+}

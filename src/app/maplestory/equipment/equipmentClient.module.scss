@@ -1,0 +1,28 @@
+.equipment-client {
+  .equipment-client-container {
+    width: 100%;
+    max-width: 1024px;
+    padding: 16px;
+  }
+
+  .equipment-content {
+    margin-top: 12px;
+  }
+
+  .table-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .empty-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 240px;
+    border-radius: $border-radius;
+    background-color: $gray-800;
+    color: $text-secondary;
+    font-size: 13px;
+  }
+}

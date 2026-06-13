@@ -2,6 +2,7 @@ import Header, { type THeaderMenu } from '@/components/common/header/Header';
 
 const PRIMARY_MENUS: THeaderMenu[] = [
   { name: '할일', link: '/maplestory/mapledo' },
+  { name: '장비 관리', link: '/maplestory/equipment' },
   { name: '내 캐릭터', link: '/maplestory/my-characters' },
   { name: '유니온', link: '/maplestory/union' },
 ];
