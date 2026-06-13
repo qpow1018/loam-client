@@ -27,6 +27,29 @@ function replaceEquipmentState(
   return nextState === null ? nextStates : [...nextStates, nextState];
 }
 
+function createOptimisticEquipmentState(
+  characterId: string,
+  slotKey: string,
+  state: TMaplestoryEquipmentState | undefined,
+  isHighlighted: boolean,
+): TMaplestoryEquipmentState {
+  return {
+    id: state?.id ?? '',
+    characterId,
+    slotKey,
+    itemName: state?.itemName ?? null,
+    bonusOption: state?.bonusOption ?? null,
+    starforce: state?.starforce ?? null,
+    scroll: state?.scroll ?? null,
+    potential: state?.potential ?? null,
+    additionalPotential: state?.additionalPotential ?? null,
+    extra: state?.extra ?? null,
+    goal: state?.goal ?? null,
+    purchasePrice: state?.purchasePrice ?? null,
+    isHighlighted,
+  };
+}
+
 function useMyCharactersMutation<TVariables>(
   mutationFn: (variables: TVariables) => Promise<TResMaplestoryMyCharacter[]>,
 ) {
@@ -176,13 +199,9 @@ const maplestoryQuery = {
     const queryClient = useQueryClient();
 
     return useMutation({
-      mutationFn: (variables: {
-        characterId: string;
-        slotKey: string;
-        state: TMaplestoryEquipmentState;
-      }) =>
+      mutationFn: (variables: { characterId: string; slotKey: string; isHighlighted: boolean }) =>
         api.maplestory.saveEquipmentState(variables.characterId, variables.slotKey, {
-          isHighlighted: variables.state.isHighlighted,
+          isHighlighted: variables.isHighlighted,
         }),
       async onMutate(variables) {
         const queryKey = getEquipmentStatesQueryKey(variables.characterId);
@@ -190,8 +209,14 @@ const maplestoryQuery = {
         const previousState = queryClient
           .getQueryData<TMaplestoryEquipmentState[]>(queryKey)
           ?.find((state) => state.slotKey === variables.slotKey);
+        const optimisticState = createOptimisticEquipmentState(
+          variables.characterId,
+          variables.slotKey,
+          previousState,
+          variables.isHighlighted,
+        );
         queryClient.setQueryData<TMaplestoryEquipmentState[]>(queryKey, (states = []) =>
-          replaceEquipmentState(states, variables.slotKey, variables.state),
+          replaceEquipmentState(states, variables.slotKey, optimisticState),
         );
 
         return { previousState };

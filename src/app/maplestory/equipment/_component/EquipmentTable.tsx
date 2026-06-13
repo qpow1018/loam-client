@@ -31,15 +31,6 @@ export default function EquipmentTable(props: {
           <col className={styles['content-column']} />
           <col className={styles['price-column']} />
         </colgroup>
-        <thead>
-          <tr>
-            <th aria-label="강조" />
-            <th>장비명</th>
-            <th>현재 장비 스펙</th>
-            <th>목표</th>
-            <th>구매 시세</th>
-          </tr>
-        </thead>
         <tbody>
           {group.slots.map((slot) => {
             const state = states.get(slot.key);

@@ -16,32 +16,12 @@
       width: 160px;
     }
 
-    .content-column {
-      width: 324px;
-    }
-
     .price-column {
       width: 120px;
     }
 
-    th {
-      height: 34px;
-      padding: 0 12px;
-      background-color: $gray-700;
-      border-right: 1px solid $gray-600;
-      color: $text-secondary;
-      font-size: 11px;
-      font-weight: 500;
-      text-align: left;
-
-      &:last-child {
-        border-right: 0;
-        text-align: right;
-      }
-    }
-
     td {
-      height: 44px;
+      height: 40px;
       padding: 0;
       background-color: $gray-800;
       border-top: 1px solid $gray-700;
@@ -51,6 +31,10 @@
       &:last-child {
         border-right: 0;
       }
+    }
+
+    tr:first-child td {
+      border-top: 0;
     }
 
     .highlighted td {
@@ -81,8 +65,8 @@
   .cell-button {
     display: block;
     width: 100%;
-    min-height: 43px;
-    padding: 10px 12px;
+    min-height: 39px;
+    padding: 7px 12px;
     color: $text-primary;
     font-size: 12px;
     line-height: 1.5;

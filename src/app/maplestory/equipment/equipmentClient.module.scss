@@ -1,8 +1,11 @@
 .equipment-client {
   .equipment-client-container {
     width: 100%;
-    max-width: 1024px;
     padding: 16px;
+  }
+
+  .equipment-section {
+    width: 1024px;
   }
 
   .equipment-content {
