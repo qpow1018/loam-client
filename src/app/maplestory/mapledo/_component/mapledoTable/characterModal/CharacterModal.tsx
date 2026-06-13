@@ -53,6 +53,7 @@ export default function CharacterModal(props: {
     setTempColumn((prev) => ({
       id: prev?.id ?? uuidv4(),
       name: character.nickname,
+      className: character.className,
     }));
   }
 

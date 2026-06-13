@@ -7,6 +7,8 @@ import type { TDragHandleProps } from '@/components/common/draggableList/Draggab
 import HeaderCell from '@/components/taskTable/HeaderCell';
 import CharacterModal from './characterModal/CharacterModal';
 
+import styles from './mapleHeaderCell.module.scss';
+
 export default function MapleHeaderCell(props: {
   column: TTaskTableColumn;
   dragHandleProps: TDragHandleProps;
@@ -29,11 +31,13 @@ export default function MapleHeaderCell(props: {
 
   return (
     <>
-      <HeaderCell
-        column={column}
-        dragHandleProps={dragHandleProps}
-        onEdit={() => setIsModalOpen(true)}
-      />
+      <HeaderCell dragHandleProps={dragHandleProps} onEdit={() => setIsModalOpen(true)}>
+        <div className={styles['character-info']}>
+          {column.className && <span className={styles['class-name']}>{column.className}</span>}
+          <span className={styles['nickname']}>{column.name}</span>
+        </div>
+      </HeaderCell>
+
       {isModalOpen && (
         <CharacterModal
           isOpen={isModalOpen}

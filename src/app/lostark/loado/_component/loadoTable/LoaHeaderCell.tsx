@@ -8,6 +8,8 @@ import type { TDragHandleProps } from '@/components/common/draggableList/Draggab
 import HeaderCell from '@/components/taskTable/HeaderCell';
 import CharacterModal from './characterModal/CharacterModal';
 
+import styles from './loaHeaderCell.module.scss';
+
 export default function LoaHeaderCell(props: {
   column: TTaskTableColumn;
   dragHandleProps: TDragHandleProps;
@@ -30,11 +32,16 @@ export default function LoaHeaderCell(props: {
 
   return (
     <>
-      <HeaderCell
-        column={column}
-        dragHandleProps={dragHandleProps}
-        onEdit={() => setIsModalOpen(true)}
-      />
+      <HeaderCell dragHandleProps={dragHandleProps} onEdit={() => setIsModalOpen(true)}>
+        <div className={styles['character-info']}>
+          {column.imageUrl && (
+            <div className={styles['icon-box']}>
+              <img src={column.imageUrl} alt="" />
+            </div>
+          )}
+          <span className={styles['nickname']}>{column.name}</span>
+        </div>
+      </HeaderCell>
 
       {isModalOpen && (
         <CharacterModal

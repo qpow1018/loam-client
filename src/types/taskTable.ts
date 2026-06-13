@@ -19,6 +19,7 @@ export type TTaskTableData = {
 export type TTaskTableColumn = {
   id: string;
   name: string;
+  className?: string;
   imageUrl?: string;
 };
 
