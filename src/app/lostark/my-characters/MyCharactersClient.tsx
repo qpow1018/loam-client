@@ -29,12 +29,14 @@ export default function MyCharactersClient() {
   const [draftCharacters, setDraftCharacters] = useState<Record<string, TResLostarkMainCharacter>>(
     {},
   );
+
   const {
     data: savedMainCharacters = [],
     isLoading,
     isError,
   } = lostarkQuery.useGetMainCharacters();
   const reorderMainCharacters = lostarkQuery.useReorderMainCharacters();
+
   const mainCharacters = savedMainCharacters.map(
     (character) => draftCharacters[character.id] ?? character,
   );

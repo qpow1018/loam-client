@@ -30,6 +30,7 @@ export default function CharacterModal(props: {
 
   const [tempColumn, setTempColumn] = useState<TTaskTableColumn | null>(editingData ?? null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
   const { data: allCharacters = [], isLoading, isError } = lostarkQuery.useGetMyCharacters();
 
   const isEditMode = editingData !== undefined;
