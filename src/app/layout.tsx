@@ -4,6 +4,7 @@ import { Noto_Sans_KR } from 'next/font/google';
 import '@/assets/reset.scss';
 import '@/assets/global.scss';
 
+import QueryProvider from '@/components/QueryProvider';
 import ToastContainer from '@/components/common/toast/ToastContainer';
 import ServiceWorkerRegister from '@/components/ServiceWorkerRegister';
 
@@ -39,8 +40,10 @@ export default function RootLayout({
       <body>
         <ServiceWorkerRegister />
 
-        {children}
-        <ToastContainer />
+        <QueryProvider>
+          {children}
+          <ToastContainer />
+        </QueryProvider>
       </body>
     </html>
   );
