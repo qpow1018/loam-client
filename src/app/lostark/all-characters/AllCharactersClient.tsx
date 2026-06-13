@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
-import api from '@/api';
 import type { TReqCreateLostarkMyCharacter, TResLostarkMyCharacter } from '@/api/lostark/type';
+import lostarkQuery from '@/queries/lostarkQuery';
 import toast from '@/utils/toast';
 
 import Button from '@/components/common/button/Button';
@@ -15,26 +15,20 @@ import CreateCharacterModal from './_component/CreateCharacterModal';
 import styles from './allCharactersClient.module.scss';
 
 export default function AllCharactersClient() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [allCharacters, setAllCharacters] = useState<TResLostarkMyCharacter[]>([]);
-
-  const [togglingMainCharacterId, setTogglingMainCharacterId] = useState<string | null>(null);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-  useEffect(() => {
-    async function getMyCharactersFromServer() {
-      try {
-        const res = await api.lostark.getMyCharacters();
-        setAllCharacters(res);
-        setIsLoading(false);
-      } catch {
-        toast.error('내 캐릭터 목록을 불러오지 못했습니다.');
-      }
-    }
+  const { data: allCharacters = [], isLoading, isError } = lostarkQuery.useGetMyCharacters();
+  const addMyCharacters = lostarkQuery.useAddMyCharacters();
+  const refreshMyCharacters = lostarkQuery.useRefreshMyCharacters();
+  const reorderMyCharacters = lostarkQuery.useReorderMyCharacters();
+  const toggleMainCharacter = lostarkQuery.useToggleMainCharacter();
+  const deleteMyCharacter = lostarkQuery.useDeleteMyCharacter();
 
-    getMyCharactersFromServer();
-  }, []);
+  useEffect(() => {
+    if (isError) {
+      toast.error('내 캐릭터 목록을 불러오지 못했습니다.');
+    }
+  }, [isError]);
 
   async function handleSubmitCharacters(nextCharacters: TReqCreateLostarkMyCharacter[]) {
     if (nextCharacters.length === 0) {
@@ -42,11 +36,10 @@ export default function AllCharactersClient() {
     }
 
     try {
-      const savedCharacters = await api.lostark.addMyCharacters(
-        nextCharacters,
-        allCharacters.length,
-      );
-      setAllCharacters(savedCharacters);
+      await addMyCharacters.mutateAsync({
+        characters: nextCharacters,
+        startSortOrder: allCharacters.length,
+      });
       setIsCreateModalOpen(false);
       toast.success('캐릭터를 등록했습니다.');
     } catch {
@@ -55,79 +48,41 @@ export default function AllCharactersClient() {
   }
 
   async function handleRefreshCharacters() {
-    if (allCharacters.length === 0 || isRefreshing) return;
-
-    setIsRefreshing(true);
+    if (allCharacters.length === 0 || refreshMyCharacters.isPending) return;
 
     try {
-      const resSiblingCharacters = await api.lostark.getSiblingCharacters(
-        allCharacters[0].nickname,
-      );
-      const itemLevelByCharacterName = new Map(
-        resSiblingCharacters.data.map((character) => [
-          character.CharacterName,
-          character.ItemAvgLevel,
-        ]),
-      );
-
-      const nextCharacters = allCharacters.map((character) => {
-        const nextItemLevel = itemLevelByCharacterName.get(character.nickname);
-        if (nextItemLevel === undefined) {
-          return character;
-        }
-
-        return {
-          ...character,
-          itemLevel: nextItemLevel,
-        };
-      });
-
-      const resUpdateMyCharacters = await api.lostark.updateMyCharacters(nextCharacters);
-      setAllCharacters(resUpdateMyCharacters);
+      await refreshMyCharacters.mutateAsync(allCharacters);
       toast.success('원정대를 갱신했습니다.');
     } catch {
       toast.error('원정대 갱신에 실패했습니다.');
-    } finally {
-      setIsRefreshing(false);
     }
   }
 
   async function handleReorder(next: TResLostarkMyCharacter[]) {
-    const previous = allCharacters;
-    setAllCharacters(next);
-
     try {
-      const response = await api.lostark.reorderMyCharacters(next);
-      setAllCharacters(response);
+      await reorderMyCharacters.mutateAsync(next);
     } catch {
-      setAllCharacters(previous);
       toast.error('캐릭터 순서 변경에 실패했습니다.');
     }
   }
 
   async function handleToggleMainCharacter(character: TResLostarkMyCharacter) {
-    if (togglingMainCharacterId) return;
-
-    setTogglingMainCharacterId(character.id);
+    if (toggleMainCharacter.isPending) return;
 
     try {
-      const response = await api.lostark.toggleMainCharacter(character);
-      setAllCharacters(response);
+      await toggleMainCharacter.mutateAsync(character);
 
       toast.success(
         character.isMain === true ? '메인 캐릭터를 해제했습니다.' : '메인 캐릭터를 등록했습니다.',
       );
     } catch {
       toast.error('메인 캐릭터 변경에 실패했습니다.');
-    } finally {
-      setTogglingMainCharacterId(null);
     }
   }
 
   async function handleDeleteCharacter(id: string) {
     try {
-      const response = await api.lostark.deleteMyCharacter(id);
-      setAllCharacters(response);
+      await deleteMyCharacter.mutateAsync(id);
       toast.success('캐릭터를 삭제했습니다.');
     } catch {
       toast.error('캐릭터 삭제에 실패했습니다.');
@@ -146,7 +101,7 @@ export default function AllCharactersClient() {
               <Button
                 onClick={handleRefreshCharacters}
                 theme="bg-gray600"
-                isLoading={isRefreshing}
+                isLoading={refreshMyCharacters.isPending}
                 isDisabled={allCharacters.length === 0}
               >
                 원정대 갱신
@@ -160,7 +115,7 @@ export default function AllCharactersClient() {
 
           {isLoading && <BoxLoading height={240} />}
 
-          {!isLoading && allCharacters.length === 0 && (
+          {!isLoading && !isError && allCharacters.length === 0 && (
             <div className={styles['empty']}>
               <p className={styles['empty-message']}>원정대 캐릭터를 불러오세요.</p>
             </div>
@@ -169,7 +124,7 @@ export default function AllCharactersClient() {
           {!isLoading && allCharacters.length > 0 && (
             <CharacterList
               characters={allCharacters}
-              togglingMainCharacterId={togglingMainCharacterId}
+              togglingMainCharacterId={toggleMainCharacter.variables?.id}
               onReorder={handleReorder}
               onToggleMain={handleToggleMainCharacter}
               onDeleteItem={handleDeleteCharacter}

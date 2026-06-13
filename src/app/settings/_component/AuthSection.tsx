@@ -1,5 +1,6 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -10,6 +11,7 @@ import toast from '@/utils/toast';
 
 export default function AuthSection() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [isSigningOut, setIsSigningOut] = useState(false);
 
   async function handleSignOut() {
@@ -26,6 +28,7 @@ export default function AuthSection() {
       return;
     }
 
+    queryClient.clear();
     router.replace('/login');
     router.refresh();
   }
