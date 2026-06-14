@@ -14,7 +14,11 @@ export default function SettingsClient(props: { game: TSettingsGame }) {
 
   return (
     <div className={styles['settings-page']}>
-      {game === 'maplestory' ? <MaplestoryHeader /> : <LostarkHeader />}
+      {game === 'maplestory' ? (
+        <MaplestoryHeader isBackupReminderVisible={false} />
+      ) : (
+        <LostarkHeader isBackupReminderVisible={false} />
+      )}
 
       <main className={styles['settings-page-container']}>
         <BackupSection />

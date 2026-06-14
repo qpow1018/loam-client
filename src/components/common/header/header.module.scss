@@ -57,4 +57,34 @@
     height: 32px;
     background-color: rgba($white, 0.35);
   }
+
+  .backup-reminder {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 13px;
+    height: 32px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #92400e;
+    background-color: #fef3c7;
+    border: 1px solid rgba(146, 64, 14, 0.15);
+    border-radius: 999px;
+    box-shadow: 0 2px 8px rgba($black, 0.18);
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+
+    &:hover {
+      background-color: #fde68a;
+    }
+
+    .backup-reminder-dot {
+      width: 7px;
+      height: 7px;
+      background-color: #f59e0b;
+      border-radius: 50%;
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+    }
+  }
 }

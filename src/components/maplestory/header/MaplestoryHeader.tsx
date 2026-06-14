@@ -12,6 +12,15 @@ const SECONDARY_MENUS: THeaderMenu[] = [
   { name: '설정', link: '/settings?game=maplestory' },
 ];
 
-export default function MaplestoryHeader() {
-  return <Header theme="rose" primaryMenus={PRIMARY_MENUS} secondaryMenus={SECONDARY_MENUS} />;
+export default function MaplestoryHeader(props: { isBackupReminderVisible?: boolean }) {
+  const { isBackupReminderVisible = true } = props;
+
+  return (
+    <Header
+      theme="rose"
+      primaryMenus={PRIMARY_MENUS}
+      secondaryMenus={SECONDARY_MENUS}
+      backupReminderLink={isBackupReminderVisible ? '/settings?game=maplestory#backup' : undefined}
+    />
+  );
 }

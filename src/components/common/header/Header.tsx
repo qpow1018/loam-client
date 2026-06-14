@@ -1,5 +1,7 @@
 import Link from 'next/link';
 
+import CloudBackupReminder from '@/components/common/header/CloudBackupReminder';
+
 import styles from './header.module.scss';
 
 export type THeaderMenu = {
@@ -11,10 +13,11 @@ type THeaderProps = {
   theme: 'mint' | 'rose';
   primaryMenus: THeaderMenu[];
   secondaryMenus: THeaderMenu[];
+  backupReminderLink?: string;
 };
 
 export default function Header(props: THeaderProps) {
-  const { theme, primaryMenus, secondaryMenus } = props;
+  const { theme, primaryMenus, secondaryMenus, backupReminderLink } = props;
   const hasDivider = primaryMenus.length > 0 && secondaryMenus.length > 0;
 
   function renderMenu(menu: THeaderMenu) {
@@ -33,6 +36,9 @@ export default function Header(props: THeaderProps) {
         {primaryMenus.map(renderMenu)}
         {hasDivider && <span aria-hidden="true" className={styles['navigation-divider']} />}
         {secondaryMenus.map(renderMenu)}
+        {backupReminderLink !== undefined && (
+          <CloudBackupReminder settingsLink={backupReminderLink} />
+        )}
       </nav>
     </header>
   );

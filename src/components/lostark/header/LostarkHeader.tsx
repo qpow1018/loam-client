@@ -12,6 +12,15 @@ const SECONDARY_MENUS: THeaderMenu[] = [
   { name: '설정', link: '/settings?game=lostark' },
 ];
 
-export default function LostarkHeader() {
-  return <Header theme="mint" primaryMenus={PRIMARY_MENUS} secondaryMenus={SECONDARY_MENUS} />;
+export default function LostarkHeader(props: { isBackupReminderVisible?: boolean }) {
+  const { isBackupReminderVisible = true } = props;
+
+  return (
+    <Header
+      theme="mint"
+      primaryMenus={PRIMARY_MENUS}
+      secondaryMenus={SECONDARY_MENUS}
+      backupReminderLink={isBackupReminderVisible ? '/settings?game=lostark#backup' : undefined}
+    />
+  );
 }

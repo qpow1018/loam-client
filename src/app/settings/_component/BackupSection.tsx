@@ -145,6 +145,7 @@ export default function BackupSection() {
   return (
     <>
       <SettingsSection
+        id="backup"
         title="백업/복원"
         description="할일 테이블과 메모 데이터를 JSON 파일 또는 클라우드 백업으로 보관합니다."
         status={backupStatus}

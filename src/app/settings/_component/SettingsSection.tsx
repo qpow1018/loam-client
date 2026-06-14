@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import styles from '@/app/settings/_component/settingsSection.module.scss';
 
 export default function SettingsSection(props: {
+  id?: string;
   title: string;
   description: string;
   status?: string;
@@ -10,10 +11,11 @@ export default function SettingsSection(props: {
   children?: ReactNode;
   variant?: 'default' | 'primary';
 }) {
-  const { title, description, status, actions, children, variant = 'default' } = props;
+  const { id, title, description, status, actions, children, variant = 'default' } = props;
 
   return (
     <section
+      id={id}
       className={`${styles['settings-section']} ${variant === 'primary' ? styles['is-primary'] : ''}`}
     >
       <div className={styles['section-header']}>
