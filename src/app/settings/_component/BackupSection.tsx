@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, type ChangeEvent } from 'react';
+import { useEffect, useRef, useState, type ChangeEvent } from 'react';
 
 import {
   createBackupPayload,
@@ -18,14 +18,46 @@ import SettingsSection from '@/app/settings/_component/SettingsSection';
 
 import styles from '@/app/settings/_component/backupSection.module.scss';
 
+function formatBackupDate(value: string): string {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '확인할 수 없음';
+
+  return new Intl.DateTimeFormat('ko-KR', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  }).format(date);
+}
+
 export default function BackupSection() {
   const backupInputRef = useRef<HTMLInputElement>(null);
 
   const [backupStatus, setBackupStatus] = useState<string>();
+  const [lastCloudBackup, setLastCloudBackup] = useState('확인 중...');
   const [pendingBackup, setPendingBackup] = useState<TBackupPayload | null>(null);
   const [isCloudBackupLoading, setIsCloudBackupLoading] = useState(false);
   const [isCloudRestoreLoading, setIsCloudRestoreLoading] = useState(false);
   const [isCloudRestoreConfirmOpen, setIsCloudRestoreConfirmOpen] = useState(false);
+
+  useEffect(() => {
+    let isActive = true;
+
+    async function loadLastCloudBackup() {
+      try {
+        const backup = await api.backup.getStorageBackup();
+        if (!isActive) return;
+
+        setLastCloudBackup(backup === null ? '없음' : formatBackupDate(backup.exportedAt));
+      } catch {
+        if (isActive) setLastCloudBackup('확인할 수 없음');
+      }
+    }
+
+    void loadLastCloudBackup();
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
 
   function handleExportClick() {
     downloadBackupPayload(createBackupPayload());
@@ -41,7 +73,8 @@ export default function BackupSection() {
 
     setIsCloudBackupLoading(true);
     try {
-      await api.backup.saveStorageBackup(createBackupPayload());
+      const backup = await api.backup.saveStorageBackup(createBackupPayload());
+      setLastCloudBackup(formatBackupDate(backup.exportedAt));
       setBackupStatus('현재 저장 데이터를 클라우드에 백업했습니다.');
     } catch {
       setBackupStatus('클라우드 백업에 실패했습니다. 로그인 상태를 확인해주세요.');
@@ -126,7 +159,7 @@ export default function BackupSection() {
           </Button>
         </SettingsField>
 
-        <SettingsField label="클라우드" value="로그인 계정에 최신 백업 1개를 저장합니다.">
+        <SettingsField label="클라우드" value={`마지막 백업: ${lastCloudBackup}`}>
           <Button
             theme="bg-pri"
             size="small"
