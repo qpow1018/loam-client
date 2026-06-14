@@ -1,6 +1,10 @@
 .memo-modal-content {
   padding: 16px;
 
+  .title-input {
+    margin-bottom: 12px;
+  }
+
   .action-buttons {
     display: flex;
     align-items: center;

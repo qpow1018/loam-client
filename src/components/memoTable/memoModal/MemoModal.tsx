@@ -10,6 +10,7 @@ import Modal from '@/components/common/modal/Modal';
 import Confirm from '@/components/common/modal/Confirm';
 import Button from '@/components/common/button/Button';
 import IconButton from '@/components/common/button/IconButton';
+import TextInput from '@/components/common/form/TextInput';
 import Textarea from '@/components/common/form/Textarea';
 
 import styles from './memoModal.module.scss';
@@ -23,6 +24,7 @@ export default function MemoModal(props: {
 }) {
   const { isOpen, onClose, editingData, onSubmit, onDelete } = props;
 
+  const [title, setTitle] = useState(editingData?.title ?? '');
   const [content, setContent] = useState(editingData?.content ?? '');
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
@@ -31,9 +33,11 @@ export default function MemoModal(props: {
 
   function handleSave() {
     if (isSaveDisabled) return;
+    const trimmedTitle = title.trim();
     const trimmedContent = content.trim();
     onSubmit({
       id: editingData?.id ?? uuidv4(),
+      title: trimmedTitle || undefined,
       content: trimmedContent,
     });
   }
@@ -47,6 +51,13 @@ export default function MemoModal(props: {
         width={480}
       >
         <div className={styles['memo-modal-content']}>
+          <TextInput
+            value={title}
+            onChange={setTitle}
+            placeholder="제목을 입력하세요 (선택)"
+            className={styles['title-input']}
+          />
+
           <Textarea
             autoFocus
             isCursorAtEndOnAutoFocus

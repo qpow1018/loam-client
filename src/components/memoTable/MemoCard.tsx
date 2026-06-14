@@ -34,9 +34,10 @@ export default function MemoCard(props: {
   return (
     <>
       <div className={styles['memo-card']}>
-        <p className={styles['memo-content']} onClick={() => setIsModalOpen(true)}>
-          {memo.content}
-        </p>
+        <div className={styles['memo-content']} onClick={() => setIsModalOpen(true)}>
+          {memo.title !== undefined && <p className={styles['memo-title']}>{memo.title}</p>}
+          <p>{memo.content}</p>
+        </div>
 
         <div
           {...dragHandleProps}
