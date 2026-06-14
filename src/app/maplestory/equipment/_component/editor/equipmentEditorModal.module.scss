@@ -22,6 +22,54 @@
     }
   }
 
+  .field-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .main-input {
+    width: 140px;
+    flex-shrink: 0;
+  }
+
+  .helper-area {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    padding-left: 12px;
+    border-left: 1px solid $gray-600;
+  }
+
+  .helper-button {
+    min-width: 0;
+    height: 30px;
+    padding: 0 8px;
+    border-color: $gray-600;
+    color: $text-secondary;
+    font-size: 11px;
+  }
+
+  .calculator-input {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: $text-secondary;
+    font-size: 10px;
+    white-space: nowrap;
+  }
+
+  .helper-input {
+    width: 64px;
+    height: 30px;
+    padding: 0 8px;
+    border-color: $gray-600;
+    color: $text-secondary;
+    font-size: 11px;
+  }
+
   .action-buttons {
     display: flex;
     justify-content: flex-end;

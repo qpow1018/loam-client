@@ -10,7 +10,6 @@ import type { TEquipmentEditor } from '@/app/maplestory/equipment/_type/equipmen
 
 import Button from '@/components/common/button/Button';
 import TextInput from '@/components/common/form/TextInput';
-import Textarea from '@/components/common/form/Textarea';
 import Modal from '@/components/common/modal/Modal';
 import SpecEditorFields, { type TEquipmentSpecForm } from './SpecEditorFields';
 
@@ -45,7 +44,7 @@ export default function EquipmentEditorModal(props: {
       title={`${editor.slotName} ${getEditorTitle(editor)}`}
       isDismissable={!isSaving}
       isShowCloseButton={!isSaving}
-      width={editor.kind === 'spec' ? 560 : 480}
+      width={editor.kind === 'spec' ? 860 : 480}
     >
       <div className={styles['equipment-editor-modal']}>
         {editor.kind === 'spec' ? (
@@ -78,25 +77,9 @@ function SingleValueEditor(props: {
   const { editor, value, onChange } = props;
   const placeholder = getPlaceholder(editor);
 
-  if (editor.kind === 'goal') {
-    return (
-      <label className={styles['form-row']}>
-        <span>목표</span>
-        <Textarea
-          value={value}
-          placeholder={placeholder}
-          rows={3}
-          autoFocus
-          isCursorAtEndOnAutoFocus
-          onChange={onChange}
-        />
-      </label>
-    );
-  }
-
   return (
     <label className={styles['form-row']}>
-      <span>{editor.kind === 'itemName' ? '장비명' : '구매 시세'}</span>
+      <span>{getEditorTitle(editor)}</span>
       <TextInput value={value} placeholder={placeholder} onChange={onChange} />
     </label>
   );
