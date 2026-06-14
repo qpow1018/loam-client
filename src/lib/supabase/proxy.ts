@@ -30,14 +30,13 @@ export async function updateSession(request: NextRequest) {
     },
   );
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data } = await supabase.auth.getClaims();
+  const claims = data?.claims;
 
   const isLoginPath = request.nextUrl.pathname === LOGIN_PATH;
-  const isAllowedUser = user !== null && isAllowedAuthEmail(user.email);
+  const isAllowedUser = claims !== undefined && isAllowedAuthEmail(claims.email);
 
-  if (user !== null && !isAllowedUser) {
+  if (claims !== undefined && !isAllowedUser) {
     await supabase.auth.signOut();
   }
 

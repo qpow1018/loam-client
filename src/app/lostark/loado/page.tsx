@@ -1,8 +1,5 @@
 import LoadoClient from './LoadoClient';
-import { requireAuth } from '@/lib/auth/requireAuth';
 
-export default async function LoadoPage() {
-  await requireAuth('/lostark/loado');
-
+export default function LoadoPage() {
   return <LoadoClient />;
 }

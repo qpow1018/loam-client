@@ -1,8 +1,5 @@
-import { requireAuth } from '@/lib/auth/requireAuth';
 import AllCharactersClient from './AllCharactersClient';
 
-export default async function AllCharactersPage() {
-  await requireAuth('/lostark/all-characters');
-
+export default function AllCharactersPage() {
   return <AllCharactersClient />;
 }
