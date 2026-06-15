@@ -1,3 +1,5 @@
+import { createClient } from 'npm:@supabase/supabase-js@2';
+
 const LOSTARK_API_BASE_URL = 'https://developer-lostark.game.onstove.com';
 
 const corsHeaders = {
@@ -778,6 +780,11 @@ Deno.serve(async (req) => {
   }
 
   try {
+    const authErrorResponse = await validateAuthorization(req);
+    if (authErrorResponse !== null) {
+      return authErrorResponse;
+    }
+
     const body = (await req.json()) as RequestBody;
     const characterName = body.characterName?.trim();
 
@@ -835,3 +842,60 @@ Deno.serve(async (req) => {
     );
   }
 });
+
+async function validateAuthorization(req: Request) {
+  const token = req.headers.get('authorization')?.replace(/^Bearer\s+/i, '');
+
+  if (token === undefined) {
+    return Response.json(
+      { message: 'Authentication is required.' },
+      { status: 401, headers: corsHeaders },
+    );
+  }
+
+  const supabaseUrl = Deno.env.get('SUPABASE_URL');
+  const supabaseKey = Deno.env.get('SB_PUBLISHABLE_KEY') ?? Deno.env.get('SUPABASE_ANON_KEY');
+
+  if (!supabaseUrl || !supabaseKey) {
+    return Response.json(
+      { message: 'Supabase Auth environment variables are required.' },
+      { status: 500, headers: corsHeaders },
+    );
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseKey);
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser(token);
+
+  if (error || user === null) {
+    return Response.json(
+      { message: 'Authentication is required.' },
+      { status: 401, headers: corsHeaders },
+    );
+  }
+
+  if (!isAllowedAuthEmail(user.email)) {
+    return Response.json(
+      { message: 'This account cannot access LoaM.' },
+      { status: 403, headers: corsHeaders },
+    );
+  }
+
+  return null;
+}
+
+function isAllowedAuthEmail(email: string | undefined) {
+  const allowedEmails = Deno.env
+    .get('AUTH_ALLOWED_EMAILS')
+    ?.split(',')
+    .map((item) => item.trim().toLowerCase())
+    .filter(Boolean);
+
+  if (allowedEmails === undefined || allowedEmails.length === 0) {
+    return false;
+  }
+
+  return email !== undefined && allowedEmails.includes(email.toLowerCase());
+}
