@@ -321,6 +321,28 @@ export async function toggleMainCharacter(
 export async function deleteMyCharacter(id: string): Promise<TResLostarkMyCharacter[]> {
   const supabase = createClient();
   const userId = await getCurrentUserId();
+
+  const { data: character, error: characterError } = await supabase
+    .from(LOSTARK_MY_CHARACTERS_TABLE)
+    .select('nickname')
+    .eq('id', id)
+    .eq('user_id', userId)
+    .single();
+
+  if (characterError) {
+    throw characterError;
+  }
+
+  const { error: mainCharacterError } = await supabase
+    .from(LOSTARK_MAIN_CHARACTERS_TABLE)
+    .delete()
+    .eq('user_id', userId)
+    .eq('character_name', character.nickname);
+
+  if (mainCharacterError) {
+    throw mainCharacterError;
+  }
+
   const { error } = await supabase
     .from(LOSTARK_MY_CHARACTERS_TABLE)
     .delete()

@@ -56,7 +56,7 @@ Deno.serve(async (req) => {
       },
     );
 
-    const data = await response.json();
+    const data = parseResponseBody(await response.text());
 
     return Response.json(
       {
@@ -76,6 +76,18 @@ Deno.serve(async (req) => {
     );
   }
 });
+
+function parseResponseBody(value: string): unknown {
+  if (value.trim().length === 0) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(value) as unknown;
+  } catch {
+    return value;
+  }
+}
 
 async function validateAuthorization(req: Request) {
   const token = req.headers.get('authorization')?.replace(/^Bearer\s+/i, '');
