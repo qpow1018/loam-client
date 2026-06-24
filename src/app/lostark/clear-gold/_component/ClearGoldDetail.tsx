@@ -24,7 +24,7 @@ export default function ClearGoldDetail({ contentName, difficulty }: TClearGoldD
       <header className={styles['detail-header']}>
         <div>
           <p className={styles['content-name']}>{contentName}</p>
-          <h1>{difficulty.name}</h1>
+          <h2>{difficulty.name}</h2>
         </div>
         <span className={styles['item-level']}>입장 Lv. {difficulty.entryItemLevel}</span>
       </header>
@@ -46,6 +46,9 @@ export default function ClearGoldDetail({ contentName, difficulty }: TClearGoldD
 
       <div className={styles['gate-region']}>
         <table className={styles['gate-table']}>
+          <caption className={styles['caption']}>
+            {contentName} {difficulty.name} 관문별 클리어 골드
+          </caption>
           <colgroup>
             <col />
             <col className={styles['gold-column']} />

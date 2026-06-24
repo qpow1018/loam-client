@@ -31,7 +31,7 @@
       font-size: 11px;
     }
 
-    h1 {
+    h2 {
       font-size: 16px;
       font-weight: 500;
     }
@@ -81,6 +81,18 @@
       width: 100%;
       table-layout: fixed;
       border-collapse: collapse;
+
+      .caption {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
 
       .gold-column {
         width: 120px;
