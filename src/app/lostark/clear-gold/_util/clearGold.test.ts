@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
+import { CLEAR_GOLD_CONTENTS } from '../_define/clearGoldContents';
 import type { TClearGoldGate } from '../_type/clearGold';
 import { calculateClearGoldSummary, formatGold } from './clearGold';
 
@@ -28,4 +29,28 @@ test('sums tradable and bound gold separately and together', () => {
 test('formats gold with locale separators', () => {
   assert.equal(formatGold(11_500), '11,500');
   assert.equal(formatGold(0), '0');
+});
+
+test('provides Kazeroth Act 1 normal clear gold data', () => {
+  const normal = CLEAR_GOLD_CONTENTS[0]?.difficulties[0];
+
+  assert.ok(normal);
+  assert.equal(normal.entryItemLevel, 1660);
+  assert.deepEqual(calculateClearGoldSummary(normal.gates), {
+    tradableGold: 11_500,
+    boundGold: 0,
+    totalGold: 11_500,
+  });
+});
+
+test('provides Kazeroth Act 1 hard clear gold data', () => {
+  const hard = CLEAR_GOLD_CONTENTS[0]?.difficulties[1];
+
+  assert.ok(hard);
+  assert.equal(hard.entryItemLevel, 1680);
+  assert.deepEqual(calculateClearGoldSummary(hard.gates), {
+    tradableGold: 18_000,
+    boundGold: 0,
+    totalGold: 18_000,
+  });
 });
