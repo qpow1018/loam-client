@@ -1,0 +1,123 @@
+.detail,
+.empty {
+  min-width: 0;
+  flex: 1;
+  border-radius: $border-radius;
+  background-color: $gray-800;
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
+  color: $text-secondary;
+  font-size: 13px;
+}
+
+.detail {
+  padding: 16px;
+
+  .detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 12px;
+    border-bottom: 1px solid $gray-600;
+
+    .content-name {
+      margin-bottom: 3px;
+      color: $text-secondary;
+      font-size: 11px;
+    }
+
+    h1 {
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .item-level {
+      padding: 5px 8px;
+      border-radius: $border-radius;
+      background-color: $gray-700;
+      color: $mint-300;
+      font-size: 11px;
+    }
+  }
+
+  .summary-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 16px;
+
+    li {
+      padding: 14px;
+      border-radius: $border-radius;
+      background-color: $gray-700;
+
+      span {
+        display: block;
+        margin-bottom: 6px;
+        color: $text-secondary;
+        font-size: 11px;
+      }
+
+      strong {
+        color: $mint-300;
+        font-size: 16px;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .gate-region {
+    margin-top: 16px;
+    overflow: hidden;
+    border: 1px solid $gray-600;
+    border-radius: $border-radius;
+
+    .gate-table {
+      width: 100%;
+      table-layout: fixed;
+      border-collapse: collapse;
+
+      .gold-column {
+        width: 120px;
+      }
+
+      thead {
+        background-color: $gray-700;
+        color: $text-secondary;
+      }
+
+      tbody tr {
+        border-top: 1px solid $gray-600;
+      }
+
+      th,
+      td {
+        padding: 11px 12px;
+        font-size: 12px;
+        font-weight: 400;
+        text-align: right;
+
+        &:first-child {
+          text-align: left;
+        }
+      }
+
+      .gate-total {
+        color: $mint-300;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .updated-date {
+    margin-top: 10px;
+    color: $gray-400;
+    font-size: 10px;
+    text-align: right;
+  }
+}
