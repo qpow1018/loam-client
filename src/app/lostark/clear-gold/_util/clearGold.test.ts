@@ -32,10 +32,23 @@ test('formats gold with locale separators', () => {
 });
 
 test('provides Kazeroth Act 1 normal clear gold data', () => {
-  const normal = CLEAR_GOLD_CONTENTS[0]?.difficulties[0];
+  const content = CLEAR_GOLD_CONTENTS[0];
+
+  assert.ok(content);
+  assert.equal(content.id, 'kazeroth-act-1');
+  assert.equal(content.name, '카제로스 레이드 1막');
+
+  const normal = content.difficulties[0];
 
   assert.ok(normal);
+  assert.equal(normal.id, 'kazeroth-act-1-normal');
+  assert.equal(normal.name, '노말');
   assert.equal(normal.entryItemLevel, 1660);
+  assert.equal(normal.updatedAt, '2026.03.15');
+  assert.deepEqual(normal.gates, [
+    { name: '1관문', tradableGold: 3500, boundGold: 0 },
+    { name: '2관문', tradableGold: 8000, boundGold: 0 },
+  ]);
   assert.deepEqual(calculateClearGoldSummary(normal.gates), {
     tradableGold: 11_500,
     boundGold: 0,
@@ -47,7 +60,14 @@ test('provides Kazeroth Act 1 hard clear gold data', () => {
   const hard = CLEAR_GOLD_CONTENTS[0]?.difficulties[1];
 
   assert.ok(hard);
+  assert.equal(hard.id, 'kazeroth-act-1-hard');
+  assert.equal(hard.name, '하드');
   assert.equal(hard.entryItemLevel, 1680);
+  assert.equal(hard.updatedAt, '2026.03.15');
+  assert.deepEqual(hard.gates, [
+    { name: '1관문', tradableGold: 5500, boundGold: 0 },
+    { name: '2관문', tradableGold: 12500, boundGold: 0 },
+  ]);
   assert.deepEqual(calculateClearGoldSummary(hard.gates), {
     tradableGold: 18_000,
     boundGold: 0,
