@@ -14,14 +14,14 @@ test('returns zero totals for empty gates', () => {
 
 test('sums tradable and bound gold separately and together', () => {
   const gates: readonly TClearGoldGate[] = [
-    { name: '1관문', tradableGold: 4_000, boundGold: 1_000 },
-    { name: '2관문', tradableGold: 3_500, boundGold: 2_500 },
+    { name: '1관문', tradableGold: 1_000, boundGold: 2_000 },
+    { name: '2관문', tradableGold: 1_500, boundGold: 500 },
   ];
 
   assert.deepEqual(calculateClearGoldSummary(gates), {
-    tradableGold: 7_500,
-    boundGold: 3_500,
-    totalGold: 11_000,
+    tradableGold: 2_500,
+    boundGold: 2_500,
+    totalGold: 5_000,
   });
 });
 
