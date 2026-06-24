@@ -18,6 +18,12 @@ export type TClearGoldContent = {
   difficulties: readonly TClearGoldDifficulty[];
 };
 
+export type TClearGoldCategory = {
+  id: string;
+  name: string;
+  contents: readonly TClearGoldContent[];
+};
+
 export type TClearGoldSummary = {
   tradableGold: number;
   boundGold: number;
