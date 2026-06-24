@@ -6,11 +6,15 @@ import LostarkHeader from '@/components/lostark/header/LostarkHeader';
 
 import ClearGoldContentList from './_component/ClearGoldContentList';
 import ClearGoldDetail from './_component/ClearGoldDetail';
-import { CLEAR_GOLD_CONTENTS } from './_define/clearGoldContents';
+import { CLEAR_GOLD_CATEGORIES } from './_define/clearGoldContents';
+import type { TClearGoldContent } from './_type/clearGold';
 
 import styles from './clearGoldClient.module.scss';
 
-const DEFAULT_DIFFICULTY_ID = CLEAR_GOLD_CONTENTS[0]?.difficulties[0]?.id ?? '';
+const CLEAR_GOLD_CONTENTS = CLEAR_GOLD_CATEGORIES.flatMap<TClearGoldContent>(
+  (category) => category.contents,
+);
+const DEFAULT_DIFFICULTY_ID = CLEAR_GOLD_CATEGORIES[0]?.contents[0]?.difficulties[0]?.id ?? '';
 
 export default function ClearGoldClient() {
   const [selectedDifficultyId, setSelectedDifficultyId] = useState<string>(DEFAULT_DIFFICULTY_ID);
@@ -26,7 +30,7 @@ export default function ClearGoldClient() {
       <LostarkHeader />
       <main className={styles['clear-gold-container']}>
         <ClearGoldContentList
-          contents={CLEAR_GOLD_CONTENTS}
+          categories={CLEAR_GOLD_CATEGORIES}
           selectedDifficultyId={selectedDifficultyId}
           onSelectDifficulty={setSelectedDifficultyId}
         />

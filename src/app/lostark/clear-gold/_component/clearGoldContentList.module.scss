@@ -12,50 +12,68 @@
     font-weight: 500;
   }
 
-  .content-groups {
+  .category-groups {
     margin-top: 16px;
 
-    .content-group {
-      & + .content-group {
-        margin-top: 20px;
+    .category-group {
+      & + .category-group {
+        margin-top: 24px;
       }
 
-      .content-name {
-        margin-bottom: 8px;
-        color: $text-secondary;
+      .category-name {
+        padding-bottom: 8px;
+        border-bottom: 1px solid $gray-700;
+        color: $mint-300;
         font-size: 12px;
-        font-weight: 500;
+        font-weight: 600;
       }
 
-      .difficulty-list {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
+      .content-groups {
+        margin-top: 12px;
 
-        .difficulty-button {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          width: 100%;
-          padding: 10px 12px;
-          border: 1px solid $gray-600;
-          border-radius: $border-radius;
-          background-color: $gray-700;
-          color: $text-primary;
-          font-size: 12px;
-          text-align: left;
-          transition: $transition;
-          cursor: pointer;
-
-          &:hover,
-          &.is-selected {
-            border-color: $mint-500;
-            background-color: $mint-900;
+        .content-group {
+          & + .content-group {
+            margin-top: 16px;
           }
 
-          .item-level {
-            color: $gray-300;
-            font-size: 11px;
+          .content-name {
+            margin-bottom: 8px;
+            color: $text-secondary;
+            font-size: 12px;
+            font-weight: 500;
+          }
+
+          .difficulty-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+
+            .difficulty-button {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              width: 100%;
+              padding: 10px 12px;
+              border: 1px solid $gray-600;
+              border-radius: $border-radius;
+              background-color: $gray-700;
+              color: $text-primary;
+              font-size: 12px;
+              text-align: left;
+              transition: $transition;
+              cursor: pointer;
+
+              &:hover,
+              &.is-selected {
+                border-color: $mint-500;
+                background-color: $mint-900;
+              }
+
+              .item-level {
+                color: $gray-300;
+                font-size: 11px;
+              }
+            }
           }
         }
       }
