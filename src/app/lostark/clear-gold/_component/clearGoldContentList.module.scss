@@ -1,82 +1,31 @@
 .content-list {
-  width: 280px;
-  flex-shrink: 0;
-  padding: 16px;
-  border-radius: $border-radius;
-  background-color: $gray-800;
-
   .title {
-    padding-bottom: 12px;
-    border-bottom: 1px solid $gray-600;
+    margin-bottom: 10px;
+    color: $text-secondary;
     font-size: 13px;
     font-weight: 500;
   }
 
-  .category-groups {
-    margin-top: 16px;
+  .content-list-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
 
-    .category-group {
-      & + .category-group {
-        margin-top: 24px;
-      }
+  .content-chip {
+    min-height: 32px;
+    padding: 7px 11px;
+    border-radius: 999px;
+    background-color: transparent;
+    color: $text-secondary;
+    font-size: 12px;
+    transition: $transition;
+    cursor: pointer;
 
-      .category-name {
-        padding-bottom: 8px;
-        border-bottom: 1px solid $gray-700;
-        color: $mint-300;
-        font-size: 12px;
-        font-weight: 600;
-      }
-
-      .content-groups {
-        margin-top: 12px;
-
-        .content-group {
-          & + .content-group {
-            margin-top: 16px;
-          }
-
-          .content-name {
-            margin-bottom: 8px;
-            color: $text-secondary;
-            font-size: 12px;
-            font-weight: 500;
-          }
-
-          .difficulty-list {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-
-            .difficulty-button {
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-              width: 100%;
-              padding: 10px 12px;
-              border: 1px solid $gray-600;
-              border-radius: $border-radius;
-              background-color: $gray-700;
-              color: $text-primary;
-              font-size: 12px;
-              text-align: left;
-              transition: $transition;
-              cursor: pointer;
-
-              &:hover,
-              &.is-selected {
-                border-color: $mint-500;
-                background-color: $mint-900;
-              }
-
-              .item-level {
-                color: $gray-300;
-                font-size: 11px;
-              }
-            }
-          }
-        }
-      }
+    &:hover,
+    &.is-selected {
+      background-color: $gray-700;
+      color: $text-primary;
     }
   }
 }

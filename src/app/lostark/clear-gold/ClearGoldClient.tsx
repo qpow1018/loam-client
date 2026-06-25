@@ -3,38 +3,40 @@
 import { useState } from 'react';
 
 import LostarkHeader from '@/components/lostark/header/LostarkHeader';
-
-import ClearGoldContentList from './_component/ClearGoldContentList';
-import ClearGoldDetail from './_component/ClearGoldDetail';
-import { CLEAR_GOLD_CATEGORIES } from './_define/clearGoldContents';
-import type { TClearGoldContent } from './_type/clearGold';
+import Tabs from '@/components/common/tabs/Tabs';
+import CharacterGoldPanel from './_component/CharacterGoldPanel';
+import ClearGoldPanel from './_component/ClearGoldPanel';
+import LevelGoldPanel from './_component/LevelGoldPanel';
 
 import styles from './clearGoldClient.module.scss';
 
-const CLEAR_GOLD_CONTENTS = CLEAR_GOLD_CATEGORIES.flatMap<TClearGoldContent>(
-  (category) => category.contents,
-);
-const DEFAULT_DIFFICULTY_ID = CLEAR_GOLD_CATEGORIES[0]?.contents[0]?.difficulties[0]?.id ?? '';
+type TClearGoldTab = 'clear-gold' | 'level-gold' | 'character-gold';
+
+const CLEAR_GOLD_TABS = [
+  { value: 'clear-gold', label: '클리어 골드' },
+  { value: 'level-gold', label: '레벨별 골드' },
+  { value: 'character-gold', label: '캐릭터별 골드' },
+] as const;
 
 export default function ClearGoldClient() {
-  const [selectedDifficultyId, setSelectedDifficultyId] = useState<string>(DEFAULT_DIFFICULTY_ID);
-  const selectedContent = CLEAR_GOLD_CONTENTS.find((content) =>
-    content.difficulties.some((difficulty) => difficulty.id === selectedDifficultyId),
-  );
-  const selectedDifficulty = selectedContent?.difficulties.find(
-    (difficulty) => difficulty.id === selectedDifficultyId,
-  );
+  const [activeTab, setActiveTab] = useState<TClearGoldTab>('clear-gold');
 
   return (
     <div className={styles['clear-gold-client']}>
       <LostarkHeader />
+
       <main className={styles['clear-gold-container']}>
-        <ClearGoldContentList
-          categories={CLEAR_GOLD_CATEGORIES}
-          selectedDifficultyId={selectedDifficultyId}
-          onSelectDifficulty={setSelectedDifficultyId}
-        />
-        <ClearGoldDetail contentName={selectedContent?.name} difficulty={selectedDifficulty} />
+        <div className={styles['tab-section']}>
+          <Tabs<TClearGoldTab>
+            options={CLEAR_GOLD_TABS}
+            value={activeTab}
+            onChange={(next) => setActiveTab(next)}
+          />
+        </div>
+
+        {activeTab === 'clear-gold' && <ClearGoldPanel />}
+        {activeTab === 'level-gold' && <LevelGoldPanel />}
+        {activeTab === 'character-gold' && <CharacterGoldPanel />}
       </main>
     </div>
   );

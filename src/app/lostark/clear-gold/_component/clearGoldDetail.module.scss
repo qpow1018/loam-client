@@ -1,9 +1,6 @@
 .detail,
 .empty {
   min-width: 0;
-  flex: 1;
-  border-radius: $border-radius;
-  background-color: $gray-800;
 }
 
 .empty {
@@ -16,66 +13,49 @@
 }
 
 .detail {
-  padding: 16px;
+  display: flex;
+  flex-direction: column;
 
-  .detail-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-bottom: 12px;
-    border-bottom: 1px solid $gray-600;
+  .difficulty-card {
+    padding: 18px 0;
 
-    .content-name {
-      margin-bottom: 3px;
-      color: $text-secondary;
-      font-size: 11px;
+    & + .difficulty-card {
+      border-top: 1px solid $gray-700;
     }
 
-    h2 {
-      font-size: 16px;
-      font-weight: 500;
-    }
-
-    .item-level {
-      padding: 5px 8px;
-      border-radius: $border-radius;
-      background-color: $gray-700;
-      color: $mint-300;
-      font-size: 11px;
+    &:first-child {
+      padding-top: 4px;
     }
   }
 
-  .summary-list {
+  .detail-header {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-top: 16px;
+    grid-template-columns: minmax(220px, 1.5fr) repeat(3, minmax(120px, 1fr));
+    gap: 16px;
 
-    li {
-      padding: 14px;
-      border-radius: $border-radius;
-      background-color: $gray-700;
-
+    .summary-item {
       span {
         display: block;
-        margin-bottom: 6px;
+        margin-bottom: 5px;
         color: $text-secondary;
         font-size: 11px;
       }
 
       strong {
-        color: $mint-300;
-        font-size: 16px;
+        color: $text-primary;
+        font-size: 14px;
         font-weight: 600;
+      }
+
+      &:nth-child(2) strong {
+        color: $mint-300;
       }
     }
   }
 
   .gate-region {
-    margin-top: 16px;
+    margin-top: 14px;
     overflow: hidden;
-    border: 1px solid $gray-600;
-    border-radius: $border-radius;
 
     .gate-table {
       width: 100%;
@@ -99,12 +79,11 @@
       }
 
       thead {
-        background-color: $gray-700;
         color: $text-secondary;
       }
 
       tbody tr {
-        border-top: 1px solid $gray-600;
+        border-top: 1px solid $gray-700;
       }
 
       th,

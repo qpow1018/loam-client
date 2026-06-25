@@ -1,0 +1,10 @@
+.empty-gold-panel {
+  display: flex;
+  justify-content: center;
+  padding: 100px 0;
+
+  p {
+    font-size: 13px;
+    color: $text-secondary;
+  }
+}

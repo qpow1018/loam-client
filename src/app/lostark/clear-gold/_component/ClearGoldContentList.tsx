@@ -4,57 +4,36 @@ import styles from './clearGoldContentList.module.scss';
 
 type TClearGoldContentListProps = {
   categories: readonly TClearGoldCategory[];
-  selectedDifficultyId: string;
-  onSelectDifficulty: (difficultyId: string) => void;
+  selectedContentId: string;
+  onSelectContent: (contentId: string) => void;
 };
 
 export default function ClearGoldContentList({
   categories,
-  selectedDifficultyId,
-  onSelectDifficulty,
+  selectedContentId,
+  onSelectContent,
 }: TClearGoldContentListProps) {
+  const contents = categories.flatMap((category) => category.contents);
+
   return (
-    <aside className={styles['content-list']} aria-label="클리어 골드 콘텐츠 목록">
-      <h1 className={styles['title']}>클리어 골드</h1>
+    <section className={styles['content-list']} aria-label="클리어 골드 레이드 목록">
+      <h1 className={styles['title']}>레이드 선택</h1>
 
-      <div className={styles['category-groups']}>
-        {categories.map((category) => (
-          <section className={styles['category-group']} key={category.id}>
-            <h2 className={styles['category-name']}>{category.name}</h2>
-
-            <div className={styles['content-groups']}>
-              {category.contents.map((content) => (
-                <section className={styles['content-group']} key={content.id}>
-                  <h3 className={styles['content-name']}>{content.name}</h3>
-
-                  <div className={styles['difficulty-list']}>
-                    {content.difficulties.map((difficulty) => {
-                      const isSelected = difficulty.id === selectedDifficultyId;
-
-                      return (
-                        <button
-                          className={`${styles['difficulty-button']} ${
-                            isSelected ? styles['is-selected'] : ''
-                          }`}
-                          type="button"
-                          aria-pressed={isSelected}
-                          key={difficulty.id}
-                          onClick={() => onSelectDifficulty(difficulty.id)}
-                        >
-                          <span>{difficulty.name}</span>
-                          <span className={styles['item-level']}>
-                            Lv. {difficulty.entryItemLevel}
-                          </span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </section>
-              ))}
-            </div>
-          </section>
+      <div className={styles['content-list-row']}>
+        {contents.map((content) => (
+          <button
+            className={`${styles['content-chip']} ${
+              content.id === selectedContentId ? styles['is-selected'] : ''
+            }`}
+            type="button"
+            aria-pressed={content.id === selectedContentId}
+            key={content.id}
+            onClick={() => onSelectContent(content.id)}
+          >
+            {content.name}
+          </button>
         ))}
       </div>
-    </aside>
+    </section>
   );
 }
