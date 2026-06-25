@@ -36,6 +36,7 @@ supabase/.temp/
 
 # local brainstorming mockups
 .superpowers/
+.worktrees/
 
 # typescript
 *.tsbuildinfo
