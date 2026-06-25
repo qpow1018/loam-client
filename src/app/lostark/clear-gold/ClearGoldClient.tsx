@@ -4,18 +4,16 @@ import { useState } from 'react';
 
 import LostarkHeader from '@/components/lostark/header/LostarkHeader';
 import Tabs from '@/components/common/tabs/Tabs';
-import CharacterGoldPanel from './_component/CharacterGoldPanel';
 import ClearGoldPanel from './_component/ClearGoldPanel';
 import LevelGoldPanel from './_component/LevelGoldPanel';
 
 import styles from './clearGoldClient.module.scss';
 
-type TClearGoldTab = 'clear-gold' | 'level-gold' | 'character-gold';
+type TClearGoldTab = 'clear-gold' | 'level-gold';
 
 const CLEAR_GOLD_TABS = [
   { value: 'clear-gold', label: '클리어 골드' },
   { value: 'level-gold', label: '레벨별 골드' },
-  { value: 'character-gold', label: '캐릭터별 골드' },
 ] as const;
 
 export default function ClearGoldClient() {
@@ -36,7 +34,6 @@ export default function ClearGoldClient() {
 
         {activeTab === 'clear-gold' && <ClearGoldPanel />}
         {activeTab === 'level-gold' && <LevelGoldPanel />}
-        {activeTab === 'character-gold' && <CharacterGoldPanel />}
       </main>
     </div>
   );

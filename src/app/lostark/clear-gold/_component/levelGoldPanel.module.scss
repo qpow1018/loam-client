@@ -3,36 +3,17 @@
   flex-direction: column;
   gap: 14px;
 
-  .panel-header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 12px;
-
-    h2 {
-      color: $text-primary;
-      font-size: 22px;
-      font-weight: 500;
-    }
-
-    span {
-      color: $text-secondary;
-      font-size: 12px;
-    }
-  }
-
   .exclude-panel {
-    padding: 14px 16px;
+    padding: 12px 14px;
     border: 1px solid $gray-700;
     border-radius: $border-radius;
     background-color: $gray-800;
 
     .exclude-header {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 12px;
 
       h3 {
         color: $text-primary;
@@ -46,8 +27,14 @@
         font-size: 12px;
       }
 
-      .clear-button {
+      .exclude-actions {
+        display: flex;
         flex: 0 0 auto;
+        gap: 8px;
+      }
+
+      .select-button,
+      .clear-button {
         min-height: 32px;
         padding: 5px 10px;
         color: $text-secondary;
@@ -62,6 +49,11 @@
           border-color: $rose-400;
         }
 
+        &[aria-expanded='true'] {
+          color: $text-primary;
+          border-color: $rose-400;
+        }
+
         &:disabled {
           opacity: 0.45;
           cursor: not-allowed;
@@ -69,10 +61,33 @@
       }
     }
 
+    .excluded-chip-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .excluded-chip {
+      max-width: 280px;
+      overflow: hidden;
+      padding: 5px 8px;
+      color: $text-primary;
+      font-size: 12px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      border: 1px solid $rose-400;
+      border-radius: 100px;
+      background-color: rgba($rose-400, 0.12);
+    }
+
     .exclude-list {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 8px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid $gray-700;
     }
 
     .exclude-option {
@@ -116,74 +131,88 @@
     }
   }
 
-  .table-region {
-    overflow-x: auto;
+  .level-card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .level-card {
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1fr) 180px;
+    gap: 16px;
+    padding: 16px;
     border: 1px solid $gray-700;
     border-radius: $border-radius;
     background-color: $gray-800;
-  }
 
-  .level-gold-table {
-    width: 100%;
-    min-width: 900px;
-    table-layout: fixed;
-    border-collapse: collapse;
+    .level-rail {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-right: 16px;
+      border-right: 1px solid $gray-700;
 
-    .caption {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
+      strong {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 74px;
+        min-height: 54px;
+        color: transparent;
+        font-size: 44px;
+        font-weight: 800;
+        background: linear-gradient(135deg, $text-primary 8%, $rose-400 42%, $mint-300 92%) -100% / 200%;
+        background-clip: text, border-box;
+        white-space: nowrap;
+      }
     }
 
-    .level-column {
-      width: 96px;
+    .card-main {
+      min-width: 0;
     }
 
-    .gold-column {
-      width: 118px;
-    }
+    .card-summary {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 14px;
+      padding-left: 16px;
+      border-left: 1px solid $gray-700;
 
-    thead {
-      color: $text-secondary;
-      background-color: $gray-900;
-    }
+      div {
+        text-align: right;
+      }
 
-    tbody tr {
-      border-top: 1px solid $gray-700;
-    }
+      span {
+        display: block;
+        margin-bottom: 5px;
+        color: $text-secondary;
+        font-size: 12px;
+      }
 
-    th,
-    td {
-      padding: 13px 14px;
-      vertical-align: top;
-      font-size: 12px;
-      font-weight: 400;
-      text-align: left;
-    }
+      strong {
+        display: block;
+        font-size: 24px;
+        font-weight: 800;
+        line-height: 1;
+      }
 
-    th {
-      color: $text-secondary;
-    }
+      small {
+        display: block;
+        margin-top: 6px;
+        color: $text-secondary;
+        font-size: 11px;
+        line-height: 1.2;
+      }
 
-    .level-cell {
-      color: $text-primary;
-      font-size: 13px;
-      font-weight: 600;
-      white-space: nowrap;
-    }
+      .tradable-summary strong {
+        color: $mint-300;
+      }
 
-    .total-gold {
-      color: $mint-300;
-      font-size: 16px;
-      font-weight: 700;
-      text-align: right;
-      white-space: nowrap;
+      .bound-summary strong {
+        color: #f2d16b;
+      }
     }
   }
 
@@ -195,24 +224,84 @@
 
     li {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 68px;
+      grid-template-columns: 108px minmax(0, 1fr) 108px;
       gap: 8px;
       align-items: center;
+      min-height: 36px;
+      padding: 8px 9px;
+      border: 1px solid $gray-700;
+      border-radius: $border-radius;
+    }
+
+    .raid-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
     }
 
     .raid-name {
       min-width: 0;
       overflow: hidden;
       color: $text-primary;
+      font-size: 12px;
+      font-weight: 500;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
+    .raid-level {
+      color: $text-primary;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .difficulty-chip {
+      flex: 0 0 auto;
+      padding: 2px 6px;
+      color: $text-primary;
+      font-size: 10px;
+      font-weight: 600;
+      border: 1px solid $gray-700;
+      border-radius: 100px;
+    }
+
     .raid-gold {
-      color: $text-secondary;
+      color: $text-primary;
+      font-size: 12px;
       font-weight: 500;
       text-align: right;
       white-space: nowrap;
+    }
+
+    .tradable-only-raid {
+
+      .raid-meta,
+      .raid-name,
+      .raid-level,
+      .difficulty-chip,
+      .raid-gold {
+        color: $mint-300;
+      }
+
+      .difficulty-chip {
+        border-color: rgba($mint-300, 0.42);
+      }
+    }
+
+    .bound-only-raid {
+
+      .raid-meta,
+      .raid-name,
+      .raid-level,
+      .difficulty-chip,
+      .raid-gold {
+        color: #f2d16b;
+      }
+
+      .difficulty-chip {
+        border-color: rgba(#f2d16b, 0.42);
+      }
     }
   }
 }
