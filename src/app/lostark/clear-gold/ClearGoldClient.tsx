@@ -12,12 +12,12 @@ import styles from './clearGoldClient.module.scss';
 type TClearGoldTab = 'clear-gold' | 'level-gold';
 
 const CLEAR_GOLD_TABS = [
-  { value: 'clear-gold', label: '클리어 골드' },
   { value: 'level-gold', label: '레벨별 골드' },
+  { value: 'clear-gold', label: '클리어 골드' },
 ] as const;
 
 export default function ClearGoldClient() {
-  const [activeTab, setActiveTab] = useState<TClearGoldTab>('clear-gold');
+  const [activeTab, setActiveTab] = useState<TClearGoldTab>('level-gold');
 
   return (
     <div className={styles['clear-gold-client']}>
@@ -32,8 +32,8 @@ export default function ClearGoldClient() {
           />
         </div>
 
-        {activeTab === 'clear-gold' && <ClearGoldPanel />}
         {activeTab === 'level-gold' && <LevelGoldPanel />}
+        {activeTab === 'clear-gold' && <ClearGoldPanel />}
       </main>
     </div>
   );
