@@ -29,3 +29,37 @@ export type TClearGoldSummary = {
   boundGold: number;
   totalGold: number;
 };
+
+export type TLevelGoldRaid = {
+  contentId: string;
+  contentName: string;
+  difficultyId: string;
+  difficultyName: string;
+  entryItemLevel: number;
+  tradableGold: number;
+  boundGold: number;
+  totalGold: number;
+};
+
+export type TLevelGoldRaidGroup = {
+  raids: TLevelGoldRaid[];
+  totalGold: number;
+};
+
+export type TLevelGoldRow = {
+  level: number;
+  withBound: TLevelGoldRaidGroup;
+  withoutBound: TLevelGoldRaidGroup;
+};
+
+export type TCreateLevelGoldRowsOptions = {
+  excludedDifficultyIds?: readonly string[];
+};
+
+export type TLevelGoldDifficultyOption = {
+  contentId: string;
+  contentName: string;
+  difficultyId: string;
+  difficultyName: string;
+  entryItemLevel: number;
+};
