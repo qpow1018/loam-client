@@ -129,7 +129,7 @@ export const CLEAR_GOLD_CATEGORIES = [
     contents: [
       {
         id: 'kazeroth-finale',
-        name: '종막 최후의 날',
+        name: '종막: 최후의 날',
         difficulties: [
           {
             id: 'kazeroth-finale-hard',
@@ -155,7 +155,7 @@ export const CLEAR_GOLD_CATEGORIES = [
       },
       {
         id: 'kazeroth-act-4',
-        name: '4막 파멸의 성채',
+        name: '4막: 파멸의 성채',
         difficulties: [
           {
             id: 'kazeroth-act-4-hard',
@@ -181,7 +181,7 @@ export const CLEAR_GOLD_CATEGORIES = [
       },
       {
         id: 'kazeroth-act-3',
-        name: '3막 칠흑, 폭풍의 밤',
+        name: '3막: 칠흑, 폭풍의 밤',
         difficulties: [
           {
             id: 'kazeroth-act-3-hard',
@@ -209,7 +209,7 @@ export const CLEAR_GOLD_CATEGORIES = [
       },
       {
         id: 'kazeroth-act-2',
-        name: '2막 아브렐슈드',
+        name: '2막: 아브렐슈드',
         difficulties: [
           {
             id: 'kazeroth-act-2-hard',
@@ -235,7 +235,7 @@ export const CLEAR_GOLD_CATEGORIES = [
       },
       {
         id: 'kazeroth-act-1',
-        name: '1막 에기르',
+        name: '1막: 에기르',
         difficulties: [
           {
             id: 'kazeroth-act-1-hard',
@@ -261,7 +261,7 @@ export const CLEAR_GOLD_CATEGORIES = [
       },
       {
         id: 'kazeroth-prologue',
-        name: '서막 에키드나',
+        name: '서막: 에키드나',
         difficulties: [
           {
             id: 'kazeroth-prologue-hard',
