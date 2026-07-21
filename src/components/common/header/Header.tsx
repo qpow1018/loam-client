@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 import CloudBackupReminder from '@/components/common/header/CloudBackupReminder';
 
@@ -11,18 +14,28 @@ export type THeaderMenu = {
 
 type THeaderProps = {
   theme: 'mint' | 'rose';
+  homeLink: string;
   primaryMenus: THeaderMenu[];
-  secondaryMenus: THeaderMenu[];
+  gameSwitchMenu: THeaderMenu;
+  settingsMenu: THeaderMenu;
   backupReminderLink?: string;
 };
 
 export default function Header(props: THeaderProps) {
-  const { theme, primaryMenus, secondaryMenus, backupReminderLink } = props;
-  const hasDivider = primaryMenus.length > 0 && secondaryMenus.length > 0;
+  const { theme, homeLink, primaryMenus, gameSwitchMenu, settingsMenu, backupReminderLink } = props;
+  const pathname = usePathname();
 
   function renderMenu(menu: THeaderMenu) {
+    const menuPathname = menu.link.split('?')[0];
+    const isActive = pathname === menuPathname || pathname.startsWith(`${menuPathname}/`);
+
     return (
-      <Link key={menu.link} href={menu.link} className={styles['navigation-link']}>
+      <Link
+        key={menu.link}
+        href={menu.link}
+        className={`${styles['navigation-link']} ${isActive ? styles['is-active'] : ''}`}
+        aria-current={isActive ? 'page' : undefined}
+      >
         {menu.name}
       </Link>
     );
@@ -30,15 +43,24 @@ export default function Header(props: THeaderProps) {
 
   return (
     <header className={`${styles['header']} ${styles[`is-${theme}`]}`}>
-      <div className={styles['logo']}>LoaM</div>
+      <Link href={homeLink} className={styles['logo']} aria-label="LoaM 홈">
+        LoaM
+      </Link>
 
-      <nav className={styles['navigation']}>
+      <nav className={styles['primary-navigation']} aria-label="주요 메뉴">
         {primaryMenus.map(renderMenu)}
-        {hasDivider && <span aria-hidden="true" className={styles['navigation-divider']} />}
-        {secondaryMenus.map(renderMenu)}
-        {backupReminderLink !== undefined && (
-          <CloudBackupReminder settingsLink={backupReminderLink} />
-        )}
+
+        <div className={styles['backup-reminder-slot']}>
+          {backupReminderLink !== undefined && (
+            <CloudBackupReminder settingsLink={backupReminderLink} />
+          )}
+        </div>
+      </nav>
+
+      <nav className={styles['utility-navigation']} aria-label="보조 메뉴">
+        {renderMenu(gameSwitchMenu)}
+        <span aria-hidden="true" className={styles['navigation-divider']} />
+        {renderMenu(settingsMenu)}
       </nav>
     </header>
   );
