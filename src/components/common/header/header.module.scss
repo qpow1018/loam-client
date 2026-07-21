@@ -11,7 +11,8 @@
   &.is-mint {
     background-color: $mint-700;
 
-    .navigation-link:hover {
+    .navigation-link:hover,
+    .navigation-link.is-active {
       background-color: $mint-800;
     }
   }
@@ -19,7 +20,8 @@
   &.is-rose {
     background-color: $rose-700;
 
-    .navigation-link:hover {
+    .navigation-link:hover,
+    .navigation-link.is-active {
       background-color: $rose-800;
     }
   }
@@ -29,25 +31,45 @@
     font-weight: 700;
     letter-spacing: -0.3px;
     color: $text-primary;
+    text-decoration: none;
   }
 
-  .navigation {
-    flex: 1;
+  .primary-navigation,
+  .utility-navigation {
     display: flex;
     align-items: center;
     gap: 8px;
+  }
 
-    .navigation-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 16px;
-      height: 36px;
-      font-size: 12px;
-      font-weight: 500;
-      color: $text-primary;
-      border-radius: $border-radius;
-      text-decoration: none;
+  .primary-navigation {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .utility-navigation {
+    flex-shrink: 0;
+  }
+
+  .navigation-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    height: 36px;
+    font-size: 13px;
+    font-weight: 500;
+    color: $text-primary;
+    border-radius: $border-radius;
+    text-decoration: none;
+  }
+
+  .backup-reminder-slot {
+    display: flex;
+    align-items: center;
+    margin-left: -8px;
+
+    .navigation-divider {
+      margin: 0 16px;
     }
   }
 

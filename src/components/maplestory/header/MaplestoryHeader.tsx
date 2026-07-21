@@ -7,10 +7,8 @@ const PRIMARY_MENUS: THeaderMenu[] = [
   { name: '유니온', link: '/maplestory/union' },
 ];
 
-const SECONDARY_MENUS: THeaderMenu[] = [
-  { name: '로아 홈', link: '/lostark/loado' },
-  { name: '설정', link: '/settings?game=maplestory' },
-];
+const GAME_SWITCH_MENU: THeaderMenu = { name: '로아 홈', link: '/lostark/loado' };
+const SETTINGS_MENU: THeaderMenu = { name: '설정', link: '/settings?game=maplestory' };
 
 export default function MaplestoryHeader(props: { isBackupReminderVisible?: boolean }) {
   const { isBackupReminderVisible = true } = props;
@@ -18,8 +16,10 @@ export default function MaplestoryHeader(props: { isBackupReminderVisible?: bool
   return (
     <Header
       theme="rose"
+      homeLink="/maplestory/mapledo"
       primaryMenus={PRIMARY_MENUS}
-      secondaryMenus={SECONDARY_MENUS}
+      gameSwitchMenu={GAME_SWITCH_MENU}
+      settingsMenu={SETTINGS_MENU}
       backupReminderLink={isBackupReminderVisible ? '/settings?game=maplestory#backup' : undefined}
     />
   );
