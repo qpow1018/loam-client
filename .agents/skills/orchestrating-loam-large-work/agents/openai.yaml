@@ -1,0 +1,4 @@
+interface:
+  display_name: 'LoaM 큰 작업 오케스트레이션'
+  short_description: 'LoaM 큰 작업을 전문가 역할과 단계별 검증으로 운영합니다'
+  default_prompt: 'Use $orchestrating-loam-large-work to coordinate this large LoaM task through discovery, design, implementation, and independent verification.'

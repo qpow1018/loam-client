@@ -38,16 +38,18 @@ npm run build:webpack
 - `tsconfig.tsbuildinfo`
 - `supabase/.temp/`
 
-## 코딩 스타일
+## 작업 스킬
 
-코드 작성, 수정, 리뷰, 리팩터링에는 프로젝트 스킬 `$following-loam-coding-style`을 적용하세요.
+- 프론트엔드 TypeScript, React, Next.js route, TanStack Query, 클라이언트 저장소, UI, SCSS 작성·수정·리뷰·리팩터링에는 프로젝트 스킬 `$following-loam-frontend-style`을 적용하세요.
+- `src/api`, `src/lib`, Supabase Auth/RLS, SQL migration, Edge Function, 외부 API 서버 호출, 비밀, DB 계약 작성·수정·리뷰·리팩터링에는 프로젝트 스킬 `$following-loam-backend-boundaries`를 적용하세요.
+- 여러 영역에 걸친 큰 기능, 구조 변경, 기획·설계·구현·독립 검증이 필요한 작업에는 프로젝트 스킬 `$orchestrating-loam-large-work`를 적용하세요.
 
 ## API와 Supabase
 
 - Supabase Function 호출에는 다음 환경 변수가 필요합니다.
   - `NEXT_PUBLIC_SUPABASE_URL`
   - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
-- `lostark-sibling-characters` Edge Function은 Supabase 런타임의 `LOSTARK_API_KEY`를 읽습니다.
+- Lost Ark Edge Function은 Supabase 런타임의 `LOSTARK_API_KEY`를 읽습니다.
 - 비공개 Lost Ark API key를 클라이언트 코드에 노출하지 마세요.
 - 브라우저에서 호출하는 Edge Function을 추가할 때는 CORS 처리를 유지하세요.
 
