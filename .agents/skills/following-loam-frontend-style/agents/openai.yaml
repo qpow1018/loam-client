@@ -1,0 +1,4 @@
+interface:
+  display_name: 'LoaM 프론트엔드 스타일'
+  short_description: 'LoaM 프론트엔드 구조와 코딩 규칙을 적용합니다'
+  default_prompt: 'Use $following-loam-frontend-style to apply the LoaM frontend conventions to this change.'
