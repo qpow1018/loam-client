@@ -1,6 +1,6 @@
 ---
 name: orchestrating-loam-large-work
-description: Use when a LoaM task is large, cross-cutting, ambiguous, production-sensitive, or explicitly asks for planning, product or UX design, architecture, implementation, review, or specialist subagent coordination. Orchestrates staged discovery, conditional product and system design, disjoint frontend and backend implementation, independent verification, and release checks. Do not use for small isolated fixes, single-file edits, simple explanations, or routine reviews that do not benefit from specialist coordination.
+description: Use when a LoaM task is large, cross-cutting, ambiguous, production-sensitive, or explicitly asks for planning, product, UX or visual UI design, architecture, implementation, review, or specialist subagent coordination. Orchestrates staged discovery, conditional product, visual and system design, disjoint frontend and backend implementation, independent verification, and release checks. Do not use for small isolated fixes, single-file edits, simple explanations, or routine reviews that do not benefit from specialist coordination.
 ---
 
 # LoaM 큰 작업 오케스트레이션
@@ -39,7 +39,8 @@ description: Use when a LoaM task is large, cross-cutting, ambiguous, production
 메인 에이전트가 작업 지휘자를 맡아 목표와 완료 기준, 역할과 순서, 실행 계약, 통합 diff, 최종 보고를 소유한다. 별도 작업 지휘자는 생성하지 않는다.
 
 - `loam_investigator` (현황 조사관): 큰 작업의 초기 조사에 기본 투입한다. 현재 동작, 영향 경로, 재사용·검증 수단, 위험과 미확인 사항을 받는다.
-- `loam_product_experience` (제품·경험 설계자): 사용자 흐름이나 UI 구조가 크게 바뀔 때 투입한다. 핵심 흐름과 상태, 반응형·접근성, 제품 완료 기준을 받는다.
+- `loam_product_experience` (제품·경험 설계자): 사용자 흐름이나 정보 구조가 크게 바뀔 때 투입한다. 핵심 흐름과 상태, 정보 계층, 접근성, 제품 완료 기준을 받는다.
+- `loam_ui_designer` (UI·비주얼 디자이너): 새 화면, 큰 UI 변경, 기존 화면과의 시각적 일관성 검토에 투입한다. 구현 전에는 실제 기준 화면에서 레이아웃·크기·위치·간격·타이포그래피·밀도 계약을 만들고, 구현 후에는 같은 viewport에서 계약 충족을 다시 판정한다.
 - `loam_system_architect` (시스템 설계자): 여러 모듈, 데이터·인증 경계, migration 또는 큰 구조 변경에 투입한다. 목표 구조, 계약, 파일 소유권, 순서와 위험을 받는다.
 - `loam_frontend_worker` (프론트엔드 구현자): React, Next.js, TanStack Query, 클라이언트 저장소, UI 또는 SCSS 변경에 투입한다.
 - `loam_backend_worker` (백엔드·데이터 구현자): API, 서버·인증, Supabase, migration, Edge Function, 외부 연동 또는 DB 계약 변경에 투입한다.
@@ -63,7 +64,8 @@ description: Use when a LoaM task is large, cross-cutting, ambiguous, production
 ### 2. 조사 단계를 실행한다
 
 - 현황 조사관에게 적용되는 `AGENTS.md`, 관련 문서, 지원 환경, 기존 검증 기반과 dirty worktree를 확인하도록 읽기 전용 범위와 조사 질문을 전달한다.
-- UI와 시스템 설계가 모두 필요하면 제품·경험 설계자와 시스템 설계자를 같은 읽기 전용 단계에서 병렬 실행한다.
+- 새 화면이나 큰 UI 변경이면 제품·경험 설계자와 UI·비주얼 디자이너를 함께 투입한다. UI·비주얼 디자이너는 선언된 viewport에서 현재 화면과 유사한 기존 화면 2~3개를 실제 브라우저로 비교한다.
+- UI와 시스템 설계가 모두 필요하면 제품·경험 설계자, UI·비주얼 디자이너, 시스템 설계자를 같은 읽기 전용 단계에서 병렬 실행한다.
 - 가용 슬롯이 부족하면 조사, 제품·경험 설계, 시스템 설계를 순차 단계로 실행한다.
 - 역할을 합쳐도 독립적인 관점이 사라지지 않는 작은 범위에서만 역할을 겸임시키고 이유를 기록한다.
 - 각 결과에서 관찰된 사실, 제안, 미확인 사항을 분리한다.
@@ -76,6 +78,7 @@ description: Use when a LoaM task is large, cross-cutting, ambiguous, production
 - 저장소에서 확인한 근거
 - 지원 플랫폼, 대상 브라우저와 viewport, 검증 대상 환경
 - 제품과 기술 결정
+- 비주얼 계약: 기준 화면, 페이지 canvas와 헤더 아래 시작 위치, grid·패널 크기, 간격, 타이포그래피, 컴포넌트·표 밀도, overflow와 주요 상태
 - 별도 승인이 필요한 새 의존성, 테스트 러너, CI, 빌드·배포 기반, 공용 컴포넌트·레이아웃 변경
 - 구현 단위와 담당 역할
 - 역할별 수정 가능 파일과 수정 금지 범위
@@ -90,7 +93,7 @@ description: Use when a LoaM task is large, cross-cutting, ambiguous, production
 - 승인된 실행 계약이 없으면 구현자를 투입하거나 파일을 수정하지 않는다.
 - 프론트엔드와 백엔드 파일 소유권이 분리되면 구현자를 병렬 실행한다.
 - 공유 타입, 설정, 공통 계약처럼 겹치는 파일은 작업 지휘자가 소유하거나 구현 순서를 정한다.
-- 각 구현자에게 승인된 실행 계약, 저장소 제약, 지원 환경, 목표, 허용 경로, 금지 경로, 결정사항, 완료 기준, 검증 명령을 명시한다.
+- 각 구현자에게 승인된 실행 계약과 비주얼 계약, 저장소 제약, 지원 환경, 목표, 허용 경로, 금지 경로, 결정사항, 완료 기준, 검증 명령을 명시한다.
 - 실행 계약에 없는 모바일·반응형 대응, 의존성, 테스트 러너, 공용 컴포넌트·레이아웃 변경을 임의로 추가하지 못하게 한다.
 - 구현자가 범위 밖 문제를 발견하면 임의로 수정하지 말고 작업 지휘자에게 보고하게 한다.
 
@@ -98,6 +101,7 @@ description: Use when a LoaM task is large, cross-cutting, ambiguous, production
 
 - 실제 diff와 작업 트리 상태를 확인한다.
 - 구현 결과가 실행 계약과 기존 프로젝트 경계를 지키는지 검토한다.
+- UI 변경은 UI·비주얼 디자이너가 구현 전과 같은 기준 화면·viewport에서 실제 화면을 다시 확인하게 한다. 승인된 비주얼 계약과 다른 크기·위치·간격·계층·밀도는 구현 수정 대상으로 처리하고, 새로운 디자인 결정은 사용자 승인 단계로 되돌린다.
 - 승인되지 않은 기반 변경이나 공유 영향이 발견되면 통합하지 않고 사용자 승인 단계로 되돌린다.
 - 중복 구현, 충돌, 임시 코드, 누락된 정리를 해결한다.
 - 변경 범위에 맞는 가장 작은 검증부터 실행한다.
@@ -107,6 +111,7 @@ description: Use when a LoaM task is large, cross-cutting, ambiguous, production
 - 독립 검증자에게 사용자의 원래 요청, 실행 계약, 실제 diff, 검증 로그를 제공한다.
 - 독립 검증자는 저장소와 실행 계약이 지원하지 않는 플랫폼을 결함으로 보고하지 않는다.
 - 승인되지 않은 의존성, 테스트 러너, 공통 설정, 공용 컴포넌트·레이아웃 변경은 차단 문제로 판정한다.
+- 승인된 비주얼 계약의 너비, 위치, 간격, 정렬, 타이포그래피, 컴포넌트 밀도 위반은 style-only finding이 아니라 계약 위반으로 판정한다.
 - 구현자의 기대 결론이나 자기평가를 정답처럼 전달하지 않는다.
 - 차단 문제가 발견되면 원래 구현자 또는 작업 지휘자가 수정하고 관련 검증을 반복한다.
 - 수정 후 독립 검증자가 영향을 다시 확인하게 한다.
@@ -135,6 +140,7 @@ description: Use when a LoaM task is large, cross-cutting, ambiguous, production
 - 역할과 단일 목표
 - 필요한 저장소 및 사용자 맥락
 - 승인된 실행 계약과 지원 환경
+- UI 역할이면 비주얼 계약, 기준 화면과 검증 viewport
 - 읽기 전용 또는 수정 가능 여부
 - 허용 경로와 금지 경로
 - 반환할 산출물
