@@ -1,10 +1,10 @@
 import type {
   TBookOption,
+  TEquipmentGrade,
+  TEquipmentType,
   TMaterialAmount,
-  TRefiningPart,
-  TRefiningRegion,
   TRefiningStep,
-} from '../_type/refining';
+} from '@/app/lostark/refining/_type/refining';
 
 type TRow = readonly [number, number, number, number, number, number];
 const NONE: TBookOption = { kind: 'none' };
@@ -41,16 +41,16 @@ const SERKA_RATES: Record<number, readonly [number, number, number]> = {
   21: [100, 25, 4],
   23: [50, 50, 2],
 };
-function rateFor(region: TRefiningRegion, from: number) {
-  const source = region === 'aegir' ? AEGIR_RATES : SERKA_RATES;
+function rateFor(equipmentGrade: TEquipmentGrade, from: number) {
+  const source = equipmentGrade === 'aegir' ? AEGIR_RATES : SERKA_RATES;
   const key = Object.keys(source)
     .map(Number)
     .filter((entry) => entry <= from)
     .sort((a, b) => b - a)[0];
   return source[key];
 }
-function aegirBooks(part: TRefiningPart, from: number): readonly TBookOption[] {
-  const prefix = part === 'weapon' ? 'weapon-metallurgy' : 'armor-tailoring';
+function aegirBooks(equipmentType: TEquipmentType, from: number): readonly TBookOption[] {
+  const prefix = equipmentType === 'weapon' ? 'weapon-metallurgy' : 'armor-tailoring';
   const bookId = (suffix: string) =>
     `${prefix}-${suffix}` as Extract<TMaterialAmount['id'], `${typeof prefix}${string}`>;
   if (from <= 11) return BOOK(1000, bookId('11-14'));
@@ -127,29 +127,31 @@ const SERKA_ARMOR: readonly TRow[] = [
   [2330, 27, 28, 23820, 6100, 36000],
   [2450, 29, 30, 25000, 6400, 36000],
 ];
+
 function make(
-  region: TRefiningRegion,
-  part: TRefiningPart,
+  equipmentGrade: TEquipmentGrade,
+  equipmentType: TEquipmentType,
   fromLevel: number,
   row: TRow,
 ): TRefiningStep {
   const [stone, leap, fusion, fate, gold, silver] = row;
-  const [initialRate, breathMax, breathRateBonus] = rateFor(region, fromLevel);
-  const prefix = region === 'aegir' ? 'aegir' : 'serka';
+  const [initialRate, breathMax, breathRateBonus] = rateFor(equipmentGrade, fromLevel);
+  const prefix = equipmentGrade === 'aegir' ? 'aegir' : 'serka';
   const stoneId =
-    `${prefix}-${part === 'weapon' ? (region === 'aegir' ? 'destruction-stone' : 'destruction-crystal') : region === 'aegir' ? 'guardian-stone' : 'guardian-crystal'}` as TMaterialAmount['id'];
+    `${prefix}-${equipmentType === 'weapon' ? (equipmentGrade === 'aegir' ? 'destruction-stone' : 'destruction-crystal') : equipmentGrade === 'aegir' ? 'guardian-stone' : 'guardian-crystal'}` as TMaterialAmount['id'];
   const leapId =
-    `${prefix}-${region === 'aegir' ? 'leapstone' : 'great-leapstone'}` as TMaterialAmount['id'];
+    `${prefix}-${equipmentGrade === 'aegir' ? 'leapstone' : 'great-leapstone'}` as TMaterialAmount['id'];
   const fusionId =
-    `${prefix}-${region === 'aegir' ? 'fusion' : 'advanced-fusion'}` as TMaterialAmount['id'];
+    `${prefix}-${equipmentGrade === 'aegir' ? 'fusion' : 'advanced-fusion'}` as TMaterialAmount['id'];
+
   return {
-    region,
-    part,
+    equipmentGrade,
+    equipmentType,
     fromLevel,
     initialRate,
     breathMax,
     breathRateBonus,
-    breathMaterialId: part === 'weapon' ? 'weapon-lava-breath' : 'armor-glacier-breath',
+    breathMaterialId: equipmentType === 'weapon' ? 'weapon-lava-breath' : 'armor-glacier-breath',
     requiredMaterials: [
       { id: stoneId, quantity: stone },
       { id: leapId, quantity: leap },
@@ -158,19 +160,35 @@ function make(
     ],
     gold,
     silver,
-    books: region === 'aegir' ? aegirBooks(part, fromLevel) : [NONE],
+    books: equipmentGrade === 'aegir' ? aegirBooks(equipmentType, fromLevel) : [NONE],
   };
 }
+
 export const REFINING_STEPS: readonly TRefiningStep[] = [
   ...AEGIR_WEAPON.map((row, index) => make('aegir', 'weapon', index + 10, row)),
   ...AEGIR_ARMOR.map((row, index) => make('aegir', 'armor', index + 10, row)),
   ...SERKA_WEAPON.map((row, index) => make('serka', 'weapon', index + 11, row)),
   ...SERKA_ARMOR.map((row, index) => make('serka', 'armor', index + 11, row)),
 ];
-export function getRefiningStep(region: TRefiningRegion, part: TRefiningPart, fromLevel: number) {
+
+export function getRefiningLevels(equipmentGrade: TEquipmentGrade, equipmentType: TEquipmentType) {
+  return REFINING_STEPS.filter(
+    (step) => step.equipmentGrade === equipmentGrade && step.equipmentType === equipmentType,
+  ).map((step) => step.fromLevel);
+}
+
+export function getRefiningStep(
+  equipmentGrade: TEquipmentGrade,
+  equipmentType: TEquipmentType,
+  fromLevel: number,
+) {
   const step = REFINING_STEPS.find(
-    (item) => item.region === region && item.part === part && item.fromLevel === fromLevel,
+    (item) =>
+      item.equipmentGrade === equipmentGrade &&
+      item.equipmentType === equipmentType &&
+      item.fromLevel === fromLevel,
   );
-  if (!step) throw new Error(`Unsupported refining step: ${region}/${part}/+${fromLevel}`);
+  if (!step)
+    throw new Error(`Unsupported refining step: ${equipmentGrade}/${equipmentType}/+${fromLevel}`);
   return step;
 }

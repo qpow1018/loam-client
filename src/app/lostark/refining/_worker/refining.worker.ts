@@ -1,7 +1,10 @@
 /// <reference lib="webworker" />
 
-import type { TRefiningWorkerRequest, TRefiningWorkerResponse } from '../_type/refiningWorker';
-import { calculateRefiningPlan } from '../_util/calculateRefiningPlan';
+import type {
+  TRefiningWorkerRequest,
+  TRefiningWorkerResponse,
+} from '@/app/lostark/refining/_type/refiningWorker';
+import { calculateRefiningPlan } from '@/app/lostark/refining/_util/calculateRefiningPlan';
 
 const workerScope = self as unknown as DedicatedWorkerGlobalScope;
 

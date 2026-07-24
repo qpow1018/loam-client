@@ -5,7 +5,7 @@ import type {
   TRefiningAction,
   TRefiningPlan,
   TRefiningPlanInput,
-} from '../_type/refining';
+} from '@/app/lostark/refining/_type/refining';
 
 const ARTISAN_SCALE = 1_000_000;
 const ARTISAN_DENOMINATOR = 215 * ARTISAN_SCALE;

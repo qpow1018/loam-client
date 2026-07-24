@@ -2,19 +2,28 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import Button from '@/components/common/button/Button';
 import BoxLoading from '@/components/common/loading/BoxLoading';
+import Tabs from '@/components/common/tabs/Tabs';
+import Button from '@/components/common/button/Button';
 
-import { getRefiningStep, REFINING_STEPS } from './_define/refiningSteps';
+import RefiningConditionPanel from '@/app/lostark/refining/_component/RefiningConditionPanel';
+import { getRefiningStep } from '@/app/lostark/refining/_define/refiningSteps';
 import type {
   TBookOption,
   TMarketMaterialId,
-  TRefiningPart,
+  TRefiningCondition,
   TRefiningPlan,
-  TRefiningRegion,
-} from './_type/refining';
-import type { TRefiningWorkerRequest, TRefiningWorkerResponse } from './_type/refiningWorker';
-import styles from './refiningClient.module.scss';
+} from '@/app/lostark/refining/_type/refining';
+import type {
+  TRefiningWorkerRequest,
+  TRefiningWorkerResponse,
+} from '@/app/lostark/refining/_type/refiningWorker';
+import styles from '@/app/lostark/refining/refiningClient.module.scss';
+
+const REFINING_TABS: { value: string; label: string }[] = [
+  { value: 'standard-refining', label: '일반재련' },
+  { value: 'advanced-refining', label: '상급재련' },
+];
 
 type TMaterialForm = { price: string; owned: string; isValuedAtMarket: boolean };
 type TMaterialForms = Partial<Record<TMarketMaterialId, TMaterialForm>>;
@@ -82,11 +91,15 @@ function ownedErrorKey(id: TMarketMaterialId) {
 }
 
 export default function RefiningClient() {
-  const [region, setRegion] = useState<TRefiningRegion>('aegir');
-  const [part, setPart] = useState<TRefiningPart>('weapon');
-  const [fromLevel, setFromLevel] = useState(10);
-  const [failureCount, setFailureCount] = useState('0');
-  const [artisanEnergy, setArtisanEnergy] = useState('0');
+  const [activeTab, setActiveTab] = useState<string>(REFINING_TABS[0].value);
+
+  const [condition, setCondition] = useState<TRefiningCondition>({
+    equipmentGrade: 'aegir',
+    equipmentType: 'weapon',
+    fromLevel: 10,
+    failureCount: '0',
+    artisanEnergy: '0',
+  });
   const initialStep = getRefiningStep('aegir', 'weapon', 10);
   const [materials, setMaterials] = useState<TMaterialForms>(() =>
     initialMaterialForms(relevantMaterialIds(initialStep)),
@@ -95,18 +108,13 @@ export default function RefiningClient() {
   const [plan, setPlan] = useState<TRefiningPlan>();
   const [calculationError, setCalculationError] = useState<string>();
   const [isCalculating, setIsCalculating] = useState(false);
-  const errorRefs = useRef<Record<string, HTMLInputElement | null>>({});
   const workerRef = useRef<Worker | undefined>(undefined);
   const requestIdRef = useRef(0);
 
-  const availableLevels = useMemo(
-    () =>
-      REFINING_STEPS.filter((step) => step.region === region && step.part === part).map(
-        (step) => step.fromLevel,
-      ),
-    [part, region],
+  const step = useMemo(
+    () => getRefiningStep(condition.equipmentGrade, condition.equipmentType, condition.fromLevel),
+    [condition.equipmentGrade, condition.equipmentType, condition.fromLevel],
   );
-  const step = useMemo(() => getRefiningStep(region, part, fromLevel), [fromLevel, part, region]);
   const materialIds = useMemo(() => relevantMaterialIds(step), [step]);
   const hasErrors = Object.values(errors).some(Boolean);
 
@@ -130,35 +138,9 @@ export default function RefiningClient() {
     setCalculationError(undefined);
   }
 
-  function focusFirstError(nextErrors: TErrors) {
-    const errorKey = Object.keys(nextErrors)[0];
-    errorRefs.current[errorKey]?.focus();
-  }
-
-  function handleRegionChange(value: TRefiningRegion) {
-    const nextPart: TRefiningPart = part;
-    const nextLevel = REFINING_STEPS.find(
-      (item) => item.region === value && item.part === nextPart,
-    )!.fromLevel;
-    setRegion(value);
-    setFromLevel(nextLevel);
-    setErrors({});
-    invalidateResult();
-  }
-
-  function handlePartChange(value: TRefiningPart) {
-    const nextLevel = REFINING_STEPS.find(
-      (item) => item.region === region && item.part === value,
-    )!.fromLevel;
-    setPart(value);
-    setFromLevel(nextLevel);
-    setErrors({});
-    invalidateResult();
-  }
-
-  function handleLevelChange(value: number) {
-    setFromLevel(value);
-    setErrors({});
+  function handleConditionChange(nextCondition: TRefiningCondition) {
+    setCondition(nextCondition);
+    setErrors((current) => ({ ...current, failureCount: undefined, artisanEnergy: undefined }));
     invalidateResult();
   }
 
@@ -173,10 +155,13 @@ export default function RefiningClient() {
 
   function handleCalculate() {
     const nextErrors: TErrors = {};
-    const parsedFailureCount = Number(failureCount);
+    const parsedFailureCount = Number(condition.failureCount);
     if (!Number.isInteger(parsedFailureCount) || parsedFailureCount < 0)
       nextErrors.failureCount = '실패 횟수는 0 이상의 정수로 입력해 주세요.';
-    if (!/^\d+(?:\.\d{1,6})?$/.test(artisanEnergy) || Number(artisanEnergy) > 100)
+    if (
+      !/^\d+(?:\.\d{1,6})?$/.test(condition.artisanEnergy) ||
+      Number(condition.artisanEnergy) > 100
+    )
       nextErrors.artisanEnergy = '장인의 기운은 0부터 100 사이의 숫자로 입력해 주세요.';
 
     const prices = {} as Record<TMarketMaterialId, number>;
@@ -197,7 +182,6 @@ export default function RefiningClient() {
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) {
       invalidateResult();
-      focusFirstError(nextErrors);
       return;
     }
 
@@ -241,7 +225,7 @@ export default function RefiningClient() {
         input: {
           step,
           failureCount: parsedFailureCount,
-          artisanEnergy,
+          artisanEnergy: condition.artisanEnergy,
           prices,
           ownedMaterials,
         },
@@ -257,105 +241,24 @@ export default function RefiningClient() {
 
   return (
     <main className={styles['refining-page']}>
-      <header className={styles['page-heading']}>
-        <p>에기르 · 세르카 일반 재련</p>
-        <h1>재련 최적화</h1>
-        <span>
-          선택한 +{fromLevel} → +{fromLevel + 1} 한 단계의 성공까지 필요한 재련을 계산합니다.
-        </span>
-      </header>
+      <div className={styles['tab-section']}>
+        <Tabs options={REFINING_TABS} value={activeTab} onChange={(next) => setActiveTab(next)} />
+      </div>
+
+      <RefiningConditionPanel
+        condition={condition}
+        errors={errors}
+        onChange={handleConditionChange}
+      />
 
       <div className={styles['content-grid']}>
         <section className={styles['input-panel']} aria-labelledby="refining-input-heading">
           <h2 id="refining-input-heading">조건과 재료 단가</h2>
           {hasErrors && (
             <p className={styles['input-error-summary']} role="alert">
-              필수 입력값을 확인해 주세요. 오류가 있는 첫 번째 항목으로 이동했습니다.
+              필수 입력값을 확인해 주세요.
             </p>
           )}
-          <fieldset className={styles['field-group']}>
-            <legend>재련 조건</legend>
-            <div className={styles['condition-grid']}>
-              <label>
-                장비군
-                <select
-                  value={region}
-                  onChange={(event) => handleRegionChange(event.target.value as TRefiningRegion)}
-                >
-                  <option value="aegir">에기르</option>
-                  <option value="serka">세르카</option>
-                </select>
-              </label>
-              <label>
-                부위
-                <select
-                  value={part}
-                  onChange={(event) => handlePartChange(event.target.value as TRefiningPart)}
-                >
-                  <option value="weapon">무기</option>
-                  <option value="armor">방어구</option>
-                </select>
-              </label>
-              <label>
-                현재 단계
-                <select
-                  value={fromLevel}
-                  onChange={(event) => handleLevelChange(Number(event.target.value))}
-                >
-                  {availableLevels.map((level) => (
-                    <option key={level} value={level}>
-                      +{level} → +{level + 1}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                실패 횟수
-                <input
-                  ref={(element) => {
-                    errorRefs.current.failureCount = element;
-                  }}
-                  aria-describedby={errors.failureCount ? 'failure-count-error' : undefined}
-                  aria-invalid={Boolean(errors.failureCount)}
-                  inputMode="numeric"
-                  min="0"
-                  value={failureCount}
-                  onChange={(event) => {
-                    setFailureCount(event.target.value);
-                    setErrors((current) => ({ ...current, failureCount: undefined }));
-                    invalidateResult();
-                  }}
-                />
-                {errors.failureCount && (
-                  <span id="failure-count-error" className={styles['field-error']}>
-                    {errors.failureCount}
-                  </span>
-                )}
-              </label>
-              <label>
-                장인의 기운 (%)
-                <input
-                  ref={(element) => {
-                    errorRefs.current.artisanEnergy = element;
-                  }}
-                  aria-describedby={errors.artisanEnergy ? 'artisan-energy-error' : undefined}
-                  aria-invalid={Boolean(errors.artisanEnergy)}
-                  inputMode="decimal"
-                  value={artisanEnergy}
-                  onChange={(event) => {
-                    setArtisanEnergy(event.target.value);
-                    setErrors((current) => ({ ...current, artisanEnergy: undefined }));
-                    invalidateResult();
-                  }}
-                />
-                {errors.artisanEnergy && (
-                  <span id="artisan-energy-error" className={styles['field-error']}>
-                    {errors.artisanEnergy}
-                  </span>
-                )}
-              </label>
-            </div>
-          </fieldset>
 
           <fieldset className={styles['field-group']}>
             <legend>재료별 입력</legend>
@@ -385,9 +288,6 @@ export default function RefiningClient() {
                         <th scope="row">{MATERIAL_NAMES[id]}</th>
                         <td>
                           <input
-                            ref={(element) => {
-                              errorRefs.current[priceErrorKey(id)] = element;
-                            }}
                             aria-label={`${MATERIAL_NAMES[id]} 개당 단가`}
                             aria-describedby={priceError ? priceErrorId : undefined}
                             aria-invalid={Boolean(priceError)}
@@ -405,9 +305,6 @@ export default function RefiningClient() {
                         </td>
                         <td>
                           <input
-                            ref={(element) => {
-                              errorRefs.current[ownedErrorKey(id)] = element;
-                            }}
                             aria-label={`${MATERIAL_NAMES[id]} 보유 수량`}
                             aria-describedby={ownedError ? ownedErrorId : undefined}
                             aria-invalid={Boolean(ownedError)}

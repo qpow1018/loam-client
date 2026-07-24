@@ -1,5 +1,12 @@
-export type TRefiningRegion = 'aegir' | 'serka';
-export type TRefiningPart = 'weapon' | 'armor';
+export type TEquipmentGrade = 'aegir' | 'serka';
+export type TEquipmentType = 'weapon' | 'armor';
+export type TRefiningCondition = {
+  equipmentGrade: TEquipmentGrade;
+  equipmentType: TEquipmentType;
+  fromLevel: number;
+  failureCount: string;
+  artisanEnergy: string;
+};
 
 export type TMarketMaterialId =
   | 'aegir-destruction-stone'
@@ -30,8 +37,8 @@ export type TBookOption =
   | { kind: 'enhanced'; rateBonus: number; materialId: TMarketMaterialId };
 
 export type TRefiningStep = {
-  region: TRefiningRegion;
-  part: TRefiningPart;
+  equipmentGrade: TEquipmentGrade;
+  equipmentType: TEquipmentType;
   fromLevel: number;
   initialRate: number;
   breathMax: number;
