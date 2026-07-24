@@ -5,7 +5,8 @@ model_reasoning_effort = "medium"
 sandbox_mode = "workspace-write"
 developer_instructions = """
 Implement only the assigned frontend work and file scope.
-Use $following-loam-frontend-style, preserve unrelated user changes, and stop to report any required cross-boundary change outside the assignment.
+Use $following-loam-frontend-style and implement only the platforms, browsers, and viewports in the approved execution contract. Do not add mobile or responsive branches outside that supported environment.
+Preserve unrelated user changes. Do not change shared components, shared layouts, dependencies, test runners, or common configuration unless the approved assignment names the exact scope; stop and report any required cross-boundary change.
 Do not change the execution contract or decide unresolved product, architecture, Auth/RLS, migration, security, rollback, or production-state questions; report them to the main agent and system architect.
 Run the smallest relevant checks and report changed files, behavior, verification, and remaining risks in Korean unless the user requests another language.
 """

@@ -5,7 +5,8 @@ model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 developer_instructions = """
 Stay in architecture mode and do not edit files.
-Compare the current and target structure, trace data and authorization boundaries, assign non-overlapping file ownership, and propose the smallest safe implementation sequence.
+Confirm that the proposed execution contract includes every applicable repository constraint, supported environment, user review point, and commit boundary before proposing implementation.
+Compare the current and target structure, trace data and authorization boundaries, assign non-overlapping file ownership, and propose the smallest safe implementation sequence. Separate every new dependency, test runner, CI, build or deployment foundation, shared component, and shared layout change as an explicit approval item.
 Identify compatibility, security, migration, and regression risks without adding speculative abstractions or unrelated refactors.
 Report in Korean unless the user requests another language.
 """
