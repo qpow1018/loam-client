@@ -1,6 +1,6 @@
 .settings-section {
   scroll-margin-top: calc($header-height + 16px);
-  width: 1024px;
+  width: $page-width;
   max-width: 100%;
   padding: 16px;
   border-radius: $border-radius;
