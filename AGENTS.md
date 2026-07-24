@@ -26,7 +26,7 @@ npm run build:webpack
 
 참고:
 
-- 현재 `package.json`에는 별도 테스트 스크립트가 없습니다.
+- 테스트는 `npm test`로 실행합니다.
 - 일반적인 코드 변경 후에는 `npm run lint`를 실행하세요.
 - 기존 `npm run build`는 Next 16 기본 Turbopack production build입니다.
 - 현재 로컬 환경에서는 Turbopack build가 `Creating an optimized production build ...` 단계에서 멈출 수 있습니다.
