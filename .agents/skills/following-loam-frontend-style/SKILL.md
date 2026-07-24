@@ -70,4 +70,5 @@ LoaM 프론트엔드 코드를 작성하거나 수정할 때 다음 규칙을 �
 - 독립적으로 재사용되는 클래스, `@keyframes`, `@mixin`, 전역 스타일만 top-level에 둔다.
 - 새로운 공용 색상, 크기, 믹스인을 만들기 전에 `src/assets/_variables.scss`와 `src/assets/_mixins.scss`를 확인한다.
 - Sass 변수와 믹스인은 전역 주입되므로 SCSS Module에 `@use`를 반복해서 추가하지 않는다.
+- `line-height`는 `src/assets/global.scss`의 `body` 전역값을 사용하고, 컴포넌트 또는 라우트 SCSS Module에서 재정의하지 않는다.
 - 기존 gray 기반 다크 UI와 mint, rose 강조색을 유지한다.
