@@ -69,6 +69,7 @@ export type TRefiningPlan = {
     failureCount: number;
     artisanEnergy: number;
     action: TRefiningAction;
+    immediateGold: number;
   }[];
   recommendedWorstCase: {
     attempts: number;

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import Button from '@/components/common/button/Button';
+import BoxLoading from '@/components/common/loading/BoxLoading';
 
 import { getRefiningStep, REFINING_STEPS } from './_define/refiningSteps';
 import type {
@@ -55,6 +56,10 @@ function initialMaterialForms(ids: readonly TMarketMaterialId[]): TMaterialForms
   ) as TMaterialForms;
 }
 
+function defaultMaterialForm(): TMaterialForm {
+  return { price: '', owned: '0', isValuedAtMarket: false };
+}
+
 function formatGold(value: number) {
   return `${Math.round(value).toLocaleString('ko-KR')} G`;
 }
@@ -103,6 +108,7 @@ export default function RefiningClient() {
   );
   const step = useMemo(() => getRefiningStep(region, part, fromLevel), [fromLevel, part, region]);
   const materialIds = useMemo(() => relevantMaterialIds(step), [step]);
+  const hasErrors = Object.values(errors).some(Boolean);
 
   useEffect(
     () => () => {
@@ -134,10 +140,8 @@ export default function RefiningClient() {
     const nextLevel = REFINING_STEPS.find(
       (item) => item.region === value && item.part === nextPart,
     )!.fromLevel;
-    const nextStep = getRefiningStep(value, nextPart, nextLevel);
     setRegion(value);
     setFromLevel(nextLevel);
-    setMaterials(initialMaterialForms(relevantMaterialIds(nextStep)));
     setErrors({});
     invalidateResult();
   }
@@ -146,32 +150,23 @@ export default function RefiningClient() {
     const nextLevel = REFINING_STEPS.find(
       (item) => item.region === region && item.part === value,
     )!.fromLevel;
-    const nextStep = getRefiningStep(region, value, nextLevel);
     setPart(value);
     setFromLevel(nextLevel);
-    setMaterials(initialMaterialForms(relevantMaterialIds(nextStep)));
     setErrors({});
     invalidateResult();
   }
 
   function handleLevelChange(value: number) {
     setFromLevel(value);
-    const nextStep = getRefiningStep(region, part, value);
-    setMaterials((current) => {
-      const defaults = initialMaterialForms(relevantMaterialIds(nextStep));
-      return Object.fromEntries(
-        Object.entries(defaults).map(([id, form]) => [
-          id,
-          current[id as TMarketMaterialId] ?? form,
-        ]),
-      ) as TMaterialForms;
-    });
     setErrors({});
     invalidateResult();
   }
 
   function updateMaterial(id: TMarketMaterialId, next: Partial<TMaterialForm>, errorKey?: string) {
-    setMaterials((current) => ({ ...current, [id]: { ...current[id]!, ...next } }));
+    setMaterials((current) => ({
+      ...current,
+      [id]: { ...(current[id] ?? defaultMaterialForm()), ...next },
+    }));
     if (errorKey) setErrors((current) => ({ ...current, [errorKey]: undefined }));
     invalidateResult();
   }
@@ -189,7 +184,7 @@ export default function RefiningClient() {
       Record<TMarketMaterialId, { quantity: number; isValuedAtMarket: boolean }>
     > = {};
     for (const id of materialIds) {
-      const form = materials[id]!;
+      const form = materials[id] ?? defaultMaterialForm();
       const price = Number(form.price);
       const owned = Number(form.owned);
       if (form.price.trim() === '' || !Number.isFinite(price) || price < 0)
@@ -265,12 +260,19 @@ export default function RefiningClient() {
       <header className={styles['page-heading']}>
         <p>에기르 · 세르카 일반 재련</p>
         <h1>재련 최적화</h1>
-        <span>현재 단계에서 다음 단계까지 1회 성공 기준으로 계산합니다.</span>
+        <span>
+          선택한 +{fromLevel} → +{fromLevel + 1} 한 단계의 성공까지 필요한 재련을 계산합니다.
+        </span>
       </header>
 
       <div className={styles['content-grid']}>
         <section className={styles['input-panel']} aria-labelledby="refining-input-heading">
           <h2 id="refining-input-heading">조건과 재료 단가</h2>
+          {hasErrors && (
+            <p className={styles['input-error-summary']} role="alert">
+              필수 입력값을 확인해 주세요. 오류가 있는 첫 번째 항목으로 이동했습니다.
+            </p>
+          )}
           <fieldset className={styles['field-group']}>
             <legend>재련 조건</legend>
             <div className={styles['condition-grid']}>
@@ -358,7 +360,7 @@ export default function RefiningClient() {
           <fieldset className={styles['field-group']}>
             <legend>재료별 입력</legend>
             <p className={styles['field-description']}>
-              필수 재료 4종, 숨결, 가능한 책의 개당 단가와 보유 수량을 입력해 주세요.
+              보유분은 기본 0G이며, ‘시장가 반영’을 선택하면 입력 단가로 계산합니다.
             </p>
             <div className={styles['table-scroll']}>
               <table>
@@ -368,12 +370,12 @@ export default function RefiningClient() {
                     <th scope="col">재료</th>
                     <th scope="col">개당 G</th>
                     <th scope="col">보유 수량</th>
-                    <th scope="col">보유분 시장가 반영</th>
+                    <th scope="col">시장가 반영</th>
                   </tr>
                 </thead>
                 <tbody>
                   {materialIds.map((id) => {
-                    const form = materials[id]!;
+                    const form = materials[id] ?? defaultMaterialForm();
                     const priceError = errors[priceErrorKey(id)];
                     const ownedError = errors[ownedErrorKey(id)];
                     const priceErrorId = `price-${id}-error`;
@@ -426,13 +428,13 @@ export default function RefiningClient() {
                           <label className={styles['check-label']}>
                             <input
                               type="checkbox"
-                              aria-label={`${MATERIAL_NAMES[id]} 보유분 시장가로 계산`}
+                              aria-label={`${MATERIAL_NAMES[id]} 보유분 시장가 반영`}
                               checked={form.isValuedAtMarket}
                               onChange={(event) =>
                                 updateMaterial(id, { isValuedAtMarket: event.target.checked })
                               }
                             />
-                            <span>시장가로 계산</span>
+                            <span>시장가 반영</span>
                           </label>
                         </td>
                       </tr>
@@ -458,14 +460,17 @@ export default function RefiningClient() {
               {calculationError}
             </p>
           )}
-          {!plan ? (
+          {!plan && isCalculating ? (
+            <div className={styles['loading-result']}>
+              <BoxLoading height={120} />
+              <p>최적 전략을 계산하고 있습니다.</p>
+            </div>
+          ) : !plan ? (
             <p className={styles['empty-result']}>
-              {isCalculating
-                ? '최적 전략을 계산하고 있습니다.'
-                : '단가와 보유 수량을 입력한 뒤 계산하기를 눌러 주세요.'}
+              단가와 보유 수량을 입력한 뒤 계산하기를 눌러 주세요.
             </p>
           ) : (
-            <RefiningResult plan={plan} materialIds={materialIds} />
+            <RefiningResult plan={plan} materialIds={materialIds} step={step} />
           )}
         </section>
       </div>
@@ -473,40 +478,104 @@ export default function RefiningClient() {
   );
 }
 
-function RefiningResult(props: { plan: TRefiningPlan; materialIds: readonly TMarketMaterialId[] }) {
-  const { plan, materialIds } = props;
+function RefiningResult(props: {
+  plan: TRefiningPlan;
+  materialIds: readonly TMarketMaterialId[];
+  step: ReturnType<typeof getRefiningStep>;
+}) {
+  const { plan, materialIds, step } = props;
   const current = plan.conditionalActions[0];
+  const currentMaterials = new Map<TMarketMaterialId, number>();
+  for (const material of step.requiredMaterials)
+    currentMaterials.set(material.id, (currentMaterials.get(material.id) ?? 0) + material.quantity);
+  if (current.action.breathQuantity > 0)
+    currentMaterials.set(
+      step.breathMaterialId,
+      (currentMaterials.get(step.breathMaterialId) ?? 0) + current.action.breathQuantity,
+    );
+  if (current.action.book.kind !== 'none')
+    currentMaterials.set(
+      current.action.book.materialId,
+      (currentMaterials.get(current.action.book.materialId) ?? 0) + 1,
+    );
+
   return (
     <div className={styles['result-content']}>
-      <div className={styles['summary-card']}>
-        <strong>현재 권장 행동</strong>
-        <p>{actionText(current.action)}</p>
+      <section className={styles['current-action']} aria-labelledby="current-action-heading">
+        <h3 id="current-action-heading">이번 시도 권장</h3>
+        <p className={styles['action-text']}>{actionText(current.action)}</p>
         <dl>
           <div>
-            <dt>기대 시도</dt>
-            <dd>{formatQuantity(plan.expectedAttempts)}회</dd>
+            <dt>숨결</dt>
+            <dd>{current.action.breathQuantity}개</dd>
           </div>
           <div>
-            <dt>기대 비용 (실링 제외)</dt>
-            <dd>{formatGold(plan.expectedGold)}</dd>
+            <dt>책</dt>
+            <dd>
+              {current.action.book.kind === 'none'
+                ? '미사용'
+                : MATERIAL_NAMES[current.action.book.materialId]}
+            </dd>
           </div>
           <div>
-            <dt>기대 실링</dt>
-            <dd>{formatQuantity(plan.expectedSilver)} 실링</dd>
+            <dt>성공률</dt>
+            <dd>{(current.action.successRate / 100).toFixed(2)}%</dd>
           </div>
           <div>
-            <dt>장인 100%까지 최대 시도</dt>
-            <dd>{plan.recommendedWorstCase.attempts}회</dd>
+            <dt>즉시 골드</dt>
+            <dd>{formatGold(current.immediateGold)}</dd>
           </div>
           <div>
-            <dt>장인 100%까지 비용 (실링 제외)</dt>
-            <dd>{formatGold(plan.recommendedWorstCase.gold)}</dd>
-          </div>
-          <div>
-            <dt>장인 100%까지 실링</dt>
-            <dd>{formatQuantity(plan.recommendedWorstCase.silver)} 실링</dd>
+            <dt>즉시 실링</dt>
+            <dd>{formatQuantity(step.silver)} 실링</dd>
           </div>
         </dl>
+        <div className={styles['immediate-materials']}>
+          <strong>이번 시도 투입 재료</strong>
+          <ul>
+            {[...currentMaterials.entries()].map(([id, quantity]) => (
+              <li key={id}>
+                {MATERIAL_NAMES[id]} {formatQuantity(quantity)}개
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+      <div className={styles['outcome-grid']}>
+        <section aria-labelledby="expected-heading">
+          <h3 id="expected-heading">기대값</h3>
+          <dl className={styles['metric-grid']}>
+            <div>
+              <dt>기대 시도</dt>
+              <dd>{formatQuantity(plan.expectedAttempts)}회</dd>
+            </div>
+            <div>
+              <dt>기대 비용</dt>
+              <dd>{formatGold(plan.expectedGold)}</dd>
+            </div>
+            <div>
+              <dt>기대 실링</dt>
+              <dd>{formatQuantity(plan.expectedSilver)} 실링</dd>
+            </div>
+          </dl>
+        </section>
+        <section aria-labelledby="worst-heading">
+          <h3 id="worst-heading">최악 경로</h3>
+          <dl className={styles['metric-grid']}>
+            <div>
+              <dt>최대 시도</dt>
+              <dd>{plan.recommendedWorstCase.attempts}회</dd>
+            </div>
+            <div>
+              <dt>누적 비용</dt>
+              <dd>{formatGold(plan.recommendedWorstCase.gold)}</dd>
+            </div>
+            <div>
+              <dt>누적 실링</dt>
+              <dd>{formatQuantity(plan.recommendedWorstCase.silver)} 실링</dd>
+            </div>
+          </dl>
+        </section>
       </div>
       <div className={styles['notice']}>
         <p>사용자 입력 단가 기준 · 보유분 기본 0G · 실링은 골드 최적화에서 제외</p>
@@ -521,8 +590,8 @@ function RefiningResult(props: { plan: TRefiningPlan; materialIds: readonly TMar
             <tr>
               <th scope="col">재료</th>
               <th scope="col">기대 사용</th>
-              <th scope="col">구매</th>
-              <th scope="col">비용</th>
+              <th scope="col">기대 구매량</th>
+              <th scope="col">기대 비용</th>
             </tr>
           </thead>
           <tbody>

@@ -427,6 +427,7 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
         startArtisan + trace.accumulatedRate * ARTISAN_PER_SUCCESS_RATE,
       ),
       action,
+      immediateGold,
     });
     worstActions.push({
       failureCount: trace.failures,

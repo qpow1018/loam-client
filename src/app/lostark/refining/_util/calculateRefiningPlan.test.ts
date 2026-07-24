@@ -196,7 +196,12 @@ describe('Bellman plan', () => {
     ).toThrow('artisanEnergy');
   });
   it('returns actual immediate costs for every recommended worst-case attempt', () => {
-    const plan = calculateRefiningPlan(input(minimal(400)));
+    const plan = calculateRefiningPlan(
+      input({
+        ...minimal(10000),
+        requiredMaterials: [{ id: 'aegir-leapstone', quantity: 2 }],
+      }),
+    );
     expect(plan.recommendedWorstCase.conditionalActions).toHaveLength(
       plan.recommendedWorstCase.attempts,
     );
@@ -206,6 +211,10 @@ describe('Bellman plan', () => {
         0,
       ),
     ).toBe(plan.recommendedWorstCase.gold);
+    expect(plan.conditionalActions[0]?.immediateGold).toBe(
+      plan.recommendedWorstCase.conditionalActions[0]?.immediateGold,
+    );
+    expect(plan.conditionalActions[0]?.immediateGold).toBe(101);
   });
   it('changes the exact optional policy when required free stock changes future attempt costs', () => {
     const step: TRefiningStep = {
