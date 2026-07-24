@@ -1,0 +1,200 @@
+.refining-page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 24px 72px;
+  color: $gray-100;
+}
+.page-heading {
+  margin-bottom: 28px;
+  p {
+    margin: 0 0 8px;
+    color: $mint-300;
+    font-weight: 700;
+  }
+  h1 {
+    margin: 0;
+    font-size: 32px;
+  }
+  span {
+    display: block;
+    margin-top: 10px;
+    color: $gray-400;
+  }
+}
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(360px, 0.85fr);
+  gap: 24px;
+  align-items: start;
+}
+.input-panel,
+.result-panel {
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 24px;
+  border: 1px solid $gray-700;
+  border-radius: 16px;
+  background: $gray-900;
+}
+.input-panel h2,
+.result-panel h2,
+.result-content h3 {
+  margin: 0 0 20px;
+  font-size: 20px;
+}
+.field-group {
+  min-width: 0;
+  margin: 0 0 22px;
+  padding: 18px;
+  border: 1px solid $gray-700;
+  border-radius: 12px;
+  legend {
+    padding: 0 6px;
+    color: $gray-200;
+    font-weight: 700;
+  }
+}
+.condition-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  label {
+    display: grid;
+    gap: 8px;
+    color: $gray-300;
+    font-size: 14px;
+  }
+}
+.refining-page input,
+.refining-page select {
+  width: 100%;
+  min-height: 42px;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid $gray-600;
+  border-radius: 8px;
+  background: $gray-800;
+  color: $gray-100;
+}
+.field-description {
+  margin: 0 0 14px;
+  color: $gray-400;
+  font-size: 14px;
+}
+.table-scroll {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  table {
+    width: 100%;
+    min-width: 640px;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  caption {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+  th,
+  td {
+    padding: 10px 8px;
+    border-bottom: 1px solid $gray-700;
+    text-align: left;
+    vertical-align: middle;
+  }
+  thead th {
+    color: $gray-400;
+    font-weight: 500;
+  }
+  tbody th {
+    min-width: 140px;
+    color: $gray-200;
+    font-weight: 500;
+  }
+  input {
+    min-width: 100px;
+  }
+}
+.check-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: $gray-300;
+  white-space: nowrap;
+  input {
+    width: 16px;
+    min-height: 16px;
+  }
+}
+.field-error {
+  display: block;
+  margin-top: 5px;
+  color: $rose-400;
+  font-size: 12px;
+}
+.calculation-error {
+  margin: 0 0 16px;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba($rose-400, 0.1);
+  color: $rose-300;
+  font-size: 14px;
+}
+.empty-result {
+  margin: 0;
+  padding: 32px 0;
+  color: $gray-400;
+  text-align: center;
+}
+.result-content {
+  display: grid;
+  gap: 22px;
+}
+.result-panel .table-scroll table {
+  min-width: 0;
+}
+.summary-card {
+  padding: 18px;
+  border-radius: 12px;
+  background: $gray-800;
+  strong {
+    color: $mint-300;
+  }
+  p {
+    margin: 10px 0 18px;
+    color: $gray-100;
+    font-weight: 700;
+  }
+  dl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin: 0;
+  }
+  dt {
+    color: $gray-400;
+    font-size: 13px;
+  }
+  dd {
+    margin: 5px 0 0;
+    color: $gray-100;
+    font-weight: 700;
+  }
+}
+.notice {
+  padding: 12px 14px;
+  border-left: 3px solid $mint-400;
+  background: rgba($mint-400, 0.08);
+  color: $gray-300;
+  font-size: 13px;
+  p {
+    margin: 0;
+  }
+  p + p {
+    margin-top: 5px;
+  }
+}
