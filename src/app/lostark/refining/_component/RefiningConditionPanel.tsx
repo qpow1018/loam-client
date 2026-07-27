@@ -1,11 +1,12 @@
 import type { ReactNode } from 'react';
 
-import { getRefiningLevels } from '@/app/lostark/refining/_define/refiningSteps';
 import type {
   TEquipmentGrade,
   TEquipmentType,
   TRefiningCondition,
 } from '@/app/lostark/refining/_type/refining';
+import { getRefiningLevels } from '@/app/lostark/refining/_define/refiningSteps';
+import Select from '@/components/common/form/Select';
 
 import styles from '@/app/lostark/refining/_component/refiningConditionPanel.module.scss';
 
@@ -65,18 +66,17 @@ export default function RefiningConditionPanel(props: {
           />
         </ConditionBox>
 
-        <ConditionBox label="현재 단계">
-          <select
-            aria-label="현재 단계"
-            value={fromLevel}
-            onChange={(event) => onChange({ ...condition, fromLevel: Number(event.target.value) })}
-          >
-            {availableLevels.map((level) => (
-              <option key={level} value={level}>
-                +{level} → +{level + 1}
-              </option>
-            ))}
-          </select>
+        <ConditionBox label="재련 단계" labelId="refining-level-label">
+          <Select
+            id="refining-level"
+            labelId="refining-level-label"
+            value={String(fromLevel)}
+            options={availableLevels.map((level) => ({
+              value: String(level),
+              label: `${level} → ${level + 1}`,
+            }))}
+            onChange={(value) => onChange({ ...condition, fromLevel: Number(value) })}
+          />
         </ConditionBox>
 
         <ConditionBox label="실패 횟수">
@@ -116,12 +116,18 @@ export default function RefiningConditionPanel(props: {
   );
 }
 
-function ConditionBox(props: { label: string; children: ReactNode }) {
-  const { label, children } = props;
+function ConditionBox(props: { label: string; labelId?: string; children: ReactNode }) {
+  const { label, labelId, children } = props;
 
   return (
     <div className={styles['condition-box']} role="group" aria-label={label}>
-      <p className={styles['label']}>{label}</p>
+      {labelId ? (
+        <p id={labelId} className={styles['label']}>
+          {label}
+        </p>
+      ) : (
+        <p className={styles['label']}>{label}</p>
+      )}
       {children}
     </div>
   );
