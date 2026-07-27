@@ -24,7 +24,6 @@ function validInput() {
       artisanEnergy: '12.345678',
     },
     materials,
-    materialIds,
     step,
   };
 }

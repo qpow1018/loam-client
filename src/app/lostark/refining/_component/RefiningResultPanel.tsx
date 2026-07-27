@@ -1,14 +1,27 @@
 import type { ReactNode } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
+import Button from '@/components/common/button/Button';
 import BoxLoading from '@/components/common/loading/BoxLoading';
 
 import { MATERIAL_NAMES } from '@/app/lostark/refining/_define/refiningMaterials';
 import type {
   TBookOption,
   TMarketMaterialId,
+  TMaterialForms,
   TRefiningPlan,
+  TRefiningCondition,
   TRefiningStep,
 } from '@/app/lostark/refining/_type/refining';
+import type {
+  TRefiningWorkerRequest,
+  TRefiningWorkerResponse,
+} from '@/app/lostark/refining/_type/refiningWorker';
+import {
+  getRelevantMaterialIds,
+  validateRefiningInput,
+  type TRefiningInputErrors,
+} from '@/app/lostark/refining/_util/refiningInput';
 import styles from '@/app/lostark/refining/_component/refiningResultPanel.module.scss';
 
 function formatGold(value: number) {
@@ -25,13 +38,86 @@ function actionText(action: { breathQuantity: number; book: TBookOption; success
 }
 
 export default function RefiningResultPanel(props: {
-  plan?: TRefiningPlan;
-  calculationError?: string;
-  isCalculating: boolean;
-  materialIds: readonly TMarketMaterialId[];
+  condition: TRefiningCondition;
+  materials: TMaterialForms;
   step: TRefiningStep;
+  onErrorsChange: (errors: TRefiningInputErrors) => void;
 }) {
-  const { plan, calculationError, isCalculating, materialIds, step } = props;
+  const { condition, materials, step, onErrorsChange } = props;
+  const materialIds = getRelevantMaterialIds(step);
+  const [plan, setPlan] = useState<TRefiningPlan>();
+  const [calculationError, setCalculationError] = useState<string>();
+  const [isCalculating, setIsCalculating] = useState(false);
+  const workerRef = useRef<Worker | undefined>(undefined);
+  const requestIdRef = useRef(0);
+
+  useEffect(
+    () => () => {
+      workerRef.current?.terminate();
+    },
+    [],
+  );
+
+  function handleCalculate() {
+    const validation = validateRefiningInput({ condition, materials, step });
+    onErrorsChange(validation.errors);
+    if (!validation.input) {
+      requestIdRef.current += 1;
+      workerRef.current?.terminate();
+      workerRef.current = undefined;
+      setPlan(undefined);
+      setCalculationError(undefined);
+      setIsCalculating(false);
+      return;
+    }
+
+    workerRef.current?.terminate();
+    setPlan(undefined);
+    setCalculationError(undefined);
+    setIsCalculating(true);
+    const requestId = requestIdRef.current + 1;
+    requestIdRef.current = requestId;
+
+    try {
+      const worker = new Worker(new URL('../_worker/refining.worker.ts', import.meta.url), {
+        type: 'module',
+      });
+      workerRef.current = worker;
+
+      worker.addEventListener('message', (event: MessageEvent<TRefiningWorkerResponse>) => {
+        if (event.data.requestId !== requestIdRef.current) return;
+        worker.terminate();
+        workerRef.current = undefined;
+        setIsCalculating(false);
+
+        if ('error' in event.data) {
+          setCalculationError(
+            '계산 중 오류가 발생했습니다. 입력값을 확인한 뒤 다시 시도해 주세요.',
+          );
+          return;
+        }
+        setPlan(event.data.plan);
+      });
+      worker.addEventListener('error', () => {
+        if (requestId !== requestIdRef.current) return;
+        worker.terminate();
+        workerRef.current = undefined;
+        setIsCalculating(false);
+        setCalculationError('계산 중 오류가 발생했습니다. 입력값을 확인한 뒤 다시 시도해 주세요.');
+      });
+
+      const request: TRefiningWorkerRequest = {
+        requestId,
+        input: { step, ...validation.input },
+      };
+      worker.postMessage(request);
+    } catch {
+      workerRef.current = undefined;
+      setIsCalculating(false);
+      setPlan(undefined);
+      setCalculationError('계산 중 오류가 발생했습니다. 입력값을 확인한 뒤 다시 시도해 주세요.');
+    }
+  }
 
   return (
     <section
@@ -40,6 +126,16 @@ export default function RefiningResultPanel(props: {
       aria-live="polite"
     >
       <h2 id="refining-result-heading">계산 결과</h2>
+      <Button
+        theme="bg-pri"
+        size="large"
+        isFullWidth
+        isLoading={isCalculating}
+        className={styles['calculate-button']}
+        onClick={handleCalculate}
+      >
+        {isCalculating ? '계산 중' : '계산하기'}
+      </Button>
       {calculationError && (
         <p className={styles['calculation-error']} role="alert">
           {calculationError}

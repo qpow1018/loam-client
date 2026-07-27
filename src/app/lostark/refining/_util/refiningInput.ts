@@ -46,10 +46,10 @@ export function hasRefiningInputErrors(errors: TRefiningInputErrors) {
 export function validateRefiningInput(props: {
   condition: TRefiningCondition;
   materials: TMaterialForms;
-  materialIds: readonly TMarketMaterialId[];
   step: TRefiningStep;
 }): { errors: TRefiningInputErrors; input?: TValidatedRefiningInput } {
-  const { condition, materials, materialIds, step } = props;
+  const { condition, materials, step } = props;
+  const materialIds = getRelevantMaterialIds(step);
   const errors: TRefiningInputErrors = {};
   const materialErrors: TMaterialInputErrors = {};
   const failureBonusRate = parseFailureBonusRate(condition.failureBonusRate);

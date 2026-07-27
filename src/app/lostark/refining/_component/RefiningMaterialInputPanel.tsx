@@ -1,42 +1,34 @@
-import Button from '@/components/common/button/Button';
-
-import { MATERIAL_NAMES } from '@/app/lostark/refining/_define/refiningMaterials';
 import type {
   TMaterialForm,
   TMaterialForms,
   TMaterialInputErrors,
   TMarketMaterialId,
+  TRefiningStep,
 } from '@/app/lostark/refining/_type/refining';
+import { MATERIAL_NAMES } from '@/app/lostark/refining/_define/refiningMaterials';
+import { getRelevantMaterialIds } from '@/app/lostark/refining/_util/refiningInput';
+
 import styles from '@/app/lostark/refining/_component/refiningMaterialInputPanel.module.scss';
 
 const DEFAULT_MATERIAL_FORM: TMaterialForm = { price: '', owned: '0', isValuedAtMarket: false };
 
 export default function RefiningMaterialInputPanel(props: {
-  materialIds: readonly TMarketMaterialId[];
+  step: TRefiningStep;
   materials: TMaterialForms;
   materialErrors: TMaterialInputErrors;
   hasErrors: boolean;
-  isCalculating: boolean;
   onMaterialChange: (
     id: TMarketMaterialId,
     next: Partial<TMaterialForm>,
     errorField?: 'price' | 'owned',
   ) => void;
-  onCalculate: () => void;
 }) {
-  const {
-    materialIds,
-    materials,
-    materialErrors,
-    hasErrors,
-    isCalculating,
-    onMaterialChange,
-    onCalculate,
-  } = props;
+  const { step, materials, materialErrors, hasErrors, onMaterialChange } = props;
+  const materialIds = getRelevantMaterialIds(step);
 
   return (
     <section className={styles['input-panel']} aria-labelledby="refining-input-heading">
-      <h2 id="refining-input-heading">조건과 재료 단가</h2>
+      <h2 id="refining-input-heading">재료 단가</h2>
       {hasErrors && (
         <p className={styles['input-error-summary']} role="alert">
           필수 입력값을 확인해 주세요.
@@ -124,9 +116,6 @@ export default function RefiningMaterialInputPanel(props: {
           </table>
         </div>
       </fieldset>
-      <Button theme="bg-pri" size="large" isLoading={isCalculating} onClick={onCalculate}>
-        {isCalculating ? '계산 중' : '계산하기'}
-      </Button>
     </section>
   );
 }
