@@ -29,9 +29,9 @@ export default function RefiningConditionPanel(props: {
   const { equipmentGrade, equipmentType, fromLevel, failureBonusRate, artisanEnergy } = condition;
 
   const availableLevels = getRefiningLevels(equipmentGrade, equipmentType);
-  const baseSuccessRate = `${(
+  const baseSuccessRate = (
     getRefiningStep(equipmentGrade, equipmentType, fromLevel).initialRate / 100
-  ).toFixed(2)}%`;
+  ).toFixed(2);
 
   function handleEquipmentGradeChange(value: TEquipmentGrade) {
     const nextLevel = getRefiningLevels(value, equipmentType)[0]!;
@@ -82,21 +82,19 @@ export default function RefiningConditionPanel(props: {
         </ConditionBox>
 
         <ConditionBox label="기본 확률">
-          <TextInput value={baseSuccessRate} isReadonly />
+          <PercentageInput value={baseSuccessRate} isReadonly />
         </ConditionBox>
 
         <ConditionBox label="장인의 기운">
-          <TextInput
+          <PercentageInput
             value={artisanEnergy}
-            inputMode="decimal"
             onChange={(value) => onChange({ ...condition, artisanEnergy: value })}
           />
         </ConditionBox>
 
         <ConditionBox label="실패로 추가된 확률">
-          <TextInput
+          <PercentageInput
             value={failureBonusRate}
-            inputMode="decimal"
             onChange={(value) => onChange({ ...condition, failureBonusRate: value })}
           />
         </ConditionBox>
@@ -138,6 +136,27 @@ function RadioButtons(props: {
           {option.label}
         </button>
       ))}
+    </div>
+  );
+}
+
+function PercentageInput(props: {
+  value: string;
+  onChange?: (value: string) => void;
+  isReadonly?: boolean;
+}) {
+  const { value, onChange, isReadonly = false } = props;
+
+  return (
+    <div className={styles['percentage-input']}>
+      <TextInput
+        className={styles['percentage-value']}
+        value={value}
+        isReadonly={isReadonly}
+        inputMode="decimal"
+        onChange={onChange}
+      />
+      <span aria-hidden="true">%</span>
     </div>
   );
 }
