@@ -4,7 +4,7 @@ export type TRefiningCondition = {
   equipmentGrade: TEquipmentGrade;
   equipmentType: TEquipmentType;
   fromLevel: number;
-  failureCount: string;
+  failureBonusRate: string;
   artisanEnergy: string;
 };
 
@@ -53,7 +53,7 @@ export type TRefiningStep = {
 export type TOwnedMaterial = { quantity: number; isValuedAtMarket: boolean };
 export type TRefiningPlanInput = {
   step: TRefiningStep;
-  failureCount: number;
+  failureBonusRate: number;
   artisanEnergy: string;
   ownedMaterials?: Partial<Record<TMarketMaterialId, TOwnedMaterial>>;
   prices: Record<TMarketMaterialId, number>;
@@ -73,7 +73,7 @@ export type TRefiningPlan = {
   materialExpectations: Partial<Record<TMarketMaterialId, TMaterialExpectation>>;
   goldBreakdown: { pureGold: number; marketMaterials: number };
   conditionalActions: readonly {
-    failureCount: number;
+    failureBonusRate: number;
     artisanEnergy: number;
     action: TRefiningAction;
     immediateGold: number;
@@ -83,7 +83,7 @@ export type TRefiningPlan = {
     gold: number;
     silver: number;
     conditionalActions: readonly {
-      failureCount: number;
+      failureBonusRate: number;
       artisanEnergy: number;
       action: TRefiningAction;
       immediateGold: number;

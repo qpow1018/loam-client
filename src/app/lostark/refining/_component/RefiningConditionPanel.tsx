@@ -26,7 +26,7 @@ export default function RefiningConditionPanel(props: {
   onChange: (condition: TRefiningCondition) => void;
 }) {
   const { condition, onChange } = props;
-  const { equipmentGrade, equipmentType, fromLevel, failureCount, artisanEnergy } = condition;
+  const { equipmentGrade, equipmentType, fromLevel, failureBonusRate, artisanEnergy } = condition;
 
   const availableLevels = getRefiningLevels(equipmentGrade, equipmentType);
   const baseSuccessRate = `${(
@@ -93,11 +93,11 @@ export default function RefiningConditionPanel(props: {
           />
         </ConditionBox>
 
-        <ConditionBox label="실패 횟수">
+        <ConditionBox label="실패로 추가된 확률">
           <TextInput
-            value={failureCount}
-            inputMode="numeric"
-            onChange={(value) => onChange({ ...condition, failureCount: value })}
+            value={failureBonusRate}
+            inputMode="decimal"
+            onChange={(value) => onChange({ ...condition, failureBonusRate: value })}
           />
         </ConditionBox>
       </div>

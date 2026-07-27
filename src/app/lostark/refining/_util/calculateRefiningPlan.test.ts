@@ -12,7 +12,13 @@ function input(
   step: TRefiningStep,
   overrides: Partial<TRefiningPlanInput> = {},
 ): TRefiningPlanInput {
-  return { step, failureCount: 0, artisanEnergy: '0', prices: TEST_MARKET_PRICES, ...overrides };
+  return {
+    step,
+    failureBonusRate: 0,
+    artisanEnergy: '0',
+    prices: TEST_MARKET_PRICES,
+    ...overrides,
+  };
 }
 function minimal(initialRate: number): TRefiningStep {
   return {
@@ -45,15 +51,19 @@ describe('fixed refining data', () => {
       )?.quantity,
     ).toBe(29040);
   });
-  it('uses initial rate, failure correction, cap, and exact artisan accumulation', () => {
+  it('uses failure bonus rate, cap, and exact artisan accumulation', () => {
     const step = minimal(400);
     const plan = calculateRefiningPlan(input(step));
     expect(plan.conditionalActions[0].action.successRate).toBe(400);
     expect(plan.conditionalActions[1].action.successRate).toBe(440);
-    expect(plan.conditionalActions.find((row) => row.failureCount === 10)?.action.successRate).toBe(
-      800,
-    );
+    expect(
+      plan.conditionalActions.find((row) => row.failureBonusRate === 400)?.action.successRate,
+    ).toBe(800);
     expect(plan.conditionalActions[1].artisanEnergy).toBeCloseTo(4 / 2.15, 12);
+    expect(
+      calculateRefiningPlan(input(step, { failureBonusRate: 120 })).conditionalActions[0]?.action
+        .successRate,
+    ).toBe(520);
   });
   it('maps every Aegir book range to its exact effect and part-specific market item', () => {
     const expected = [

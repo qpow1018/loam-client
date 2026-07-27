@@ -90,6 +90,13 @@ function ownedErrorKey(id: TMarketMaterialId) {
   return `owned-${id}`;
 }
 
+function parseFailureBonusRate(value: string) {
+  const normalized = value.trim().replace(/%$/, '');
+  if (!/^\d+(?:\.\d{1,2})?$/.test(normalized)) return undefined;
+  const [whole, fractional = ''] = normalized.split('.');
+  return Number(whole) * 100 + Number(`${fractional}00`.slice(0, 2));
+}
+
 export default function RefiningClient() {
   const [activeTab, setActiveTab] = useState<string>(REFINING_TABS[0].value);
 
@@ -97,7 +104,7 @@ export default function RefiningClient() {
     equipmentGrade: 'aegir',
     equipmentType: 'weapon',
     fromLevel: 10,
-    failureCount: '0',
+    failureBonusRate: '0',
     artisanEnergy: '0',
   });
   const initialStep = getRefiningStep('aegir', 'weapon', 10);
@@ -140,7 +147,7 @@ export default function RefiningClient() {
 
   function handleConditionChange(nextCondition: TRefiningCondition) {
     setCondition(nextCondition);
-    setErrors((current) => ({ ...current, failureCount: undefined, artisanEnergy: undefined }));
+    setErrors((current) => ({ ...current, failureBonusRate: undefined, artisanEnergy: undefined }));
     invalidateResult();
   }
 
@@ -155,9 +162,9 @@ export default function RefiningClient() {
 
   function handleCalculate() {
     const nextErrors: TErrors = {};
-    const parsedFailureCount = Number(condition.failureCount);
-    if (!Number.isInteger(parsedFailureCount) || parsedFailureCount < 0)
-      nextErrors.failureCount = '실패 횟수는 0 이상의 정수로 입력해 주세요.';
+    const parsedFailureBonusRate = parseFailureBonusRate(condition.failureBonusRate);
+    if (parsedFailureBonusRate === undefined || parsedFailureBonusRate > step.initialRate)
+      nextErrors.failureBonusRate = `실패로 추가된 확률은 0부터 ${(step.initialRate / 100).toFixed(2)}% 사이로 입력해 주세요.`;
     if (
       !/^\d+(?:\.\d{1,6})?$/.test(condition.artisanEnergy) ||
       Number(condition.artisanEnergy) > 100
@@ -224,7 +231,7 @@ export default function RefiningClient() {
         requestId,
         input: {
           step,
-          failureCount: parsedFailureCount,
+          failureBonusRate: parsedFailureBonusRate ?? 0,
           artisanEnergy: condition.artisanEnergy,
           prices,
           ownedMaterials,
@@ -505,18 +512,18 @@ function RefiningResult(props: {
       <h3>실패 상태별 조건부 권장</h3>
       <div className={styles['table-scroll']}>
         <table>
-          <caption>실패 횟수와 장인의 기운에 따른 권장 행동</caption>
+          <caption>실패로 추가된 확률과 장인의 기운에 따른 권장 행동</caption>
           <thead>
             <tr>
-              <th scope="col">실패</th>
+              <th scope="col">실패 추가 확률</th>
               <th scope="col">장인의 기운</th>
               <th scope="col">권장 행동</th>
             </tr>
           </thead>
           <tbody>
             {plan.conditionalActions.map((item) => (
-              <tr key={`${item.failureCount}-${item.artisanEnergy}`}>
-                <td>{item.failureCount}회</td>
+              <tr key={`${item.failureBonusRate}-${item.artisanEnergy}`}>
+                <td>{(item.failureBonusRate / 100).toFixed(2)}%</td>
                 <td>{item.artisanEnergy.toFixed(2)}%</td>
                 <td>{actionText(item.action)}</td>
               </tr>

@@ -15,7 +15,12 @@ const NONE: TBookOption = { kind: 'none' };
 const ZERO_USAGE = { owned: 0, purchased: 0, total: 0, gold: 0 };
 
 type TRemaining = Partial<Record<TMarketMaterialId, number>>;
-type TState = { failures: number; accumulatedRate: number; remainingCode: number };
+type TState = {
+  attempts: number;
+  failureBonusRate: number;
+  accumulatedRate: number;
+  remainingCode: number;
+};
 type TScalarValue = { gold: number; action: TRefiningAction };
 type TInventorySlot = {
   id: TMarketMaterialId;
@@ -42,8 +47,12 @@ function artisanToNumber(value: number) {
   return Math.min(100, value / ARTISAN_DENOMINATOR / 100);
 }
 
-function currentBaseRate(initialRate: number, failures: number) {
-  return Math.min(initialRate + failures * (initialRate / 10), initialRate * 2);
+function currentBaseRate(initialRate: number, failureBonusRate: number) {
+  return Math.min(initialRate + failureBonusRate, initialRate * 2);
+}
+
+function nextFailureBonusRate(initialRate: number, failureBonusRate: number) {
+  return Math.min(initialRate, failureBonusRate + initialRate / 10);
 }
 
 function actionKey(action: TRefiningAction) {
@@ -77,7 +86,7 @@ function optionalConsumptions(
 
 export function getRefiningActions(
   step: TRefiningPlanInput['step'],
-  failureCount: number,
+  failureBonusRate: number,
 ): readonly TRefiningAction[] {
   return step.books.flatMap((book) =>
     Array.from({ length: step.breathMax + 1 }, (_, breathQuantity) => ({
@@ -85,7 +94,7 @@ export function getRefiningActions(
       book,
       successRate: Math.min(
         10_000,
-        currentBaseRate(step.initialRate, failureCount) +
+        currentBaseRate(step.initialRate, failureBonusRate) +
           breathQuantity * step.breathRateBonus +
           (book.kind === 'none' ? 0 : book.rateBonus),
       ),
@@ -94,8 +103,12 @@ export function getRefiningActions(
 }
 
 export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan {
-  if (!Number.isInteger(input.failureCount) || input.failureCount < 0)
-    throw new Error('failureCount must be a non-negative integer.');
+  if (
+    !Number.isInteger(input.failureBonusRate) ||
+    input.failureBonusRate < 0 ||
+    input.failureBonusRate > input.step.initialRate
+  )
+    throw new Error('failureBonusRate must be an integer percentage not above the initial rate.');
   for (const [id, owned] of Object.entries(input.ownedMaterials ?? {})) {
     if (!owned || !Number.isInteger(owned.quantity) || owned.quantity < 0)
       throw new Error(`Invalid owned quantity: ${id}`);
@@ -117,27 +130,27 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
     input.step.breathMaterialId,
     ...input.step.books.flatMap((book) => (book.kind === 'none' ? [] : [book.materialId])),
   ]);
-  const actionsByFailure = new Map<number, readonly TRefiningAction[]>();
+  const actionsByFailureBonusRate = new Map<number, readonly TRefiningAction[]>();
 
-  function actionsForFailure(failures: number) {
-    const cached = actionsByFailure.get(failures);
+  function actionsForFailureBonusRate(failureBonusRate: number) {
+    const cached = actionsByFailureBonusRate.get(failureBonusRate);
     if (cached) return cached;
-    const actions = getRefiningActions(input.step, failures);
-    actionsByFailure.set(failures, actions);
+    const actions = getRefiningActions(input.step, failureBonusRate);
+    actionsByFailureBonusRate.set(failureBonusRate, actions);
     return actions;
   }
 
   // No failure path can outlive this bound: even the cheapest-rate action adds
   // positive artisan energy on every failure.
-  let boundFailures = input.failureCount;
+  let boundFailureBonusRate = input.failureBonusRate;
   let boundAccumulatedRate = 0;
   let maxFailureAttempts = 0;
   while (boundAccumulatedRate < guaranteeRate) {
     const minimumRate = Math.min(
-      ...actionsForFailure(boundFailures).map((action) => action.successRate),
+      ...actionsForFailureBonusRate(boundFailureBonusRate).map((action) => action.successRate),
     );
     boundAccumulatedRate += minimumRate;
-    boundFailures += 1;
+    boundFailureBonusRate = nextFailureBonusRate(input.step.initialRate, boundFailureBonusRate);
     maxFailureAttempts += 1;
   }
 
@@ -172,7 +185,7 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
     throw new Error('Optional material inventory is too large to optimize exactly.');
 
   function requiredAttemptCost(state: TState) {
-    const elapsedAttempts = state.failures - input.failureCount;
+    const elapsedAttempts = state.attempts;
     return input.step.requiredMaterials.reduce((total, material) => {
       const owned = input.ownedMaterials?.[material.id];
       if (!owned || owned.isValuedAtMarket)
@@ -197,8 +210,8 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
     return { remainingCode: nextRemainingCode, gold };
   }
 
-  function maxRateAction(failures: number) {
-    return actionsForFailure(failures).reduce((best, action) => {
+  function maxRateAction(failureBonusRate: number) {
+    return actionsForFailureBonusRate(failureBonusRate).reduce((best, action) => {
       if (action.successRate > best.successRate) return action;
       if (action.successRate === best.successRate && tieBreaker(action, best) < 0) return action;
       return best;
@@ -209,14 +222,14 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
   // (or its market price is zero), every competing action has the same or a
   // higher immediate cost and a weakly worse chance of reaching later costs.
   const maxPathConsumption: TRemaining = {};
-  let maxPathFailures = input.failureCount;
+  let maxPathFailureBonusRate = input.failureBonusRate;
   let maxPathAccumulatedRate = 0;
   while (maxPathAccumulatedRate < guaranteeRate) {
-    const action = maxRateAction(maxPathFailures);
+    const action = maxRateAction(maxPathFailureBonusRate);
     for (const { id, quantity } of optionalConsumptions(input.step, action))
       maxPathConsumption[id] = (maxPathConsumption[id] ?? 0) + quantity;
     maxPathAccumulatedRate += action.successRate;
-    maxPathFailures += 1;
+    maxPathFailureBonusRate = nextFailureBonusRate(input.step.initialRate, maxPathFailureBonusRate);
   }
   const isFreeMaxRatePath = [...optionalIds].every((id) => {
     const requiredQuantity = maxPathConsumption[id] ?? 0;
@@ -239,7 +252,7 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
     number,
     { gold: Float64Array; nextRemainingCode: Float64Array }
   >();
-  const transitionActions = actionsForFailure(input.failureCount);
+  const transitionActions = actionsForFailureBonusRate(input.failureBonusRate);
 
   function actionIndex(action: TRefiningAction) {
     const bookIndex = input.step.books.indexOf(action.book);
@@ -263,9 +276,8 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
   }
 
   function stateKey(state: TState) {
-    const failureOffset = state.failures - input.failureCount;
     return (
-      (failureOffset * rateStateCount + state.accumulatedRate) * inventoryStateCount +
+      (state.attempts * rateStateCount + state.accumulatedRate) * inventoryStateCount +
       state.remainingCode
     );
   }
@@ -279,8 +291,8 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
     const rawActions: readonly TRefiningAction[] = guaranteed
       ? [{ breathQuantity: 0, book: NONE, successRate: 10_000 }]
       : isFreeMaxRatePath
-        ? [maxRateAction(state.failures)]
-        : actionsForFailure(state.failures);
+        ? [maxRateAction(state.failureBonusRate)]
+        : actionsForFailureBonusRate(state.failureBonusRate);
     let best: TScalarValue | undefined;
     const requiredGold = requiredAttemptCost(state);
     if (optionalIdList.length > 0) {
@@ -297,7 +309,11 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
           : immediate +
             (1 - probability) *
               solve({
-                failures: state.failures + 1,
+                attempts: state.attempts + 1,
+                failureBonusRate: nextFailureBonusRate(
+                  input.step.initialRate,
+                  state.failureBonusRate,
+                ),
                 accumulatedRate: Math.min(
                   guaranteeRate,
                   state.accumulatedRate + action.successRate,
@@ -317,7 +333,9 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
         optionalGold: number;
         nextRemainingCode: number;
       }[];
-      const cachedActions = guaranteed ? undefined : noInventoryActionCache.get(state.failures);
+      const cachedActions = guaranteed
+        ? undefined
+        : noInventoryActionCache.get(state.failureBonusRate);
       if (cachedActions) actions = cachedActions;
       else {
         let highestRate = -1;
@@ -341,7 +359,7 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
             highestRate = action.successRate;
             return true;
           });
-        if (!guaranteed) noInventoryActionCache.set(state.failures, actions);
+        if (!guaranteed) noInventoryActionCache.set(state.failureBonusRate, actions);
       }
       for (const { action, optionalGold, nextRemainingCode } of actions) {
         const immediate = requiredGold + optionalGold;
@@ -351,7 +369,11 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
           : immediate +
             (1 - probability) *
               solve({
-                failures: state.failures + 1,
+                attempts: state.attempts + 1,
+                failureBonusRate: nextFailureBonusRate(
+                  input.step.initialRate,
+                  state.failureBonusRate,
+                ),
                 accumulatedRate: Math.min(
                   guaranteeRate,
                   state.accumulatedRate + action.successRate,
@@ -372,7 +394,8 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
   }
 
   const start: TState = {
-    failures: input.failureCount,
+    attempts: 0,
+    failureBonusRate: input.failureBonusRate,
     accumulatedRate: 0,
     remainingCode: initialRemainingCode,
   };
@@ -422,7 +445,7 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
     worstAttempts += 1;
     worstGold += immediateGold;
     conditionalActions.push({
-      failureCount: trace.failures,
+      failureBonusRate: trace.failureBonusRate,
       artisanEnergy: artisanToNumber(
         startArtisan + trace.accumulatedRate * ARTISAN_PER_SUCCESS_RATE,
       ),
@@ -430,7 +453,7 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
       immediateGold,
     });
     worstActions.push({
-      failureCount: trace.failures,
+      failureBonusRate: trace.failureBonusRate,
       artisanEnergy: artisanToNumber(
         startArtisan + trace.accumulatedRate * ARTISAN_PER_SUCCESS_RATE,
       ),
@@ -442,7 +465,8 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
     const optional = consumeOptional(trace.remainingCode, action);
     reachProbability *= 1 - action.successRate / 10_000;
     trace = {
-      failures: trace.failures + 1,
+      attempts: trace.attempts + 1,
+      failureBonusRate: nextFailureBonusRate(input.step.initialRate, trace.failureBonusRate),
       accumulatedRate: Math.min(guaranteeRate, trace.accumulatedRate + action.successRate),
       remainingCode: optional.remainingCode,
     };
