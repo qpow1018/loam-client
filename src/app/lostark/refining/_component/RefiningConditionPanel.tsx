@@ -6,12 +6,11 @@ import type {
   TRefiningCondition,
 } from '@/app/lostark/refining/_type/refining';
 import { getRefiningLevels, getRefiningStep } from '@/app/lostark/refining/_define/refiningSteps';
+
 import TextInput from '@/components/common/form/TextInput';
 import Select from '@/components/common/form/Select';
 
 import styles from '@/app/lostark/refining/_component/refiningConditionPanel.module.scss';
-
-type TErrors = Partial<Record<string, string>>;
 
 const EQUIPMENT_GRADE_OPTIONS: { value: TEquipmentGrade; label: string }[] = [
   { value: 'serka', label: '세르카' },
@@ -24,10 +23,9 @@ const EQUIPMENT_TYPE_OPTIONS: { value: TEquipmentType; label: string }[] = [
 
 export default function RefiningConditionPanel(props: {
   condition: TRefiningCondition;
-  errors: TErrors;
   onChange: (condition: TRefiningCondition) => void;
 }) {
-  const { condition, errors, onChange } = props;
+  const { condition, onChange } = props;
   const { equipmentGrade, equipmentType, fromLevel, failureCount, artisanEnergy } = condition;
 
   const availableLevels = getRefiningLevels(equipmentGrade, equipmentType);
@@ -93,9 +91,6 @@ export default function RefiningConditionPanel(props: {
             inputMode="decimal"
             onChange={(value) => onChange({ ...condition, artisanEnergy: value })}
           />
-          {errors.artisanEnergy && (
-            <span className={styles['field-error']}>{errors.artisanEnergy}</span>
-          )}
         </ConditionBox>
 
         <ConditionBox label="실패 횟수">
@@ -104,9 +99,6 @@ export default function RefiningConditionPanel(props: {
             inputMode="numeric"
             onChange={(value) => onChange({ ...condition, failureCount: value })}
           />
-          {errors.failureCount && (
-            <span className={styles['field-error']}>{errors.failureCount}</span>
-          )}
         </ConditionBox>
       </div>
     </section>

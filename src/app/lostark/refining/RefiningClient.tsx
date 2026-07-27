@@ -245,11 +245,7 @@ export default function RefiningClient() {
         <Tabs options={REFINING_TABS} value={activeTab} onChange={(next) => setActiveTab(next)} />
       </div>
 
-      <RefiningConditionPanel
-        condition={condition}
-        errors={errors}
-        onChange={handleConditionChange}
-      />
+      <RefiningConditionPanel condition={condition} onChange={handleConditionChange} />
 
       <div className={styles['content-grid']}>
         <section className={styles['input-panel']} aria-labelledby="refining-input-heading">
