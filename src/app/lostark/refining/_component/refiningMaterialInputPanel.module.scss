@@ -1,0 +1,150 @@
+.input-panel {
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 16px;
+  border-radius: 6px;
+  background: $gray-800;
+
+  h2 {
+    margin: 0 0 16px;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .input-error-summary {
+    margin: 0 0 12px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    background: rgba($rose-400, 0.1);
+    color: $rose-300;
+    font-size: 12px;
+  }
+
+  .field-group {
+    min-width: 0;
+    margin: 0;
+    padding: 0 0 12px;
+    border: 0;
+    border-bottom: 1px solid $gray-700;
+
+    legend {
+      padding: 0;
+      color: $gray-200;
+      font-size: 13px;
+      font-weight: 500;
+    }
+  }
+
+  .field-description {
+    margin: 8px 0;
+    color: $gray-400;
+    font-size: 12px;
+  }
+
+  .table-scroll {
+    width: 100%;
+    min-width: 0;
+    overflow: visible;
+
+    table {
+      width: 100%;
+      table-layout: fixed;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    caption {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+    }
+
+    th,
+    td {
+      padding: 4px 8px;
+      border-bottom: 1px solid $gray-700;
+      overflow-wrap: anywhere;
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    thead th {
+      color: $gray-400;
+      font-weight: 500;
+    }
+
+    tbody th {
+      color: $gray-200;
+      font-weight: 500;
+    }
+
+    tbody tr {
+      height: 44px;
+    }
+
+    input {
+      width: 100%;
+      min-width: 0;
+      min-height: 36px;
+      box-sizing: border-box;
+      padding: 6px 8px;
+      border: 1px solid $gray-600;
+      border-radius: 6px;
+      background: $gray-900;
+      color: $gray-100;
+      font-size: 13px;
+
+      &:focus-visible {
+        border-color: $mint-400;
+        outline: 2px solid rgba($mint-400, 0.3);
+        outline-offset: 1px;
+      }
+    }
+
+    th:nth-child(1),
+    td:nth-child(1) {
+      width: 32%;
+    }
+
+    th:nth-child(2),
+    td:nth-child(2),
+    th:nth-child(3),
+    td:nth-child(3) {
+      width: 19%;
+    }
+
+    th:nth-child(4),
+    td:nth-child(4) {
+      width: 30%;
+    }
+  }
+
+  .check-label {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 6px !important;
+    color: $gray-300 !important;
+    font-size: 12px !important;
+
+    input {
+      width: 16px;
+      min-height: 16px;
+      margin: 0;
+    }
+  }
+
+  .field-error {
+    display: block;
+    margin-top: 4px;
+    color: $rose-400;
+    font-size: 12px;
+  }
+
+  > :last-child {
+    width: 100%;
+    min-height: 40px;
+    margin-top: 16px;
+  }
+}

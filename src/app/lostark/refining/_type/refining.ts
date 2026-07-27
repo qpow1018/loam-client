@@ -30,6 +30,11 @@ export type TMarketMaterialId =
   | 'armor-tailoring-enhanced-19-20';
 
 export type TMaterialAmount = { id: TMarketMaterialId; quantity: number };
+export type TMaterialForm = { price: string; owned: string; isValuedAtMarket: boolean };
+export type TMaterialForms = Partial<Record<TMarketMaterialId, TMaterialForm>>;
+export type TMaterialInputErrors = Partial<
+  Record<TMarketMaterialId, { price?: string; owned?: string }>
+>;
 
 export type TBookOption =
   | { kind: 'none' }
