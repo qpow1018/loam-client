@@ -5,7 +5,8 @@ import type {
   TEquipmentType,
   TRefiningCondition,
 } from '@/app/lostark/refining/_type/refining';
-import { getRefiningLevels } from '@/app/lostark/refining/_define/refiningSteps';
+import { getRefiningLevels, getRefiningStep } from '@/app/lostark/refining/_define/refiningSteps';
+import TextInput from '@/components/common/form/TextInput';
 import Select from '@/components/common/form/Select';
 
 import styles from '@/app/lostark/refining/_component/refiningConditionPanel.module.scss';
@@ -13,8 +14,8 @@ import styles from '@/app/lostark/refining/_component/refiningConditionPanel.mod
 type TErrors = Partial<Record<string, string>>;
 
 const EQUIPMENT_GRADE_OPTIONS: { value: TEquipmentGrade; label: string }[] = [
-  { value: 'aegir', label: '에기르' },
   { value: 'serka', label: '세르카' },
+  { value: 'aegir', label: '에기르' },
 ];
 const EQUIPMENT_TYPE_OPTIONS: { value: TEquipmentType; label: string }[] = [
   { value: 'weapon', label: '무기' },
@@ -30,6 +31,9 @@ export default function RefiningConditionPanel(props: {
   const { equipmentGrade, equipmentType, fromLevel, failureCount, artisanEnergy } = condition;
 
   const availableLevels = getRefiningLevels(equipmentGrade, equipmentType);
+  const baseSuccessRate = `${(
+    getRefiningStep(equipmentGrade, equipmentType, fromLevel).initialRate / 100
+  ).toFixed(2)}%`;
 
   function handleEquipmentGradeChange(value: TEquipmentGrade) {
     const nextLevel = getRefiningLevels(value, equipmentType)[0]!;
@@ -79,36 +83,29 @@ export default function RefiningConditionPanel(props: {
           />
         </ConditionBox>
 
-        <ConditionBox label="실패 횟수">
-          <input
-            aria-label="실패 횟수"
-            aria-describedby={errors.failureCount ? 'failure-count-error' : undefined}
-            aria-invalid={Boolean(errors.failureCount)}
-            inputMode="numeric"
-            min="0"
-            value={failureCount}
-            onChange={(event) => onChange({ ...condition, failureCount: event.target.value })}
+        <ConditionBox label="기본 확률">
+          <TextInput value={baseSuccessRate} isReadonly />
+        </ConditionBox>
+
+        <ConditionBox label="장인의 기운">
+          <TextInput
+            value={artisanEnergy}
+            inputMode="decimal"
+            onChange={(value) => onChange({ ...condition, artisanEnergy: value })}
           />
-          {errors.failureCount && (
-            <span id="failure-count-error" className={styles['field-error']}>
-              {errors.failureCount}
-            </span>
+          {errors.artisanEnergy && (
+            <span className={styles['field-error']}>{errors.artisanEnergy}</span>
           )}
         </ConditionBox>
 
-        <ConditionBox label="장인의 기운 (%)">
-          <input
-            aria-label="장인의 기운"
-            aria-describedby={errors.artisanEnergy ? 'artisan-energy-error' : undefined}
-            aria-invalid={Boolean(errors.artisanEnergy)}
-            inputMode="decimal"
-            value={artisanEnergy}
-            onChange={(event) => onChange({ ...condition, artisanEnergy: event.target.value })}
+        <ConditionBox label="실패 횟수">
+          <TextInput
+            value={failureCount}
+            inputMode="numeric"
+            onChange={(value) => onChange({ ...condition, failureCount: value })}
           />
-          {errors.artisanEnergy && (
-            <span id="artisan-energy-error" className={styles['field-error']}>
-              {errors.artisanEnergy}
-            </span>
+          {errors.failureCount && (
+            <span className={styles['field-error']}>{errors.failureCount}</span>
           )}
         </ConditionBox>
       </div>

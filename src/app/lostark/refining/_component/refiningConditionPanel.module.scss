@@ -12,7 +12,7 @@
 
   .condition-grid {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(3, 220px) repeat(3, 140px);
     gap: 28px;
 
     .condition-box {
@@ -48,24 +48,6 @@
         color: $text-primary;
         border-color: $rose-400;
       }
-    }
-  }
-
-  input {
-    width: 100%;
-    min-height: 36px;
-    box-sizing: border-box;
-    padding: 6px 8px;
-    border: 1px solid $gray-600;
-    border-radius: 6px;
-    background: $gray-900;
-    color: $gray-100;
-    font-size: 13px;
-
-    &:focus-visible {
-      border-color: $mint-400;
-      outline: 2px solid rgba($mint-400, 0.3);
-      outline-offset: 1px;
     }
   }
 
