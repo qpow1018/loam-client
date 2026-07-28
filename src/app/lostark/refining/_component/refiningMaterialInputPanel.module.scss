@@ -71,21 +71,25 @@
   }
 
   .owned-field {
-    position: relative;
     display: flex;
     align-items: center;
     gap: 6px;
 
-    > span:first-child {
+    >span:first-child {
       color: $gray-400;
       font-size: 12px;
     }
+  }
+
+  .quantity-input {
+    position: relative;
+    display: block;
 
     input {
-      width: 88px;
+      width: 96px;
       height: 28px;
       box-sizing: border-box;
-      padding: 4px 6px;
+      padding: 4px 24px 4px 6px;
       border: 1px solid $gray-600;
       border-radius: 4px;
       background: $gray-900;
@@ -97,6 +101,16 @@
         outline: 2px solid rgba($mint-400, 0.3);
         outline-offset: 1px;
       }
+    }
+
+    >span {
+      position: absolute;
+      top: 50%;
+      right: 7px;
+      color: $gray-400;
+      font-size: 12px;
+      pointer-events: none;
+      transform: translateY(-50%);
     }
   }
 

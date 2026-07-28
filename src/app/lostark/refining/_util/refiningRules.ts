@@ -90,6 +90,8 @@ function createRefiningRule(
   const { fromLevel, gold, shilling, ...materialQuantities } = costRule;
 
   const rateRule = getRefiningRateRule(equipmentGrade, fromLevel);
+  console.log('-- rateRule', rateRule);
+
   const requiredMaterials = Object.entries(materialQuantities).map(([id, quantity]) => ({
     id: id as TMaterialAmount['id'],
     quantity: quantity as number,
