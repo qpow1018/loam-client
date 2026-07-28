@@ -61,7 +61,21 @@ export default function RefiningClient() {
   const hasErrors = hasRefiningInputErrors(errors);
 
   function handleConditionChange(nextCondition: TRefiningCondition) {
+    const nextRule = getRefiningRule(
+      nextCondition.equipmentGrade,
+      nextCondition.equipmentType,
+      nextCondition.fromLevel,
+    );
     setCondition(nextCondition);
+    setMaterials((current) => {
+      const missingMaterialIds = nextRule.inputMaterialIds.filter((id) => !current[id]);
+      if (missingMaterialIds.length === 0) return current;
+
+      return {
+        ...current,
+        ...Object.fromEntries(missingMaterialIds.map((id) => [id, getDefaultMaterialForm()])),
+      };
+    });
     setErrors((current) => ({ ...current, failureBonusRate: undefined, artisanEnergy: undefined }));
   }
 
@@ -72,7 +86,7 @@ export default function RefiningClient() {
   ) {
     setMaterials((current) => ({
       ...current,
-      [id]: { ...(current[id] ?? getDefaultMaterialForm()), ...next },
+      [id]: { ...current[id]!, ...next },
     }));
     if (errorField) {
       setErrors((current) => ({
@@ -95,7 +109,7 @@ export default function RefiningClient() {
         <RefiningConditionPanel condition={condition} onChange={handleConditionChange} />
 
         <RefiningMaterialInputPanel
-          step={selectedRefiningRule}
+          rule={selectedRefiningRule}
           materials={materials}
           materialErrors={errors.materials ?? {}}
           hasErrors={hasErrors}
