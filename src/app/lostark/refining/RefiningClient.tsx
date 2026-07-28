@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 
-import Tabs from '@/components/common/tabs/Tabs';
-
 import RefiningConditionPanel from '@/app/lostark/refining/_component/RefiningConditionPanel';
 import RefiningMaterialInputPanel from '@/app/lostark/refining/_component/RefiningMaterialInputPanel';
 import RefiningResultPanel from '@/app/lostark/refining/_component/RefiningResultPanel';
@@ -17,10 +15,6 @@ import type {
 } from '@/app/lostark/refining/_type/refining';
 import styles from '@/app/lostark/refining/refiningClient.module.scss';
 
-const REFINING_TABS: { value: string; label: string }[] = [
-  { value: 'standard-refining', label: '일반재련' },
-  { value: 'advanced-refining', label: '상급재련' },
-];
 const INITIAL_CONDITION: TRefiningCondition = {
   equipmentGrade: 'serka',
   equipmentType: 'weapon',
@@ -30,7 +24,6 @@ const INITIAL_CONDITION: TRefiningCondition = {
 };
 
 export default function RefiningClient() {
-  const [activeTab, setActiveTab] = useState<string>(REFINING_TABS[0].value);
   const [condition, setCondition] = useState<TRefiningCondition>(INITIAL_CONDITION);
   const [materials, setMaterials] = useState<TRefiningMaterialInputs>(getInitialMaterials);
 
@@ -83,10 +76,6 @@ export default function RefiningClient() {
 
   return (
     <main className={styles['refining-page']}>
-      <div className={styles['tab-section']}>
-        <Tabs options={REFINING_TABS} value={activeTab} onChange={setActiveTab} />
-      </div>
-
       <div className={styles['content-grid']}>
         <RefiningConditionPanel condition={condition} onChange={handleConditionChange} />
 
