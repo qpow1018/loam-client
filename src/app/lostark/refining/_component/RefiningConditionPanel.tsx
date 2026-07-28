@@ -81,21 +81,21 @@ export default function RefiningConditionPanel(props: {
           />
         </ConditionBox>
 
-        <ConditionBox label="기본 확률">
+        <ConditionBox label="기본 성공률">
           <PercentageInput value={baseSuccessRate} isReadonly />
-        </ConditionBox>
-
-        <ConditionBox label="장인의 기운">
-          <PercentageInput
-            value={artisanEnergy}
-            onChange={(value) => onChange({ ...condition, artisanEnergy: value })}
-          />
         </ConditionBox>
 
         <ConditionBox label="실패로 추가된 확률">
           <PercentageInput
             value={failureBonusRate}
             onChange={(value) => onChange({ ...condition, failureBonusRate: value })}
+          />
+        </ConditionBox>
+
+        <ConditionBox label="장인의 기운">
+          <PercentageInput
+            value={artisanEnergy}
+            onChange={(value) => onChange({ ...condition, artisanEnergy: value })}
           />
         </ConditionBox>
       </div>

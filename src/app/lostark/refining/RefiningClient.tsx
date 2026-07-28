@@ -90,9 +90,9 @@ export default function RefiningClient() {
         <Tabs options={REFINING_TABS} value={activeTab} onChange={setActiveTab} />
       </div>
 
-      <RefiningConditionPanel condition={condition} onChange={handleConditionChange} />
-
       <div className={styles['content-grid']}>
+        <RefiningConditionPanel condition={condition} onChange={handleConditionChange} />
+
         <RefiningMaterialInputPanel
           step={step}
           materials={materials}
@@ -101,12 +101,12 @@ export default function RefiningClient() {
           onMaterialChange={handleMaterialChange}
         />
 
-        {/* <RefiningResultPanel
+        <RefiningResultPanel
           condition={condition}
           materials={materials}
           step={step}
           onErrorsChange={setErrors}
-        /> */}
+        />
       </div>
     </main>
   );
