@@ -257,7 +257,7 @@ function RefiningResult(props: {
         </section>
       </div>
       <div className={styles['notice']}>
-        <p>사용자 입력 단가 기준 · 보유분 기본 0G · 실링은 골드 최적화에서 제외</p>
+        <p>사용자 입력 단가 기준 · 가치 0G 처리한 보유분 제외 · 실링은 골드 최적화에서 제외</p>
         <p>이벤트 미반영</p>
         <p>장인 100% 확정 성공 행은 보조재를 사용하지 않습니다.</p>
       </div>

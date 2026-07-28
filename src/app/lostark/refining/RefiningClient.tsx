@@ -101,12 +101,12 @@ export default function RefiningClient() {
           onMaterialChange={handleMaterialChange}
         />
 
-        <RefiningResultPanel
+        {/* <RefiningResultPanel
           condition={condition}
           materials={materials}
           step={step}
           onErrorsChange={setErrors}
-        />
+        /> */}
       </div>
     </main>
   );

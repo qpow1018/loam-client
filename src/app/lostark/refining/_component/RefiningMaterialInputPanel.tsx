@@ -10,7 +10,7 @@ import { getRelevantMaterialIds } from '@/app/lostark/refining/_util/refiningInp
 
 import styles from '@/app/lostark/refining/_component/refiningMaterialInputPanel.module.scss';
 
-const DEFAULT_MATERIAL_FORM: TMaterialForm = { price: '', owned: '0', isValuedAtMarket: false };
+const DEFAULT_MATERIAL_FORM: TMaterialForm = { price: '', owned: '0', isZeroValued: false };
 
 export default function RefiningMaterialInputPanel(props: {
   step: TRefiningStep;
@@ -38,7 +38,8 @@ export default function RefiningMaterialInputPanel(props: {
       <fieldset className={styles['field-group']}>
         <legend>재료별 입력</legend>
         <p className={styles['field-description']}>
-          보유분은 기본 0G이며, ‘시장가 반영’을 선택하면 입력 단가로 계산합니다.
+          보유 재료는 입력한 거래소 가격으로 계산합니다. ‘가치 0G 처리’를 선택하면 보유분만 0G로
+          계산합니다.
         </p>
         <div className={styles['table-scroll']}>
           <table>
@@ -46,9 +47,9 @@ export default function RefiningMaterialInputPanel(props: {
             <thead>
               <tr>
                 <th scope="col">재료</th>
-                <th scope="col">개당 G</th>
+                <th scope="col">거래소 가격</th>
                 <th scope="col">보유 수량</th>
-                <th scope="col">시장가 반영</th>
+                <th scope="col">가치 0G 처리</th>
               </tr>
             </thead>
             <tbody>
@@ -100,13 +101,13 @@ export default function RefiningMaterialInputPanel(props: {
                       <label className={styles['check-label']}>
                         <input
                           type="checkbox"
-                          aria-label={`${MATERIAL_NAMES[id]} 보유분 시장가 반영`}
-                          checked={form.isValuedAtMarket}
+                          aria-label={`${MATERIAL_NAMES[id]} 가치 0G 처리`}
+                          checked={form.isZeroValued}
                           onChange={(event) =>
-                            onMaterialChange(id, { isValuedAtMarket: event.target.checked })
+                            onMaterialChange(id, { isZeroValued: event.target.checked })
                           }
                         />
-                        <span>시장가 반영</span>
+                        <span>가치 0G 처리</span>
                       </label>
                     </td>
                   </tr>

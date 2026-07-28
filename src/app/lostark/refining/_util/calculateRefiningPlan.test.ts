@@ -126,24 +126,24 @@ describe('Bellman plan', () => {
     expect(plan.conditionalActions.at(-1)?.artisanEnergy).toBe(100);
     expect(plan.recommendedWorstCase.conditionalActions.at(-1)?.artisanEnergy).toBe(100);
   });
-  it('values held materials only when selected and always buys shortages', () => {
+  it('treats held materials as 0G only when selected and always buys shortages', () => {
     const step = {
       ...minimal(10000),
       requiredMaterials: [{ id: 'aegir-leapstone' as const, quantity: 2 }],
     };
     const none = calculateRefiningPlan(input(step));
-    const free = calculateRefiningPlan(
+    const zeroValued = calculateRefiningPlan(
       input(step, {
-        ownedMaterials: { 'aegir-leapstone': { quantity: 2, isValuedAtMarket: false } },
+        ownedMaterials: { 'aegir-leapstone': { quantity: 2, isZeroValued: true } },
       }),
     );
     const valued = calculateRefiningPlan(
       input(step, {
-        ownedMaterials: { 'aegir-leapstone': { quantity: 1, isValuedAtMarket: true } },
+        ownedMaterials: { 'aegir-leapstone': { quantity: 1, isZeroValued: false } },
       }),
     );
     expect(none.expectedGold).toBe(101);
-    expect(free.expectedGold).toBe(1);
+    expect(zeroValued.expectedGold).toBe(1);
     expect(valued.expectedGold).toBe(101);
     expect(valued.materialExpectations['aegir-leapstone']?.expectedPurchased).toBe(1);
   });
@@ -200,7 +200,7 @@ describe('Bellman plan', () => {
     expect(() =>
       calculateRefiningPlan(
         input(minimal(10000), {
-          ownedMaterials: { 'weapon-lava-breath': { quantity: -1, isValuedAtMarket: false } },
+          ownedMaterials: { 'weapon-lava-breath': { quantity: -1, isZeroValued: false } },
         }),
       ),
     ).toThrow('Invalid owned quantity');
@@ -245,7 +245,7 @@ describe('Bellman plan', () => {
       input(step, {
         prices,
         ownedMaterials: {
-          'aegir-leapstone': { quantity: 1, isValuedAtMarket: false },
+          'aegir-leapstone': { quantity: 1, isZeroValued: true },
         },
       }),
     );
@@ -253,7 +253,7 @@ describe('Bellman plan', () => {
       input(step, {
         prices,
         ownedMaterials: {
-          'aegir-leapstone': { quantity: 2, isValuedAtMarket: false },
+          'aegir-leapstone': { quantity: 2, isZeroValued: true },
         },
       }),
     );
@@ -266,9 +266,9 @@ describe('Bellman plan', () => {
     const plan = calculateRefiningPlan(
       input(step, {
         ownedMaterials: {
-          'weapon-lava-breath': { quantity: 50, isValuedAtMarket: false },
-          'weapon-metallurgy-19-20': { quantity: 3, isValuedAtMarket: false },
-          'weapon-metallurgy-enhanced-19-20': { quantity: 2, isValuedAtMarket: false },
+          'weapon-lava-breath': { quantity: 50, isZeroValued: true },
+          'weapon-metallurgy-19-20': { quantity: 3, isZeroValued: true },
+          'weapon-metallurgy-enhanced-19-20': { quantity: 2, isZeroValued: true },
         },
       }),
     );
@@ -287,8 +287,8 @@ describe('Bellman plan', () => {
     const plan = calculateRefiningPlan(
       input(step, {
         ownedMaterials: {
-          'aegir-leapstone': { quantity: 2, isValuedAtMarket: false },
-          'weapon-lava-breath': { quantity: 1, isValuedAtMarket: false },
+          'aegir-leapstone': { quantity: 2, isZeroValued: true },
+          'weapon-lava-breath': { quantity: 1, isZeroValued: true },
         },
       }),
     );

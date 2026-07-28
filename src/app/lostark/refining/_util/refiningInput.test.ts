@@ -13,8 +13,7 @@ const materialIds = getRelevantMaterialIds(step);
 
 function validInput() {
   const materials = createMaterialForms(materialIds);
-  for (const id of materialIds)
-    materials[id] = { price: '100', owned: '0', isValuedAtMarket: false };
+  for (const id of materialIds) materials[id] = { price: '100', owned: '0', isZeroValued: false };
   return {
     condition: {
       equipmentGrade: 'aegir' as const,
@@ -37,7 +36,7 @@ describe('validateRefiningInput', () => {
       failureBonusRate: 125,
       artisanEnergy: '12.345678',
       prices: { 'aegir-destruction-stone': 100 },
-      ownedMaterials: { 'aegir-destruction-stone': { quantity: 0, isValuedAtMarket: false } },
+      ownedMaterials: { 'aegir-destruction-stone': { quantity: 0, isZeroValued: false } },
     });
   });
 
@@ -48,7 +47,7 @@ describe('validateRefiningInput', () => {
     input.materials['aegir-destruction-stone'] = {
       price: '',
       owned: '-1',
-      isValuedAtMarket: false,
+      isZeroValued: false,
     };
 
     const validation = validateRefiningInput(input);

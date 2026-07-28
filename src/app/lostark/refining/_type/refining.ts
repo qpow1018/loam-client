@@ -30,7 +30,7 @@ export type TMarketMaterialId =
   | 'armor-tailoring-enhanced-19-20';
 
 export type TMaterialAmount = { id: TMarketMaterialId; quantity: number };
-export type TMaterialForm = { price: string; owned: string; isValuedAtMarket: boolean };
+export type TMaterialForm = { price: string; owned: string; isZeroValued: boolean };
 export type TMaterialForms = Partial<Record<TMarketMaterialId, TMaterialForm>>;
 export type TMaterialInputErrors = Partial<
   Record<TMarketMaterialId, { price?: string; owned?: string }>
@@ -55,7 +55,7 @@ export type TRefiningStep = {
   books: readonly TBookOption[];
 };
 
-export type TOwnedMaterial = { quantity: number; isValuedAtMarket: boolean };
+export type TOwnedMaterial = { quantity: number; isZeroValued: boolean };
 export type TRefiningPlanInput = {
   step: TRefiningStep;
   failureBonusRate: number;

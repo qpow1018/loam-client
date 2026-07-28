@@ -33,7 +33,7 @@ export function createMaterialForms(ids: readonly TMarketMaterialId[]): TMateria
 }
 
 export function createDefaultMaterialForm(): TMaterialForm {
-  return { price: '', owned: '0', isValuedAtMarket: false };
+  return { price: '', owned: '0', isZeroValued: false };
 }
 
 export function hasRefiningInputErrors(errors: TRefiningInputErrors) {
@@ -75,7 +75,7 @@ export function validateRefiningInput(props: {
         ...materialErrors[id],
         owned: '보유 수량은 0 이상의 정수로 입력해 주세요.',
       };
-    else ownedMaterials[id] = { quantity: owned, isValuedAtMarket: form.isValuedAtMarket };
+    else ownedMaterials[id] = { quantity: owned, isZeroValued: form.isZeroValued };
   }
   if (Object.keys(materialErrors).length > 0) errors.materials = materialErrors;
   if (hasRefiningInputErrors(errors)) return { errors };
