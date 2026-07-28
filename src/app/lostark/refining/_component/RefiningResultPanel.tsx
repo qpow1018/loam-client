@@ -18,7 +18,6 @@ import type {
   TRefiningWorkerResponse,
 } from '@/app/lostark/refining/_type/refiningWorker';
 import {
-  getRelevantMaterialIds,
   validateRefiningInput,
   type TRefiningInputErrors,
 } from '@/app/lostark/refining/_util/refiningInput';
@@ -45,7 +44,7 @@ export default function RefiningResultPanel(props: {
   onErrorsChange: (errors: TRefiningInputErrors) => void;
 }) {
   const { condition, materials, step, onErrorsChange } = props;
-  const materialIds = getRelevantMaterialIds(step);
+  const materialIds = step.inputMaterialIds;
   const [plan, setPlan] = useState<TRefiningPlan>();
   const [calculationError, setCalculationError] = useState<string>();
   const [isCalculating, setIsCalculating] = useState(false);

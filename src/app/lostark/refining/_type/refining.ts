@@ -55,14 +55,16 @@ export type TRefiningRule = {
   breathRateBonus: number;
   breathMaterialId: TMarketMaterialId;
   requiredMaterials: readonly TMaterialAmount[];
+  inputMaterialIds: readonly TMarketMaterialId[];
   gold: number;
   shilling: number;
   books: readonly TBookOption[];
 };
 
-// TODO check
 export type TMaterialForm = { price: string; owned: string; isZeroValued: boolean };
 export type TMaterialForms = Partial<Record<TMarketMaterialId, TMaterialForm>>;
+
+// TODO check
 export type TMaterialInputErrors = Partial<
   Record<TMarketMaterialId, { price?: string; owned?: string }>
 >;

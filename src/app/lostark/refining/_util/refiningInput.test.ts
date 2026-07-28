@@ -1,19 +1,17 @@
 import { describe, expect, it } from 'vitest';
 
+import type { TMaterialForms } from '@/app/lostark/refining/_type/refining';
 import { getRefiningRule } from '@/app/lostark/refining/_util/refiningRules';
 import {
-  createMaterialForms,
-  getRelevantMaterialIds,
   hasRefiningInputErrors,
   validateRefiningInput,
 } from '@/app/lostark/refining/_util/refiningInput';
 
 const step = getRefiningRule('aegir', 'weapon', 10);
-const materialIds = getRelevantMaterialIds(step);
-
 function validInput() {
-  const materials = createMaterialForms(materialIds);
-  for (const id of materialIds) materials[id] = { price: '100', owned: '0', isZeroValued: false };
+  const materials = {} as TMaterialForms;
+  for (const id of step.inputMaterialIds)
+    materials[id] = { price: '100', owned: '0', isZeroValued: false };
   return {
     condition: {
       equipmentGrade: 'aegir' as const,

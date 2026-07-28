@@ -3,6 +3,7 @@ import type {
   TEquipmentGrade,
   TEquipmentType,
   TMaterialAmount,
+  TMarketMaterialId,
   TRefiningCostRule,
   TRefiningRateRule,
   TRefiningRule,
@@ -93,17 +94,26 @@ function createRefiningRule(
     id: id as TMaterialAmount['id'],
     quantity: quantity as number,
   }));
+  const breathMaterialId: TMarketMaterialId =
+    equipmentType === 'weapon' ? 'weapon-breath' : 'armor-breath';
+  const books = getBookOptions(equipmentGrade, equipmentType, fromLevel);
+  const inputMaterialIds = [
+    ...requiredMaterials.map((material) => material.id),
+    breathMaterialId,
+    ...books.flatMap((book) => (book.kind === 'none' ? [] : [book.materialId])),
+  ].filter((id, index, ids) => ids.indexOf(id) === index);
 
   return {
     equipmentGrade,
     equipmentType,
     fromLevel,
     ...rateRule,
-    breathMaterialId: equipmentType === 'weapon' ? 'weapon-breath' : 'armor-breath',
+    breathMaterialId,
     requiredMaterials,
+    inputMaterialIds,
     gold,
     shilling,
-    books: getBookOptions(equipmentGrade, equipmentType, fromLevel),
+    books,
   };
 }
 

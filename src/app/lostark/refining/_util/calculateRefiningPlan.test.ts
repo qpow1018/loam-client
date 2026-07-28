@@ -33,6 +33,7 @@ function minimal(initialRate: number): TRefiningRule {
     breathRateBonus: 0,
     breathMaterialId: 'weapon-breath',
     requiredMaterials: [],
+    inputMaterialIds: [],
     gold: 1,
     shilling: 1,
     books: [{ kind: 'none' }],

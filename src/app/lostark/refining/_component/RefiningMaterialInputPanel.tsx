@@ -6,7 +6,6 @@ import type {
   TRefiningRule,
 } from '@/app/lostark/refining/_type/refining';
 import { REFINING_MATERIALS } from '@/app/lostark/refining/_define/refiningMaterials';
-import { getRelevantMaterialIds } from '@/app/lostark/refining/_util/refiningInput';
 
 import styles from '@/app/lostark/refining/_component/refiningMaterialInputPanel.module.scss';
 
@@ -24,7 +23,7 @@ export default function RefiningMaterialInputPanel(props: {
   ) => void;
 }) {
   const { step, materials, materialErrors, hasErrors, onMaterialChange } = props;
-  const materialIds = getRelevantMaterialIds(step);
+  const materialIds = step.inputMaterialIds;
 
   return (
     <section className={styles['input-panel']} aria-labelledby="refining-input-heading">

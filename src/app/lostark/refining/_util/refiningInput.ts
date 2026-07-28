@@ -1,6 +1,5 @@
 import type {
   TMarketMaterialId,
-  TMaterialForm,
   TMaterialForms,
   TMaterialInputErrors,
   TOwnedMaterial,
@@ -20,22 +19,6 @@ export type TValidatedRefiningInput = Pick<
   'failureBonusRate' | 'artisanEnergy' | 'prices' | 'ownedMaterials'
 >;
 
-export function getRelevantMaterialIds(step: TRefiningRule) {
-  return [
-    ...step.requiredMaterials.map((material) => material.id),
-    step.breathMaterialId,
-    ...step.books.flatMap((book) => (book.kind === 'none' ? [] : [book.materialId])),
-  ].filter((id, index, ids) => ids.indexOf(id) === index);
-}
-
-export function createMaterialForms(ids: readonly TMarketMaterialId[]): TMaterialForms {
-  return Object.fromEntries(ids.map((id) => [id, createDefaultMaterialForm()])) as TMaterialForms;
-}
-
-export function createDefaultMaterialForm(): TMaterialForm {
-  return { price: '', owned: '0', isZeroValued: false };
-}
-
 export function hasRefiningInputErrors(errors: TRefiningInputErrors) {
   return (
     Boolean(errors.failureBonusRate || errors.artisanEnergy) ||
@@ -49,7 +32,7 @@ export function validateRefiningInput(props: {
   step: TRefiningRule;
 }): { errors: TRefiningInputErrors; input?: TValidatedRefiningInput } {
   const { condition, materials, step } = props;
-  const materialIds = getRelevantMaterialIds(step);
+  const materialIds = step.inputMaterialIds;
   const errors: TRefiningInputErrors = {};
   const materialErrors: TMaterialInputErrors = {};
   const failureBonusRate = parseFailureBonusRate(condition.failureBonusRate);
@@ -61,7 +44,11 @@ export function validateRefiningInput(props: {
   const prices = {} as Record<TMarketMaterialId, number>;
   const ownedMaterials: Partial<Record<TMarketMaterialId, TOwnedMaterial>> = {};
   for (const id of materialIds) {
-    const form = materials[id] ?? createDefaultMaterialForm();
+    const form = materials[id];
+    if (!form) {
+      materialErrors[id] = { price: '개당 단가는 0 이상의 숫자로 입력해 주세요.' };
+      continue;
+    }
     const price = Number(form.price);
     const owned = Number(form.owned);
     if (form.price.trim() === '' || !Number.isFinite(price) || price < 0)

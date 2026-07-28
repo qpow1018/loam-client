@@ -14,12 +14,7 @@ import type {
   TMarketMaterialId,
   TRefiningCondition,
 } from '@/app/lostark/refining/_type/refining';
-import {
-  createDefaultMaterialForm,
-  createMaterialForms,
-  getRelevantMaterialIds,
-  hasRefiningInputErrors,
-} from '@/app/lostark/refining/_util/refiningInput';
+import { hasRefiningInputErrors } from '@/app/lostark/refining/_util/refiningInput';
 import type { TRefiningInputErrors } from '@/app/lostark/refining/_util/refiningInput';
 import styles from '@/app/lostark/refining/refiningClient.module.scss';
 
@@ -38,24 +33,30 @@ const INITIAL_CONDITION: TRefiningCondition = {
 export default function RefiningClient() {
   const [activeTab, setActiveTab] = useState<string>(REFINING_TABS[0].value);
   const [condition, setCondition] = useState<TRefiningCondition>(INITIAL_CONDITION);
+  const [materials, setMaterials] = useState<TMaterialForms>(getInitialMaterials);
 
-  const selectedRefiningStep = getRefiningRule(
+  const selectedRefiningRule = getRefiningRule(
     condition.equipmentGrade,
     condition.equipmentType,
     condition.fromLevel,
   );
 
-  const [materials, setMaterials] = useState<TMaterialForms>(() =>
-    createMaterialForms(
-      getRelevantMaterialIds(
-        getRefiningRule(
-          INITIAL_CONDITION.equipmentGrade,
-          INITIAL_CONDITION.equipmentType,
-          INITIAL_CONDITION.fromLevel,
-        ),
-      ),
-    ),
-  );
+  function getDefaultMaterialForm(): TMaterialForm {
+    return { price: '', owned: '0', isZeroValued: false };
+  }
+
+  function getInitialMaterials(): TMaterialForms {
+    const initialRule = getRefiningRule(
+      INITIAL_CONDITION.equipmentGrade,
+      INITIAL_CONDITION.equipmentType,
+      INITIAL_CONDITION.fromLevel,
+    );
+
+    return Object.fromEntries(
+      initialRule.inputMaterialIds.map((id) => [id, getDefaultMaterialForm()]),
+    ) as TMaterialForms;
+  }
+
   const [errors, setErrors] = useState<TRefiningInputErrors>({});
   const hasErrors = hasRefiningInputErrors(errors);
 
@@ -71,7 +72,7 @@ export default function RefiningClient() {
   ) {
     setMaterials((current) => ({
       ...current,
-      [id]: { ...(current[id] ?? createDefaultMaterialForm()), ...next },
+      [id]: { ...(current[id] ?? getDefaultMaterialForm()), ...next },
     }));
     if (errorField) {
       setErrors((current) => ({
@@ -94,7 +95,7 @@ export default function RefiningClient() {
         <RefiningConditionPanel condition={condition} onChange={handleConditionChange} />
 
         <RefiningMaterialInputPanel
-          step={selectedRefiningStep}
+          step={selectedRefiningRule}
           materials={materials}
           materialErrors={errors.materials ?? {}}
           hasErrors={hasErrors}
@@ -104,7 +105,7 @@ export default function RefiningClient() {
         <RefiningResultPanel
           condition={condition}
           materials={materials}
-          step={selectedRefiningStep}
+          step={selectedRefiningRule}
           onErrorsChange={setErrors}
         />
       </div>
