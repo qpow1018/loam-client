@@ -11,7 +11,7 @@ import {
 const step = getRefiningRule('aegir', 'weapon', 10);
 function validInput() {
   const materials = {} as TRefiningMaterialInputs;
-  for (const id of step.inputMaterialIds) materials[id] = { owned: '0', isZeroValued: false };
+  for (const id of step.inputMaterialIds) materials[id] = { owned: '0', isZeroPriced: false };
   return {
     condition: {
       equipmentGrade: 'aegir' as const,
@@ -28,14 +28,16 @@ function validInput() {
 
 describe('validateRefiningInput', () => {
   it('normalizes valid user input for the refining worker', () => {
-    const validation = validateRefiningInput(validInput());
+    const input = validInput();
+    input.materials['aegir-destruction']!.isZeroPriced = true;
+    const validation = validateRefiningInput(input);
 
     expect(validation.errors).toEqual({});
     expect(validation.input).toMatchObject({
       failureBonusRate: 125,
       artisanEnergy: '12.345678',
-      prices: { 'aegir-destruction': 3.4 },
-      ownedMaterials: { 'aegir-destruction': { quantity: 0, isZeroValued: false } },
+      prices: { 'aegir-destruction': 0 },
+      ownedMaterials: { 'aegir-destruction': { quantity: 0 } },
     });
   });
 
@@ -43,7 +45,7 @@ describe('validateRefiningInput', () => {
     const input = validInput();
     input.condition.failureBonusRate = '10.001';
     input.condition.artisanEnergy = '100.000001';
-    input.materials['aegir-destruction'] = { owned: '-1', isZeroValued: false };
+    input.materials['aegir-destruction'] = { owned: '-1', isZeroPriced: false };
 
     const validation = validateRefiningInput(input);
 

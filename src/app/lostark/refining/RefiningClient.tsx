@@ -43,7 +43,7 @@ export default function RefiningClient() {
   );
 
   function getDefaultMaterialForm(): TRefiningMaterialInput {
-    return { owned: '0', isZeroValued: false };
+    return { owned: '0', isZeroPriced: false };
   }
 
   function getInitialMaterials(): TRefiningMaterialInputs {

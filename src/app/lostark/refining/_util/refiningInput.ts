@@ -55,7 +55,7 @@ export function validateRefiningInput(props: {
         ...materialErrors[id],
         owned: '보유 수량은 0 이상의 정수로 입력해 주세요.',
       };
-    else ownedMaterials[id] = { quantity: owned, isZeroValued: form.isZeroValued };
+    else ownedMaterials[id] = { quantity: owned };
   }
   if (Object.keys(materialErrors).length > 0) errors.materials = materialErrors;
   if (hasRefiningInputErrors(errors)) return { errors };
@@ -65,7 +65,9 @@ export function validateRefiningInput(props: {
     input: {
       failureBonusRate: failureBonusRate ?? 0,
       artisanEnergy: condition.artisanEnergy,
-      prices: marketPrices,
+      prices: Object.fromEntries(
+        materialIds.map((id) => [id, materials[id]?.isZeroPriced ? 0 : marketPrices[id]]),
+      ) as Record<TRefiningMaterialId, number>,
       ownedMaterials,
     },
   };

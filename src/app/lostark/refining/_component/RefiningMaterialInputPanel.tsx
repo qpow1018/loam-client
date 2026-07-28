@@ -32,7 +32,9 @@ export default function RefiningMaterialInputPanel(props: {
         </p>
       )}
 
-      <p className={styles['field-description']}>가치 0G 처리는 보유한 재료에만 적용됩니다.</p>
+      <p className={styles['field-description']}>
+        재료 가격을 0G로 처리하면 보유 수량과 관계없이 비용에서 제외됩니다.
+      </p>
       <table>
         <caption>재련 재료 단가와 보유 수량</caption>
         <thead>
@@ -40,7 +42,7 @@ export default function RefiningMaterialInputPanel(props: {
             <th scope="col">재료</th>
             <th scope="col">단가</th>
             <th scope="col">보유</th>
-            <th scope="col">0G 처리</th>
+            <th scope="col">가격 0G</th>
           </tr>
         </thead>
         <tbody>
@@ -77,13 +79,13 @@ export default function RefiningMaterialInputPanel(props: {
                   <label className={styles['check-label']}>
                     <input
                       type="checkbox"
-                      aria-label={`${REFINING_MATERIALS[id].name} 가치 0G 처리`}
-                      checked={form.isZeroValued}
+                      aria-label={`${REFINING_MATERIALS[id].name} 가격 0G 처리`}
+                      checked={form.isZeroPriced}
                       onChange={(event) =>
-                        onMaterialChange(id, { isZeroValued: event.target.checked })
+                        onMaterialChange(id, { isZeroPriced: event.target.checked })
                       }
                     />
-                    <span>가치 0G 처리</span>
+                    <span>가격 0G 처리</span>
                   </label>
                 </td>
               </tr>

@@ -156,7 +156,7 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
 
   const optionalIdList = [...optionalIds].filter((id) => {
     const owned = input.ownedMaterials?.[id];
-    return owned && owned.isZeroValued && owned.quantity > 0 && input.prices[id] > 0;
+    return owned && owned.quantity > 0 && input.prices[id] > 0;
   });
   const initialRemaining: TRemaining = {};
   for (const id of optionalIdList) {
@@ -188,8 +188,7 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
     const elapsedAttempts = state.attempts;
     return input.step.requiredMaterials.reduce((total, material) => {
       const owned = input.ownedMaterials?.[material.id];
-      if (!owned || !owned.isZeroValued)
-        return total + material.quantity * input.prices[material.id];
+      if (!owned) return total + material.quantity * input.prices[material.id];
       const freeRemaining = Math.max(0, owned.quantity - elapsedAttempts * material.quantity);
       const purchased = material.quantity - Math.min(freeRemaining, material.quantity);
       return total + purchased * input.prices[material.id];
@@ -236,7 +235,7 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
     if (requiredQuantity === 0) return true;
     if (input.prices[id] === 0) return true;
     const owned = input.ownedMaterials?.[id];
-    return Boolean(owned && owned.isZeroValued && owned.quantity >= requiredQuantity);
+    return Boolean(owned && owned.quantity >= requiredQuantity);
   });
 
   const rateStateCount = guaranteeRate + 1;
@@ -426,8 +425,7 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
       const ownedUsed = Math.min(reportRemaining[id] ?? 0, quantity);
       const purchased = quantity - ownedUsed;
       reportRemaining[id] = (reportRemaining[id] ?? 0) - ownedUsed;
-      const isZeroValued = input.ownedMaterials?.[id]?.isZeroValued ?? false;
-      const gold = (isZeroValued ? 0 : ownedUsed * input.prices[id]) + purchased * input.prices[id];
+      const gold = purchased * input.prices[id];
       const current = usage[id] ?? ZERO_USAGE;
       usage[id] = {
         owned: current.owned + reachProbability * ownedUsed,
