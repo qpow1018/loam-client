@@ -8,6 +8,22 @@ export type TRefiningCondition = {
   artisanEnergy: string;
 };
 
+export type TRefiningRateRule = {
+  initialRate: number;
+  breathMax: number;
+  breathRateBonus: number;
+};
+export type TRefiningCost = {
+  fromLevel: number;
+  stone: number;
+  leapstone: number;
+  fusionMaterial: number;
+  fateShard: number;
+  gold: number;
+  silver: number;
+};
+
+
 export type TMarketMaterialId =
   | 'aegir-destruction-stone'
   | 'aegir-guardian-stone'
@@ -40,6 +56,7 @@ export type TBookOption =
   | { kind: 'none' }
   | { kind: 'normal'; rateBonus: number; materialId: TMarketMaterialId }
   | { kind: 'enhanced'; rateBonus: number; materialId: TMarketMaterialId };
+
 
 export type TRefiningStep = {
   equipmentGrade: TEquipmentGrade;

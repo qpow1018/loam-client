@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { getRefiningStep } from '@/app/lostark/refining/_define/refiningSteps';
+import { getRefiningStep } from '@/app/lostark/refining/_util/refiningRules';
 import {
   createMaterialForms,
   getRelevantMaterialIds,

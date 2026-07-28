@@ -5,7 +5,7 @@ import type {
   TEquipmentType,
   TRefiningCondition,
 } from '@/app/lostark/refining/_type/refining';
-import { getRefiningLevels, getRefiningStep } from '@/app/lostark/refining/_define/refiningSteps';
+import { getRefiningLevels, getRefiningStep } from '@/app/lostark/refining/_util/refiningRules';
 
 import TextInput from '@/components/common/form/TextInput';
 import Select from '@/components/common/form/Select';

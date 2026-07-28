@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { TEST_MARKET_PRICES } from '@/app/lostark/refining/_define/refiningFixtures';
-import { getRefiningStep, REFINING_STEPS } from '@/app/lostark/refining/_define/refiningSteps';
+import { getRefiningStep, REFINING_STEPS } from '@/app/lostark/refining/_util/refiningRules';
 import type { TRefiningPlanInput, TRefiningStep } from '@/app/lostark/refining/_type/refining';
 import {
   calculateRefiningPlan,

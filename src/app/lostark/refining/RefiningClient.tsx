@@ -7,7 +7,7 @@ import Tabs from '@/components/common/tabs/Tabs';
 import RefiningConditionPanel from '@/app/lostark/refining/_component/RefiningConditionPanel';
 import RefiningMaterialInputPanel from '@/app/lostark/refining/_component/RefiningMaterialInputPanel';
 import RefiningResultPanel from '@/app/lostark/refining/_component/RefiningResultPanel';
-import { getRefiningStep } from '@/app/lostark/refining/_define/refiningSteps';
+import { getRefiningStep } from '@/app/lostark/refining/_util/refiningRules';
 import type {
   TMaterialForm,
   TMaterialForms,
@@ -39,7 +39,7 @@ export default function RefiningClient() {
   const [activeTab, setActiveTab] = useState<string>(REFINING_TABS[0].value);
   const [condition, setCondition] = useState<TRefiningCondition>(INITIAL_CONDITION);
 
-  const step = getRefiningStep(
+  const selectedRefiningStep = getRefiningStep(
     condition.equipmentGrade,
     condition.equipmentType,
     condition.fromLevel,
@@ -94,7 +94,7 @@ export default function RefiningClient() {
         <RefiningConditionPanel condition={condition} onChange={handleConditionChange} />
 
         <RefiningMaterialInputPanel
-          step={step}
+          step={selectedRefiningStep}
           materials={materials}
           materialErrors={errors.materials ?? {}}
           hasErrors={hasErrors}
@@ -104,7 +104,7 @@ export default function RefiningClient() {
         <RefiningResultPanel
           condition={condition}
           materials={materials}
-          step={step}
+          step={selectedRefiningStep}
           onErrorsChange={setErrors}
         />
       </div>
