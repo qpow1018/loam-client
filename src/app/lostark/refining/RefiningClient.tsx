@@ -15,8 +15,6 @@ import type {
   TRefiningMaterialId,
   TRefiningCondition,
 } from '@/app/lostark/refining/_type/refining';
-import { hasRefiningInputErrors } from '@/app/lostark/refining/_util/refiningInput';
-import type { TRefiningInputErrors } from '@/app/lostark/refining/_util/refiningInput';
 import styles from '@/app/lostark/refining/refiningClient.module.scss';
 
 const REFINING_TABS: { value: string; label: string }[] = [
@@ -58,9 +56,6 @@ export default function RefiningClient() {
     ) as TRefiningMaterialInputs;
   }
 
-  const [errors, setErrors] = useState<TRefiningInputErrors>({});
-  const hasErrors = hasRefiningInputErrors(errors);
-
   function handleConditionChange(nextCondition: TRefiningCondition) {
     const nextRule = getRefiningRule(
       nextCondition.equipmentGrade,
@@ -77,27 +72,13 @@ export default function RefiningClient() {
         ...Object.fromEntries(missingMaterialIds.map((id) => [id, getDefaultMaterialForm()])),
       };
     });
-    setErrors((current) => ({ ...current, failureBonusRate: undefined, artisanEnergy: undefined }));
   }
 
-  function handleMaterialChange(
-    id: TRefiningMaterialId,
-    next: Partial<TRefiningMaterialInput>,
-    errorField?: 'owned',
-  ) {
+  function handleMaterialChange(id: TRefiningMaterialId, next: Partial<TRefiningMaterialInput>) {
     setMaterials((current) => ({
       ...current,
       [id]: { ...current[id]!, ...next },
     }));
-    if (errorField) {
-      setErrors((current) => ({
-        ...current,
-        materials: {
-          ...current.materials,
-          [id]: { ...current.materials?.[id], [errorField]: undefined },
-        },
-      }));
-    }
   }
 
   return (
@@ -113,8 +94,6 @@ export default function RefiningClient() {
           rule={selectedRefiningRule}
           marketPrices={MOCK_REFINING_MARKET_PRICES}
           materials={materials}
-          materialErrors={errors.materials ?? {}}
-          hasErrors={hasErrors}
           onMaterialChange={handleMaterialChange}
         />
 
@@ -123,7 +102,6 @@ export default function RefiningClient() {
           marketPrices={MOCK_REFINING_MARKET_PRICES}
           materials={materials}
           step={selectedRefiningRule}
-          onErrorsChange={setErrors}
         />
       </div>
     </main>

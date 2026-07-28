@@ -3,10 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { MOCK_REFINING_MARKET_PRICES } from '@/app/lostark/refining/_define/refiningMarketPrices';
 import type { TRefiningMaterialInputs } from '@/app/lostark/refining/_type/refining';
 import { getRefiningRule } from '@/app/lostark/refining/_util/refiningRules';
-import {
-  hasRefiningInputErrors,
-  validateRefiningInput,
-} from '@/app/lostark/refining/_util/refiningInput';
+import { validateRefiningInput } from '@/app/lostark/refining/_util/refiningInput';
 
 const step = getRefiningRule('aegir', 'weapon', 10);
 function validInput() {
@@ -32,8 +29,7 @@ describe('validateRefiningInput', () => {
     input.materials['aegir-destruction']!.isZeroPriced = true;
     const validation = validateRefiningInput(input);
 
-    expect(validation.errors).toEqual({});
-    expect(validation.input).toMatchObject({
+    expect(validation).toMatchObject({
       failureBonusRate: 125,
       artisanEnergy: '12.345678',
       prices: { 'aegir-destruction': 0 },
@@ -41,7 +37,7 @@ describe('validateRefiningInput', () => {
     });
   });
 
-  it('reports condition and material errors without creating a worker input', () => {
+  it('does not create a worker input for invalid condition or material values', () => {
     const input = validInput();
     input.condition.failureBonusRate = '10.001';
     input.condition.artisanEnergy = '100.000001';
@@ -49,14 +45,6 @@ describe('validateRefiningInput', () => {
 
     const validation = validateRefiningInput(input);
 
-    expect(validation.input).toBeUndefined();
-    expect(validation.errors).toMatchObject({
-      failureBonusRate: expect.any(String),
-      artisanEnergy: expect.any(String),
-      materials: {
-        'aegir-destruction': { owned: expect.any(String) },
-      },
-    });
-    expect(hasRefiningInputErrors(validation.errors)).toBe(true);
+    expect(validation).toBeUndefined();
   });
 });

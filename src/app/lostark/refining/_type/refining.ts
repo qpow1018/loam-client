@@ -65,8 +65,6 @@ export type TRefiningMaterialInput = { owned: string; isZeroPriced: boolean };
 export type TRefiningMaterialInputs = Partial<Record<TRefiningMaterialId, TRefiningMaterialInput>>;
 
 // TODO check
-export type TMaterialInputErrors = Partial<Record<TRefiningMaterialId, { owned?: string }>>;
-
 export type TRefiningOwnedMaterials = Partial<Record<TRefiningMaterialId, number>>;
 export type TRefiningPlanInput = {
   step: TRefiningRule;

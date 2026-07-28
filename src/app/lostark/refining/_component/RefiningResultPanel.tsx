@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import Button from '@/components/common/button/Button';
 import BoxLoading from '@/components/common/loading/BoxLoading';
+import Confirm from '@/components/common/modal/Confirm';
 
 import { REFINING_MATERIALS } from '@/app/lostark/refining/_define/refiningMaterials';
 import type {
@@ -17,10 +18,7 @@ import type {
   TRefiningWorkerRequest,
   TRefiningWorkerResponse,
 } from '@/app/lostark/refining/_type/refiningWorker';
-import {
-  validateRefiningInput,
-  type TRefiningInputErrors,
-} from '@/app/lostark/refining/_util/refiningInput';
+import { validateRefiningInput } from '@/app/lostark/refining/_util/refiningInput';
 import styles from '@/app/lostark/refining/_component/refiningResultPanel.module.scss';
 
 function formatGold(value: number) {
@@ -42,12 +40,12 @@ export default function RefiningResultPanel(props: {
   marketPrices: Readonly<Record<TRefiningMaterialId, number>>;
   materials: TRefiningMaterialInputs;
   step: TRefiningRule;
-  onErrorsChange: (errors: TRefiningInputErrors) => void;
 }) {
-  const { condition, marketPrices, materials, step, onErrorsChange } = props;
+  const { condition, marketPrices, materials, step } = props;
   const materialIds = step.inputMaterialIds;
   const [plan, setPlan] = useState<TRefiningPlan>();
   const [calculationError, setCalculationError] = useState<string>();
+  const [isInputErrorOpen, setIsInputErrorOpen] = useState(false);
   const [isCalculating, setIsCalculating] = useState(false);
   const workerRef = useRef<Worker | undefined>(undefined);
   const requestIdRef = useRef(0);
@@ -60,15 +58,15 @@ export default function RefiningResultPanel(props: {
   );
 
   function handleCalculate() {
-    const validation = validateRefiningInput({ condition, marketPrices, materials, step });
-    onErrorsChange(validation.errors);
-    if (!validation.input) {
+    const input = validateRefiningInput({ condition, marketPrices, materials, step });
+    if (!input) {
       requestIdRef.current += 1;
       workerRef.current?.terminate();
       workerRef.current = undefined;
       setPlan(undefined);
       setCalculationError(undefined);
       setIsCalculating(false);
+      setIsInputErrorOpen(true);
       return;
     }
 
@@ -109,7 +107,7 @@ export default function RefiningResultPanel(props: {
 
       const request: TRefiningWorkerRequest = {
         requestId,
-        input: { step, ...validation.input },
+        input: { step, ...input },
       };
       worker.postMessage(request);
     } catch {
@@ -121,38 +119,53 @@ export default function RefiningResultPanel(props: {
   }
 
   return (
-    <section
-      className={styles['result-panel']}
-      aria-labelledby="refining-result-heading"
-      aria-live="polite"
-    >
-      <h2 id="refining-result-heading">계산 결과</h2>
-      <Button
-        theme="bg-pri"
-        size="large"
-        isFullWidth
-        isLoading={isCalculating}
-        className={styles['calculate-button']}
-        onClick={handleCalculate}
+    <>
+      <section
+        className={styles['result-panel']}
+        aria-labelledby="refining-result-heading"
+        aria-live="polite"
       >
-        {isCalculating ? '계산 중' : '계산하기'}
-      </Button>
-      {calculationError && (
-        <p className={styles['calculation-error']} role="alert">
-          {calculationError}
-        </p>
-      )}
-      {!plan && isCalculating ? (
-        <div className={styles['loading-result']}>
-          <BoxLoading height={120} />
-          <p>최적 전략을 계산하고 있습니다.</p>
-        </div>
-      ) : !plan ? (
-        <p className={styles['empty-result']}>보유 수량을 입력한 뒤 계산하기를 눌러 주세요.</p>
-      ) : (
-        <RefiningResult plan={plan} materialIds={materialIds} step={step} />
-      )}
-    </section>
+        <h2 id="refining-result-heading">계산 결과</h2>
+        <Button
+          theme="bg-pri"
+          size="large"
+          isFullWidth
+          isLoading={isCalculating}
+          className={styles['calculate-button']}
+          onClick={handleCalculate}
+        >
+          {isCalculating ? '계산 중' : '계산하기'}
+        </Button>
+        {calculationError && (
+          <p className={styles['calculation-error']} role="alert">
+            {calculationError}
+          </p>
+        )}
+        {!plan && isCalculating ? (
+          <div className={styles['loading-result']}>
+            <BoxLoading height={120} />
+            <p>최적 전략을 계산하고 있습니다.</p>
+          </div>
+        ) : !plan ? (
+          <p className={styles['empty-result']}>보유 수량을 입력한 뒤 계산하기를 눌러 주세요.</p>
+        ) : (
+          <RefiningResult plan={plan} materialIds={materialIds} step={step} />
+        )}
+      </section>
+      <Confirm
+        isOpen={isInputErrorOpen}
+        onClose={() => setIsInputErrorOpen(false)}
+        title="입력값을 확인해 주세요"
+        message="재련 조건과 보유 수량을 확인한 뒤 다시 계산해 주세요."
+        buttons={[
+          {
+            label: '확인',
+            theme: 'bg-pri',
+            onClick: () => setIsInputErrorOpen(false),
+          },
+        ]}
+      />
+    </>
   );
 }
 

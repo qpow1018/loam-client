@@ -9,15 +9,6 @@
     margin-bottom: 12px;
   }
 
-  .input-error-summary {
-    margin: 0 0 12px;
-    padding: 8px 10px;
-    border-radius: 6px;
-    background: rgba($rose-400, 0.1);
-    color: $rose-300;
-    font-size: 12px;
-  }
-
   .field-description {
     margin: 0 0 8px;
     color: $gray-400;
@@ -122,15 +113,5 @@
       height: 16px;
       margin: 0;
     }
-  }
-
-  .field-error {
-    display: block;
-    position: absolute;
-    top: calc(100% + 2px);
-    left: 0;
-    width: 180px;
-    color: $rose-400;
-    font-size: 11px;
   }
 }
