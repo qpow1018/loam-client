@@ -35,8 +35,8 @@ describe('validateRefiningInput', () => {
     expect(validation.input).toMatchObject({
       failureBonusRate: 125,
       artisanEnergy: '12.345678',
-      prices: { 'aegir-destruction-stone': 100 },
-      ownedMaterials: { 'aegir-destruction-stone': { quantity: 0, isZeroValued: false } },
+      prices: { 'aegir-destruction': 100 },
+      ownedMaterials: { 'aegir-destruction': { quantity: 0, isZeroValued: false } },
     });
   });
 
@@ -44,7 +44,7 @@ describe('validateRefiningInput', () => {
     const input = validInput();
     input.condition.failureBonusRate = '10.001';
     input.condition.artisanEnergy = '100.000001';
-    input.materials['aegir-destruction-stone'] = {
+    input.materials['aegir-destruction'] = {
       price: '',
       owned: '-1',
       isZeroValued: false,
@@ -57,7 +57,7 @@ describe('validateRefiningInput', () => {
       failureBonusRate: expect.any(String),
       artisanEnergy: expect.any(String),
       materials: {
-        'aegir-destruction-stone': { price: expect.any(String), owned: expect.any(String) },
+        'aegir-destruction': { price: expect.any(String), owned: expect.any(String) },
       },
     });
     expect(hasRefiningInputErrors(validation.errors)).toBe(true);

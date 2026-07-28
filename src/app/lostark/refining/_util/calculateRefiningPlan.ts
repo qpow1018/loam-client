@@ -486,7 +486,7 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
 
   return {
     expectedGold,
-    expectedSilver: input.step.silver * expectedAttempts,
+    expectedShilling: input.step.shilling * expectedAttempts,
     expectedAttempts,
     materialExpectations,
     goldBreakdown: {
@@ -497,7 +497,7 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
     recommendedWorstCase: {
       attempts: worstAttempts,
       gold: worstGold,
-      silver: input.step.silver * worstAttempts,
+      shilling: input.step.shilling * worstAttempts,
       conditionalActions: worstActions,
     },
   };

@@ -13,52 +13,40 @@ export type TRefiningRateRule = {
   breathMax: number;
   breathRateBonus: number;
 };
-export type TRefiningCost = {
-  fromLevel: number;
-  stone: number;
-  leapstone: number;
-  fusionMaterial: number;
-  fateShard: number;
-  gold: number;
-  silver: number;
-};
-
-
 export type TMarketMaterialId =
-  | 'aegir-destruction-stone'
-  | 'aegir-guardian-stone'
+  | 'aegir-destruction'
+  | 'aegir-guardian'
   | 'aegir-leapstone'
-  | 'aegir-fusion'
-  | 'serka-destruction-crystal'
-  | 'serka-guardian-crystal'
-  | 'serka-great-leapstone'
-  | 'serka-advanced-fusion'
+  | 'aegir-abidos'
+  | 'serka-destruction'
+  | 'serka-guardian'
+  | 'serka-leapstone'
+  | 'serka-abidos'
   | 'fate-shard'
-  | 'weapon-lava-breath'
-  | 'armor-glacier-breath'
-  | 'weapon-metallurgy-11-14'
-  | 'armor-tailoring-11-14'
-  | 'weapon-metallurgy-15-18'
-  | 'armor-tailoring-15-18'
-  | 'weapon-metallurgy-19-20'
-  | 'armor-tailoring-19-20'
-  | 'weapon-metallurgy-enhanced-19-20'
-  | 'armor-tailoring-enhanced-19-20';
+  | 'weapon-breath'
+  | 'armor-breath'
+  | 'weapon-book-11-14'
+  | 'armor-book-11-14'
+  | 'weapon-book-15-18'
+  | 'armor-book-15-18'
+  | 'weapon-book-19-20'
+  | 'armor-book-19-20'
+  | 'weapon-strong-book-19-20'
+  | 'armor-strong-book-19-20';
+
+export type TRefiningCostRule = {
+  fromLevel: number;
+  gold: number;
+  shilling: number;
+} & Partial<Record<TMarketMaterialId, number>>;
 
 export type TMaterialAmount = { id: TMarketMaterialId; quantity: number };
-export type TMaterialForm = { price: string; owned: string; isZeroValued: boolean };
-export type TMaterialForms = Partial<Record<TMarketMaterialId, TMaterialForm>>;
-export type TMaterialInputErrors = Partial<
-  Record<TMarketMaterialId, { price?: string; owned?: string }>
->;
-
 export type TBookOption =
   | { kind: 'none' }
   | { kind: 'normal'; rateBonus: number; materialId: TMarketMaterialId }
   | { kind: 'enhanced'; rateBonus: number; materialId: TMarketMaterialId };
 
-
-export type TRefiningStep = {
+export type TRefiningRule = {
   equipmentGrade: TEquipmentGrade;
   equipmentType: TEquipmentType;
   fromLevel: number;
@@ -68,13 +56,20 @@ export type TRefiningStep = {
   breathMaterialId: TMarketMaterialId;
   requiredMaterials: readonly TMaterialAmount[];
   gold: number;
-  silver: number;
+  shilling: number;
   books: readonly TBookOption[];
 };
 
+// TODO check
+export type TMaterialForm = { price: string; owned: string; isZeroValued: boolean };
+export type TMaterialForms = Partial<Record<TMarketMaterialId, TMaterialForm>>;
+export type TMaterialInputErrors = Partial<
+  Record<TMarketMaterialId, { price?: string; owned?: string }>
+>;
+
 export type TOwnedMaterial = { quantity: number; isZeroValued: boolean };
 export type TRefiningPlanInput = {
-  step: TRefiningStep;
+  step: TRefiningRule;
   failureBonusRate: number;
   artisanEnergy: string;
   ownedMaterials?: Partial<Record<TMarketMaterialId, TOwnedMaterial>>;
@@ -90,7 +85,7 @@ export type TMaterialExpectation = {
 };
 export type TRefiningPlan = {
   expectedGold: number;
-  expectedSilver: number;
+  expectedShilling: number;
   expectedAttempts: number;
   materialExpectations: Partial<Record<TMarketMaterialId, TMaterialExpectation>>;
   goldBreakdown: { pureGold: number; marketMaterials: number };
@@ -103,7 +98,7 @@ export type TRefiningPlan = {
   recommendedWorstCase: {
     attempts: number;
     gold: number;
-    silver: number;
+    shilling: number;
     conditionalActions: readonly {
       failureBonusRate: number;
       artisanEnergy: number;

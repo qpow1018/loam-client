@@ -4,14 +4,14 @@ import { useEffect, useRef, useState } from 'react';
 import Button from '@/components/common/button/Button';
 import BoxLoading from '@/components/common/loading/BoxLoading';
 
-import { MATERIAL_NAMES } from '@/app/lostark/refining/_define/refiningMaterials';
+import { REFINING_MATERIALS } from '@/app/lostark/refining/_define/refiningMaterials';
 import type {
   TBookOption,
   TMarketMaterialId,
   TMaterialForms,
   TRefiningPlan,
   TRefiningCondition,
-  TRefiningStep,
+  TRefiningRule,
 } from '@/app/lostark/refining/_type/refining';
 import type {
   TRefiningWorkerRequest,
@@ -33,14 +33,15 @@ function formatQuantity(value: number) {
 }
 
 function actionText(action: { breathQuantity: number; book: TBookOption; successRate: number }) {
-  const book = action.book.kind === 'none' ? '책 미사용' : MATERIAL_NAMES[action.book.materialId];
+  const book =
+    action.book.kind === 'none' ? '책 미사용' : REFINING_MATERIALS[action.book.materialId].name;
   return `숨결 ${action.breathQuantity}개 · ${book} · 성공률 ${(action.successRate / 100).toFixed(2)}%`;
 }
 
 export default function RefiningResultPanel(props: {
   condition: TRefiningCondition;
   materials: TMaterialForms;
-  step: TRefiningStep;
+  step: TRefiningRule;
   onErrorsChange: (errors: TRefiningInputErrors) => void;
 }) {
   const { condition, materials, step, onErrorsChange } = props;
@@ -160,7 +161,7 @@ export default function RefiningResultPanel(props: {
 function RefiningResult(props: {
   plan: TRefiningPlan;
   materialIds: readonly TMarketMaterialId[];
-  step: TRefiningStep;
+  step: TRefiningRule;
 }) {
   const { plan, materialIds, step } = props;
   const current = plan.conditionalActions[0];
@@ -193,7 +194,7 @@ function RefiningResult(props: {
             <dd>
               {current.action.book.kind === 'none'
                 ? '미사용'
-                : MATERIAL_NAMES[current.action.book.materialId]}
+                : REFINING_MATERIALS[current.action.book.materialId].name}
             </dd>
           </div>
           <div>
@@ -206,7 +207,7 @@ function RefiningResult(props: {
           </div>
           <div>
             <dt>즉시 실링</dt>
-            <dd>{formatQuantity(step.silver)} 실링</dd>
+            <dd>{formatQuantity(step.shilling)} 실링</dd>
           </div>
         </dl>
         <div className={styles['immediate-materials']}>
@@ -214,7 +215,7 @@ function RefiningResult(props: {
           <ul>
             {[...currentMaterials.entries()].map(([id, quantity]) => (
               <li key={id}>
-                {MATERIAL_NAMES[id]} {formatQuantity(quantity)}개
+                {REFINING_MATERIALS[id].name} {formatQuantity(quantity)}개
               </li>
             ))}
           </ul>
@@ -234,7 +235,7 @@ function RefiningResult(props: {
             </div>
             <div>
               <dt>기대 실링</dt>
-              <dd>{formatQuantity(plan.expectedSilver)} 실링</dd>
+              <dd>{formatQuantity(plan.expectedShilling)} 실링</dd>
             </div>
           </dl>
         </section>
@@ -251,7 +252,7 @@ function RefiningResult(props: {
             </div>
             <div>
               <dt>누적 실링</dt>
-              <dd>{formatQuantity(plan.recommendedWorstCase.silver)} 실링</dd>
+              <dd>{formatQuantity(plan.recommendedWorstCase.shilling)} 실링</dd>
             </div>
           </dl>
         </section>
@@ -270,7 +271,7 @@ function RefiningResult(props: {
           const material = plan.materialExpectations[id];
           return (
             <tr key={id}>
-              <th scope="row">{MATERIAL_NAMES[id]}</th>
+              <th scope="row">{REFINING_MATERIALS[id].name}</th>
               <td>{formatQuantity(material?.expectedTotalUsed ?? 0)}</td>
               <td>{formatQuantity(material?.expectedPurchased ?? 0)}</td>
               <td>{formatGold(material?.expectedGold ?? 0)}</td>

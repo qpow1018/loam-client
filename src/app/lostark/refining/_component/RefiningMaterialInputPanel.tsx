@@ -3,9 +3,9 @@ import type {
   TMaterialForms,
   TMaterialInputErrors,
   TMarketMaterialId,
-  TRefiningStep,
+  TRefiningRule,
 } from '@/app/lostark/refining/_type/refining';
-import { MATERIAL_NAMES } from '@/app/lostark/refining/_define/refiningMaterials';
+import { REFINING_MATERIALS } from '@/app/lostark/refining/_define/refiningMaterials';
 import { getRelevantMaterialIds } from '@/app/lostark/refining/_util/refiningInput';
 
 import styles from '@/app/lostark/refining/_component/refiningMaterialInputPanel.module.scss';
@@ -13,7 +13,7 @@ import styles from '@/app/lostark/refining/_component/refiningMaterialInputPanel
 const DEFAULT_MATERIAL_FORM: TMaterialForm = { price: '', owned: '0', isZeroValued: false };
 
 export default function RefiningMaterialInputPanel(props: {
-  step: TRefiningStep;
+  step: TRefiningRule;
   materials: TMaterialForms;
   materialErrors: TMaterialInputErrors;
   hasErrors: boolean;
@@ -61,10 +61,10 @@ export default function RefiningMaterialInputPanel(props: {
                 const ownedErrorId = `owned-${id}-error`;
                 return (
                   <tr key={id}>
-                    <th scope="row">{MATERIAL_NAMES[id]}</th>
+                    <th scope="row">{REFINING_MATERIALS[id].name}</th>
                     <td>
                       <input
-                        aria-label={`${MATERIAL_NAMES[id]} 개당 단가`}
+                        aria-label={`${REFINING_MATERIALS[id].name} 개당 단가`}
                         aria-describedby={priceError ? priceErrorId : undefined}
                         aria-invalid={Boolean(priceError)}
                         inputMode="decimal"
@@ -81,7 +81,7 @@ export default function RefiningMaterialInputPanel(props: {
                     </td>
                     <td>
                       <input
-                        aria-label={`${MATERIAL_NAMES[id]} 보유 수량`}
+                        aria-label={`${REFINING_MATERIALS[id].name} 보유 수량`}
                         aria-describedby={ownedError ? ownedErrorId : undefined}
                         aria-invalid={Boolean(ownedError)}
                         inputMode="numeric"
@@ -101,7 +101,7 @@ export default function RefiningMaterialInputPanel(props: {
                       <label className={styles['check-label']}>
                         <input
                           type="checkbox"
-                          aria-label={`${MATERIAL_NAMES[id]} 가치 0G 처리`}
+                          aria-label={`${REFINING_MATERIALS[id].name} 가치 0G 처리`}
                           checked={form.isZeroValued}
                           onChange={(event) =>
                             onMaterialChange(id, { isZeroValued: event.target.checked })

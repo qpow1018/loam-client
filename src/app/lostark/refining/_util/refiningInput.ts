@@ -6,7 +6,7 @@ import type {
   TOwnedMaterial,
   TRefiningCondition,
   TRefiningPlanInput,
-  TRefiningStep,
+  TRefiningRule,
 } from '@/app/lostark/refining/_type/refining';
 
 export type TRefiningInputErrors = {
@@ -20,7 +20,7 @@ export type TValidatedRefiningInput = Pick<
   'failureBonusRate' | 'artisanEnergy' | 'prices' | 'ownedMaterials'
 >;
 
-export function getRelevantMaterialIds(step: TRefiningStep) {
+export function getRelevantMaterialIds(step: TRefiningRule) {
   return [
     ...step.requiredMaterials.map((material) => material.id),
     step.breathMaterialId,
@@ -46,7 +46,7 @@ export function hasRefiningInputErrors(errors: TRefiningInputErrors) {
 export function validateRefiningInput(props: {
   condition: TRefiningCondition;
   materials: TMaterialForms;
-  step: TRefiningStep;
+  step: TRefiningRule;
 }): { errors: TRefiningInputErrors; input?: TValidatedRefiningInput } {
   const { condition, materials, step } = props;
   const materialIds = getRelevantMaterialIds(step);
