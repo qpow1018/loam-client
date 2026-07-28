@@ -64,6 +64,11 @@
     height: 44px;
   }
 
+  .market-price {
+    color: $gray-200;
+    font-variant-numeric: tabular-nums;
+  }
+
   input {
     width: 100%;
     min-width: 0;

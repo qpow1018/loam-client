@@ -7,6 +7,7 @@ import Tabs from '@/components/common/tabs/Tabs';
 import RefiningConditionPanel from '@/app/lostark/refining/_component/RefiningConditionPanel';
 import RefiningMaterialInputPanel from '@/app/lostark/refining/_component/RefiningMaterialInputPanel';
 import RefiningResultPanel from '@/app/lostark/refining/_component/RefiningResultPanel';
+import { MOCK_REFINING_MARKET_PRICES } from '@/app/lostark/refining/_define/refiningMarketPrices';
 import { getRefiningRule } from '@/app/lostark/refining/_util/refiningRules';
 import type {
   TRefiningMaterialInput,
@@ -42,7 +43,7 @@ export default function RefiningClient() {
   );
 
   function getDefaultMaterialForm(): TRefiningMaterialInput {
-    return { price: '', owned: '0', isZeroValued: false };
+    return { owned: '0', isZeroValued: false };
   }
 
   function getInitialMaterials(): TRefiningMaterialInputs {
@@ -82,7 +83,7 @@ export default function RefiningClient() {
   function handleMaterialChange(
     id: TRefiningMaterialId,
     next: Partial<TRefiningMaterialInput>,
-    errorField?: 'price' | 'owned',
+    errorField?: 'owned',
   ) {
     setMaterials((current) => ({
       ...current,
@@ -110,6 +111,7 @@ export default function RefiningClient() {
 
         <RefiningMaterialInputPanel
           rule={selectedRefiningRule}
+          marketPrices={MOCK_REFINING_MARKET_PRICES}
           materials={materials}
           materialErrors={errors.materials ?? {}}
           hasErrors={hasErrors}
@@ -118,6 +120,7 @@ export default function RefiningClient() {
 
         <RefiningResultPanel
           condition={condition}
+          marketPrices={MOCK_REFINING_MARKET_PRICES}
           materials={materials}
           step={selectedRefiningRule}
           onErrorsChange={setErrors}

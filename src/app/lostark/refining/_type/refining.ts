@@ -61,13 +61,11 @@ export type TRefiningRule = {
   books: readonly TBookOption[];
 };
 
-export type TRefiningMaterialInput = { price: string; owned: string; isZeroValued: boolean };
+export type TRefiningMaterialInput = { owned: string; isZeroValued: boolean };
 export type TRefiningMaterialInputs = Partial<Record<TRefiningMaterialId, TRefiningMaterialInput>>;
 
 // TODO check
-export type TMaterialInputErrors = Partial<
-  Record<TRefiningMaterialId, { price?: string; owned?: string }>
->;
+export type TMaterialInputErrors = Partial<Record<TRefiningMaterialId, { owned?: string }>>;
 
 export type TOwnedMaterial = { quantity: number; isZeroValued: boolean };
 export type TRefiningPlanInput = {

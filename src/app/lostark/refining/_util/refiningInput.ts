@@ -22,16 +22,17 @@ export type TValidatedRefiningInput = Pick<
 export function hasRefiningInputErrors(errors: TRefiningInputErrors) {
   return (
     Boolean(errors.failureBonusRate || errors.artisanEnergy) ||
-    Object.values(errors.materials ?? {}).some((error) => error.price || error.owned)
+    Object.values(errors.materials ?? {}).some((error) => error.owned)
   );
 }
 
 export function validateRefiningInput(props: {
   condition: TRefiningCondition;
+  marketPrices: Readonly<Record<TRefiningMaterialId, number>>;
   materials: TRefiningMaterialInputs;
   step: TRefiningRule;
 }): { errors: TRefiningInputErrors; input?: TValidatedRefiningInput } {
-  const { condition, materials, step } = props;
+  const { condition, marketPrices, materials, step } = props;
   const materialIds = step.inputMaterialIds;
   const errors: TRefiningInputErrors = {};
   const materialErrors: TMaterialInputErrors = {};
@@ -41,22 +42,14 @@ export function validateRefiningInput(props: {
   if (!/^\d+(?:\.\d{1,6})?$/.test(condition.artisanEnergy) || Number(condition.artisanEnergy) > 100)
     errors.artisanEnergy = '장인의 기운은 0부터 100 사이의 숫자로 입력해 주세요.';
 
-  const prices = {} as Record<TRefiningMaterialId, number>;
   const ownedMaterials: Partial<Record<TRefiningMaterialId, TOwnedMaterial>> = {};
   for (const id of materialIds) {
     const form = materials[id];
     if (!form) {
-      materialErrors[id] = { price: '개당 단가는 0 이상의 숫자로 입력해 주세요.' };
+      materialErrors[id] = { owned: '보유 수량은 0 이상의 정수로 입력해 주세요.' };
       continue;
     }
-    const price = Number(form.price);
     const owned = Number(form.owned);
-    if (form.price.trim() === '' || !Number.isFinite(price) || price < 0)
-      materialErrors[id] = {
-        ...materialErrors[id],
-        price: '개당 단가는 0 이상의 숫자로 입력해 주세요.',
-      };
-    else prices[id] = price;
     if (!Number.isInteger(owned) || owned < 0)
       materialErrors[id] = {
         ...materialErrors[id],
@@ -72,7 +65,7 @@ export function validateRefiningInput(props: {
     input: {
       failureBonusRate: failureBonusRate ?? 0,
       artisanEnergy: condition.artisanEnergy,
-      prices,
+      prices: marketPrices,
       ownedMaterials,
     },
   };

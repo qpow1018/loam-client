@@ -11,16 +11,17 @@ import styles from '@/app/lostark/refining/_component/refiningMaterialInputPanel
 
 export default function RefiningMaterialInputPanel(props: {
   rule: TRefiningRule;
+  marketPrices: Readonly<Record<TRefiningMaterialId, number>>;
   materials: TRefiningMaterialInputs;
   materialErrors: TMaterialInputErrors;
   hasErrors: boolean;
   onMaterialChange: (
     id: TRefiningMaterialId,
     next: Partial<TRefiningMaterialInput>,
-    errorField?: 'price' | 'owned',
+    errorField?: 'owned',
   ) => void;
 }) {
-  const { rule, materials, materialErrors, hasErrors, onMaterialChange } = props;
+  const { rule, marketPrices, materials, materialErrors, hasErrors, onMaterialChange } = props;
 
   return (
     <section className={styles['input-panel']} aria-labelledby="refining-input-heading">
@@ -46,29 +47,13 @@ export default function RefiningMaterialInputPanel(props: {
           {rule.inputMaterialIds.map((id) => {
             const form = materials[id];
             if (!form) return null;
-            const priceError = materialErrors[id]?.price;
             const ownedError = materialErrors[id]?.owned;
-            const priceErrorId = `price-${id}-error`;
             const ownedErrorId = `owned-${id}-error`;
             return (
               <tr key={id}>
                 <th scope="row">{REFINING_MATERIALS[id].name}</th>
-                <td>
-                  <input
-                    aria-label={`${REFINING_MATERIALS[id].name} 개당 단가`}
-                    aria-describedby={priceError ? priceErrorId : undefined}
-                    aria-invalid={Boolean(priceError)}
-                    inputMode="decimal"
-                    value={form.price}
-                    onChange={(event) =>
-                      onMaterialChange(id, { price: event.target.value }, 'price')
-                    }
-                  />
-                  {priceError && (
-                    <span id={priceErrorId} className={styles['field-error']}>
-                      {priceError}
-                    </span>
-                  )}
+                <td className={styles['market-price']}>
+                  {marketPrices[id].toLocaleString('ko-KR', { maximumFractionDigits: 3 })} G
                 </td>
                 <td>
                   <input

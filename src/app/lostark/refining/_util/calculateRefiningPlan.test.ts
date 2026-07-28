@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { TEST_MARKET_PRICES } from '@/app/lostark/refining/_define/refiningFixtures';
+import { MOCK_REFINING_MARKET_PRICES } from '@/app/lostark/refining/_define/refiningMarketPrices';
 import {
   getAvailableRefiningLevels,
   getRefiningRule,
@@ -19,7 +19,7 @@ function input(
     step,
     failureBonusRate: 0,
     artisanEnergy: '0',
-    prices: TEST_MARKET_PRICES,
+    prices: MOCK_REFINING_MARKET_PRICES,
     ...overrides,
   };
 }
@@ -148,14 +148,17 @@ describe('Bellman plan', () => {
       ...minimal(10000),
       requiredMaterials: [{ id: 'aegir-leapstone' as const, quantity: 2 }],
     };
-    const none = calculateRefiningPlan(input(step));
+    const prices = { ...MOCK_REFINING_MARKET_PRICES, 'aegir-leapstone': 50 };
+    const none = calculateRefiningPlan(input(step, { prices }));
     const zeroValued = calculateRefiningPlan(
       input(step, {
+        prices,
         ownedMaterials: { 'aegir-leapstone': { quantity: 2, isZeroValued: true } },
       }),
     );
     const valued = calculateRefiningPlan(
       input(step, {
+        prices,
         ownedMaterials: { 'aegir-leapstone': { quantity: 1, isZeroValued: false } },
       }),
     );
@@ -211,7 +214,7 @@ describe('Bellman plan', () => {
   it('rejects negative or non-finite ownership and price inputs', () => {
     expect(() =>
       calculateRefiningPlan(
-        input(minimal(10000), { prices: { ...TEST_MARKET_PRICES, 'weapon-breath': -1 } }),
+        input(minimal(10000), { prices: { ...MOCK_REFINING_MARKET_PRICES, 'weapon-breath': -1 } }),
       ),
     ).toThrow('Invalid market price');
     expect(() =>
@@ -227,10 +230,13 @@ describe('Bellman plan', () => {
   });
   it('returns actual immediate costs for every recommended worst-case attempt', () => {
     const plan = calculateRefiningPlan(
-      input({
-        ...minimal(10000),
-        requiredMaterials: [{ id: 'aegir-leapstone', quantity: 2 }],
-      }),
+      input(
+        {
+          ...minimal(10000),
+          requiredMaterials: [{ id: 'aegir-leapstone', quantity: 2 }],
+        },
+        { prices: { ...MOCK_REFINING_MARKET_PRICES, 'aegir-leapstone': 50 } },
+      ),
     );
     expect(plan.recommendedWorstCase.conditionalActions).toHaveLength(
       plan.recommendedWorstCase.attempts,
@@ -254,7 +260,7 @@ describe('Bellman plan', () => {
       requiredMaterials: [{ id: 'aegir-leapstone', quantity: 1 }],
     };
     const prices = {
-      ...TEST_MARKET_PRICES,
+      ...MOCK_REFINING_MARKET_PRICES,
       'aegir-leapstone': 200,
       'weapon-breath': 60,
     };

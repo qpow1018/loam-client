@@ -39,11 +39,12 @@ function actionText(action: { breathQuantity: number; book: TBookOption; success
 
 export default function RefiningResultPanel(props: {
   condition: TRefiningCondition;
+  marketPrices: Readonly<Record<TRefiningMaterialId, number>>;
   materials: TRefiningMaterialInputs;
   step: TRefiningRule;
   onErrorsChange: (errors: TRefiningInputErrors) => void;
 }) {
-  const { condition, materials, step, onErrorsChange } = props;
+  const { condition, marketPrices, materials, step, onErrorsChange } = props;
   const materialIds = step.inputMaterialIds;
   const [plan, setPlan] = useState<TRefiningPlan>();
   const [calculationError, setCalculationError] = useState<string>();
@@ -59,7 +60,7 @@ export default function RefiningResultPanel(props: {
   );
 
   function handleCalculate() {
-    const validation = validateRefiningInput({ condition, materials, step });
+    const validation = validateRefiningInput({ condition, marketPrices, materials, step });
     onErrorsChange(validation.errors);
     if (!validation.input) {
       requestIdRef.current += 1;
@@ -147,9 +148,7 @@ export default function RefiningResultPanel(props: {
           <p>최적 전략을 계산하고 있습니다.</p>
         </div>
       ) : !plan ? (
-        <p className={styles['empty-result']}>
-          단가와 보유 수량을 입력한 뒤 계산하기를 눌러 주세요.
-        </p>
+        <p className={styles['empty-result']}>보유 수량을 입력한 뒤 계산하기를 눌러 주세요.</p>
       ) : (
         <RefiningResult plan={plan} materialIds={materialIds} step={step} />
       )}
