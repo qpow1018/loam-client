@@ -104,25 +104,28 @@ function createRefiningStep(
   };
 }
 
-export const REFINING_STEPS: readonly TRefiningStep[] = [
+const REFINING_RULES: readonly TRefiningStep[] = [
   ...AEGIR_WEAPON_COSTS.map((cost) => createRefiningStep('aegir', 'weapon', cost)),
   ...AEGIR_ARMOR_COSTS.map((cost) => createRefiningStep('aegir', 'armor', cost)),
   ...SERKA_WEAPON_COSTS.map((cost) => createRefiningStep('serka', 'weapon', cost)),
   ...SERKA_ARMOR_COSTS.map((cost) => createRefiningStep('serka', 'armor', cost)),
 ];
 
-export function getRefiningLevels(equipmentGrade: TEquipmentGrade, equipmentType: TEquipmentType) {
-  return REFINING_STEPS.filter(
+export function getAvailableRefiningLevels(
+  equipmentGrade: TEquipmentGrade,
+  equipmentType: TEquipmentType,
+) {
+  return REFINING_RULES.filter(
     (step) => step.equipmentGrade === equipmentGrade && step.equipmentType === equipmentType,
   ).map((step) => step.fromLevel);
 }
 
-export function getRefiningStep(
+export function getRefiningRule(
   equipmentGrade: TEquipmentGrade,
   equipmentType: TEquipmentType,
   fromLevel: number,
 ) {
-  const step = REFINING_STEPS.find(
+  const step = REFINING_RULES.find(
     (item) =>
       item.equipmentGrade === equipmentGrade &&
       item.equipmentType === equipmentType &&

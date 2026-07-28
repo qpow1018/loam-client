@@ -5,7 +5,10 @@ import type {
   TEquipmentType,
   TRefiningCondition,
 } from '@/app/lostark/refining/_type/refining';
-import { getRefiningLevels, getRefiningStep } from '@/app/lostark/refining/_util/refiningRules';
+import {
+  getAvailableRefiningLevels,
+  getRefiningRule,
+} from '@/app/lostark/refining/_util/refiningRules';
 
 import TextInput from '@/components/common/form/TextInput';
 import Select from '@/components/common/form/Select';
@@ -28,18 +31,18 @@ export default function RefiningConditionPanel(props: {
   const { condition, onChange } = props;
   const { equipmentGrade, equipmentType, fromLevel, failureBonusRate, artisanEnergy } = condition;
 
-  const availableLevels = getRefiningLevels(equipmentGrade, equipmentType);
+  const availableLevels = getAvailableRefiningLevels(equipmentGrade, equipmentType);
   const baseSuccessRate = (
-    getRefiningStep(equipmentGrade, equipmentType, fromLevel).initialRate / 100
+    getRefiningRule(equipmentGrade, equipmentType, fromLevel).initialRate / 100
   ).toFixed(2);
 
   function handleEquipmentGradeChange(value: TEquipmentGrade) {
-    const nextLevel = getRefiningLevels(value, equipmentType)[0]!;
+    const nextLevel = getAvailableRefiningLevels(value, equipmentType)[0]!;
     onChange({ ...condition, equipmentGrade: value, fromLevel: nextLevel });
   }
 
   function handleEquipmentTypeChange(value: TEquipmentType) {
-    const nextLevel = getRefiningLevels(equipmentGrade, value)[0]!;
+    const nextLevel = getAvailableRefiningLevels(equipmentGrade, value)[0]!;
     onChange({ ...condition, equipmentType: value, fromLevel: nextLevel });
   }
 

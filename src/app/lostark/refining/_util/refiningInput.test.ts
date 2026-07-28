@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { getRefiningStep } from '@/app/lostark/refining/_util/refiningRules';
+import { getRefiningRule } from '@/app/lostark/refining/_util/refiningRules';
 import {
   createMaterialForms,
   getRelevantMaterialIds,
@@ -8,7 +8,7 @@ import {
   validateRefiningInput,
 } from '@/app/lostark/refining/_util/refiningInput';
 
-const step = getRefiningStep('aegir', 'weapon', 10);
+const step = getRefiningRule('aegir', 'weapon', 10);
 const materialIds = getRelevantMaterialIds(step);
 
 function validInput() {
