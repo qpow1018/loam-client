@@ -37,7 +37,7 @@ describe('validateRefiningInput', () => {
       failureBonusRate: 125,
       artisanEnergy: '12.345678',
       prices: { 'aegir-destruction': 0 },
-      ownedMaterials: { 'aegir-destruction': { quantity: 0 } },
+      ownedMaterials: { 'aegir-destruction': 0 },
     });
   });
 

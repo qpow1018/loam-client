@@ -110,7 +110,7 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
   )
     throw new Error('failureBonusRate must be an integer percentage not above the initial rate.');
   for (const [id, owned] of Object.entries(input.ownedMaterials ?? {})) {
-    if (!owned || !Number.isInteger(owned.quantity) || owned.quantity < 0)
+    if (!Number.isInteger(owned) || owned < 0)
       throw new Error(`Invalid owned quantity: ${id}`);
   }
 
@@ -156,7 +156,7 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
 
   const optionalIdList = [...optionalIds].filter((id) => {
     const owned = input.ownedMaterials?.[id];
-    return owned && owned.quantity > 0 && input.prices[id] > 0;
+    return owned && owned > 0 && input.prices[id] > 0;
   });
   const initialRemaining: TRemaining = {};
   for (const id of optionalIdList) {
@@ -167,7 +167,7 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
           ? 1
           : 0;
     initialRemaining[id] = Math.min(
-      input.ownedMaterials?.[id]?.quantity ?? 0,
+      input.ownedMaterials?.[id] ?? 0,
       perAttemptMaximum * maxFailureAttempts,
     );
   }
@@ -189,7 +189,7 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
     return input.step.requiredMaterials.reduce((total, material) => {
       const owned = input.ownedMaterials?.[material.id];
       if (!owned) return total + material.quantity * input.prices[material.id];
-      const freeRemaining = Math.max(0, owned.quantity - elapsedAttempts * material.quantity);
+      const freeRemaining = Math.max(0, owned - elapsedAttempts * material.quantity);
       const purchased = material.quantity - Math.min(freeRemaining, material.quantity);
       return total + purchased * input.prices[material.id];
     }, input.step.gold);
@@ -235,7 +235,7 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
     if (requiredQuantity === 0) return true;
     if (input.prices[id] === 0) return true;
     const owned = input.ownedMaterials?.[id];
-    return Boolean(owned && owned.quantity >= requiredQuantity);
+    return Boolean(owned && owned >= requiredQuantity);
   });
 
   const rateStateCount = guaranteeRate + 1;
@@ -402,7 +402,7 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
 
   const usage = {} as TUsage;
   const reportRemaining: TRemaining = {};
-  for (const id of relevantIds) reportRemaining[id] = input.ownedMaterials?.[id]?.quantity ?? 0;
+  for (const id of relevantIds) reportRemaining[id] = input.ownedMaterials?.[id] ?? 0;
   let expectedAttempts = 0;
   let expectedPureGold = 0;
   let expectedMarketGold = 0;

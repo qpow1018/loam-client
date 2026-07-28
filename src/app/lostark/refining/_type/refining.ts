@@ -67,12 +67,12 @@ export type TRefiningMaterialInputs = Partial<Record<TRefiningMaterialId, TRefin
 // TODO check
 export type TMaterialInputErrors = Partial<Record<TRefiningMaterialId, { owned?: string }>>;
 
-export type TOwnedMaterial = { quantity: number };
+export type TRefiningOwnedMaterials = Partial<Record<TRefiningMaterialId, number>>;
 export type TRefiningPlanInput = {
   step: TRefiningRule;
   failureBonusRate: number;
   artisanEnergy: string;
-  ownedMaterials?: Partial<Record<TRefiningMaterialId, TOwnedMaterial>>;
+  ownedMaterials?: TRefiningOwnedMaterials;
   prices: Record<TRefiningMaterialId, number>;
 };
 

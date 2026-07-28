@@ -153,7 +153,7 @@ describe('Bellman plan', () => {
     const owned = calculateRefiningPlan(
       input(step, {
         prices,
-        ownedMaterials: { 'aegir-leapstone': { quantity: 2 } },
+        ownedMaterials: { 'aegir-leapstone': 2 },
       }),
     );
     const zeroPriced = calculateRefiningPlan(
@@ -219,7 +219,7 @@ describe('Bellman plan', () => {
     expect(() =>
       calculateRefiningPlan(
         input(minimal(10000), {
-          ownedMaterials: { 'weapon-breath': { quantity: -1 } },
+          ownedMaterials: { 'weapon-breath': -1 },
         }),
       ),
     ).toThrow('Invalid owned quantity');
@@ -267,7 +267,7 @@ describe('Bellman plan', () => {
       input(step, {
         prices,
         ownedMaterials: {
-          'aegir-leapstone': { quantity: 1 },
+          'aegir-leapstone': 1,
         },
       }),
     );
@@ -275,7 +275,7 @@ describe('Bellman plan', () => {
       input(step, {
         prices,
         ownedMaterials: {
-          'aegir-leapstone': { quantity: 2 },
+          'aegir-leapstone': 2,
         },
       }),
     );
@@ -288,9 +288,9 @@ describe('Bellman plan', () => {
     const plan = calculateRefiningPlan(
       input(step, {
         ownedMaterials: {
-          'weapon-breath': { quantity: 50 },
-          'weapon-book-19-20': { quantity: 3 },
-          'weapon-strong-book-19-20': { quantity: 2 },
+          'weapon-breath': 50,
+          'weapon-book-19-20': 3,
+          'weapon-strong-book-19-20': 2,
         },
       }),
     );
@@ -309,8 +309,8 @@ describe('Bellman plan', () => {
     const plan = calculateRefiningPlan(
       input(step, {
         ownedMaterials: {
-          'aegir-leapstone': { quantity: 2 },
-          'weapon-breath': { quantity: 1 },
+          'aegir-leapstone': 2,
+          'weapon-breath': 1,
         },
       }),
     );

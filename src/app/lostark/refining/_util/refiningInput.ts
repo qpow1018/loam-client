@@ -2,7 +2,7 @@ import type {
   TRefiningMaterialId,
   TRefiningMaterialInputs,
   TMaterialInputErrors,
-  TOwnedMaterial,
+  TRefiningOwnedMaterials,
   TRefiningCondition,
   TRefiningPlanInput,
   TRefiningRule,
@@ -42,7 +42,7 @@ export function validateRefiningInput(props: {
   if (!/^\d+(?:\.\d{1,6})?$/.test(condition.artisanEnergy) || Number(condition.artisanEnergy) > 100)
     errors.artisanEnergy = '장인의 기운은 0부터 100 사이의 숫자로 입력해 주세요.';
 
-  const ownedMaterials: Partial<Record<TRefiningMaterialId, TOwnedMaterial>> = {};
+  const ownedMaterials: TRefiningOwnedMaterials = {};
   for (const id of materialIds) {
     const form = materials[id];
     if (!form) {
@@ -55,7 +55,7 @@ export function validateRefiningInput(props: {
         ...materialErrors[id],
         owned: '보유 수량은 0 이상의 정수로 입력해 주세요.',
       };
-    else ownedMaterials[id] = { quantity: owned };
+    else ownedMaterials[id] = owned;
   }
   if (Object.keys(materialErrors).length > 0) errors.materials = materialErrors;
   if (hasRefiningInputErrors(errors)) return { errors };
