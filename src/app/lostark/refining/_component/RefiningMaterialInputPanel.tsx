@@ -1,24 +1,28 @@
 import type {
-  TMaterialForm,
-  TMaterialForms,
+  TRefiningMaterialInput,
+  TRefiningMaterialInputs,
   TMaterialInputErrors,
-  TMarketMaterialId,
+  TRefiningMaterialId,
   TRefiningRule,
 } from '@/app/lostark/refining/_type/refining';
 import { REFINING_MATERIALS } from '@/app/lostark/refining/_define/refiningMaterials';
 
 import styles from '@/app/lostark/refining/_component/refiningMaterialInputPanel.module.scss';
 
-const DEFAULT_MATERIAL_FORM: TMaterialForm = { price: '', owned: '0', isZeroValued: false };
+const DEFAULT_MATERIAL_FORM: TRefiningMaterialInput = {
+  price: '',
+  owned: '0',
+  isZeroValued: false,
+};
 
 export default function RefiningMaterialInputPanel(props: {
   step: TRefiningRule;
-  materials: TMaterialForms;
+  materials: TRefiningMaterialInputs;
   materialErrors: TMaterialInputErrors;
   hasErrors: boolean;
   onMaterialChange: (
-    id: TMarketMaterialId,
-    next: Partial<TMaterialForm>,
+    id: TRefiningMaterialId,
+    next: Partial<TRefiningMaterialInput>,
     errorField?: 'price' | 'owned',
   ) => void;
 }) {

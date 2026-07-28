@@ -13,7 +13,7 @@ export type TRefiningRateRule = {
   breathMax: number;
   breathRateBonus: number;
 };
-export type TMarketMaterialId =
+export type TRefiningMaterialId =
   | 'aegir-destruction'
   | 'aegir-guardian'
   | 'aegir-leapstone'
@@ -38,13 +38,13 @@ export type TRefiningCostRule = {
   fromLevel: number;
   gold: number;
   shilling: number;
-} & Partial<Record<TMarketMaterialId, number>>;
+} & Partial<Record<TRefiningMaterialId, number>>;
 
-export type TMaterialAmount = { id: TMarketMaterialId; quantity: number };
+export type TMaterialAmount = { id: TRefiningMaterialId; quantity: number };
 export type TBookOption =
   | { kind: 'none' }
-  | { kind: 'normal'; rateBonus: number; materialId: TMarketMaterialId }
-  | { kind: 'enhanced'; rateBonus: number; materialId: TMarketMaterialId };
+  | { kind: 'normal'; rateBonus: number; materialId: TRefiningMaterialId }
+  | { kind: 'enhanced'; rateBonus: number; materialId: TRefiningMaterialId };
 
 export type TRefiningRule = {
   equipmentGrade: TEquipmentGrade;
@@ -53,20 +53,20 @@ export type TRefiningRule = {
   initialRate: number;
   breathMax: number;
   breathRateBonus: number;
-  breathMaterialId: TMarketMaterialId;
+  breathMaterialId: TRefiningMaterialId;
   requiredMaterials: readonly TMaterialAmount[];
-  inputMaterialIds: readonly TMarketMaterialId[];
+  inputMaterialIds: readonly TRefiningMaterialId[];
   gold: number;
   shilling: number;
   books: readonly TBookOption[];
 };
 
-export type TMaterialForm = { price: string; owned: string; isZeroValued: boolean };
-export type TMaterialForms = Partial<Record<TMarketMaterialId, TMaterialForm>>;
+export type TRefiningMaterialInput = { price: string; owned: string; isZeroValued: boolean };
+export type TRefiningMaterialInputs = Partial<Record<TRefiningMaterialId, TRefiningMaterialInput>>;
 
 // TODO check
 export type TMaterialInputErrors = Partial<
-  Record<TMarketMaterialId, { price?: string; owned?: string }>
+  Record<TRefiningMaterialId, { price?: string; owned?: string }>
 >;
 
 export type TOwnedMaterial = { quantity: number; isZeroValued: boolean };
@@ -74,8 +74,8 @@ export type TRefiningPlanInput = {
   step: TRefiningRule;
   failureBonusRate: number;
   artisanEnergy: string;
-  ownedMaterials?: Partial<Record<TMarketMaterialId, TOwnedMaterial>>;
-  prices: Record<TMarketMaterialId, number>;
+  ownedMaterials?: Partial<Record<TRefiningMaterialId, TOwnedMaterial>>;
+  prices: Record<TRefiningMaterialId, number>;
 };
 
 export type TRefiningAction = { breathQuantity: number; book: TBookOption; successRate: number };
@@ -89,7 +89,7 @@ export type TRefiningPlan = {
   expectedGold: number;
   expectedShilling: number;
   expectedAttempts: number;
-  materialExpectations: Partial<Record<TMarketMaterialId, TMaterialExpectation>>;
+  materialExpectations: Partial<Record<TRefiningMaterialId, TMaterialExpectation>>;
   goldBreakdown: { pureGold: number; marketMaterials: number };
   conditionalActions: readonly {
     failureBonusRate: number;

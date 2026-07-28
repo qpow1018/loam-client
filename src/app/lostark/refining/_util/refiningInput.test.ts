@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import type { TMaterialForms } from '@/app/lostark/refining/_type/refining';
+import type { TRefiningMaterialInputs } from '@/app/lostark/refining/_type/refining';
 import { getRefiningRule } from '@/app/lostark/refining/_util/refiningRules';
 import {
   hasRefiningInputErrors,
@@ -9,7 +9,7 @@ import {
 
 const step = getRefiningRule('aegir', 'weapon', 10);
 function validInput() {
-  const materials = {} as TMaterialForms;
+  const materials = {} as TRefiningMaterialInputs;
   for (const id of step.inputMaterialIds)
     materials[id] = { price: '100', owned: '0', isZeroValued: false };
   return {

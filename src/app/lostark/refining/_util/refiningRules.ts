@@ -3,7 +3,7 @@ import type {
   TEquipmentGrade,
   TEquipmentType,
   TMaterialAmount,
-  TMarketMaterialId,
+  TRefiningMaterialId,
   TRefiningCostRule,
   TRefiningRateRule,
   TRefiningRule,
@@ -94,7 +94,7 @@ function createRefiningRule(
     id: id as TMaterialAmount['id'],
     quantity: quantity as number,
   }));
-  const breathMaterialId: TMarketMaterialId =
+  const breathMaterialId: TRefiningMaterialId =
     equipmentType === 'weapon' ? 'weapon-breath' : 'armor-breath';
   const books = getBookOptions(equipmentGrade, equipmentType, fromLevel);
   const inputMaterialIds = [

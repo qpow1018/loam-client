@@ -9,9 +9,9 @@ import RefiningMaterialInputPanel from '@/app/lostark/refining/_component/Refini
 import RefiningResultPanel from '@/app/lostark/refining/_component/RefiningResultPanel';
 import { getRefiningRule } from '@/app/lostark/refining/_util/refiningRules';
 import type {
-  TMaterialForm,
-  TMaterialForms,
-  TMarketMaterialId,
+  TRefiningMaterialInput,
+  TRefiningMaterialInputs,
+  TRefiningMaterialId,
   TRefiningCondition,
 } from '@/app/lostark/refining/_type/refining';
 import { hasRefiningInputErrors } from '@/app/lostark/refining/_util/refiningInput';
@@ -33,7 +33,7 @@ const INITIAL_CONDITION: TRefiningCondition = {
 export default function RefiningClient() {
   const [activeTab, setActiveTab] = useState<string>(REFINING_TABS[0].value);
   const [condition, setCondition] = useState<TRefiningCondition>(INITIAL_CONDITION);
-  const [materials, setMaterials] = useState<TMaterialForms>(getInitialMaterials);
+  const [materials, setMaterials] = useState<TRefiningMaterialInputs>(getInitialMaterials);
 
   const selectedRefiningRule = getRefiningRule(
     condition.equipmentGrade,
@@ -41,11 +41,11 @@ export default function RefiningClient() {
     condition.fromLevel,
   );
 
-  function getDefaultMaterialForm(): TMaterialForm {
+  function getDefaultMaterialForm(): TRefiningMaterialInput {
     return { price: '', owned: '0', isZeroValued: false };
   }
 
-  function getInitialMaterials(): TMaterialForms {
+  function getInitialMaterials(): TRefiningMaterialInputs {
     const initialRule = getRefiningRule(
       INITIAL_CONDITION.equipmentGrade,
       INITIAL_CONDITION.equipmentType,
@@ -54,7 +54,7 @@ export default function RefiningClient() {
 
     return Object.fromEntries(
       initialRule.inputMaterialIds.map((id) => [id, getDefaultMaterialForm()]),
-    ) as TMaterialForms;
+    ) as TRefiningMaterialInputs;
   }
 
   const [errors, setErrors] = useState<TRefiningInputErrors>({});
@@ -66,8 +66,8 @@ export default function RefiningClient() {
   }
 
   function handleMaterialChange(
-    id: TMarketMaterialId,
-    next: Partial<TMaterialForm>,
+    id: TRefiningMaterialId,
+    next: Partial<TRefiningMaterialInput>,
     errorField?: 'price' | 'owned',
   ) {
     setMaterials((current) => ({

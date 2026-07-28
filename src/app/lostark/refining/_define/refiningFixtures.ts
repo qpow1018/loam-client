@@ -1,7 +1,7 @@
-import type { TMarketMaterialId } from '@/app/lostark/refining/_type/refining';
+import type { TRefiningMaterialId } from '@/app/lostark/refining/_type/refining';
 
 /** Deliberately artificial unit prices for deterministic tests, not market quotes. */
-export const TEST_MARKET_PRICES: Record<TMarketMaterialId, number> = {
+export const TEST_MARKET_PRICES: Record<TRefiningMaterialId, number> = {
   'aegir-destruction': 2,
   'aegir-guardian': 1,
   'aegir-leapstone': 50,

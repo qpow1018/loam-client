@@ -1,6 +1,6 @@
-import type { TMarketMaterialId } from '@/app/lostark/refining/_type/refining';
+import type { TRefiningMaterialId } from '@/app/lostark/refining/_type/refining';
 
-export const REFINING_MATERIALS: Record<TMarketMaterialId, { name: string }> = {
+export const REFINING_MATERIALS: Record<TRefiningMaterialId, { name: string }> = {
   'fate-shard': { name: '운명의 파편' },
   'aegir-destruction': { name: '운명의 파괴석' },
   'aegir-guardian': { name: '운명의 수호석' },

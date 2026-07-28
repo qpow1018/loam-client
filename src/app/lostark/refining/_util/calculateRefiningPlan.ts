@@ -1,6 +1,6 @@
 import type {
   TBookOption,
-  TMarketMaterialId,
+  TRefiningMaterialId,
   TMaterialExpectation,
   TRefiningAction,
   TRefiningPlan,
@@ -14,7 +14,7 @@ const ARTISAN_PER_SUCCESS_RATE = 100 * ARTISAN_SCALE;
 const NONE: TBookOption = { kind: 'none' };
 const ZERO_USAGE = { owned: 0, purchased: 0, total: 0, gold: 0 };
 
-type TRemaining = Partial<Record<TMarketMaterialId, number>>;
+type TRemaining = Partial<Record<TRefiningMaterialId, number>>;
 type TState = {
   attempts: number;
   failureBonusRate: number;
@@ -23,12 +23,12 @@ type TState = {
 };
 type TScalarValue = { gold: number; action: TRefiningAction };
 type TInventorySlot = {
-  id: TMarketMaterialId;
+  id: TRefiningMaterialId;
   base: number;
   multiplier: number;
 };
 type TUsage = Record<
-  TMarketMaterialId,
+  TRefiningMaterialId,
   { owned: number; purchased: number; total: number; gold: number }
 >;
 
@@ -69,14 +69,14 @@ function tieBreaker(left: TRefiningAction, right: TRefiningAction) {
   );
 }
 
-function bookMaterialId(book: TBookOption): TMarketMaterialId | undefined {
+function bookMaterialId(book: TBookOption): TRefiningMaterialId | undefined {
   return book.kind === 'none' ? undefined : book.materialId;
 }
 
 function optionalConsumptions(
   step: TRefiningPlanInput['step'],
   action: TRefiningAction,
-): readonly { id: TMarketMaterialId; quantity: number }[] {
+): readonly { id: TRefiningMaterialId; quantity: number }[] {
   const bookId = bookMaterialId(action.book);
   return [
     { id: step.breathMaterialId, quantity: action.breathQuantity },
@@ -114,7 +114,7 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
       throw new Error(`Invalid owned quantity: ${id}`);
   }
 
-  const relevantIds = new Set<TMarketMaterialId>([
+  const relevantIds = new Set<TRefiningMaterialId>([
     ...input.step.requiredMaterials.map(({ id }) => id),
     input.step.breathMaterialId,
     ...input.step.books.flatMap((book) => (book.kind === 'none' ? [] : [book.materialId])),
@@ -126,7 +126,7 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
 
   const startArtisan = parseArtisanEnergy(input.artisanEnergy);
   const guaranteeRate = Math.ceil((GUARANTEE_ARTISAN - startArtisan) / ARTISAN_PER_SUCCESS_RATE);
-  const optionalIds = new Set<TMarketMaterialId>([
+  const optionalIds = new Set<TRefiningMaterialId>([
     input.step.breathMaterialId,
     ...input.step.books.flatMap((book) => (book.kind === 'none' ? [] : [book.materialId])),
   ]);
@@ -171,7 +171,7 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
       perAttemptMaximum * maxFailureAttempts,
     );
   }
-  const inventorySlotById = new Map<TMarketMaterialId, TInventorySlot>();
+  const inventorySlotById = new Map<TRefiningMaterialId, TInventorySlot>();
   let inventoryStateCount = 1;
   let initialRemainingCode = 0;
   for (const id of optionalIdList) {

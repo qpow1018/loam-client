@@ -7,8 +7,8 @@ import BoxLoading from '@/components/common/loading/BoxLoading';
 import { REFINING_MATERIALS } from '@/app/lostark/refining/_define/refiningMaterials';
 import type {
   TBookOption,
-  TMarketMaterialId,
-  TMaterialForms,
+  TRefiningMaterialId,
+  TRefiningMaterialInputs,
   TRefiningPlan,
   TRefiningCondition,
   TRefiningRule,
@@ -39,7 +39,7 @@ function actionText(action: { breathQuantity: number; book: TBookOption; success
 
 export default function RefiningResultPanel(props: {
   condition: TRefiningCondition;
-  materials: TMaterialForms;
+  materials: TRefiningMaterialInputs;
   step: TRefiningRule;
   onErrorsChange: (errors: TRefiningInputErrors) => void;
 }) {
@@ -159,12 +159,12 @@ export default function RefiningResultPanel(props: {
 
 function RefiningResult(props: {
   plan: TRefiningPlan;
-  materialIds: readonly TMarketMaterialId[];
+  materialIds: readonly TRefiningMaterialId[];
   step: TRefiningRule;
 }) {
   const { plan, materialIds, step } = props;
   const current = plan.conditionalActions[0];
-  const currentMaterials = new Map<TMarketMaterialId, number>();
+  const currentMaterials = new Map<TRefiningMaterialId, number>();
   for (const material of step.requiredMaterials)
     currentMaterials.set(material.id, (currentMaterials.get(material.id) ?? 0) + material.quantity);
   if (current.action.breathQuantity > 0)

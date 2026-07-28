@@ -1,6 +1,6 @@
 import type {
-  TMarketMaterialId,
-  TMaterialForms,
+  TRefiningMaterialId,
+  TRefiningMaterialInputs,
   TMaterialInputErrors,
   TOwnedMaterial,
   TRefiningCondition,
@@ -28,7 +28,7 @@ export function hasRefiningInputErrors(errors: TRefiningInputErrors) {
 
 export function validateRefiningInput(props: {
   condition: TRefiningCondition;
-  materials: TMaterialForms;
+  materials: TRefiningMaterialInputs;
   step: TRefiningRule;
 }): { errors: TRefiningInputErrors; input?: TValidatedRefiningInput } {
   const { condition, materials, step } = props;
@@ -41,8 +41,8 @@ export function validateRefiningInput(props: {
   if (!/^\d+(?:\.\d{1,6})?$/.test(condition.artisanEnergy) || Number(condition.artisanEnergy) > 100)
     errors.artisanEnergy = '장인의 기운은 0부터 100 사이의 숫자로 입력해 주세요.';
 
-  const prices = {} as Record<TMarketMaterialId, number>;
-  const ownedMaterials: Partial<Record<TMarketMaterialId, TOwnedMaterial>> = {};
+  const prices = {} as Record<TRefiningMaterialId, number>;
+  const ownedMaterials: Partial<Record<TRefiningMaterialId, TOwnedMaterial>> = {};
   for (const id of materialIds) {
     const form = materials[id];
     if (!form) {
