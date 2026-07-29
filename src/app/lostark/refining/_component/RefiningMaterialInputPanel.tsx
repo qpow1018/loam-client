@@ -17,6 +17,16 @@ export default function RefiningMaterialInputPanel(props: {
 }) {
   const { visibleMaterialIds, marketPrices, materials, onMaterialChange } = props;
 
+  function getOrderedVisibleMaterialIds(
+    visibleMaterialIds: readonly TRefiningMaterialId[],
+  ): readonly TRefiningMaterialId[] {
+    if (!visibleMaterialIds.includes('fate-shard')) return visibleMaterialIds;
+
+    return ['fate-shard', ...visibleMaterialIds.filter((id) => id !== 'fate-shard')];
+  }
+
+  const orderedVisibleMaterialIds = getOrderedVisibleMaterialIds(visibleMaterialIds);
+
   return (
     <section className={styles['input-panel']} aria-label="재련 재료">
       <div className={styles['action-row']}>
@@ -26,7 +36,7 @@ export default function RefiningMaterialInputPanel(props: {
       </div>
 
       <div className={styles['material-list']}>
-        {visibleMaterialIds.map((id) => {
+        {orderedVisibleMaterialIds.map((id) => {
           const form = materials[id];
           if (!form) return null;
 
@@ -68,19 +78,17 @@ function RefiningMaterialRow(props: {
       </div>
 
       <div className={styles['material-controls']}>
-        <label className={styles['owned-field']}>
-          <span>보유 수량</span>
-          <span className={styles['quantity-input']}>
-            <input
-              aria-label={`${material.name} 보유 수량`}
-              inputMode="numeric"
-              min="0"
-              value={form.owned}
-              onChange={(event) => onMaterialChange(id, { owned: event.target.value })}
-            />
-            <span aria-hidden="true">개</span>
-          </span>
-        </label>
+        <div className={styles['quantity-input']}>
+          <input
+            aria-label={`${material.name} 보유 수량`}
+            inputMode="numeric"
+            min="0"
+            value={form.owned}
+            onChange={(event) => onMaterialChange(id, { owned: event.target.value })}
+            placeholder="보유 수량"
+          />
+          <span aria-hidden="true">개</span>
+        </div>
 
         <label className={styles['zero-price-field']}>
           <input

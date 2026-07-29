@@ -29,7 +29,8 @@ export function validateRefiningInput(props: {
   for (const id of materialIds) {
     const form = materials[id];
     if (!form) return undefined;
-    const owned = Number(form.owned);
+    const normalizedOwned = form.owned.trim();
+    const owned = normalizedOwned === '' ? 0 : Number(normalizedOwned);
     if (!Number.isInteger(owned) || owned < 0) return undefined;
     ownedMaterials[id] = owned;
   }

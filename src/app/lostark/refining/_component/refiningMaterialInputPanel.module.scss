@@ -7,13 +7,9 @@
     margin-bottom: 12px;
   }
 
-  .material-list {
-    border-top: 1px solid $gray-700;
-  }
-
   .material-row {
     padding: 12px 0;
-    border-bottom: 1px solid $gray-700;
+    border-top: 1px solid $gray-700;
 
     .material-header {
       display: flex;
@@ -50,64 +46,52 @@
       align-items: center;
       gap: 8px;
       margin-top: 8px;
-    }
 
-    .owned-field {
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      .quantity-input {
+        position: relative;
+        display: block;
 
-      >span:first-child {
-        color: $gray-400;
-        font-size: 12px;
-      }
-    }
+        input {
+          box-sizing: border-box;
+          width: 140px;
+          height: 28px;
+          padding: 4px 24px 4px 6px;
+          border: 1px solid $gray-600;
+          border-radius: 4px;
+          background: $gray-900;
+          color: $gray-100;
+          font-size: 12px;
 
-    .quantity-input {
-      position: relative;
-      display: block;
+          &:focus-visible {
+            outline: none;
+            border-color: $mint-400;
+          }
+        }
 
-      input {
-        width: 96px;
-        height: 28px;
-        box-sizing: border-box;
-        padding: 4px 24px 4px 6px;
-        border: 1px solid $gray-600;
-        border-radius: 4px;
-        background: $gray-900;
-        color: $gray-100;
-        font-size: 12px;
-
-        &:focus-visible {
-          border-color: $mint-400;
-          outline: 2px solid rgba($mint-400, 0.3);
-          outline-offset: 1px;
+        >span {
+          position: absolute;
+          top: 50%;
+          right: 7px;
+          color: $gray-400;
+          font-size: 11px;
+          pointer-events: none;
+          transform: translateY(-50%);
         }
       }
 
-      >span {
-        position: absolute;
-        top: 50%;
-        right: 7px;
-        color: $gray-400;
+      .zero-price-field {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        color: $gray-300;
         font-size: 12px;
-        pointer-events: none;
-        transform: translateY(-50%);
-      }
-    }
+        white-space: nowrap;
 
-    .zero-price-field {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      color: $gray-300;
-      font-size: 12px;
-      white-space: nowrap;
-
-      input {
-        width: 16px;
-        height: 16px;
-        margin: 0;
+        input {
+          width: 16px;
+          height: 16px;
+          margin: 0;
+        }
       }
     }
   }

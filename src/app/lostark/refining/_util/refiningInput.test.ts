@@ -37,6 +37,15 @@ describe('validateRefiningInput', () => {
     });
   });
 
+  it('treats an empty owned quantity as zero', () => {
+    const input = validInput();
+    input.materials['aegir-destruction']!.owned = '';
+
+    const validation = validateRefiningInput(input);
+
+    expect(validation).toMatchObject({ ownedMaterials: { 'aegir-destruction': 0 } });
+  });
+
   it('does not create a worker input for invalid condition or material values', () => {
     const input = validInput();
     input.condition.failureBonusRate = '10.001';
