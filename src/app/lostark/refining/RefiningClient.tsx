@@ -2,17 +2,19 @@
 
 import { useState } from 'react';
 
-import RefiningConditionPanel from '@/app/lostark/refining/_component/RefiningConditionPanel';
-import RefiningMaterialInputPanel from '@/app/lostark/refining/_component/RefiningMaterialInputPanel';
-import RefiningResultPanel from '@/app/lostark/refining/_component/RefiningResultPanel';
-import { MOCK_REFINING_MARKET_PRICES } from '@/app/lostark/refining/_define/refiningMarketPrices';
-import { getRefiningRule } from '@/app/lostark/refining/_util/refiningRules';
 import type {
   TRefiningMaterialInput,
   TRefiningMaterialInputs,
   TRefiningMaterialId,
   TRefiningCondition,
 } from '@/app/lostark/refining/_type/refining';
+import { MOCK_REFINING_MARKET_PRICES } from '@/app/lostark/refining/_define/refiningMarketPrices';
+import { getRefiningRule } from '@/app/lostark/refining/_util/refiningRules';
+
+import RefiningConditionPanel from '@/app/lostark/refining/_component/RefiningConditionPanel';
+import RefiningMaterialInputPanel from '@/app/lostark/refining/_component/RefiningMaterialInputPanel';
+import RefiningResultPanel from '@/app/lostark/refining/_component/RefiningResultPanel';
+
 import styles from '@/app/lostark/refining/refiningClient.module.scss';
 
 const INITIAL_CONDITION: TRefiningCondition = {
@@ -26,8 +28,6 @@ const INITIAL_CONDITION: TRefiningCondition = {
 export default function RefiningClient() {
   const [condition, setCondition] = useState<TRefiningCondition>(INITIAL_CONDITION);
   const [materials, setMaterials] = useState<TRefiningMaterialInputs>(getInitialMaterials);
-
-  console.log('materials', materials);
 
   const selectedRefiningRule = getRefiningRule(
     condition.equipmentGrade,
@@ -88,12 +88,12 @@ export default function RefiningClient() {
           onMaterialChange={handleMaterialChange}
         />
 
-        <RefiningResultPanel
+        {/* <RefiningResultPanel
           condition={condition}
           marketPrices={MOCK_REFINING_MARKET_PRICES}
           materials={materials}
           step={selectedRefiningRule}
-        />
+        /> */}
       </div>
     </main>
   );

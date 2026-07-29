@@ -86,15 +86,15 @@ function createRefiningRule(
   const { fromLevel, gold, shilling, ...materialQuantities } = costRule;
 
   const rateBand = getRefiningRateBand(equipmentGrade, fromLevel);
-  console.log('-- rateBand', rateBand);
-
   const requiredMaterials = Object.entries(materialQuantities).map(([id, quantity]) => ({
     id: id as TMaterialAmount['id'],
     quantity: quantity as number,
   }));
+
   const breathMaterialId: TRefiningMaterialId =
     equipmentType === 'weapon' ? 'weapon-breath' : 'armor-breath';
   const books = getBookOptions(equipmentGrade, equipmentType, fromLevel);
+
   const inputMaterialIds = [
     ...requiredMaterials.map((material) => material.id),
     breathMaterialId,
