@@ -82,8 +82,8 @@ export default function RefiningClient() {
         <RefiningConditionPanel condition={condition} onChange={handleConditionChange} />
 
         <RefiningMaterialInputPanel
-          rule={selectedRefiningRule}
           marketPrices={MOCK_REFINING_MARKET_PRICES}
+          visibleMaterialIds={selectedRefiningRule.inputMaterialIds}
           materials={materials}
           onMaterialChange={handleMaterialChange}
         />

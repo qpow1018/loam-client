@@ -1,18 +1,10 @@
 .input-panel {
-  min-width: 0;
-  box-sizing: border-box;
   padding: 16px;
-  border-radius: 6px;
   background: $gray-800;
+  border-radius: $border-radius;
 
   .action-row {
     margin-bottom: 12px;
-  }
-
-  .field-description {
-    margin: 0 0 8px;
-    color: $gray-400;
-    font-size: 12px;
   }
 
   .material-list {
@@ -20,112 +12,103 @@
   }
 
   .material-row {
-    padding: 10px 0;
+    padding: 12px 0;
     border-bottom: 1px solid $gray-700;
-  }
 
-  .material-header,
-  .material-controls {
-    display: flex;
-    align-items: center;
-  }
+    .material-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
 
-  .material-header {
-    justify-content: space-between;
-    gap: 12px;
-  }
+      .image-box {
+        width: 32px;
+        height: 32px;
+        padding: 4px;
+        border: 1px solid $gray-700;
+        border-radius: $border-radius;
 
-  .material-info {
-    display: flex;
-    align-items: center;
-    flex: 1;
-    min-width: 0;
-    gap: 8px;
+        img {
+          display: block;
+          width: 100%;
+        }
+      }
 
-    img {
-      width: 28px;
-      height: 28px;
-      flex: 0 0 auto;
-      object-fit: contain;
-    }
+      .name {
+        font-size: 12px;
+      }
 
-    p {
-      margin: 0;
-      color: $gray-200;
-      font-size: 13px;
-      font-weight: 500;
-      word-break: keep-all;
-    }
-  }
-
-  .market-price {
-    flex: 0 0 auto;
-    color: $gray-400;
-    font-size: 12px;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .material-controls {
-    justify-content: space-between;
-    margin-top: 8px;
-  }
-
-  .owned-field {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-
-    >span:first-child {
-      color: $gray-400;
-      font-size: 12px;
-    }
-  }
-
-  .quantity-input {
-    position: relative;
-    display: block;
-
-    input {
-      width: 96px;
-      height: 28px;
-      box-sizing: border-box;
-      padding: 4px 24px 4px 6px;
-      border: 1px solid $gray-600;
-      border-radius: 4px;
-      background: $gray-900;
-      color: $gray-100;
-      font-size: 12px;
-
-      &:focus-visible {
-        border-color: $mint-400;
-        outline: 2px solid rgba($mint-400, 0.3);
-        outline-offset: 1px;
+      .market-price {
+        font-size: 12px;
+        font-weight: 500;
+        // color: $mint-400; // TODO
+        color: red;
       }
     }
 
-    >span {
-      position: absolute;
-      top: 50%;
-      right: 7px;
-      color: $gray-400;
-      font-size: 12px;
-      pointer-events: none;
-      transform: translateY(-50%);
+    .material-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
     }
-  }
 
-  .zero-price-field {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    color: $gray-300;
-    font-size: 12px;
-    white-space: nowrap;
+    .owned-field {
+      display: flex;
+      align-items: center;
+      gap: 6px;
 
-    input {
-      width: 16px;
-      height: 16px;
-      margin: 0;
+      >span:first-child {
+        color: $gray-400;
+        font-size: 12px;
+      }
+    }
+
+    .quantity-input {
+      position: relative;
+      display: block;
+
+      input {
+        width: 96px;
+        height: 28px;
+        box-sizing: border-box;
+        padding: 4px 24px 4px 6px;
+        border: 1px solid $gray-600;
+        border-radius: 4px;
+        background: $gray-900;
+        color: $gray-100;
+        font-size: 12px;
+
+        &:focus-visible {
+          border-color: $mint-400;
+          outline: 2px solid rgba($mint-400, 0.3);
+          outline-offset: 1px;
+        }
+      }
+
+      >span {
+        position: absolute;
+        top: 50%;
+        right: 7px;
+        color: $gray-400;
+        font-size: 12px;
+        pointer-events: none;
+        transform: translateY(-50%);
+      }
+    }
+
+    .zero-price-field {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: $gray-300;
+      font-size: 12px;
+      white-space: nowrap;
+
+      input {
+        width: 16px;
+        height: 16px;
+        margin: 0;
+      }
     }
   }
 }
