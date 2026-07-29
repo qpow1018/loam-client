@@ -8,11 +8,6 @@ export type TRefiningCondition = {
   artisanEnergy: string;
 };
 
-export type TRefiningRateRule = {
-  initialRate: number;
-  breathMax: number;
-  breathRateBonus: number;
-};
 export type TRefiningMaterialId =
   | 'aegir-destruction'
   | 'aegir-guardian'
@@ -33,6 +28,13 @@ export type TRefiningMaterialId =
   | 'armor-book-19-20'
   | 'weapon-strong-book-19-20'
   | 'armor-strong-book-19-20';
+
+
+export type TRefiningRateRule = {
+  initialRate: number;
+  breathMax: number;
+  breathRateBonus: number;
+};
 
 export type TRefiningCostRule = {
   fromLevel: number;
