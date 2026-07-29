@@ -19,6 +19,7 @@ export default function RefiningMaterialInputPanel(props: {
   const { rule, marketPrices, materials, onMaterialChange } = props;
 
   console.log('rule', rule);
+  console.log('materials', materials);
 
   return (
     <section className={styles['input-panel']} aria-label="재련 재료">

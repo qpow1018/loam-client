@@ -27,6 +27,8 @@ export default function RefiningClient() {
   const [condition, setCondition] = useState<TRefiningCondition>(INITIAL_CONDITION);
   const [materials, setMaterials] = useState<TRefiningMaterialInputs>(getInitialMaterials);
 
+  console.log('materials', materials);
+
   const selectedRefiningRule = getRefiningRule(
     condition.equipmentGrade,
     condition.equipmentType,
