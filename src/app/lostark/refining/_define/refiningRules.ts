@@ -1,25 +1,25 @@
-import type { TRefiningCostRule, TRefiningRateRule } from '@/app/lostark/refining/_type/refining';
+import type { TRefiningCost, TRefiningRateBand } from '@/app/lostark/refining/_type/refining';
 
-export const AEGIR_REFINING_RATE_RULES = {
-  10: { initialRate: 1000, breathMax: 20, breathRateBonus: 50 },
-  12: { initialRate: 500, breathMax: 20, breathRateBonus: 25 },
-  14: { initialRate: 400, breathMax: 20, breathRateBonus: 20 },
-  16: { initialRate: 300, breathMax: 20, breathRateBonus: 15 },
-  18: { initialRate: 300, breathMax: 20, breathRateBonus: 15 },
-  19: { initialRate: 150, breathMax: 25, breathRateBonus: 6 },
-  20: { initialRate: 150, breathMax: 25, breathRateBonus: 6 },
-  21: { initialRate: 100, breathMax: 25, breathRateBonus: 4 },
-  23: { initialRate: 50, breathMax: 50, breathRateBonus: 2 },
-} satisfies Record<number, TRefiningRateRule>;
+export const AEGIR_REFINING_RATE_BANDS = [
+  { fromLevel: 10, initialRate: 1000, breathMax: 20, breathRateBonus: 50 },
+  { fromLevel: 12, initialRate: 500, breathMax: 20, breathRateBonus: 25 },
+  { fromLevel: 14, initialRate: 400, breathMax: 20, breathRateBonus: 20 },
+  { fromLevel: 16, initialRate: 300, breathMax: 20, breathRateBonus: 15 },
+  { fromLevel: 18, initialRate: 300, breathMax: 20, breathRateBonus: 15 },
+  { fromLevel: 19, initialRate: 150, breathMax: 25, breathRateBonus: 6 },
+  { fromLevel: 20, initialRate: 150, breathMax: 25, breathRateBonus: 6 },
+  { fromLevel: 21, initialRate: 100, breathMax: 25, breathRateBonus: 4 },
+  { fromLevel: 23, initialRate: 50, breathMax: 50, breathRateBonus: 2 },
+] satisfies readonly TRefiningRateBand[];
 
-export const SERKA_REFINING_RATE_RULES = {
-  11: { initialRate: 500, breathMax: 20, breathRateBonus: 25 },
-  13: { initialRate: 400, breathMax: 20, breathRateBonus: 20 },
-  16: { initialRate: 300, breathMax: 25, breathRateBonus: 12 },
-  19: { initialRate: 150, breathMax: 25, breathRateBonus: 6 },
-  21: { initialRate: 100, breathMax: 25, breathRateBonus: 4 },
-  23: { initialRate: 50, breathMax: 50, breathRateBonus: 2 },
-} satisfies Record<number, TRefiningRateRule>;
+export const SERKA_REFINING_RATE_BANDS = [
+  { fromLevel: 11, initialRate: 500, breathMax: 20, breathRateBonus: 25 },
+  { fromLevel: 13, initialRate: 400, breathMax: 20, breathRateBonus: 20 },
+  { fromLevel: 16, initialRate: 300, breathMax: 25, breathRateBonus: 12 },
+  { fromLevel: 19, initialRate: 150, breathMax: 25, breathRateBonus: 6 },
+  { fromLevel: 21, initialRate: 100, breathMax: 25, breathRateBonus: 4 },
+  { fromLevel: 23, initialRate: 50, breathMax: 50, breathRateBonus: 2 },
+] satisfies readonly TRefiningRateBand[];
 
 export const AEGIR_WEAPON_COSTS = [
   {
@@ -157,7 +157,7 @@ export const AEGIR_WEAPON_COSTS = [
     gold: 5650,
     shilling: 150000,
   },
-] satisfies readonly TRefiningCostRule[];
+] satisfies readonly TRefiningCost[];
 
 export const AEGIR_ARMOR_COSTS = [
   {
@@ -295,7 +295,7 @@ export const AEGIR_ARMOR_COSTS = [
     gold: 3390,
     shilling: 90000,
   },
-] satisfies readonly TRefiningCostRule[];
+] satisfies readonly TRefiningCost[];
 
 export const SERKA_WEAPON_COSTS = [
   {
@@ -424,7 +424,7 @@ export const SERKA_WEAPON_COSTS = [
     gold: 10700,
     shilling: 60000,
   },
-] satisfies readonly TRefiningCostRule[];
+] satisfies readonly TRefiningCost[];
 
 export const SERKA_ARMOR_COSTS = [
   {
@@ -553,4 +553,4 @@ export const SERKA_ARMOR_COSTS = [
     gold: 6400,
     shilling: 36000,
   },
-] satisfies readonly TRefiningCostRule[];
+] satisfies readonly TRefiningCost[];

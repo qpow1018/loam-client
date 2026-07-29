@@ -4,16 +4,16 @@ import type {
   TEquipmentType,
   TMaterialAmount,
   TRefiningMaterialId,
-  TRefiningCostRule,
-  TRefiningRateRule,
+  TRefiningCost,
+  TRefiningRateBand,
   TRefiningRule,
 } from '@/app/lostark/refining/_type/refining';
 import {
   AEGIR_ARMOR_COSTS,
-  AEGIR_REFINING_RATE_RULES,
+  AEGIR_REFINING_RATE_BANDS,
   AEGIR_WEAPON_COSTS,
   SERKA_ARMOR_COSTS,
-  SERKA_REFINING_RATE_RULES,
+  SERKA_REFINING_RATE_BANDS,
   SERKA_WEAPON_COSTS,
 } from '@/app/lostark/refining/_define/refiningRules';
 
@@ -65,32 +65,28 @@ function getBookOptions(
   return [noBook];
 }
 
-function getRefiningRateRule(
+function getRefiningRateBand(
   equipmentGrade: TEquipmentGrade,
   fromLevel: number,
-): TRefiningRateRule {
-  const rateRules: Readonly<Record<number, TRefiningRateRule>> =
-    equipmentGrade === 'aegir' ? AEGIR_REFINING_RATE_RULES : SERKA_REFINING_RATE_RULES;
-  const ruleLevel = Object.keys(rateRules)
-    .map(Number)
-    .filter((level) => level <= fromLevel)
-    .sort((a, b) => b - a)[0];
+): TRefiningRateBand {
+  const rateBands: readonly TRefiningRateBand[] =
+    equipmentGrade === 'aegir' ? AEGIR_REFINING_RATE_BANDS : SERKA_REFINING_RATE_BANDS;
+  const rateBand = rateBands.findLast((band) => band.fromLevel <= fromLevel);
 
-  if (ruleLevel === undefined)
-    throw new Error(`Unsupported refining rate rule: ${equipmentGrade}/+${fromLevel}`);
+  if (!rateBand) throw new Error(`Unsupported refining rate band: ${equipmentGrade}/+${fromLevel}`);
 
-  return rateRules[ruleLevel];
+  return rateBand;
 }
 
 function createRefiningRule(
   equipmentGrade: TEquipmentGrade,
   equipmentType: TEquipmentType,
-  costRule: TRefiningCostRule,
+  costRule: TRefiningCost,
 ): TRefiningRule {
   const { fromLevel, gold, shilling, ...materialQuantities } = costRule;
 
-  const rateRule = getRefiningRateRule(equipmentGrade, fromLevel);
-  console.log('-- rateRule', rateRule);
+  const rateBand = getRefiningRateBand(equipmentGrade, fromLevel);
+  console.log('-- rateBand', rateBand);
 
   const requiredMaterials = Object.entries(materialQuantities).map(([id, quantity]) => ({
     id: id as TMaterialAmount['id'],
@@ -109,7 +105,9 @@ function createRefiningRule(
     equipmentGrade,
     equipmentType,
     fromLevel,
-    ...rateRule,
+    initialRate: rateBand.initialRate,
+    breathMax: rateBand.breathMax,
+    breathRateBonus: rateBand.breathRateBonus,
     breathMaterialId,
     requiredMaterials,
     inputMaterialIds,

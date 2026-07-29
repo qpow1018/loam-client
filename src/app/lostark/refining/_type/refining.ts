@@ -1,13 +1,3 @@
-export type TEquipmentGrade = 'aegir' | 'serka';
-export type TEquipmentType = 'weapon' | 'armor';
-export type TRefiningCondition = {
-  equipmentGrade: TEquipmentGrade;
-  equipmentType: TEquipmentType;
-  fromLevel: number;
-  failureBonusRate: string;
-  artisanEnergy: string;
-};
-
 export type TRefiningMaterialId =
   | 'aegir-destruction'
   | 'aegir-guardian'
@@ -29,14 +19,24 @@ export type TRefiningMaterialId =
   | 'weapon-strong-book-19-20'
   | 'armor-strong-book-19-20';
 
+export type TEquipmentGrade = 'aegir' | 'serka';
+export type TEquipmentType = 'weapon' | 'armor';
+export type TRefiningCondition = {
+  equipmentGrade: TEquipmentGrade;
+  equipmentType: TEquipmentType;
+  fromLevel: number;
+  failureBonusRate: string;
+  artisanEnergy: string;
+};
 
-export type TRefiningRateRule = {
+export type TRefiningRateBand = {
+  fromLevel: number;
   initialRate: number;
   breathMax: number;
   breathRateBonus: number;
 };
 
-export type TRefiningCostRule = {
+export type TRefiningCost = {
   fromLevel: number;
   gold: number;
   shilling: number;
