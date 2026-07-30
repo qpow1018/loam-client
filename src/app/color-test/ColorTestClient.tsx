@@ -30,7 +30,7 @@ export default function ColorTestClient() {
               <p className={styles['section-kicker']}>PROJECT PALETTES</p>
               <h2>현재 프로젝트 팔레트</h2>
             </div>
-            <p>_variables.scss에 정의한 Mint, Rose, Amber, Gray의 100–900 단계입니다.</p>
+            <p>_variables.scss에 정의한 Mint, Rose, Amber, Violet, Azure, Gray의 100–900 단계입니다.</p>
           </div>
 
           <div className={styles['palette-comparison']}>

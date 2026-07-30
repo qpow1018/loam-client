@@ -86,6 +86,36 @@ export const PROJECT_PALETTES: TColorPalette[] = [
     ],
   },
   {
+    name: 'Violet',
+    description: '영웅·특수 효과처럼 Rose의 오류 의미와 분리해야 하는 보조 강조 팔레트입니다.',
+    colors: [
+      { step: 100, value: '#f3e8ff' },
+      { step: 200, value: '#e9d5ff' },
+      { step: 300, value: '#d8b4fe' },
+      { step: 400, value: '#c084fc' },
+      { step: 500, value: '#a855f7' },
+      { step: 600, value: '#9333ea' },
+      { step: 700, value: '#7e22ce' },
+      { step: 800, value: '#6b21a8' },
+      { step: 900, value: '#581c87' },
+    ],
+  },
+  {
+    name: 'Azure',
+    description: '희귀 등급·정보성 수치처럼 Mint의 긍정 의미와 분리해야 하는 보조 강조 팔레트입니다.',
+    colors: [
+      { step: 100, value: '#e0f2fe' },
+      { step: 200, value: '#bae6fd' },
+      { step: 300, value: '#7dd3fc' },
+      { step: 400, value: '#38bdf8' },
+      { step: 500, value: '#0ea5e9' },
+      { step: 600, value: '#0284c7' },
+      { step: 700, value: '#0369a1' },
+      { step: 800, value: '#075985' },
+      { step: 900, value: '#0c4a6e' },
+    ],
+  },
+  {
     name: 'Gray',
     description: '페이지·카드·테두리·텍스트의 명도 위계를 구성하는 중립 팔레트입니다.',
     colors: [

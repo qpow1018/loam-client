@@ -67,6 +67,42 @@ $amber-accent: $amber-400;
 $amber-ghost: rgba($amber-accent, 0.1);
 $amber-soft: $amber-900;
 
+// Violet
+$violet-100: #f3e8ff;
+$violet-200: #e9d5ff;
+$violet-300: #d8b4fe;
+$violet-400: #c084fc;
+$violet-500: #a855f7;
+$violet-600: #9333ea;
+$violet-700: #7e22ce;
+$violet-800: #6b21a8;
+$violet-900: #581c87;
+
+// Violet semantic
+$violet: $violet-600;
+$violet-light: $violet-300;
+$violet-accent: $violet-400;
+$violet-ghost: rgba($violet-accent, 0.1);
+$violet-soft: $violet-900;
+
+// Azure
+$azure-100: #e0f2fe;
+$azure-200: #bae6fd;
+$azure-300: #7dd3fc;
+$azure-400: #38bdf8;
+$azure-500: #0ea5e9;
+$azure-600: #0284c7;
+$azure-700: #0369a1;
+$azure-800: #075985;
+$azure-900: #0c4a6e;
+
+// Azure semantic
+$azure: $azure-600;
+$azure-light: $azure-200;
+$azure-accent: $azure-400;
+$azure-ghost: rgba($azure-accent, 0.1);
+$azure-soft: $azure-900;
+
 // Text
 $text-primary: #f4f4f6; // gray-100
 $text-secondary: #8f9099; // gray-400
