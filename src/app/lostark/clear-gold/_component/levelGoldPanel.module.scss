@@ -203,7 +203,7 @@
       }
 
       .bound-summary strong {
-        color: #f2d16b;
+        color: $loa-gold;
       }
     }
   }
@@ -288,11 +288,11 @@
       .raid-level,
       .difficulty-chip,
       .raid-gold {
-        color: #f2d16b;
+        color: $loa-gold;
       }
 
       .difficulty-chip {
-        border-color: rgba(#f2d16b, 0.42);
+        border-color: rgba($loa-gold, 0.42);
       }
     }
   }

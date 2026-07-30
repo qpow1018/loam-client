@@ -25,8 +25,8 @@ export default function AbilityStoneSection(props: { characters: TResLostarkMain
     <SummarySection
       title="어빌리티 스톤"
       legendItems={[
-        { label: '5 이상', color: '#34d399' },
-        { label: '4 이하', color: '#62636c' },
+        { label: '5 이상', tier: 'high' },
+        { label: '4 이하', tier: 'low' },
       ]}
       className={styles['ability-stone-section']}
     >

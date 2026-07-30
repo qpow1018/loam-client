@@ -2,10 +2,11 @@ import type { ReactNode } from 'react';
 
 import styles from './summarySection.module.scss';
 
+type TSummaryLegendTier = 'high' | 'middle' | 'low';
+
 type TSummaryLegendItem = {
   label: string;
-  color: string;
-};
+} & ({ tier: TSummaryLegendTier; color?: never } | { color: string; tier?: never });
 
 export default function SummarySection(props: {
   title: string;
@@ -35,7 +36,12 @@ function SummaryLegend(props: { items: TSummaryLegendItem[] }) {
     <div className={styles['section-legend']}>
       {props.items.map((item) => (
         <span key={item.label} className={styles['legend-item']}>
-          <span className={styles['legend-dot']} style={{ backgroundColor: item.color }} />
+          <span
+            className={
+              item.tier ? `${styles['legend-dot']} ${styles[item.tier]}` : styles['legend-dot']
+            }
+            style={item.color ? { backgroundColor: item.color } : undefined}
+          />
           {item.label}
         </span>
       ))}

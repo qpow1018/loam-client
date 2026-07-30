@@ -50,12 +50,11 @@ $amber-900: #78350f;
 $text-primary: #f4f4f6; // gray-100
 $text-secondary: #8f9099; // gray-400
 
-// Chip
+// Feature
 $chip-perfect-text: #ffd78a;
 $chip-perfect-bg: linear-gradient(135deg, #3a250c, #7a3a10);
-$chip-perfect-shadow:
-  inset 0 0 0 1px rgba(255, 191, 63, 0.55),
-  0 0 8px rgba(255, 144, 45, 0.18);
+$chip-perfect-shadow: inset 0 0 0 1px rgba(255, 191, 63, 0.55),
+    0 0 8px rgba(255, 144, 45, 0.18);
 $chip-high-text: $gray-900;
 $chip-high-bg: linear-gradient(180deg, $amber-100 0%, $amber-300 100%);
 $chip-middle-text: $gray-900;
@@ -63,6 +62,7 @@ $chip-middle-bg: linear-gradient(180deg, #cbd5e1 0%, #94a3b8 100%);
 $chip-low-text: $text-primary;
 $chip-low-bg: $gray-600;
 $chip-none-text: $text-secondary;
+$loa-gold: $amber-400;
 
 // Overlay
 $bg-overlay: rgba(0, 0, 0, 0.5);

@@ -31,7 +31,6 @@ type TColorPalette = {
 
 const SOURCE = {
   header: 'src/components/common/header/header.module.scss',
-  itemSlot: 'src/components/lostark/itemSlot/itemSlot.module.scss',
   quality: 'src/utils/lostark.ts',
   summary: 'src/app/lostark/my-characters/_component/specSummaryPanel/',
   mainCharacter: 'src/app/lostark/my-characters/_component/mainCharactersPanel/section/',
@@ -109,40 +108,6 @@ export const COLOR_AUDIT_SECTIONS: TColorAuditSection[] = [
     description: '_variables.scss 외에 코드와 SCSS에 직접 적힌 색상입니다.',
     items: [
       {
-        expression: '#f2d16b',
-        swatch: '#f2d16b',
-        sources: [SOURCE.clearGold],
-        decision: {
-          kind: 'domain-token',
-          label: 'Lost Ark 도메인 토큰 후보',
-          reason: '귀속 골드라는 게임 도메인 의미가 명확합니다.',
-          tokenName: '$lostark-gold-bound',
-        },
-      },
-      {
-        expression: 'rgba(#f2d16b, 0.42)',
-        swatch: 'rgba(242, 209, 107, 0.42)',
-        sources: [SOURCE.clearGold],
-        decision: {
-          kind: 'domain-token',
-          label: 'Lost Ark 도메인 토큰 후보',
-          reason: '기본색 토큰을 만든 뒤 알파값은 사용처에서 합성하는 편이 자연스럽습니다.',
-          tokenName: 'rgba($lostark-gold-bound, 0.42)',
-        },
-      },
-      {
-        expression: 'red',
-        swatch: 'red',
-        sources: [SOURCE.material],
-        note: 'TODO 주석 옆의 실제 CSS 선언',
-        decision: {
-          kind: 'fix',
-          label: '수정 필요',
-          reason: '인접한 TODO가 의도한 선택 상태 색상과 현재 선언이 다릅니다.',
-          tokenName: '$mint-400',
-        },
-      },
-      {
         expression: '#15181d',
         swatch: '#15181d',
         sources: [
@@ -157,80 +122,12 @@ export const COLOR_AUDIT_SECTIONS: TColorAuditSection[] = [
           tokenName: '$lostark-character-surface',
         },
       },
-      {
-        expression: '#e95826 · #ffbf3f · #ff4b16 · #7e110d',
-        swatch: 'linear-gradient(135deg, #ffbf3f 0%, #ff4b16 48%, #7e110d 100%)',
-        sources: [`${SOURCE.mainCharacter}engravingSection.module.scss`],
-        decision: {
-          kind: 'keep-local',
-          label: '로컬 시각 레시피 유지',
-          reason:
-            '각인 배지 하나의 다단 gradient라 색 토큰 분리보다 해당 컴포넌트 안에서 읽는 편이 낫습니다.',
-        },
-      },
-      {
-        expression: 'rgba(0, 0, 0, 0.35)',
-        swatch: 'rgba(0, 0, 0, 0.35)',
-        sources: [`${SOURCE.mainCharacter}engravingSection.module.scss`],
-        decision: {
-          kind: 'keep-local',
-          label: '로컬 시각 레시피 유지',
-          reason: '각인 아이콘 marker의 외곽 그림자입니다.',
-        },
-      },
-      {
-        expression: '#34d399',
-        swatch: '#34d399',
-        sources: [
-          `${SOURCE.summary}AbilityStoneSection.tsx`,
-          `${SOURCE.summary}GearSection.tsx`,
-          `${SOURCE.summary}ArkGridSummarySection.tsx`,
-          `${SOURCE.summary}ArkPassiveSummarySection.tsx`,
-          `${SOURCE.summary}EngravingSummarySection.tsx`,
-        ],
-        note: '스펙 요약표의 상위 티어 범례 점',
-        decision: {
-          kind: 'domain-token',
-          label: 'Lost Ark 도메인 토큰 후보',
-          reason: '여러 요약표가 공통으로 사용하는 상위 티어 단색 표기입니다.',
-          tokenName: '$summary-tier-high',
-        },
-      },
-      {
-        expression: '#94a3b8',
-        swatch: '#94a3b8',
-        sources: [
-          `${SOURCE.summary}GearSection.tsx`,
-          `${SOURCE.summary}ArkGridSummarySection.tsx`,
-          `${SOURCE.summary}ArkPassiveSummarySection.tsx`,
-          `${SOURCE.summary}EngravingSummarySection.tsx`,
-        ],
-        note: '스펙 요약표의 중간 티어 범례 점',
-        decision: {
-          kind: 'domain-token',
-          label: 'Lost Ark 도메인 토큰 후보',
-          reason: '여러 요약표가 공통으로 사용하는 중간 티어 단색 표기입니다.',
-          tokenName: '$summary-tier-middle',
-        },
-      },
-      {
-        expression: '#62636c',
-        swatch: '#62636c',
-        sources: [
-          SOURCE.quality,
-          `${SOURCE.summary}AbilityStoneSection.tsx`,
-          `${SOURCE.summary}GearSection.tsx`,
-          `${SOURCE.summary}ArkGridSummarySection.tsx`,
-          `${SOURCE.summary}ArkPassiveSummarySection.tsx`,
-          `${SOURCE.summary}EngravingSummarySection.tsx`,
-        ],
-        decision: {
-          kind: 'keep-local',
-          label: '의미별 분리 유지',
-          reason:
-            '품질 기본색과 요약 하위 티어가 우연히 같은 값입니다. 하나의 토큰으로 합치지 않습니다.',
-        },
-      },
+    ],
+  },
+  {
+    title: 'Lost Ark 등급 색상 체계',
+    description: '아이템·효과·품질에 걸쳐 나타나는 게임 등급 위계 색상을 함께 검토합니다.',
+    items: [
       {
         expression: '#fe9600 · #ce43fc · #00b5ff',
         swatch: 'linear-gradient(90deg, #fe9600, #ce43fc, #00b5ff)',
@@ -251,19 +148,6 @@ export const COLOR_AUDIT_SECTIONS: TColorAuditSection[] = [
           label: 'Lost Ark 도메인 토큰 후보',
           reason: 'TypeScript에서 계산해 반환하는 장비 품질 배경색입니다.',
           tokenName: 'LOSTARK_QUALITY_BACKGROUND_COLORS',
-        },
-      },
-      {
-        expression:
-          '#111b27 · #113f5f · #21142c · #520f68 · #311d01 · #b16800 · #2e1708 · #ab4102 · #433829 · #f5dfab · #0c2e2c · #2faba8',
-        swatch: 'linear-gradient(135deg, #111b27, #113f5f)',
-        sources: [SOURCE.itemSlot],
-        note: '장비 등급별 여섯 gradient',
-        decision: {
-          kind: 'keep-local',
-          label: '공용 컴포넌트 내부 유지',
-          reason:
-            'ItemSlot 자체가 재사용 경계입니다. 12개 gradient stop을 전역 Sass 토큰으로 늘릴 필요는 없습니다.',
         },
       },
     ],

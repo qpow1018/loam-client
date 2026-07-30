@@ -13,9 +13,9 @@ export default function EngravingSummarySection(props: { characters: TResLostark
     <SummarySection
       title="각인"
       legendItems={[
-        { label: '4레벨', color: '#34d399' },
-        { label: '1~3레벨', color: '#94a3b8' },
-        { label: '0레벨', color: '#62636c' },
+        { label: '4레벨', tier: 'high' },
+        { label: '1~3레벨', tier: 'middle' },
+        { label: '0레벨', tier: 'low' },
       ]}
       className={styles['engraving-summary-section']}
     >

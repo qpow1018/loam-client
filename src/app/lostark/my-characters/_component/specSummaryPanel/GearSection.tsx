@@ -24,9 +24,9 @@ export default function GearSection(props: { characters: TResLostarkMainCharacte
     <SummarySection
       title="장비 품질"
       legendItems={[
-        { label: '100', color: '#34d399' },
-        { label: '95+', color: '#94a3b8' },
-        { label: '그 아래', color: '#62636c' },
+        { label: '100', tier: 'high' },
+        { label: '95+', tier: 'middle' },
+        { label: '그 아래', tier: 'low' },
       ]}
       className={styles['gear-section']}
     >
