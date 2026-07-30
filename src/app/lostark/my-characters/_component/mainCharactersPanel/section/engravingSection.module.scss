@@ -48,10 +48,9 @@
       border-radius: $border-radius;
 
       &.max {
-        color: #ffd78a;
-        background: linear-gradient(135deg, #3a250c, #7a3a10);
-        border-color: rgba(255, 191, 63, 0.55);
-        box-shadow: 0 0 8px rgba(255, 144, 45, 0.18);
+        color: $chip-perfect-text;
+        background: $chip-perfect-bg;
+        box-shadow: $chip-perfect-shadow;
       }
 
       span {

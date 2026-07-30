@@ -88,9 +88,9 @@
     height: 32px;
     font-size: 12px;
     font-weight: 700;
-    color: #92400e;
-    background-color: #fef3c7;
-    border: 1px solid rgba(146, 64, 14, 0.15);
+    color: $amber-800;
+    background-color: $amber-100;
+    border: 1px solid rgba($amber-800, 0.15);
     border-radius: 999px;
     box-shadow: 0 2px 8px rgba($black, 0.18);
     text-decoration: none;
@@ -98,15 +98,15 @@
     flex-shrink: 0;
 
     &:hover {
-      background-color: #fde68a;
+      background-color: $amber-200;
     }
 
     .backup-reminder-dot {
       width: 7px;
       height: 7px;
-      background-color: #f59e0b;
+      background-color: $amber-500;
       border-radius: 50%;
-      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+      box-shadow: 0 0 0 3px rgba($amber-500, 0.18);
     }
   }
 }

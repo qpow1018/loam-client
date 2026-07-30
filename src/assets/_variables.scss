@@ -2,10 +2,6 @@
 $white: #fff;
 $black: #000;
 
-// Text
-$text-primary: #f4f4f6; // gray-100
-$text-secondary: #8f9099; // gray-400
-
 // Gray
 $gray-100: #f4f4f6;
 $gray-200: #e2e2e6;
@@ -39,6 +35,35 @@ $mint-700: #047857;
 $mint-800: #065f46;
 $mint-900: #14532d;
 
+// Amber
+$amber-100: #fef3c7;
+$amber-200: #fde68a;
+$amber-300: #fcd34d;
+$amber-400: #fbbf24;
+$amber-500: #f59e0b;
+$amber-600: #d97706;
+$amber-700: #b45309;
+$amber-800: #92400e;
+$amber-900: #78350f;
+
+// Text
+$text-primary: #f4f4f6; // gray-100
+$text-secondary: #8f9099; // gray-400
+
+// Chip
+$chip-perfect-text: #ffd78a;
+$chip-perfect-bg: linear-gradient(135deg, #3a250c, #7a3a10);
+$chip-perfect-shadow:
+  inset 0 0 0 1px rgba(255, 191, 63, 0.55),
+  0 0 8px rgba(255, 144, 45, 0.18);
+$chip-high-text: $gray-900;
+$chip-high-bg: linear-gradient(180deg, $amber-100 0%, $amber-300 100%);
+$chip-middle-text: $gray-900;
+$chip-middle-bg: linear-gradient(180deg, #cbd5e1 0%, #94a3b8 100%);
+$chip-low-text: $text-primary;
+$chip-low-bg: $gray-600;
+$chip-none-text: $text-secondary;
+
 // Overlay
 $bg-overlay: rgba(0, 0, 0, 0.5);
 
@@ -55,6 +80,7 @@ $loa-summary-label-cell-width: 140px;
 // Common
 $font-family: var(--font-noto-sans-kr), sans-serif;
 $border-radius: 6px;
+$shadow-popover: 0 8px 16px rgba(0, 0, 0, 0.3);
 $transition: 0.25s ease;
 
 // Z-index

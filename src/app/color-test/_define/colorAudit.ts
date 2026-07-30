@@ -20,6 +20,15 @@ export type TColorAuditSection = {
   decision?: TColorDecision;
 };
 
+type TColorPalette = {
+  name: string;
+  description: string;
+  colors: Array<{
+    step: number;
+    value: string;
+  }>;
+};
+
 const SOURCE = {
   header: 'src/components/common/header/header.module.scss',
   itemSlot: 'src/components/lostark/itemSlot/itemSlot.module.scss',
@@ -29,75 +38,76 @@ const SOURCE = {
   clearGold: 'src/app/lostark/clear-gold/_component/levelGoldPanel.module.scss',
   material: 'src/app/lostark/refining/_component/refiningMaterialInputPanel.module.scss',
   manifest: 'src/app/manifest.ts',
-  fixedRules: 'src/app/lostark/refining/fixed-rules.html',
 } as const;
+
+export const PROJECT_PALETTES: TColorPalette[] = [
+  {
+    name: 'Mint',
+    description: '현재 활성·성공·긍정 상태에 사용하는 기본 강조 팔레트입니다.',
+    colors: [
+      { step: 100, value: '#e6fffa' },
+      { step: 200, value: '#bbf7d0' },
+      { step: 300, value: '#86efac' },
+      { step: 400, value: '#4ade80' },
+      { step: 500, value: '#10b981' },
+      { step: 600, value: '#059669' },
+      { step: 700, value: '#047857' },
+      { step: 800, value: '#065f46' },
+      { step: 900, value: '#14532d' },
+    ],
+  },
+  {
+    name: 'Rose',
+    description: '현재 오류·위험·제거 같은 부정 상태에 사용하는 강조 팔레트입니다.',
+    colors: [
+      { step: 100, value: '#fff1f2' },
+      { step: 200, value: '#ffe4e6' },
+      { step: 300, value: '#fca5a5' },
+      { step: 400, value: '#fb7185' },
+      { step: 500, value: '#f43f5e' },
+      { step: 600, value: '#e11d48' },
+      { step: 700, value: '#be123c' },
+      { step: 800, value: '#9f1239' },
+      { step: 900, value: '#4c0519' },
+    ],
+  },
+  {
+    name: 'Amber',
+    description: '주의·안내처럼 오류보다 낮은 우선순위의 상태에 사용하는 강조 팔레트입니다.',
+    colors: [
+      { step: 100, value: '#fef3c7' },
+      { step: 200, value: '#fde68a' },
+      { step: 300, value: '#fcd34d' },
+      { step: 400, value: '#fbbf24' },
+      { step: 500, value: '#f59e0b' },
+      { step: 600, value: '#d97706' },
+      { step: 700, value: '#b45309' },
+      { step: 800, value: '#92400e' },
+      { step: 900, value: '#78350f' },
+    ],
+  },
+  {
+    name: 'Gray',
+    description: '페이지·카드·테두리·텍스트의 명도 위계를 구성하는 중립 팔레트입니다.',
+    colors: [
+      { step: 100, value: '#f4f4f6' },
+      { step: 200, value: '#e2e2e6' },
+      { step: 300, value: '#c4c4cc' },
+      { step: 400, value: '#8f9099' },
+      { step: 500, value: '#62636c' },
+      { step: 600, value: '#45464e' },
+      { step: 700, value: '#34343b' },
+      { step: 800, value: '#27272a' },
+      { step: 900, value: '#18181b' },
+    ],
+  },
+];
 
 export const COLOR_AUDIT_SECTIONS: TColorAuditSection[] = [
   {
     title: '앱 UI 정적 리터럴',
     description: '_variables.scss 외에 코드와 SCSS에 직접 적힌 색상입니다.',
     items: [
-      {
-        expression: '#92400e',
-        swatch: '#92400e',
-        sources: [SOURCE.header],
-        decision: {
-          kind: 'keep-local',
-          label: '컴포넌트 로컬 유지',
-          reason: '백업 알림 배너 한 곳의 전용 대비색이라 공용 팔레트로 올릴 근거가 부족합니다.',
-        },
-      },
-      {
-        expression: '#fef3c7',
-        swatch: '#fef3c7',
-        sources: [SOURCE.header],
-        decision: {
-          kind: 'keep-local',
-          label: '컴포넌트 로컬 유지',
-          reason: '백업 알림 배너 한 곳의 전용 배경색입니다.',
-        },
-      },
-      {
-        expression: '#fde68a',
-        swatch: '#fde68a',
-        sources: [SOURCE.header],
-        decision: {
-          kind: 'keep-local',
-          label: '컴포넌트 로컬 유지',
-          reason: '백업 알림 배너 한 곳의 전용 테두리색입니다.',
-        },
-      },
-      {
-        expression: '#f59e0b',
-        swatch: '#f59e0b',
-        sources: [SOURCE.header, `${SOURCE.summary}_shared/cellValueChip.module.scss`],
-        decision: {
-          kind: 'keep-local',
-          label: '통합하지 않음',
-          reason:
-            '같은 실제 색상이지만 경고와 장비 요약 강조라는 의미가 달라 하나의 의미 토큰으로 묶으면 안 됩니다.',
-        },
-      },
-      {
-        expression: 'rgba(146, 64, 14, 0.15)',
-        swatch: 'rgba(146, 64, 14, 0.15)',
-        sources: [SOURCE.header],
-        decision: {
-          kind: 'keep-local',
-          label: '컴포넌트 로컬 유지',
-          reason: '백업 알림의 전용 반투명 테두리입니다.',
-        },
-      },
-      {
-        expression: 'rgba(245, 158, 11, 0.18 · 0.32)',
-        swatch: 'rgba(245, 158, 11, 0.32)',
-        sources: [SOURCE.header, `${SOURCE.summary}_shared/cellValueChip.module.scss`],
-        decision: {
-          kind: 'keep-local',
-          label: '통합하지 않음',
-          reason: '사용 위치별 의미가 달라 알파값까지 공용화하지 않습니다.',
-        },
-      },
       {
         expression: '#f2d16b',
         swatch: '#f2d16b',
@@ -159,68 +169,48 @@ export const COLOR_AUDIT_SECTIONS: TColorAuditSection[] = [
         },
       },
       {
-        expression: '#ffd78a · #3a250c · #7a3a10',
-        swatch: 'linear-gradient(135deg, #3a250c, #7a3a10)',
+        expression: 'rgba(0, 0, 0, 0.35)',
+        swatch: 'rgba(0, 0, 0, 0.35)',
         sources: [`${SOURCE.mainCharacter}engravingSection.module.scss`],
         decision: {
           kind: 'keep-local',
           label: '로컬 시각 레시피 유지',
-          reason: '각인 배지의 전용 보조 gradient입니다.',
+          reason: '각인 아이콘 marker의 외곽 그림자입니다.',
         },
       },
       {
-        expression: 'rgba(0, 0, 0, 0.35) · rgba(255, 191, 63, 0.55) · rgba(255, 144, 45, 0.18)',
-        swatch: 'rgba(255, 144, 45, 0.45)',
-        sources: [`${SOURCE.mainCharacter}engravingSection.module.scss`],
-        decision: {
-          kind: 'keep-local',
-          label: '로컬 시각 레시피 유지',
-          reason: '각인 배지 효과를 구성하는 그림자와 하이라이트입니다.',
-        },
-      },
-      {
-        expression: '#fbbf24 · #f59e0b',
-        swatch: 'linear-gradient(180deg, #fbbf24, #f59e0b)',
-        sources: [`${SOURCE.summary}_shared/cellValueChip.module.scss`],
-        decision: {
-          kind: 'keep-local',
-          label: '로컬 시각 레시피 유지',
-          reason: '요약 칩 한 종류의 gradient이며 경고색과도 실제 값이 겹칩니다.',
-        },
-      },
-      {
-        expression: '#a7f3d0 · #34d399',
-        swatch: 'linear-gradient(180deg, #a7f3d0, #34d399)',
+        expression: '#34d399',
+        swatch: '#34d399',
         sources: [
-          `${SOURCE.summary}_shared/cellValueChip.module.scss`,
           `${SOURCE.summary}AbilityStoneSection.tsx`,
           `${SOURCE.summary}GearSection.tsx`,
           `${SOURCE.summary}ArkGridSummarySection.tsx`,
           `${SOURCE.summary}ArkPassiveSummarySection.tsx`,
           `${SOURCE.summary}EngravingSummarySection.tsx`,
         ],
+        note: '스펙 요약표의 상위 티어 범례 점',
         decision: {
           kind: 'domain-token',
           label: 'Lost Ark 도메인 토큰 후보',
-          reason: '상위 티어 요약값과 칩에서 함께 쓰이는 등급 의미가 있습니다.',
-          tokenName: '$lostark-summary-tier-high / $lostark-summary-tier-high-soft',
+          reason: '여러 요약표가 공통으로 사용하는 상위 티어 단색 표기입니다.',
+          tokenName: '$summary-tier-high',
         },
       },
       {
-        expression: '#cbd5e1 · #94a3b8',
-        swatch: 'linear-gradient(180deg, #cbd5e1, #94a3b8)',
+        expression: '#94a3b8',
+        swatch: '#94a3b8',
         sources: [
-          `${SOURCE.summary}_shared/cellValueChip.module.scss`,
           `${SOURCE.summary}GearSection.tsx`,
           `${SOURCE.summary}ArkGridSummarySection.tsx`,
           `${SOURCE.summary}ArkPassiveSummarySection.tsx`,
           `${SOURCE.summary}EngravingSummarySection.tsx`,
         ],
+        note: '스펙 요약표의 중간 티어 범례 점',
         decision: {
           kind: 'domain-token',
           label: 'Lost Ark 도메인 토큰 후보',
-          reason: '중간 티어 요약값과 칩에서 함께 쓰이는 등급 의미가 있습니다.',
-          tokenName: '$lostark-summary-tier-mid / $lostark-summary-tier-mid-soft',
+          reason: '여러 요약표가 공통으로 사용하는 중간 티어 단색 표기입니다.',
+          tokenName: '$summary-tier-middle',
         },
       },
       {
@@ -276,25 +266,11 @@ export const COLOR_AUDIT_SECTIONS: TColorAuditSection[] = [
             'ItemSlot 자체가 재사용 경계입니다. 12개 gradient stop을 전역 Sass 토큰으로 늘릴 필요는 없습니다.',
         },
       },
-      {
-        expression: 'rgba(0, 0, 0, 0.3)',
-        swatch: 'rgba(0, 0, 0, 0.3)',
-        sources: [
-          'src/components/common/dropdownMenu/dropdownMenu.module.scss',
-          'src/components/common/form/select.module.scss',
-        ],
-        decision: {
-          kind: 'common-token',
-          label: '공용 토큰 후보',
-          reason: '두 공용 오버레이 컴포넌트에서 같은 그림자 값이 반복됩니다.',
-          tokenName: '$shadow-popover',
-        },
-      },
     ],
   },
   {
-    title: '토큰 기반 rgba 조합',
-    description: '눈에는 보이지만 기존 Sass 토큰을 알파 합성한 값입니다.',
+    title: '토큰 기반 색상 및 rgba 조합',
+    description: '눈에는 보이지만 기존 Sass 토큰 또는 그 알파 합성으로 구성한 값입니다.',
     decision: {
       kind: 'keep-local',
       label: '현 상태 유지',
@@ -302,6 +278,21 @@ export const COLOR_AUDIT_SECTIONS: TColorAuditSection[] = [
         '기본 색상은 이미 토큰입니다. 알파값은 각 상태·표면의 맥락을 담으므로 별도 색상 토큰으로 분리하지 않습니다.',
     },
     items: [
+      {
+        expression: 'rgba($amber-800, 0.15) · rgba($amber-500, 0.18)',
+        swatch: 'rgba(245, 158, 11, 0.18)',
+        sources: [SOURCE.header],
+        note: '백업 알림의 테두리와 상태 점 ring',
+      },
+      {
+        expression: '$shadow-popover',
+        swatch: 'rgba(0, 0, 0, 0.3)',
+        sources: [
+          'src/components/common/dropdownMenu/dropdownMenu.module.scss',
+          'src/components/common/form/select.module.scss',
+        ],
+        note: '0 8px 16px rgba(0, 0, 0, 0.3) 공용 떠 있는 메뉴 그림자',
+      },
       {
         expression: 'rgba($white, 0.35)',
         swatch: 'rgba(255, 255, 255, 0.35)',
@@ -389,138 +380,6 @@ export const COLOR_AUDIT_SECTIONS: TColorAuditSection[] = [
         swatch: '#18181b',
         sources: [SOURCE.manifest],
         note: 'background_color, theme_color',
-      },
-    ],
-  },
-  {
-    title: '정적 SVG 자산',
-    description: '아이콘 내부의 fill, stroke, gradient stop 값입니다.',
-    decision: {
-      kind: 'keep-external',
-      label: '자산 내부 유지',
-      reason: 'SVG 자산은 Sass 토큰 범위 밖입니다. 자산별 일러스트레이션 팔레트로 관리합니다.',
-    },
-    items: [
-      {
-        expression: '#047857 · #064e3b · #4ade80 · #f4f4f6',
-        swatch: 'linear-gradient(135deg, #047857, #064e3b)',
-        sources: ['public/icons/maplestory/task-daily.svg'],
-      },
-      {
-        expression: '#6d28d9 · #3b0764 · #a78bfa · #f4f4f6',
-        swatch: 'linear-gradient(135deg, #6d28d9, #3b0764)',
-        sources: ['public/icons/maplestory/task-monthly.svg'],
-      },
-      {
-        expression: '#be123c · #881337 · #fb7185 · #f4f4f6',
-        swatch: 'linear-gradient(135deg, #be123c, #881337)',
-        sources: ['public/icons/maplestory/task-weekly.svg'],
-      },
-      {
-        expression: '#000 · black',
-        swatch: '#000',
-        sources: ['public/next.svg', 'public/vercel.svg'],
-      },
-    ],
-  },
-  {
-    title: '단독 fixed-rules HTML',
-    description: '앱 Sass 토큰을 상속하지 않는 재련 규칙 문서의 독립 스타일입니다.',
-    decision: {
-      kind: 'keep-external',
-      label: '독립 문서로 유지',
-      reason: '단독 HTML과 print media를 함께 가지므로 앱 전역 Sass 토큰으로 옮기지 않습니다.',
-    },
-    items: [
-      {
-        expression: '#0d1014 · #151a20 · #1b2129 · #202832 · #2a3540 · #3b4855',
-        swatch: '#151a20',
-        sources: [SOURCE.fixedRules],
-      },
-      {
-        expression: '#edf2f4 · #9cabb4 · #69e0c1 · #ff7f9f · #f5c36b · #79b8ff',
-        swatch: 'linear-gradient(90deg, #69e0c1, #ff7f9f, #f5c36b, #79b8ff)',
-        sources: [SOURCE.fixedRules],
-      },
-      {
-        expression: '#0b0e11 · #d7c39e · #8ea8ff · #202730 · #161b21 · #1a2428',
-        swatch: '#202730',
-        sources: [SOURCE.fixedRules],
-      },
-      {
-        expression: '#fff · #f4f5f6 · #ccd1d5 · #adb5bd · #111 · #525a61',
-        swatch: '#f4f5f6',
-        sources: [SOURCE.fixedRules],
-        note: 'print media',
-      },
-      {
-        expression:
-          'rgba(0, 0, 0, 0.24) · rgba(13, 16, 20, 0.32 · 0.36 · 0.38 · 0.88 · 0.92) · rgba(21, 26, 32, 0.78)',
-        swatch: 'rgba(13, 16, 20, 0.88)',
-        sources: [SOURCE.fixedRules],
-      },
-      {
-        expression:
-          'rgba(105, 224, 193, 0.055 · 0.08 · 0.12 · 0.35 · 0.38 · 0.42 · 0.5) · rgba(255, 127, 159, 0.07 · 0.12)',
-        swatch: 'rgba(105, 224, 193, 0.35)',
-        sources: [SOURCE.fixedRules],
-      },
-      {
-        expression: 'rgba(121, 184, 255, 0.11 · 0.38) · rgba(245, 195, 107, 0.12 · 0.32 · 0.4)',
-        swatch: 'rgba(121, 184, 255, 0.38)',
-        sources: [SOURCE.fixedRules],
-      },
-      {
-        expression: 'rgba(27, 33, 41, 0.96) · rgba(19, 24, 30, 0.96)',
-        swatch: 'linear-gradient(145deg, rgba(27, 33, 41, 0.96), rgba(19, 24, 30, 0.96))',
-        sources: [SOURCE.fixedRules],
-      },
-    ],
-  },
-  {
-    title: 'CSS 의미값 (스와치 없음)',
-    description: '색 자체가 아니라 브라우저 계산 또는 상속을 지시합니다.',
-    decision: {
-      kind: 'keep-external',
-      label: 'CSS 의미값 유지',
-      reason: 'transparent와 inherit은 색상 팔레트가 아니라 CSS 동작입니다.',
-    },
-    items: [
-      {
-        expression: 'transparent',
-        sources: [
-          'src/components/common/button/button.module.scss',
-          'src/components/common/buttonGroup/buttonGroup.module.scss',
-          'src/components/common/dropdownMenu/dropdownMenu.module.scss',
-          'src/components/common/form/checkbox.module.scss',
-          'src/components/common/form/select.module.scss',
-          'src/components/common/form/textInput.module.scss',
-          'src/components/common/form/textarea.module.scss',
-          'src/components/common/loading/boxLoading.module.scss',
-          'src/components/common/loading/fixedLoading.module.scss',
-          'src/components/common/tabs/tabs.module.scss',
-          'src/app/login/login.module.scss',
-          'src/app/lostark/all-characters/_component/characterList.module.scss',
-          'src/app/lostark/my-characters/_component/mainCharacterOrderModal.module.scss',
-          'src/app/lostark/my-characters/_component/mainCharactersPanel/section/engravingSection.module.scss',
-          'src/app/lostark/loado/_component/loadoTable/iconPickerModal/iconPickerModal.module.scss',
-          'src/app/lostark/my-characters/_component/specSummaryPanel/_shared/cellValueChip.module.scss',
-          'src/app/settings/_component/settingsSection.module.scss',
-          'src/app/lostark/refining/_component/refiningMaterialInputPanel.module.scss',
-          'src/app/ui-test/uiTestClient.module.scss',
-          'src/app/maplestory/my-characters/_component/characterList.module.scss',
-          'src/app/maplestory/union/_component/unionCharacterRow.module.scss',
-          SOURCE.fixedRules,
-        ],
-      },
-      {
-        expression: 'inherit',
-        sources: [
-          'src/app/lostark/reference-sites/referenceSites.module.scss',
-          'src/components/common/form/textInput.module.scss',
-          'src/components/common/form/textarea.module.scss',
-          SOURCE.fixedRules,
-        ],
       },
     ],
   },

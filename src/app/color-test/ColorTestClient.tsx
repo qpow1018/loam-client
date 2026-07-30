@@ -2,6 +2,7 @@ import LostarkHeader from '@/components/lostark/header/LostarkHeader';
 
 import {
   COLOR_AUDIT_SECTIONS,
+  PROJECT_PALETTES,
   RUNTIME_COLOR_TRACE,
   type TColorAuditSection,
 } from './_define/colorAudit';
@@ -11,16 +12,45 @@ import styles from './colorTestClient.module.scss';
 export default function ColorTestClient() {
   return (
     <div className={styles['color-test-page']}>
-      <LostarkHeader isBackupReminderVisible={false} />
+      <LostarkHeader />
 
       <main className={styles['content']}>
         <header className={styles['page-header']}>
           <p className={styles['eyebrow']}>STATIC COLOR AUDIT</p>
           <h1>색상 카탈로그</h1>
           <p>
-            추적된 저장소 기준 · _variables.scss 정의 자체는 제외 · 아래 판정은 아직 적용 전 제안
+            추적된 저장소 기준 · _variables.scss 정의 자체는 제외 · 백업 알림에는 Amber 토큰 적용
+            완료
           </p>
         </header>
+
+        <section className={styles['palette-section']}>
+          <div className={styles['section-heading']}>
+            <div>
+              <p className={styles['section-kicker']}>PROJECT PALETTES</p>
+              <h2>현재 프로젝트 팔레트</h2>
+            </div>
+            <p>_variables.scss에 정의한 Mint, Rose, Amber, Gray의 100–900 단계입니다.</p>
+          </div>
+
+          <div className={styles['palette-comparison']}>
+            {PROJECT_PALETTES.map((palette) => (
+              <section key={palette.name} className={styles['palette-card']}>
+                <h3>{palette.name}</h3>
+                <p>{palette.description}</p>
+                <ul className={styles['palette-colors']}>
+                  {palette.colors.map((color) => (
+                    <li key={color.step}>
+                      <span style={{ backgroundColor: color.value }} aria-hidden="true" />
+                      <strong>{color.step}</strong>
+                      <code>{color.value}</code>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))}
+          </div>
+        </section>
 
         {COLOR_AUDIT_SECTIONS.map((section) => (
           <ColorAuditSection key={section.title} section={section} />
