@@ -11,7 +11,7 @@ import type {
   TRefiningWorkerRequest,
   TRefiningWorkerResponse,
 } from '@/app/lostark/refining/_type/refiningWorker';
-import { validateRefiningInput } from '@/app/lostark/refining/_util/refiningInput';
+import { validateRefiningInput } from '@/app/lostark/refining/_util/validateRefiningInput';
 
 import Button from '@/components/common/button/Button';
 import BoxLoading from '@/components/common/loading/BoxLoading';
@@ -42,7 +42,7 @@ export default function RefiningResultPanel(props: {
   );
 
   function handleCalculate() {
-    const input = validateRefiningInput({ condition, marketPrices, materials, step: refiningRule });
+    const input = validateRefiningInput({ condition, marketPrices, materials, refiningRule });
     if (!input) {
       setIsInputErrorOpen(true);
       return;

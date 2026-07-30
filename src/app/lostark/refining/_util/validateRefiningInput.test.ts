@@ -2,13 +2,14 @@ import { describe, expect, it } from 'vitest';
 
 import { MOCK_REFINING_MARKET_PRICES } from '@/app/lostark/refining/_define/refiningMarketPrices';
 import type { TRefiningMaterialInputs } from '@/app/lostark/refining/_type/refining';
+import { validateRefiningInput } from '@/app/lostark/refining/_util/validateRefiningInput';
 import { getRefiningRule } from '@/app/lostark/refining/_util/refiningRules';
-import { validateRefiningInput } from '@/app/lostark/refining/_util/refiningInput';
 
-const step = getRefiningRule('aegir', 'weapon', 10);
+const refiningRule = getRefiningRule('aegir', 'weapon', 10);
 function validInput() {
   const materials = {} as TRefiningMaterialInputs;
-  for (const id of step.inputMaterialIds) materials[id] = { owned: '0', isZeroPriced: false };
+  for (const id of refiningRule.inputMaterialIds)
+    materials[id] = { owned: '0', isZeroPriced: false };
   return {
     condition: {
       equipmentGrade: 'aegir' as const,
@@ -19,7 +20,7 @@ function validInput() {
     },
     marketPrices: MOCK_REFINING_MARKET_PRICES,
     materials,
-    step,
+    refiningRule,
   };
 }
 

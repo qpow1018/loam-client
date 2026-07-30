@@ -7,7 +7,7 @@ import type {
   TRefiningRule,
 } from '@/app/lostark/refining/_type/refining';
 
-export type TValidatedRefiningInput = Pick<
+type TValidatedRefiningInput = Pick<
   TRefiningPlanInput,
   'failureBonusRate' | 'artisanEnergy' | 'prices' | 'ownedMaterials'
 >;
@@ -16,16 +16,18 @@ export function validateRefiningInput(props: {
   condition: TRefiningCondition;
   marketPrices: Readonly<Record<TRefiningMaterialId, number>>;
   materials: TRefiningMaterialInputs;
-  step: TRefiningRule;
+  refiningRule: TRefiningRule;
 }): TValidatedRefiningInput | undefined {
-  const { condition, marketPrices, materials, step } = props;
-  const materialIds = step.inputMaterialIds;
+  const { condition, marketPrices, materials, refiningRule } = props;
+  const materialIds = refiningRule.inputMaterialIds;
   const failureBonusRate = parseFailureBonusRate(condition.failureBonusRate);
-  if (failureBonusRate === undefined || failureBonusRate > step.initialRate) return undefined;
+  if (failureBonusRate === undefined || failureBonusRate > refiningRule.initialRate)
+    return undefined;
   if (!/^\d+(?:\.\d{1,6})?$/.test(condition.artisanEnergy) || Number(condition.artisanEnergy) > 100)
     return undefined;
 
   const ownedMaterials: TRefiningOwnedMaterials = {};
+  const prices = { ...marketPrices };
   for (const id of materialIds) {
     const form = materials[id];
     if (!form) return undefined;
@@ -33,14 +35,13 @@ export function validateRefiningInput(props: {
     const owned = normalizedOwned === '' ? 0 : Number(normalizedOwned);
     if (!Number.isInteger(owned) || owned < 0) return undefined;
     ownedMaterials[id] = owned;
+    prices[id] = form.isZeroPriced ? 0 : marketPrices[id];
   }
 
   return {
     failureBonusRate,
     artisanEnergy: condition.artisanEnergy,
-    prices: Object.fromEntries(
-      materialIds.map((id) => [id, materials[id]?.isZeroPriced ? 0 : marketPrices[id]]),
-    ) as Record<TRefiningMaterialId, number>,
+    prices,
     ownedMaterials,
   };
 }
