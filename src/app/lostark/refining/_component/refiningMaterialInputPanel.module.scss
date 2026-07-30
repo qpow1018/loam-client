@@ -64,11 +64,11 @@
 
           &:focus-visible {
             outline: none;
-            border-color: $mint-400;
+            border-color: $gray-400;
           }
         }
 
-        >span {
+        > span {
           position: absolute;
           top: 50%;
           right: 7px;
@@ -80,18 +80,9 @@
       }
 
       .zero-price-field {
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
         color: $gray-300;
         font-size: 12px;
         white-space: nowrap;
-
-        input {
-          width: 16px;
-          height: 16px;
-          margin: 0;
-        }
       }
     }
   }

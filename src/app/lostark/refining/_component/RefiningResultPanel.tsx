@@ -269,7 +269,7 @@ function RefiningResult(props: {
         </section>
       </div>
       <div className={styles['notice']}>
-        <p>보유 재료는 0G · 가격 0G 처리 재료는 비용에서 제외 · 실링은 골드 최적화에서 제외</p>
+        <p>보유 재료는 0G · 재료비 제외 재료는 비용에서 제외 · 실링은 골드 최적화에서 제외</p>
         <p>이벤트 미반영</p>
         <p>장인 100% 확정 성공 행은 보조재를 사용하지 않습니다.</p>
       </div>

@@ -9,6 +9,7 @@ import {
   createLevelGoldRows,
   formatGold,
 } from '../_util/clearGold';
+import Checkbox from '@/components/common/form/Checkbox';
 
 import styles from './levelGoldPanel.module.scss';
 
@@ -125,15 +126,20 @@ function DifficultyExcludeOption(props: {
   }
 
   return (
-    <label
+    <Checkbox
+      isChecked={props.isChecked}
+      onChange={handleChange}
+      size="small"
       className={`${styles['exclude-option']} ${props.isChecked ? styles['is-selected'] : ''}`}
-    >
-      <input type="checkbox" checked={props.isChecked} onChange={handleChange} />
-      <span className={styles['option-name']}>
-        {props.option.contentName} {props.option.difficultyName}
-      </span>
-      <span className={styles['option-level']}>Lv. {props.option.entryItemLevel}</span>
-    </label>
+      label={
+        <>
+          <span className={styles['option-name']}>
+            {props.option.contentName} {props.option.difficultyName}
+          </span>
+          <span className={styles['option-level']}>Lv. {props.option.entryItemLevel}</span>
+        </>
+      }
+    />
   );
 }
 

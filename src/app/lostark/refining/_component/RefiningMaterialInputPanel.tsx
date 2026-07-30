@@ -6,6 +6,7 @@ import type {
 import { REFINING_MATERIALS } from '@/app/lostark/refining/_define/refiningMaterials';
 
 import Button from '@/components/common/button/Button';
+import Checkbox from '@/components/common/form/Checkbox';
 
 import styles from '@/app/lostark/refining/_component/refiningMaterialInputPanel.module.scss';
 
@@ -90,15 +91,14 @@ function RefiningMaterialRow(props: {
           <span aria-hidden="true">개</span>
         </div>
 
-        <label className={styles['zero-price-field']}>
-          <input
-            type="checkbox"
-            aria-label={`${material.name} 가격 0G 처리`}
-            checked={form.isZeroPriced}
-            onChange={(event) => onMaterialChange(id, { isZeroPriced: event.target.checked })}
-          />
-          <span>가격 0G 처리</span>
-        </label>
+        <Checkbox
+          isChecked={form.isZeroPriced}
+          onChange={(isZeroPriced) => onMaterialChange(id, { isZeroPriced })}
+          ariaLabel={`${material.name} 재료비 제외`}
+          label="재료비 제외"
+          size="medium"
+          className={styles['zero-price-field']}
+        />
       </div>
     </div>
   );
