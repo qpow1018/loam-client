@@ -156,7 +156,7 @@
         color: transparent;
         font-size: 44px;
         font-weight: 800;
-        background: linear-gradient(135deg, $text-primary 8%, $rose-400 42%, $mint-300 92%) -100% / 200%;
+        background: linear-gradient(135deg, $text-primary 8%, $rose-400 42%, $mint-light 92%) -100% / 200%;
         background-clip: text, border-box;
         white-space: nowrap;
       }
@@ -199,7 +199,7 @@
       }
 
       .tradable-summary strong {
-        color: $mint-300;
+        color: $mint-light;
       }
 
       .bound-summary strong {
@@ -273,11 +273,11 @@
       .raid-level,
       .difficulty-chip,
       .raid-gold {
-        color: $mint-300;
+        color: $mint-light;
       }
 
       .difficulty-chip {
-        border-color: rgba($mint-300, 0.42);
+        border-color: $mint;
       }
     }
 

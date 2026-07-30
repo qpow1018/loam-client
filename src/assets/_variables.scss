@@ -35,6 +35,13 @@ $mint-700: #047857;
 $mint-800: #065f46;
 $mint-900: #14532d;
 
+// Mint semantic
+$mint: $mint-600;
+$mint-light: $mint-200;
+$mint-accent: $mint-400;
+$mint-ghost: rgba($mint-accent, 0.1);
+$mint-soft: $mint-900;
+
 // Amber
 $amber-100: #fef3c7;
 $amber-200: #fde68a;

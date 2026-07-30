@@ -15,8 +15,8 @@
     white-space: nowrap;
 
     &:focus-visible + .control {
-      border-color: $mint-400;
-      outline: 2px solid rgba($mint-400, 0.3);
+      border-color: $mint-accent;
+      outline: 2px solid $mint-light;
       outline-offset: 1px;
     }
   }

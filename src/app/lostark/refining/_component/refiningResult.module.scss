@@ -43,7 +43,7 @@
 
 .metric-primary {
   dd {
-    color: $mint-400;
+    color: $mint-accent;
     font-size: 22px;
     font-weight: 700;
   }
@@ -84,8 +84,8 @@
 
 .notice {
   padding: 10px 12px;
-  border-left: 3px solid $mint-400;
-  background: rgba($mint-400, 0.08);
+  border-left: 3px solid $mint-accent;
+  background: $mint-ghost;
   color: $gray-300;
   font-size: 12px;
 
@@ -149,7 +149,7 @@
 }
 
 .purchase-cost {
-  color: $mint-400;
+  color: $mint-accent;
   font-weight: 500;
 }
 
@@ -186,13 +186,13 @@
 }
 
 .strategy-row--changed {
-  background: rgba($mint-400, 0.05);
+  background: $mint-ghost;
 }
 
 .strategy-row--guaranteed {
-  background: rgba($mint-400, 0.1);
+  background: $mint-ghost;
 
   th {
-    box-shadow: inset 3px 0 0 $mint-400;
+    box-shadow: inset 3px 0 0 $mint-accent;
   }
 }

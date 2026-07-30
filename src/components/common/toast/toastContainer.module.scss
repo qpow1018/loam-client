@@ -24,7 +24,7 @@
     pointer-events: auto;
 
     &.type-success {
-      background-color: rgba($mint-600, 0.28);
+      background-color: $mint-soft;
     }
 
     &.type-error {

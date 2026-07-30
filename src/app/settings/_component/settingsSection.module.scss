@@ -16,9 +16,9 @@
 
   &.is-primary {
     padding: 20px;
-    border-color: rgba($mint-600, 0.55);
+    border-color: $mint;
     background: $gray-800;
-    box-shadow: inset 0 1px 0 rgba($mint-400, 0.2);
+    box-shadow: inset 0 1px 0 $mint-ghost;
 
     .title-group {
       h2 {
@@ -31,14 +31,14 @@
       }
 
       .section-status {
-        color: $mint-300;
+        color: $mint-light;
       }
     }
 
     .section-body {
       margin-top: 18px;
       padding-top: 18px;
-      border-top-color: rgba($mint-600, 0.28);
+      border-top-color: $mint-ghost;
     }
   }
 
@@ -59,7 +59,7 @@
 
     .section-status {
       margin-top: 6px;
-      color: $mint-600;
+      color: $mint;
     }
   }
 

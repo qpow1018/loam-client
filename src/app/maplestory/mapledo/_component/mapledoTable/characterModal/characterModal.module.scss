@@ -28,7 +28,7 @@
     }
 
     &.selected {
-      border-color: $mint-600;
+      border-color: $mint;
     }
 
     .class-name {
@@ -36,7 +36,7 @@
       max-width: 100%;
       padding: 3px 6px;
       border-radius: $border-radius;
-      background-color: rgba($mint-500, 0.3);
+      background-color: $mint-soft;
       font-size: 10px;
       font-weight: 700;
       white-space: nowrap;

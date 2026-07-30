@@ -20,13 +20,13 @@
   }
 
   &.theme-bg-pri {
-    background-color: $mint-600;
-    border-color: $mint-600;
+    background-color: $mint;
+    border-color: $mint;
     color: $text-primary;
 
     &:hover:not(:disabled) {
-      background-color: $mint-700;
-      border-color: $mint-700;
+      background-color: $mint-soft;
+      border-color: $mint-soft;
     }
   }
 

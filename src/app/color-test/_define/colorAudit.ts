@@ -159,58 +159,9 @@ export const COLOR_AUDIT_SECTIONS: TColorAuditSection[] = [
       kind: 'keep-local',
       label: '현 상태 유지',
       reason:
-        '기본 색상은 이미 토큰입니다. 알파값은 각 상태·표면의 맥락을 담으므로 별도 색상 토큰으로 분리하지 않습니다.',
+        '의미 토큰으로 대체할 수 없는 투명 표면만 유지합니다.',
     },
     items: [
-      {
-        expression: 'rgba($amber-800, 0.15) · rgba($amber-500, 0.18)',
-        swatch: 'rgba(245, 158, 11, 0.18)',
-        sources: [SOURCE.header],
-        note: '백업 알림의 테두리와 상태 점 ring',
-      },
-      {
-        expression: '$shadow-popover',
-        swatch: 'rgba(0, 0, 0, 0.3)',
-        sources: [
-          'src/components/common/dropdownMenu/dropdownMenu.module.scss',
-          'src/components/common/form/select.module.scss',
-        ],
-        note: '0 8px 16px rgba(0, 0, 0, 0.3) 공용 떠 있는 메뉴 그림자',
-      },
-      {
-        expression: 'rgba($white, 0.35)',
-        swatch: 'rgba(255, 255, 255, 0.35)',
-        sources: [SOURCE.header, 'docs/superpowers/plans/2026-06-11-game-specific-header.md'],
-      },
-      {
-        expression: 'rgba($black, 0.18) · rgba($black, 0.24)',
-        swatch: 'rgba(0, 0, 0, 0.24)',
-        sources: [SOURCE.header, 'src/components/common/toast/toastContainer.module.scss'],
-      },
-      {
-        expression: 'rgba($mint-400, 0.3)',
-        swatch: 'rgba(74, 222, 128, 0.3)',
-        sources: [
-          'src/components/common/form/checkbox.module.scss',
-          'src/components/common/form/select.module.scss',
-        ],
-      },
-      {
-        expression: 'rgba($mint-600, 0.28 · 0.55) · rgba($mint-400, 0.2)',
-        swatch: 'rgba(5, 150, 105, 0.55)',
-        sources: [
-          'src/components/common/toast/toastContainer.module.scss',
-          'src/app/settings/_component/settingsSection.module.scss',
-        ],
-      },
-      {
-        expression: 'rgba($mint-600, 0.3) · rgba($mint-700, 0.35 · 0.4) · rgba($rose-700, 0.35)',
-        swatch: 'rgba(5, 150, 105, 0.3)',
-        sources: [
-          'src/app/lostark/my-characters/_component/mainCharactersPanel/section/arkGridSection.module.scss',
-          'src/app/ui-test/uiTestClient.module.scss',
-        ],
-      },
       {
         expression: 'rgba($rose-600, 0.28) · rgba($rose-900, 0.35 · 0.58) · rgba($rose-400, 0.12)',
         swatch: 'rgba(225, 29, 72, 0.28)',
@@ -230,22 +181,12 @@ export const COLOR_AUDIT_SECTIONS: TColorAuditSection[] = [
         ],
       },
       {
-        expression: 'rgba($mint-500, 0.3)',
-        swatch: 'rgba(16, 185, 129, 0.3)',
-        sources: [
-          'src/app/maplestory/mapledo/_component/mapledoTable/characterModal/characterModal.module.scss',
-          'src/app/maplestory/my-characters/_component/characterList.module.scss',
-        ],
-      },
-      {
-        expression: 'rgba($mint-300, 0.4 · 0.42) · rgba($mint-800, 0.7)',
-        swatch: 'rgba(134, 239, 172, 0.42)',
-        sources: [`${SOURCE.mainCharacter}extraEquipmentSection.module.scss`, SOURCE.clearGold],
-      },
-      {
-        expression: 'rgba($mint-400, 0.05 · 0.08 · 0.1)',
+        expression: '$mint-ghost',
         swatch: 'rgba(74, 222, 128, 0.1)',
-        sources: ['src/app/lostark/refining/_component/refiningResult.module.scss'],
+        sources: [
+          'src/app/lostark/refining/_component/refiningResult.module.scss',
+          'src/app/settings/_component/settingsSection.module.scss',
+        ],
       },
     ],
   },
