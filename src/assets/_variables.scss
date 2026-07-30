@@ -24,6 +24,13 @@ $rose-700: #be123c;
 $rose-800: #9f1239;
 $rose-900: #4c0519;
 
+// Rose semantic
+$rose: $rose-600;
+$rose-light: $rose-300;
+$rose-accent: $rose-400;
+$rose-ghost: rgba($rose-accent, 0.1);
+$rose-soft: $rose-900;
+
 // mint
 $mint-100: #e6fffa;
 $mint-200: #bbf7d0;

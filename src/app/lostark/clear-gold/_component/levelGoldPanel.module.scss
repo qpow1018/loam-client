@@ -46,12 +46,12 @@
 
         &:not(:disabled):hover {
           color: $text-primary;
-          border-color: $rose-400;
+          border-color: $rose-accent;
         }
 
         &[aria-expanded='true'] {
           color: $text-primary;
-          border-color: $rose-400;
+          border-color: $rose-accent;
         }
 
         &:disabled {
@@ -76,9 +76,9 @@
       font-size: 12px;
       text-overflow: ellipsis;
       white-space: nowrap;
-      border: 1px solid $rose-400;
+      border: 1px solid $rose-accent;
       border-radius: 100px;
-      background-color: rgba($rose-400, 0.12);
+      background-color: $rose-ghost;
     }
 
     .exclude-list {
@@ -104,7 +104,7 @@
 
       &:hover,
       &.is-selected {
-        border-color: $rose-400;
+        border-color: $rose-accent;
         background-color: $gray-700;
       }
 
@@ -156,7 +156,7 @@
         color: transparent;
         font-size: 44px;
         font-weight: 800;
-        background: linear-gradient(135deg, $text-primary 8%, $rose-400 42%, $mint-light 92%) -100% / 200%;
+        background: linear-gradient(135deg, $text-primary 8%, $rose-accent 42%, $mint-light 92%) -100% / 200%;
         background-clip: text, border-box;
         white-space: nowrap;
       }

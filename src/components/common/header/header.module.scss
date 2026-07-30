@@ -18,11 +18,11 @@
   }
 
   &.is-rose {
-    background-color: $rose-700;
+    background-color: $rose;
 
     .navigation-link:hover,
     .navigation-link.is-active {
-      background-color: $rose-800;
+      background-color: $rose-soft;
     }
   }
 

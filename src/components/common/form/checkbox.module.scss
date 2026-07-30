@@ -22,7 +22,7 @@
   }
 
   &:not(.is-disabled):hover .control {
-    border-color: $rose-400;
+    border-color: $rose-accent;
   }
 
   .control {
@@ -45,8 +45,8 @@
     }
 
     &.is-checked {
-      border-color: $rose-400;
-      background: $rose-400;
+      border-color: $rose-accent;
+      background: $rose-accent;
       color: $gray-900;
     }
   }

@@ -38,7 +38,7 @@
     }
 
     .highlighted td {
-      background-color: rgba($rose-900, 0.58);
+      background-color: $rose-soft;
     }
   }
 
@@ -53,11 +53,11 @@
       height: 20px;
       border: 1px solid $gray-500;
       border-radius: 4px;
-      color: $rose-300;
+      color: $rose-light;
       font-size: 15px;
 
       &:hover {
-        border-color: $rose-400;
+        border-color: $rose-accent;
       }
     }
   }

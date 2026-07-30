@@ -31,13 +31,13 @@
   }
 
   &.theme-bg-sec {
-    background-color: $rose-600;
-    border-color: $rose-600;
+    background-color: $rose;
+    border-color: $rose;
     color: $text-primary;
 
     &:hover:not(:disabled) {
-      background-color: $rose-700;
-      border-color: $rose-700;
+      background-color: $rose-soft;
+      border-color: $rose-soft;
     }
   }
 

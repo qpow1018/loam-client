@@ -163,14 +163,9 @@ export const COLOR_AUDIT_SECTIONS: TColorAuditSection[] = [
     },
     items: [
       {
-        expression: 'rgba($rose-600, 0.28) · rgba($rose-900, 0.35 · 0.58) · rgba($rose-400, 0.12)',
-        swatch: 'rgba(225, 29, 72, 0.28)',
-        sources: [
-          'src/components/common/toast/toastContainer.module.scss',
-          'src/app/maplestory/equipment/_component/equipmentTable.module.scss',
-          'src/app/maplestory/union/_component/unionCharacterRow.module.scss',
-          SOURCE.clearGold,
-        ],
+        expression: '$rose-ghost',
+        swatch: 'rgba(251, 113, 133, 0.1)',
+        sources: [SOURCE.clearGold],
       },
       {
         expression: 'rgba($gray-600, 0.88) · rgba($white, 0.04 · 0.12)',
