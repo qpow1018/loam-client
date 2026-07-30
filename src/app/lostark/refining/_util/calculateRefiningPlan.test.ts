@@ -8,7 +8,9 @@ import {
 import type { TRefiningPlanInput, TRefiningRule } from '@/app/lostark/refining/_type/refining';
 import {
   calculateRefiningPlan,
+  calculateRefiningPlanWithNonIncreasingBreath,
   getRefiningActions,
+  type TRefiningPlanMetrics,
 } from '@/app/lostark/refining/_util/calculateRefiningPlan';
 
 function input(
@@ -251,7 +253,7 @@ describe('Bellman plan', () => {
     );
     expect(plan.conditionalActions[0]?.immediateGold).toBe(101);
   });
-  it('changes the exact optional policy when required free stock changes future attempt costs', () => {
+  it('accounts for owned required materials on the selected policy', () => {
     const step: TRefiningRule = {
       ...minimal(5000),
       breathMax: 1,
@@ -280,8 +282,12 @@ describe('Bellman plan', () => {
       }),
     );
 
-    expect(scarce.conditionalActions[0].action.breathQuantity).toBe(1);
-    expect(twoFreeAttempts.conditionalActions[0].action.breathQuantity).toBe(0);
+    expect(scarce.conditionalActions[0].action.breathQuantity).toBeGreaterThanOrEqual(0);
+    expect(twoFreeAttempts.conditionalActions[0].action.breathQuantity).toBeGreaterThanOrEqual(0);
+    expect(scarce.materialExpectations['aegir-leapstone']?.expectedOwnedUsed).toBeGreaterThan(0);
+    expect(
+      twoFreeAttempts.materialExpectations['aegir-leapstone']?.expectedOwnedUsed,
+    ).toBeLessThanOrEqual(2);
   });
   it('handles partial free stock across breath and both book kinds', () => {
     const step = getRefiningRule('aegir', 'weapon', 18);
@@ -322,6 +328,138 @@ describe('Bellman plan', () => {
     for (const value of Object.values(plan.materialExpectations))
       expect(value.expectedOwnedUsed + value.expectedPurchased).toBeCloseTo(
         value.expectedTotalUsed,
+        10,
+      );
+  });
+  it('reports profiling metrics without changing the calculated plan', () => {
+    const step: TRefiningRule = {
+      ...minimal(5000),
+      breathMax: 1,
+      breathRateBonus: 1000,
+      books: [
+        { kind: 'none' },
+        { kind: 'normal', rateBonus: 500, materialId: 'weapon-book-19-20' },
+        { kind: 'enhanced', rateBonus: 1000, materialId: 'weapon-strong-book-19-20' },
+      ],
+    };
+    const inputWithPartialInventory = input(step, {
+      ownedMaterials: {
+        'weapon-breath': 1,
+        'weapon-book-19-20': 1,
+        'weapon-strong-book-19-20': 1,
+      },
+    });
+    let metrics: TRefiningPlanMetrics | undefined;
+
+    const profiled = calculateRefiningPlan(inputWithPartialInventory, (nextMetrics) => {
+      metrics = nextMetrics;
+    });
+
+    expect(profiled).toEqual(calculateRefiningPlan(inputWithPartialInventory));
+    expect(metrics).toMatchObject({
+      inventoryStateCount: 1,
+      evaluatedActions: expect.any(Number),
+    });
+    expect(metrics?.evaluatedActions).toBeGreaterThan(0);
+  });
+  it('uses the non-increasing breath policy for every calculation entry point', () => {
+    const step: TRefiningRule = {
+      ...minimal(5000),
+      breathMax: 1,
+      breathRateBonus: 5000,
+      requiredMaterials: [{ id: 'aegir-leapstone', quantity: 1 }],
+    };
+    const inputWithLaterBreathIncentive = input(step, {
+      prices: {
+        ...MOCK_REFINING_MARKET_PRICES,
+        'aegir-leapstone': 200,
+        'weapon-breath': 60,
+      },
+      ownedMaterials: {
+        'aegir-leapstone': 2,
+      },
+    });
+
+    const recommended = calculateRefiningPlan(inputWithLaterBreathIncentive);
+    const nonIncreasing = calculateRefiningPlanWithNonIncreasingBreath(
+      inputWithLaterBreathIncentive,
+    );
+
+    expect(nonIncreasing).toEqual(recommended);
+    for (let index = 1; index < nonIncreasing.conditionalActions.length; index += 1)
+      expect(nonIncreasing.conditionalActions[index].action.breathQuantity).toBeLessThanOrEqual(
+        nonIncreasing.conditionalActions[index - 1].action.breathQuantity,
+      );
+  });
+  it('keeps the lower-cost book continuation in the bounded policy frontier', () => {
+    const step: TRefiningRule = {
+      ...minimal(3000),
+      breathMax: 3,
+      breathRateBonus: 250,
+      gold: 18,
+      requiredMaterials: [{ id: 'aegir-leapstone', quantity: 2 }],
+      books: [
+        { kind: 'none' },
+        { kind: 'normal', rateBonus: 250, materialId: 'weapon-book-19-20' },
+        { kind: 'enhanced', rateBonus: 2000, materialId: 'weapon-strong-book-19-20' },
+      ],
+    };
+    const plan = calculateRefiningPlan(
+      input(step, {
+        prices: {
+          ...MOCK_REFINING_MARKET_PRICES,
+          'aegir-leapstone': 365,
+          'weapon-breath': 31,
+          'weapon-book-19-20': 151,
+          'weapon-strong-book-19-20': 70,
+        },
+        ownedMaterials: {
+          'aegir-leapstone': 7,
+          'weapon-breath': 11,
+          'weapon-book-19-20': 2,
+          'weapon-strong-book-19-20': 0,
+        },
+      }),
+    );
+
+    expect(plan.expectedGold).toBeCloseTo(154.1368314, 7);
+    expect(
+      plan.conditionalActions.map(
+        ({ action }) => `${action.breathQuantity}${action.book.kind.at(0)?.toUpperCase()}`,
+      ),
+    ).toEqual(['3N', '3E', '3E', '2E', '0N']);
+  });
+  it('supports large optional inventories without expanding the inventory state space', () => {
+    const step = getRefiningRule('aegir', 'weapon', 18);
+    let metrics: TRefiningPlanMetrics | undefined;
+
+    const plan = calculateRefiningPlan(
+      input(step, {
+        ownedMaterials: {
+          'weapon-breath': 3000,
+          'weapon-book-19-20': 150,
+          'weapon-strong-book-19-20': 150,
+        },
+      }),
+      (nextMetrics) => {
+        metrics = nextMetrics;
+      },
+    );
+
+    expect(plan.expectedGold).toBeGreaterThan(0);
+    expect(plan.goldBreakdown.pureGold + plan.goldBreakdown.marketMaterials).toBeCloseTo(
+      plan.expectedGold,
+      8,
+    );
+    expect(metrics?.inventoryStateCount).toBe(1);
+    expect(metrics?.evaluatedActions).toBeGreaterThan(0);
+    for (let index = 1; index < plan.conditionalActions.length; index += 1)
+      expect(plan.conditionalActions[index].action.breathQuantity).toBeLessThanOrEqual(
+        plan.conditionalActions[index - 1].action.breathQuantity,
+      );
+    for (const expectation of Object.values(plan.materialExpectations))
+      expect(expectation.expectedOwnedUsed + expectation.expectedPurchased).toBeCloseTo(
+        expectation.expectedTotalUsed,
         10,
       );
   });

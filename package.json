@@ -10,6 +10,7 @@
     "start": "next start",
     "lint": "eslint .",
     "test": "vitest run",
+    "bench:refining": "vitest bench --run src/app/lostark/refining/_util/calculateRefiningPlan.bench.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
