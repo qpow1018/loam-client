@@ -4,6 +4,7 @@ import type {
   TRefiningMaterialId,
   TRefiningMaterialInputs,
   TRefiningPlan,
+  TRefiningPlanInput,
   TRefiningCondition,
   TRefiningRule,
 } from '@/app/lostark/refining/_type/refining';
@@ -27,19 +28,20 @@ export default function RefiningResultPanel(props: {
   refiningRule: TRefiningRule;
 }) {
   const { condition, marketPrices, materials, refiningRule } = props;
+
   const [plan, setPlan] = useState<TRefiningPlan>();
+  const [isCalculating, setIsCalculating] = useState(false);
   const [isCalculationErrorOpen, setIsCalculationErrorOpen] = useState(false);
   const [isInputErrorOpen, setIsInputErrorOpen] = useState(false);
-  const [isCalculating, setIsCalculating] = useState(false);
+
   const workerRef = useRef<Worker | undefined>(undefined);
   const requestIdRef = useRef(0);
 
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    return () => {
       workerRef.current?.terminate();
-    },
-    [],
-  );
+    };
+  }, []);
 
   function handleCalculate() {
     const input = validateRefiningInput({ condition, marketPrices, materials, refiningRule });
@@ -48,7 +50,12 @@ export default function RefiningResultPanel(props: {
       return;
     }
 
+    startCalculation({ step: refiningRule, ...input });
+  }
+
+  function startCalculation(input: TRefiningPlanInput) {
     workerRef.current?.terminate();
+    workerRef.current = undefined;
     setPlan(undefined);
     setIsCalculationErrorOpen(false);
     setIsCalculating(true);
@@ -65,33 +72,35 @@ export default function RefiningResultPanel(props: {
         if (event.data.requestId !== requestIdRef.current) return;
         worker.terminate();
         workerRef.current = undefined;
-        setIsCalculating(false);
 
         if ('error' in event.data) {
-          setIsCalculationErrorOpen(true);
+          handleCalculationError();
           return;
         }
+        setIsCalculating(false);
         setPlan(event.data.plan);
       });
       worker.addEventListener('error', () => {
         if (requestId !== requestIdRef.current) return;
         worker.terminate();
         workerRef.current = undefined;
-        setIsCalculating(false);
-        setIsCalculationErrorOpen(true);
+        handleCalculationError();
       });
 
       const request: TRefiningWorkerRequest = {
         requestId,
-        input: { step: refiningRule, ...input },
+        input,
       };
       worker.postMessage(request);
     } catch {
       workerRef.current = undefined;
-      setIsCalculating(false);
-      setPlan(undefined);
-      setIsCalculationErrorOpen(true);
+      handleCalculationError();
     }
+  }
+
+  function handleCalculationError() {
+    setIsCalculating(false);
+    setIsCalculationErrorOpen(true);
   }
 
   return (
