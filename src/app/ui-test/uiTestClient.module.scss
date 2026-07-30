@@ -87,6 +87,31 @@
     }
   }
 
+  .grade-palette-section {
+    padding-top: 40px;
+
+    .section-heading {
+      margin-bottom: 16px;
+
+      h2,
+      p {
+        margin: 0;
+      }
+
+      h2 {
+        margin-top: 5px;
+        font-size: 20px;
+        letter-spacing: -0.5px;
+      }
+
+      > div > p:last-child {
+        margin-top: 6px;
+        color: $text-secondary;
+        font-size: 13px;
+      }
+    }
+  }
+
   .component-surface,
   .sample-card {
     border: 1px solid $gray-700;
@@ -96,6 +121,74 @@
 
   .component-surface {
     padding: 24px;
+  }
+
+  .grade-palette {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      min-width: 0;
+    }
+
+    span {
+      display: block;
+      height: 48px;
+      border: 1px solid rgba($white, 0.16);
+      border-radius: 6px;
+    }
+
+    strong,
+    code {
+      display: block;
+      overflow: hidden;
+      margin-top: 7px;
+      font-size: 11px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    strong {
+      color: $text-primary;
+    }
+
+    code {
+      margin-top: 2px;
+      color: $gray-400;
+      font-size: 10px;
+    }
+  }
+
+  .grade-normal {
+    background: $loa-grade-normal;
+  }
+
+  .grade-uncommon {
+    background: $loa-grade-uncommon;
+  }
+
+  .grade-rare {
+    background: $loa-grade-rare;
+  }
+
+  .grade-epic {
+    background: $loa-grade-epic;
+  }
+
+  .grade-legendary {
+    background: $loa-grade-legendary;
+  }
+
+  .grade-relic {
+    background: $loa-grade-relic;
+  }
+
+  .grade-ancient {
+    background: $loa-grade-ancient;
   }
 
   .button-list,

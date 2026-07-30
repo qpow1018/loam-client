@@ -345,6 +345,55 @@ export default function UiTestClient() {
           <span className={styles['status-chip']}>Desktop · Dark theme</span>
         </header>
 
+        <section className={styles['grade-palette-section']}>
+          <div className={styles['section-heading']}>
+            <div>
+              <p className={styles['section-kicker']}>LOST ARK FOUNDATION</p>
+              <h2>아이템 등급 팔레트</h2>
+              <p>일반부터 고대까지 게임 데이터의 등급 위계를 표현하는 Sass 토큰입니다.</p>
+            </div>
+          </div>
+          <div className={styles['component-surface']}>
+            <ul className={styles['grade-palette']}>
+              <li>
+                <span className={styles['grade-normal']} aria-hidden="true" />
+                <strong>일반</strong>
+                <code>$loa-grade-normal</code>
+              </li>
+              <li>
+                <span className={styles['grade-uncommon']} aria-hidden="true" />
+                <strong>고급</strong>
+                <code>$loa-grade-uncommon</code>
+              </li>
+              <li>
+                <span className={styles['grade-rare']} aria-hidden="true" />
+                <strong>희귀</strong>
+                <code>$loa-grade-rare</code>
+              </li>
+              <li>
+                <span className={styles['grade-epic']} aria-hidden="true" />
+                <strong>영웅</strong>
+                <code>$loa-grade-epic</code>
+              </li>
+              <li>
+                <span className={styles['grade-legendary']} aria-hidden="true" />
+                <strong>전설</strong>
+                <code>$loa-grade-legendary</code>
+              </li>
+              <li>
+                <span className={styles['grade-relic']} aria-hidden="true" />
+                <strong>유물</strong>
+                <code>$loa-grade-relic</code>
+              </li>
+              <li>
+                <span className={styles['grade-ancient']} aria-hidden="true" />
+                <strong>고대</strong>
+                <code>$loa-grade-ancient</code>
+              </li>
+            </ul>
+          </div>
+        </section>
+
         <CatalogSection title="버튼" description="행동의 우선순위와 크기, 상태를 비교합니다.">
           <div className={styles['button-list']}>
             <Button theme="bg-pri">주요 액션</Button>
@@ -406,7 +455,9 @@ export default function UiTestClient() {
               <span>품질</span>
               <div className={styles['quality-list']}>
                 <QualityChip quality={10} />
-                <QualityChip quality={65} />
+                <QualityChip quality={30} />
+                <QualityChip quality={70} />
+                <QualityChip quality={90} />
                 <QualityChip quality={100} />
               </div>
             </div>
