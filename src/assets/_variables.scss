@@ -60,6 +60,13 @@ $amber-700: #b45309;
 $amber-800: #92400e;
 $amber-900: #78350f;
 
+// Amber semantic
+$amber: $amber-600;
+$amber-light: $amber-200;
+$amber-accent: $amber-400;
+$amber-ghost: rgba($amber-accent, 0.1);
+$amber-soft: $amber-900;
+
 // Text
 $text-primary: #f4f4f6; // gray-100
 $text-secondary: #8f9099; // gray-400
