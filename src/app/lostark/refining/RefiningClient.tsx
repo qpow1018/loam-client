@@ -88,12 +88,12 @@ export default function RefiningClient() {
           onMaterialChange={handleMaterialChange}
         />
 
-        {/* <RefiningResultPanel
-          condition={condition}
+        <RefiningResultPanel
           marketPrices={MOCK_REFINING_MARKET_PRICES}
+          condition={condition}
           materials={materials}
-          step={selectedRefiningRule}
-        /> */}
+          refiningRule={selectedRefiningRule}
+        />
       </div>
     </main>
   );

@@ -39,10 +39,10 @@ export default function RefiningResultPanel(props: {
   condition: TRefiningCondition;
   marketPrices: Readonly<Record<TRefiningMaterialId, number>>;
   materials: TRefiningMaterialInputs;
-  step: TRefiningRule;
+  refiningRule: TRefiningRule;
 }) {
-  const { condition, marketPrices, materials, step } = props;
-  const materialIds = step.inputMaterialIds;
+  const { condition, marketPrices, materials, refiningRule } = props;
+  const materialIds = refiningRule.inputMaterialIds;
   const [plan, setPlan] = useState<TRefiningPlan>();
   const [calculationError, setCalculationError] = useState<string>();
   const [isInputErrorOpen, setIsInputErrorOpen] = useState(false);
@@ -58,7 +58,7 @@ export default function RefiningResultPanel(props: {
   );
 
   function handleCalculate() {
-    const input = validateRefiningInput({ condition, marketPrices, materials, step });
+    const input = validateRefiningInput({ condition, marketPrices, materials, step: refiningRule });
     if (!input) {
       requestIdRef.current += 1;
       workerRef.current?.terminate();
@@ -107,7 +107,7 @@ export default function RefiningResultPanel(props: {
 
       const request: TRefiningWorkerRequest = {
         requestId,
-        input: { step, ...input },
+        input: { step: refiningRule, ...input },
       };
       worker.postMessage(request);
     } catch {
@@ -149,7 +149,7 @@ export default function RefiningResultPanel(props: {
         ) : !plan ? (
           <p className={styles['empty-result']}>보유 수량을 입력한 뒤 계산하기를 눌러 주세요.</p>
         ) : (
-          <RefiningResult plan={plan} materialIds={materialIds} step={step} />
+          <RefiningResult plan={plan} materialIds={materialIds} refiningRule={refiningRule} />
         )}
       </section>
       <Confirm
@@ -172,17 +172,17 @@ export default function RefiningResultPanel(props: {
 function RefiningResult(props: {
   plan: TRefiningPlan;
   materialIds: readonly TRefiningMaterialId[];
-  step: TRefiningRule;
+  refiningRule: TRefiningRule;
 }) {
-  const { plan, materialIds, step } = props;
+  const { plan, materialIds, refiningRule } = props;
   const current = plan.conditionalActions[0];
   const currentMaterials = new Map<TRefiningMaterialId, number>();
-  for (const material of step.requiredMaterials)
+  for (const material of refiningRule.requiredMaterials)
     currentMaterials.set(material.id, (currentMaterials.get(material.id) ?? 0) + material.quantity);
   if (current.action.breathQuantity > 0)
     currentMaterials.set(
-      step.breathMaterialId,
-      (currentMaterials.get(step.breathMaterialId) ?? 0) + current.action.breathQuantity,
+      refiningRule.breathMaterialId,
+      (currentMaterials.get(refiningRule.breathMaterialId) ?? 0) + current.action.breathQuantity,
     );
   if (current.action.book.kind !== 'none')
     currentMaterials.set(
@@ -218,7 +218,7 @@ function RefiningResult(props: {
           </div>
           <div>
             <dt>즉시 실링</dt>
-            <dd>{formatQuantity(step.shilling)} 실링</dd>
+            <dd>{formatQuantity(refiningRule.shilling)} 실링</dd>
           </div>
         </dl>
         <div className={styles['immediate-materials']}>
