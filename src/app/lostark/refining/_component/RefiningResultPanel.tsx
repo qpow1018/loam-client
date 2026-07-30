@@ -1,13 +1,11 @@
-import type { ReactNode } from 'react';
 import { useEffect, useRef, useState } from 'react';
 
 import Button from '@/components/common/button/Button';
 import BoxLoading from '@/components/common/loading/BoxLoading';
 import Confirm from '@/components/common/modal/Confirm';
 
-import { REFINING_MATERIALS } from '@/app/lostark/refining/_define/refiningMaterials';
+import RefiningResult from '@/app/lostark/refining/_component/RefiningResult';
 import type {
-  TBookOption,
   TRefiningMaterialId,
   TRefiningMaterialInputs,
   TRefiningPlan,
@@ -21,20 +19,6 @@ import type {
 import { validateRefiningInput } from '@/app/lostark/refining/_util/refiningInput';
 import styles from '@/app/lostark/refining/_component/refiningResultPanel.module.scss';
 
-function formatGold(value: number) {
-  return `${Math.round(value).toLocaleString('ko-KR')} G`;
-}
-
-function formatQuantity(value: number) {
-  return value.toLocaleString('ko-KR', { maximumFractionDigits: 2 });
-}
-
-function actionText(action: { breathQuantity: number; book: TBookOption; successRate: number }) {
-  const book =
-    action.book.kind === 'none' ? '책 미사용' : REFINING_MATERIALS[action.book.materialId].name;
-  return `숨결 ${action.breathQuantity}개 · ${book} · 성공률 ${(action.successRate / 100).toFixed(2)}%`;
-}
-
 export default function RefiningResultPanel(props: {
   condition: TRefiningCondition;
   marketPrices: Readonly<Record<TRefiningMaterialId, number>>;
@@ -42,7 +26,6 @@ export default function RefiningResultPanel(props: {
   refiningRule: TRefiningRule;
 }) {
   const { condition, marketPrices, materials, refiningRule } = props;
-  const materialIds = refiningRule.inputMaterialIds;
   const [plan, setPlan] = useState<TRefiningPlan>();
   const [calculationError, setCalculationError] = useState<string>();
   const [isInputErrorOpen, setIsInputErrorOpen] = useState(false);
@@ -149,7 +132,7 @@ export default function RefiningResultPanel(props: {
         ) : !plan ? (
           <p className={styles['empty-result']}>보유 수량을 입력한 뒤 계산하기를 눌러 주세요.</p>
         ) : (
-          <RefiningResult plan={plan} materialIds={materialIds} refiningRule={refiningRule} />
+          <RefiningResult plan={plan} refiningRule={refiningRule} />
         )}
       </section>
       <Confirm
@@ -166,164 +149,5 @@ export default function RefiningResultPanel(props: {
         ]}
       />
     </>
-  );
-}
-
-function RefiningResult(props: {
-  plan: TRefiningPlan;
-  materialIds: readonly TRefiningMaterialId[];
-  refiningRule: TRefiningRule;
-}) {
-  const { plan, materialIds, refiningRule } = props;
-  const current = plan.conditionalActions[0];
-  const currentMaterials = new Map<TRefiningMaterialId, number>();
-  for (const material of refiningRule.requiredMaterials)
-    currentMaterials.set(material.id, (currentMaterials.get(material.id) ?? 0) + material.quantity);
-  if (current.action.breathQuantity > 0)
-    currentMaterials.set(
-      refiningRule.breathMaterialId,
-      (currentMaterials.get(refiningRule.breathMaterialId) ?? 0) + current.action.breathQuantity,
-    );
-  if (current.action.book.kind !== 'none')
-    currentMaterials.set(
-      current.action.book.materialId,
-      (currentMaterials.get(current.action.book.materialId) ?? 0) + 1,
-    );
-
-  return (
-    <div className={styles['result-content']}>
-      <section className={styles['current-action']} aria-labelledby="current-action-heading">
-        <h3 id="current-action-heading">이번 시도 권장</h3>
-        <p className={styles['action-text']}>{actionText(current.action)}</p>
-        <dl>
-          <div>
-            <dt>숨결</dt>
-            <dd>{current.action.breathQuantity}개</dd>
-          </div>
-          <div>
-            <dt>책</dt>
-            <dd>
-              {current.action.book.kind === 'none'
-                ? '미사용'
-                : REFINING_MATERIALS[current.action.book.materialId].name}
-            </dd>
-          </div>
-          <div>
-            <dt>성공률</dt>
-            <dd>{(current.action.successRate / 100).toFixed(2)}%</dd>
-          </div>
-          <div>
-            <dt>즉시 골드</dt>
-            <dd>{formatGold(current.immediateGold)}</dd>
-          </div>
-          <div>
-            <dt>즉시 실링</dt>
-            <dd>{formatQuantity(refiningRule.shilling)} 실링</dd>
-          </div>
-        </dl>
-        <div className={styles['immediate-materials']}>
-          <strong>이번 시도 투입 재료</strong>
-          <ul>
-            {[...currentMaterials.entries()].map(([id, quantity]) => (
-              <li key={id}>
-                {REFINING_MATERIALS[id].name} {formatQuantity(quantity)}개
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-      <div className={styles['outcome-grid']}>
-        <section aria-labelledby="expected-heading">
-          <h3 id="expected-heading">기대값</h3>
-          <dl className={styles['metric-grid']}>
-            <div>
-              <dt>기대 시도</dt>
-              <dd>{formatQuantity(plan.expectedAttempts)}회</dd>
-            </div>
-            <div>
-              <dt>기대 비용</dt>
-              <dd>{formatGold(plan.expectedGold)}</dd>
-            </div>
-            <div>
-              <dt>기대 실링</dt>
-              <dd>{formatQuantity(plan.expectedShilling)} 실링</dd>
-            </div>
-          </dl>
-        </section>
-        <section aria-labelledby="worst-heading">
-          <h3 id="worst-heading">최악 경로</h3>
-          <dl className={styles['metric-grid']}>
-            <div>
-              <dt>최대 시도</dt>
-              <dd>{plan.recommendedWorstCase.attempts}회</dd>
-            </div>
-            <div>
-              <dt>누적 비용</dt>
-              <dd>{formatGold(plan.recommendedWorstCase.gold)}</dd>
-            </div>
-            <div>
-              <dt>누적 실링</dt>
-              <dd>{formatQuantity(plan.recommendedWorstCase.shilling)} 실링</dd>
-            </div>
-          </dl>
-        </section>
-      </div>
-      <div className={styles['notice']}>
-        <p>보유 재료는 0G · 재료비 제외 재료는 비용에서 제외 · 실링은 골드 최적화에서 제외</p>
-        <p>이벤트 미반영</p>
-        <p>장인 100% 확정 성공 행은 보조재를 사용하지 않습니다.</p>
-      </div>
-      <h3>재료별 기대 사용 및 비용</h3>
-      <ResultTable
-        caption="재료별 기대 사용량과 구매 비용"
-        headings={['재료', '기대 사용', '기대 구매량', '기대 비용']}
-      >
-        {materialIds.map((id) => {
-          const material = plan.materialExpectations[id];
-          return (
-            <tr key={id}>
-              <th scope="row">{REFINING_MATERIALS[id].name}</th>
-              <td>{formatQuantity(material?.expectedTotalUsed ?? 0)}</td>
-              <td>{formatQuantity(material?.expectedPurchased ?? 0)}</td>
-              <td>{formatGold(material?.expectedGold ?? 0)}</td>
-            </tr>
-          );
-        })}
-      </ResultTable>
-      <h3>실패 상태별 조건부 권장</h3>
-      <ResultTable
-        caption="실패로 추가된 확률과 장인의 기운에 따른 권장 행동"
-        headings={['실패 추가 확률', '장인의 기운', '권장 행동']}
-      >
-        {plan.conditionalActions.map((item) => (
-          <tr key={`${item.failureBonusRate}-${item.artisanEnergy}`}>
-            <td>{(item.failureBonusRate / 100).toFixed(2)}%</td>
-            <td>{item.artisanEnergy.toFixed(2)}%</td>
-            <td>{actionText(item.action)}</td>
-          </tr>
-        ))}
-      </ResultTable>
-    </div>
-  );
-}
-
-function ResultTable(props: { caption: string; headings: readonly string[]; children: ReactNode }) {
-  const { caption, headings, children } = props;
-  return (
-    <div className={styles['table-scroll']}>
-      <table>
-        <caption>{caption}</caption>
-        <thead>
-          <tr>
-            {headings.map((heading) => (
-              <th key={heading} scope="col">
-                {heading}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>{children}</tbody>
-      </table>
-    </div>
   );
 }
