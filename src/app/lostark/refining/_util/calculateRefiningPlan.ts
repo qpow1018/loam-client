@@ -1,5 +1,6 @@
 import type {
   TBookOption,
+  TRefiningConditionalAction,
   TRefiningMaterialId,
   TMaterialExpectation,
   TRefiningAction,
@@ -410,8 +411,8 @@ export function calculateRefiningPlan(input: TRefiningPlanInput): TRefiningPlan 
   let trace = start;
   let worstGold = 0;
   let worstAttempts = 0;
-  const conditionalActions: TRefiningPlan['conditionalActions'][number][] = [];
-  const worstActions: TRefiningPlan['recommendedWorstCase']['conditionalActions'][number][] = [];
+  const conditionalActions: TRefiningConditionalAction[] = [];
+  const worstActions: TRefiningConditionalAction[] = [];
 
   while (true) {
     const action = solve(trace).action;

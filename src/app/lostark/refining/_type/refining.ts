@@ -66,7 +66,6 @@ export type TRefiningRule = {
 export type TRefiningMaterialInput = { owned: string; isZeroPriced: boolean };
 export type TRefiningMaterialInputs = Partial<Record<TRefiningMaterialId, TRefiningMaterialInput>>;
 
-// TODO check
 export type TRefiningOwnedMaterials = Partial<Record<TRefiningMaterialId, number>>;
 export type TRefiningPlanInput = {
   step: TRefiningRule;
@@ -83,27 +82,24 @@ export type TMaterialExpectation = {
   expectedTotalUsed: number;
   expectedGold: number;
 };
+export type TRefiningConditionalAction = {
+  failureBonusRate: number;
+  artisanEnergy: number;
+  action: TRefiningAction;
+  immediateGold: number;
+};
+export type TRefiningWorstCase = {
+  attempts: number;
+  gold: number;
+  shilling: number;
+  conditionalActions: readonly TRefiningConditionalAction[];
+};
 export type TRefiningPlan = {
   expectedGold: number;
   expectedShilling: number;
   expectedAttempts: number;
   materialExpectations: Partial<Record<TRefiningMaterialId, TMaterialExpectation>>;
   goldBreakdown: { pureGold: number; marketMaterials: number };
-  conditionalActions: readonly {
-    failureBonusRate: number;
-    artisanEnergy: number;
-    action: TRefiningAction;
-    immediateGold: number;
-  }[];
-  recommendedWorstCase: {
-    attempts: number;
-    gold: number;
-    shilling: number;
-    conditionalActions: readonly {
-      failureBonusRate: number;
-      artisanEnergy: number;
-      action: TRefiningAction;
-      immediateGold: number;
-    }[];
-  };
+  conditionalActions: readonly TRefiningConditionalAction[];
+  recommendedWorstCase: TRefiningWorstCase;
 };

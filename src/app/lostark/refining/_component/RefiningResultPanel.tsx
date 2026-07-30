@@ -1,10 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 
-import Button from '@/components/common/button/Button';
-import BoxLoading from '@/components/common/loading/BoxLoading';
-import Confirm from '@/components/common/modal/Confirm';
-
-import RefiningResult from '@/app/lostark/refining/_component/RefiningResult';
 import type {
   TRefiningMaterialId,
   TRefiningMaterialInputs,
@@ -17,6 +12,12 @@ import type {
   TRefiningWorkerResponse,
 } from '@/app/lostark/refining/_type/refiningWorker';
 import { validateRefiningInput } from '@/app/lostark/refining/_util/refiningInput';
+
+import Button from '@/components/common/button/Button';
+import BoxLoading from '@/components/common/loading/BoxLoading';
+import Confirm from '@/components/common/modal/Confirm';
+import RefiningResult from '@/app/lostark/refining/_component/RefiningResult';
+
 import styles from '@/app/lostark/refining/_component/refiningResultPanel.module.scss';
 
 export default function RefiningResultPanel(props: {
