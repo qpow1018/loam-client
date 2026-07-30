@@ -5,6 +5,7 @@ const PRIMARY_MENUS: THeaderMenu[] = [
   { name: '메인캐릭터', link: '/lostark/my-characters' },
   { name: '전체캐릭터', link: '/lostark/all-characters' },
   { name: '클리어 골드', link: '/lostark/clear-gold' },
+  { name: '재련 최적화', link: '/lostark/refining' },
   { name: '참고 사이트', link: '/lostark/reference-sites' },
 ];
 

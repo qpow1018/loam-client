@@ -1,0 +1,88 @@
+.input-panel {
+  padding: 16px;
+  background: $gray-800;
+  border-radius: $border-radius;
+
+  .action-row {
+    margin-bottom: 12px;
+  }
+
+  .material-row {
+    padding: 12px 0;
+    border-top: 1px solid $gray-700;
+
+    .material-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .image-box {
+        width: 32px;
+        height: 32px;
+        padding: 4px;
+        border: 1px solid $gray-700;
+        border-radius: $border-radius;
+
+        img {
+          display: block;
+          width: 100%;
+        }
+      }
+
+      .name {
+        font-size: 12px;
+      }
+
+      .market-price {
+        font-size: 12px;
+        font-weight: 500;
+        color: $loa-gold;
+      }
+    }
+
+    .material-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+
+      .quantity-input {
+        position: relative;
+        display: block;
+
+        input {
+          box-sizing: border-box;
+          width: 140px;
+          height: 28px;
+          padding: 4px 24px 4px 6px;
+          border: 1px solid $gray-500;
+          border-radius: 4px;
+          background: transparent;
+          color: $gray-100;
+          font-size: 12px;
+
+          &:focus-visible {
+            outline: none;
+            border-color: $gray-400;
+          }
+        }
+
+        > span {
+          position: absolute;
+          top: 50%;
+          right: 7px;
+          color: $gray-400;
+          font-size: 11px;
+          pointer-events: none;
+          transform: translateY(-50%);
+        }
+      }
+
+      .zero-price-field {
+        color: $gray-300;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+    }
+  }
+}

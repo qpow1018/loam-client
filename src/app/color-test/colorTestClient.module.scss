@@ -1,0 +1,257 @@
+.color-test-page {
+  min-height: 100vh;
+  background: $gray-900;
+
+  .content {
+    width: $page-wide-width;
+    margin: 0 auto;
+    padding: 64px 0 96px;
+  }
+
+  .page-header {
+    padding-bottom: 32px;
+    border-bottom: 1px solid $gray-700;
+
+    p,
+    h1 {
+      margin: 0;
+    }
+
+    .eyebrow,
+    .section-kicker {
+      color: $mint-400;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    h1 {
+      margin-top: 8px;
+      font-size: 32px;
+      letter-spacing: -1px;
+    }
+
+    > p:last-child {
+      margin-top: 10px;
+      color: $text-secondary;
+      font-size: 14px;
+    }
+  }
+
+  .catalog-section {
+    padding-top: 48px;
+  }
+
+  .palette-section {
+    padding-top: 40px;
+  }
+
+  .section-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 16px;
+
+    p,
+    h2 {
+      margin: 0;
+    }
+
+    h2 {
+      margin-top: 5px;
+      font-size: 20px;
+      letter-spacing: -0.5px;
+    }
+
+    > p {
+      max-width: 560px;
+      color: $text-secondary;
+      font-size: 13px;
+      text-align: right;
+    }
+  }
+
+  .color-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .palette-comparison {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .palette-card {
+    padding: 18px;
+    border: 1px solid $gray-700;
+    border-radius: 10px;
+    background: $gray-800;
+
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h3 {
+      font-size: 16px;
+    }
+
+    > p {
+      min-height: 34px;
+      margin-top: 6px;
+      color: $text-secondary;
+      font-size: 12px;
+    }
+  }
+
+  .palette-colors {
+    display: grid;
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+    gap: 4px;
+    margin: 14px 0 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      min-width: 0;
+    }
+
+    span {
+      display: block;
+      height: 42px;
+      border: 1px solid rgba($white, 0.16);
+      border-radius: 4px;
+    }
+
+    strong,
+    code {
+      display: block;
+      overflow: hidden;
+      margin-top: 5px;
+      font-size: 10px;
+      font-style: normal;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    strong {
+      color: $text-primary;
+    }
+
+    code {
+      margin-top: 1px;
+      color: $gray-400;
+    }
+  }
+
+  .color-decision {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    align-items: center;
+    gap: 6px 10px;
+    margin-top: 10px;
+    color: $text-secondary;
+    font-size: 11px;
+
+    span {
+      padding: 3px 6px;
+      border: 1px solid $gray-600;
+      border-radius: 999px;
+      color: $gray-300;
+      font-size: 10px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    code {
+      grid-column: 2;
+      color: $text-primary;
+      font-size: 11px;
+    }
+
+    &.decision-common-token span {
+      border-color: $mint-600;
+      color: $mint-300;
+    }
+
+    &.decision-domain-token span {
+      border-color: $gray-500;
+      color: $text-primary;
+    }
+
+    &.decision-fix span {
+      border-color: $rose-600;
+      color: $rose-300;
+    }
+  }
+
+  .color-item {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 14px;
+    min-height: 84px;
+    padding: 14px;
+    border: 1px solid $gray-700;
+    border-radius: 10px;
+    background: $gray-800;
+  }
+
+  .swatch,
+  .semantic-mark {
+    display: block;
+    width: 56px;
+    height: 56px;
+    border: 1px solid rgba($white, 0.16);
+    border-radius: 8px;
+  }
+
+  .semantic-mark {
+    display: grid;
+    place-items: center;
+    color: $gray-400;
+    font-size: 24px;
+  }
+
+  .item-details {
+    min-width: 0;
+
+    code {
+      display: block;
+      overflow-wrap: anywhere;
+      color: $text-primary;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    p {
+      margin: 5px 0 0;
+      color: $text-secondary;
+      font-size: 11px;
+    }
+  }
+
+  .source-list {
+    display: grid;
+    gap: 2px;
+    margin: 8px 0 0;
+    padding: 0;
+    color: $gray-400;
+    font-family: monospace;
+    font-size: 10px;
+    list-style: none;
+
+    li {
+      overflow-wrap: anywhere;
+    }
+  }
+}

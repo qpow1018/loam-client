@@ -1,5 +1,4 @@
-import assert from 'node:assert/strict';
-import test from 'node:test';
+import { assert, it as test } from 'vitest';
 
 import { CLEAR_GOLD_CATEGORIES } from '../_define/clearGoldContents';
 import type { TClearGoldCategory, TClearGoldGate } from '../_type/clearGold';

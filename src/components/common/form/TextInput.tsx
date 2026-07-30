@@ -2,7 +2,9 @@ import styles from './textInput.module.scss';
 
 export default function TextInput(props: {
   value: string;
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
+  isReadonly?: boolean;
+  inputMode?: React.ComponentProps<'input'>['inputMode'];
   placeholder?: string;
   onPressEnter?: () => void;
   className?: string;
@@ -11,13 +13,17 @@ export default function TextInput(props: {
   const {
     value,
     onChange,
+    isReadonly = false,
+    inputMode,
     placeholder,
     onPressEnter,
     className,
     ref,
   } = props;
+  const isReadOnly = isReadonly || onChange === undefined;
 
   function handleKeyUp(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (isReadOnly) return;
     if (e.nativeEvent.isComposing) return;
     if (e.key === 'Enter' && onPressEnter !== undefined) {
       onPressEnter();
@@ -25,12 +31,16 @@ export default function TextInput(props: {
   }
 
   return (
-    <div className={`${styles['text-input']} ${className ?? ''}`}>
+    <div
+      className={`${styles['text-input']} ${isReadOnly ? styles['is-readonly'] : ''} ${className ?? ''}`}
+    >
       <input
         ref={ref}
-        type='text'
+        type="text"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        readOnly={isReadOnly}
+        inputMode={inputMode}
+        onChange={(e) => onChange?.(e.target.value)}
         placeholder={placeholder}
         onKeyUp={handleKeyUp}
       />

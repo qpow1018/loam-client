@@ -18,10 +18,10 @@
 
   .weekday-button-selected {
     color: $text-primary;
-    background-color: $rose-500;
+    background-color: $rose;
 
     &:hover {
-      background-color: $rose-400;
+      background-color: $rose-accent;
     }
   }
 }

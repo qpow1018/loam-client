@@ -24,15 +24,15 @@
     pointer-events: auto;
 
     &.type-success {
-      background-color: rgba($mint-600, 0.28);
+      background-color: $mint-soft;
     }
 
     &.type-error {
-      background-color: rgba($rose-600, 0.28);
+      background-color: $rose-soft;
     }
 
     &.type-info {
-      background-color: rgba($gray-600, 0.88);
+      background-color: $gray-600;
     }
 
     .message {
@@ -40,7 +40,6 @@
       min-width: 0;
       font-size: 13px;
       font-weight: 500;
-      line-height: 1.4;
       word-break: keep-all;
       overflow-wrap: anywhere;
     }

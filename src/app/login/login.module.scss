@@ -64,7 +64,7 @@
   }
 
   .error-message {
-    color: $rose-300;
+    color: $rose-light;
     font-size: 12px;
   }
 
@@ -74,9 +74,9 @@
     justify-content: center;
     height: 40px;
     margin-top: 4px;
-    border: 1px solid $mint-600;
+    border: 1px solid $mint;
     border-radius: $border-radius;
-    background: $mint-600;
+    background: $mint;
     color: $text-primary;
     font-size: 14px;
     font-weight: 500;
@@ -87,8 +87,8 @@
       opacity $transition;
 
     &:hover:not(:disabled) {
-      border-color: $mint-700;
-      background: $mint-700;
+      border-color: $mint-soft;
+      background: $mint-soft;
     }
 
     &:disabled {

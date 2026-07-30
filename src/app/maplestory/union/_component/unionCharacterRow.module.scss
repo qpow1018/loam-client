@@ -8,11 +8,11 @@
   transition: background-color $transition;
 
   &.is-high-level {
-    background-color: rgba($rose-900, 0.35);
+    background-color: $rose-soft;
 
     .class-name,
     .level-status {
-      color: $rose-300;
+      color: $rose-light;
     }
   }
 
@@ -56,7 +56,7 @@
     color: $text-primary;
 
     &:focus {
-      border-color: $rose-400;
+      border-color: $rose-accent;
     }
   }
 

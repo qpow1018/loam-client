@@ -24,9 +24,9 @@ export default function ArkGridSummarySection(props: { characters: TResLostarkMa
     <SummarySection
       title="아크그리드"
       legendItems={[
-        { label: '고대 17P+', color: '#34d399' },
-        { label: '유물 17P+', color: '#94a3b8' },
-        { label: '그 이하', color: '#62636c' },
+        { label: '고대 17P+', tier: 'high' },
+        { label: '유물 17P+', tier: 'middle' },
+        { label: '그 이하', tier: 'low' },
       ]}
       className={styles['ark-grid-summary-section']}
     >

@@ -1,3 +1,8 @@
+## 지원 환경
+
+LoaM은 PC 데스크톱 브라우저 전용이며 모바일 환경은 지원하지 않습니다.
+PWA 설치 기능은 데스크톱 브라우저 사용을 위한 것으로, 모바일 지원을 의미하지 않습니다.
+
 ## Getting Started
 
 First, run the development server:

@@ -19,9 +19,9 @@ export default function ArkPassiveSummarySection(props: {
     <SummarySection
       title="아크패시브"
       legendItems={[
-        { label: '26+', color: '#34d399' },
-        { label: '21+', color: '#94a3b8' },
-        { label: '이하', color: '#62636c' },
+        { label: '26+', tier: 'high' },
+        { label: '21+', tier: 'middle' },
+        { label: '이하', tier: 'low' },
       ]}
       className={styles['ark-passive-summary-section']}
     >

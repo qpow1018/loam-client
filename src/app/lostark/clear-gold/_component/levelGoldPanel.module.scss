@@ -46,12 +46,12 @@
 
         &:not(:disabled):hover {
           color: $text-primary;
-          border-color: $rose-400;
+          border-color: $rose-accent;
         }
 
         &[aria-expanded='true'] {
           color: $text-primary;
-          border-color: $rose-400;
+          border-color: $rose-accent;
         }
 
         &:disabled {
@@ -76,9 +76,9 @@
       font-size: 12px;
       text-overflow: ellipsis;
       white-space: nowrap;
-      border: 1px solid $rose-400;
+      border: 1px solid $rose-accent;
       border-radius: 100px;
-      background-color: rgba($rose-400, 0.12);
+      background-color: $rose-ghost;
     }
 
     .exclude-list {
@@ -104,14 +104,8 @@
 
       &:hover,
       &.is-selected {
-        border-color: $rose-400;
+        border-color: $rose-accent;
         background-color: $gray-700;
-      }
-
-      input {
-        width: 14px;
-        height: 14px;
-        accent-color: $rose-400;
       }
 
       .option-name {
@@ -162,7 +156,7 @@
         color: transparent;
         font-size: 44px;
         font-weight: 800;
-        background: linear-gradient(135deg, $text-primary 8%, $rose-400 42%, $mint-300 92%) -100% / 200%;
+        background: linear-gradient(135deg, $text-primary 8%, $rose-accent 42%, $mint-light 92%) -100% / 200%;
         background-clip: text, border-box;
         white-space: nowrap;
       }
@@ -195,7 +189,6 @@
         display: block;
         font-size: 24px;
         font-weight: 800;
-        line-height: 1;
       }
 
       small {
@@ -203,15 +196,14 @@
         margin-top: 6px;
         color: $text-secondary;
         font-size: 11px;
-        line-height: 1.2;
       }
 
       .tradable-summary strong {
-        color: $mint-300;
+        color: $mint-light;
       }
 
       .bound-summary strong {
-        color: #f2d16b;
+        color: $loa-gold;
       }
     }
   }
@@ -281,11 +273,11 @@
       .raid-level,
       .difficulty-chip,
       .raid-gold {
-        color: $mint-300;
+        color: $mint-light;
       }
 
       .difficulty-chip {
-        border-color: rgba($mint-300, 0.42);
+        border-color: $mint;
       }
     }
 
@@ -296,11 +288,11 @@
       .raid-level,
       .difficulty-chip,
       .raid-gold {
-        color: #f2d16b;
+        color: $loa-gold;
       }
 
       .difficulty-chip {
-        border-color: rgba(#f2d16b, 0.42);
+        border-color: rgba($loa-gold, 0.42);
       }
     }
   }

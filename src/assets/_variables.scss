@@ -2,10 +2,6 @@
 $white: #fff;
 $black: #000;
 
-// Text
-$text-primary: #f4f4f6; // gray-100
-$text-secondary: #8f9099; // gray-400
-
 // Gray
 $gray-100: #f4f4f6;
 $gray-200: #e2e2e6;
@@ -28,6 +24,13 @@ $rose-700: #be123c;
 $rose-800: #9f1239;
 $rose-900: #4c0519;
 
+// Rose semantic
+$rose: $rose-600;
+$rose-light: $rose-300;
+$rose-accent: $rose-400;
+$rose-ghost: rgba($rose-accent, 0.1);
+$rose-soft: $rose-900;
+
 // mint
 $mint-100: #e6fffa;
 $mint-200: #bbf7d0;
@@ -39,10 +42,91 @@ $mint-700: #047857;
 $mint-800: #065f46;
 $mint-900: #14532d;
 
+// Mint semantic
+$mint: $mint-600;
+$mint-light: $mint-200;
+$mint-accent: $mint-400;
+$mint-ghost: rgba($mint-accent, 0.1);
+$mint-soft: $mint-900;
+
+// Amber
+$amber-100: #fef3c7;
+$amber-200: #fde68a;
+$amber-300: #fcd34d;
+$amber-400: #fbbf24;
+$amber-500: #f59e0b;
+$amber-600: #d97706;
+$amber-700: #b45309;
+$amber-800: #92400e;
+$amber-900: #78350f;
+
+// Amber semantic
+$amber: $amber-600;
+$amber-light: $amber-200;
+$amber-accent: $amber-400;
+$amber-ghost: rgba($amber-accent, 0.1);
+$amber-soft: $amber-900;
+
+// Violet
+$violet-100: #f3e8ff;
+$violet-200: #e9d5ff;
+$violet-300: #d8b4fe;
+$violet-400: #c084fc;
+$violet-500: #a855f7;
+$violet-600: #9333ea;
+$violet-700: #7e22ce;
+$violet-800: #6b21a8;
+$violet-900: #581c87;
+
+// Violet semantic
+$violet: $violet-600;
+$violet-light: $violet-300;
+$violet-accent: $violet-400;
+$violet-ghost: rgba($violet-accent, 0.1);
+$violet-soft: $violet-900;
+
+// Azure
+$azure-100: #e0f2fe;
+$azure-200: #bae6fd;
+$azure-300: #7dd3fc;
+$azure-400: #38bdf8;
+$azure-500: #0ea5e9;
+$azure-600: #0284c7;
+$azure-700: #0369a1;
+$azure-800: #075985;
+$azure-900: #0c4a6e;
+
+// Azure semantic
+$azure: $azure-600;
+$azure-light: $azure-200;
+$azure-accent: $azure-400;
+$azure-ghost: rgba($azure-accent, 0.1);
+$azure-soft: $azure-900;
+
+// Text
+$text-primary: #f4f4f6; // gray-100
+$text-secondary: #8f9099; // gray-400
+
+// Feature
+$chip-perfect-text: #ffd78a;
+$chip-perfect-bg: linear-gradient(135deg, #3a250c, #7a3a10);
+$chip-perfect-shadow: inset 0 0 0 1px rgba(255, 191, 63, 0.55),
+    0 0 8px rgba(255, 144, 45, 0.18);
+$chip-high-text: $gray-900;
+$chip-high-bg: linear-gradient(180deg, $amber-100 0%, $amber-300 100%);
+$chip-middle-text: $gray-900;
+$chip-middle-bg: linear-gradient(180deg, #cbd5e1 0%, #94a3b8 100%);
+$chip-low-text: $text-primary;
+$chip-low-bg: $gray-600;
+$chip-none-text: $text-secondary;
+$loa-gold: $amber-400;
+
 // Overlay
 $bg-overlay: rgba(0, 0, 0, 0.5);
 
 // Size
+$page-width: 1024px;
+$page-wide-width: 1440px;
 $header-height: 56px;
 $modal-header-height: 48px;
 $task-table-cell-height: 38px;
@@ -53,6 +137,7 @@ $loa-summary-label-cell-width: 140px;
 // Common
 $font-family: var(--font-noto-sans-kr), sans-serif;
 $border-radius: 6px;
+$shadow-popover: 0 8px 16px rgba(0, 0, 0, 0.3);
 $transition: 0.25s ease;
 
 // Z-index

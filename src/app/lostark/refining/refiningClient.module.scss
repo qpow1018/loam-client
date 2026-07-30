@@ -1,0 +1,11 @@
+.refining-page {
+  width: $page-wide-width;
+  padding: 16px 16px 80px 16px;
+
+  .content-grid {
+    display: grid;
+    align-items: start;
+    grid-template-columns: 240px 320px minmax(0, 1fr);
+    gap: 16px;
+  }
+}

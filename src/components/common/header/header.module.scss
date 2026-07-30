@@ -9,20 +9,20 @@
   height: $header-height;
 
   &.is-mint {
-    background-color: $mint-700;
+    background-color: $mint;
 
     .navigation-link:hover,
     .navigation-link.is-active {
-      background-color: $mint-800;
+      background-color: $mint-soft;
     }
   }
 
   &.is-rose {
-    background-color: $rose-700;
+    background-color: $rose;
 
     .navigation-link:hover,
     .navigation-link.is-active {
-      background-color: $rose-800;
+      background-color: $rose-soft;
     }
   }
 
@@ -88,9 +88,9 @@
     height: 32px;
     font-size: 12px;
     font-weight: 700;
-    color: #92400e;
-    background-color: #fef3c7;
-    border: 1px solid rgba(146, 64, 14, 0.15);
+    color: $amber-light;
+    background-color: $amber-soft;
+    border: 1px solid $amber;
     border-radius: 999px;
     box-shadow: 0 2px 8px rgba($black, 0.18);
     text-decoration: none;
@@ -98,15 +98,15 @@
     flex-shrink: 0;
 
     &:hover {
-      background-color: #fde68a;
+      background-color: $amber;
     }
 
     .backup-reminder-dot {
       width: 7px;
       height: 7px;
-      background-color: #f59e0b;
+      background-color: $amber-accent;
       border-radius: 50%;
-      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+      box-shadow: 0 0 0 3px $amber-ghost;
     }
   }
 }
