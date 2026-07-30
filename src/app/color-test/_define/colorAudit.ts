@@ -1,0 +1,576 @@
+export type TColorAuditItem = {
+  expression: string;
+  sources: string[];
+  note?: string;
+  swatch?: string;
+  decision?: TColorDecision;
+};
+
+export type TColorDecision = {
+  kind: 'common-token' | 'domain-token' | 'keep-local' | 'keep-external' | 'fix';
+  label: string;
+  reason: string;
+  tokenName?: string;
+};
+
+export type TColorAuditSection = {
+  title: string;
+  description: string;
+  items: TColorAuditItem[];
+  decision?: TColorDecision;
+};
+
+const SOURCE = {
+  header: 'src/components/common/header/header.module.scss',
+  itemSlot: 'src/components/lostark/itemSlot/itemSlot.module.scss',
+  quality: 'src/utils/lostark.ts',
+  summary: 'src/app/lostark/my-characters/_component/specSummaryPanel/',
+  mainCharacter: 'src/app/lostark/my-characters/_component/mainCharactersPanel/section/',
+  clearGold: 'src/app/lostark/clear-gold/_component/levelGoldPanel.module.scss',
+  material: 'src/app/lostark/refining/_component/refiningMaterialInputPanel.module.scss',
+  manifest: 'src/app/manifest.ts',
+  fixedRules: 'src/app/lostark/refining/fixed-rules.html',
+} as const;
+
+export const COLOR_AUDIT_SECTIONS: TColorAuditSection[] = [
+  {
+    title: '앱 UI 정적 리터럴',
+    description: '_variables.scss 외에 코드와 SCSS에 직접 적힌 색상입니다.',
+    items: [
+      {
+        expression: '#92400e',
+        swatch: '#92400e',
+        sources: [SOURCE.header],
+        decision: {
+          kind: 'keep-local',
+          label: '컴포넌트 로컬 유지',
+          reason: '백업 알림 배너 한 곳의 전용 대비색이라 공용 팔레트로 올릴 근거가 부족합니다.',
+        },
+      },
+      {
+        expression: '#fef3c7',
+        swatch: '#fef3c7',
+        sources: [SOURCE.header],
+        decision: {
+          kind: 'keep-local',
+          label: '컴포넌트 로컬 유지',
+          reason: '백업 알림 배너 한 곳의 전용 배경색입니다.',
+        },
+      },
+      {
+        expression: '#fde68a',
+        swatch: '#fde68a',
+        sources: [SOURCE.header],
+        decision: {
+          kind: 'keep-local',
+          label: '컴포넌트 로컬 유지',
+          reason: '백업 알림 배너 한 곳의 전용 테두리색입니다.',
+        },
+      },
+      {
+        expression: '#f59e0b',
+        swatch: '#f59e0b',
+        sources: [SOURCE.header, `${SOURCE.summary}_shared/cellValueChip.module.scss`],
+        decision: {
+          kind: 'keep-local',
+          label: '통합하지 않음',
+          reason:
+            '같은 실제 색상이지만 경고와 장비 요약 강조라는 의미가 달라 하나의 의미 토큰으로 묶으면 안 됩니다.',
+        },
+      },
+      {
+        expression: 'rgba(146, 64, 14, 0.15)',
+        swatch: 'rgba(146, 64, 14, 0.15)',
+        sources: [SOURCE.header],
+        decision: {
+          kind: 'keep-local',
+          label: '컴포넌트 로컬 유지',
+          reason: '백업 알림의 전용 반투명 테두리입니다.',
+        },
+      },
+      {
+        expression: 'rgba(245, 158, 11, 0.18 · 0.32)',
+        swatch: 'rgba(245, 158, 11, 0.32)',
+        sources: [SOURCE.header, `${SOURCE.summary}_shared/cellValueChip.module.scss`],
+        decision: {
+          kind: 'keep-local',
+          label: '통합하지 않음',
+          reason: '사용 위치별 의미가 달라 알파값까지 공용화하지 않습니다.',
+        },
+      },
+      {
+        expression: '#f2d16b',
+        swatch: '#f2d16b',
+        sources: [SOURCE.clearGold],
+        decision: {
+          kind: 'domain-token',
+          label: 'Lost Ark 도메인 토큰 후보',
+          reason: '귀속 골드라는 게임 도메인 의미가 명확합니다.',
+          tokenName: '$lostark-gold-bound',
+        },
+      },
+      {
+        expression: 'rgba(#f2d16b, 0.42)',
+        swatch: 'rgba(242, 209, 107, 0.42)',
+        sources: [SOURCE.clearGold],
+        decision: {
+          kind: 'domain-token',
+          label: 'Lost Ark 도메인 토큰 후보',
+          reason: '기본색 토큰을 만든 뒤 알파값은 사용처에서 합성하는 편이 자연스럽습니다.',
+          tokenName: 'rgba($lostark-gold-bound, 0.42)',
+        },
+      },
+      {
+        expression: 'red',
+        swatch: 'red',
+        sources: [SOURCE.material],
+        note: 'TODO 주석 옆의 실제 CSS 선언',
+        decision: {
+          kind: 'fix',
+          label: '수정 필요',
+          reason: '인접한 TODO가 의도한 선택 상태 색상과 현재 선언이 다릅니다.',
+          tokenName: '$mint-400',
+        },
+      },
+      {
+        expression: '#15181d',
+        swatch: '#15181d',
+        sources: [
+          `${SOURCE.mainCharacter}legendaryAvatarSection.module.scss`,
+          `${SOURCE.mainCharacter}profileImageSection.module.scss`,
+          `${SOURCE.mainCharacter}engravingSection.module.scss`,
+        ],
+        decision: {
+          kind: 'domain-token',
+          label: 'Lost Ark 도메인 토큰 후보',
+          reason: '메인 캐릭터 카드의 공통 어두운 표면으로 반복됩니다.',
+          tokenName: '$lostark-character-surface',
+        },
+      },
+      {
+        expression: '#e95826 · #ffbf3f · #ff4b16 · #7e110d',
+        swatch: 'linear-gradient(135deg, #ffbf3f 0%, #ff4b16 48%, #7e110d 100%)',
+        sources: [`${SOURCE.mainCharacter}engravingSection.module.scss`],
+        decision: {
+          kind: 'keep-local',
+          label: '로컬 시각 레시피 유지',
+          reason:
+            '각인 배지 하나의 다단 gradient라 색 토큰 분리보다 해당 컴포넌트 안에서 읽는 편이 낫습니다.',
+        },
+      },
+      {
+        expression: '#ffd78a · #3a250c · #7a3a10',
+        swatch: 'linear-gradient(135deg, #3a250c, #7a3a10)',
+        sources: [`${SOURCE.mainCharacter}engravingSection.module.scss`],
+        decision: {
+          kind: 'keep-local',
+          label: '로컬 시각 레시피 유지',
+          reason: '각인 배지의 전용 보조 gradient입니다.',
+        },
+      },
+      {
+        expression: 'rgba(0, 0, 0, 0.35) · rgba(255, 191, 63, 0.55) · rgba(255, 144, 45, 0.18)',
+        swatch: 'rgba(255, 144, 45, 0.45)',
+        sources: [`${SOURCE.mainCharacter}engravingSection.module.scss`],
+        decision: {
+          kind: 'keep-local',
+          label: '로컬 시각 레시피 유지',
+          reason: '각인 배지 효과를 구성하는 그림자와 하이라이트입니다.',
+        },
+      },
+      {
+        expression: '#fbbf24 · #f59e0b',
+        swatch: 'linear-gradient(180deg, #fbbf24, #f59e0b)',
+        sources: [`${SOURCE.summary}_shared/cellValueChip.module.scss`],
+        decision: {
+          kind: 'keep-local',
+          label: '로컬 시각 레시피 유지',
+          reason: '요약 칩 한 종류의 gradient이며 경고색과도 실제 값이 겹칩니다.',
+        },
+      },
+      {
+        expression: '#a7f3d0 · #34d399',
+        swatch: 'linear-gradient(180deg, #a7f3d0, #34d399)',
+        sources: [
+          `${SOURCE.summary}_shared/cellValueChip.module.scss`,
+          `${SOURCE.summary}AbilityStoneSection.tsx`,
+          `${SOURCE.summary}GearSection.tsx`,
+          `${SOURCE.summary}ArkGridSummarySection.tsx`,
+          `${SOURCE.summary}ArkPassiveSummarySection.tsx`,
+          `${SOURCE.summary}EngravingSummarySection.tsx`,
+        ],
+        decision: {
+          kind: 'domain-token',
+          label: 'Lost Ark 도메인 토큰 후보',
+          reason: '상위 티어 요약값과 칩에서 함께 쓰이는 등급 의미가 있습니다.',
+          tokenName: '$lostark-summary-tier-high / $lostark-summary-tier-high-soft',
+        },
+      },
+      {
+        expression: '#cbd5e1 · #94a3b8',
+        swatch: 'linear-gradient(180deg, #cbd5e1, #94a3b8)',
+        sources: [
+          `${SOURCE.summary}_shared/cellValueChip.module.scss`,
+          `${SOURCE.summary}GearSection.tsx`,
+          `${SOURCE.summary}ArkGridSummarySection.tsx`,
+          `${SOURCE.summary}ArkPassiveSummarySection.tsx`,
+          `${SOURCE.summary}EngravingSummarySection.tsx`,
+        ],
+        decision: {
+          kind: 'domain-token',
+          label: 'Lost Ark 도메인 토큰 후보',
+          reason: '중간 티어 요약값과 칩에서 함께 쓰이는 등급 의미가 있습니다.',
+          tokenName: '$lostark-summary-tier-mid / $lostark-summary-tier-mid-soft',
+        },
+      },
+      {
+        expression: '#62636c',
+        swatch: '#62636c',
+        sources: [
+          SOURCE.quality,
+          `${SOURCE.summary}AbilityStoneSection.tsx`,
+          `${SOURCE.summary}GearSection.tsx`,
+          `${SOURCE.summary}ArkGridSummarySection.tsx`,
+          `${SOURCE.summary}ArkPassiveSummarySection.tsx`,
+          `${SOURCE.summary}EngravingSummarySection.tsx`,
+        ],
+        decision: {
+          kind: 'keep-local',
+          label: '의미별 분리 유지',
+          reason:
+            '품질 기본색과 요약 하위 티어가 우연히 같은 값입니다. 하나의 토큰으로 합치지 않습니다.',
+        },
+      },
+      {
+        expression: '#fe9600 · #ce43fc · #00b5ff',
+        swatch: 'linear-gradient(90deg, #fe9600, #ce43fc, #00b5ff)',
+        sources: [`${SOURCE.summary}AccessorySection.tsx`],
+        decision: {
+          kind: 'domain-token',
+          label: 'Lost Ark 도메인 토큰 후보',
+          reason: '악세서리 티어 표시에만 쓰이는 명확한 도메인 팔레트입니다.',
+          tokenName: 'LOSTARK_ACCESSORY_TIER_COLORS',
+        },
+      },
+      {
+        expression: '#ea6811cc · #df18e3cc · #1260ebcc · #09ae09cc',
+        swatch: 'linear-gradient(90deg, #ea6811cc, #df18e3cc, #1260ebcc, #09ae09cc)',
+        sources: [SOURCE.quality],
+        decision: {
+          kind: 'domain-token',
+          label: 'Lost Ark 도메인 토큰 후보',
+          reason: 'TypeScript에서 계산해 반환하는 장비 품질 배경색입니다.',
+          tokenName: 'LOSTARK_QUALITY_BACKGROUND_COLORS',
+        },
+      },
+      {
+        expression:
+          '#111b27 · #113f5f · #21142c · #520f68 · #311d01 · #b16800 · #2e1708 · #ab4102 · #433829 · #f5dfab · #0c2e2c · #2faba8',
+        swatch: 'linear-gradient(135deg, #111b27, #113f5f)',
+        sources: [SOURCE.itemSlot],
+        note: '장비 등급별 여섯 gradient',
+        decision: {
+          kind: 'keep-local',
+          label: '공용 컴포넌트 내부 유지',
+          reason:
+            'ItemSlot 자체가 재사용 경계입니다. 12개 gradient stop을 전역 Sass 토큰으로 늘릴 필요는 없습니다.',
+        },
+      },
+      {
+        expression: 'rgba(0, 0, 0, 0.3)',
+        swatch: 'rgba(0, 0, 0, 0.3)',
+        sources: [
+          'src/components/common/dropdownMenu/dropdownMenu.module.scss',
+          'src/components/common/form/select.module.scss',
+        ],
+        decision: {
+          kind: 'common-token',
+          label: '공용 토큰 후보',
+          reason: '두 공용 오버레이 컴포넌트에서 같은 그림자 값이 반복됩니다.',
+          tokenName: '$shadow-popover',
+        },
+      },
+    ],
+  },
+  {
+    title: '토큰 기반 rgba 조합',
+    description: '눈에는 보이지만 기존 Sass 토큰을 알파 합성한 값입니다.',
+    decision: {
+      kind: 'keep-local',
+      label: '현 상태 유지',
+      reason:
+        '기본 색상은 이미 토큰입니다. 알파값은 각 상태·표면의 맥락을 담으므로 별도 색상 토큰으로 분리하지 않습니다.',
+    },
+    items: [
+      {
+        expression: 'rgba($white, 0.35)',
+        swatch: 'rgba(255, 255, 255, 0.35)',
+        sources: [SOURCE.header, 'docs/superpowers/plans/2026-06-11-game-specific-header.md'],
+      },
+      {
+        expression: 'rgba($black, 0.18) · rgba($black, 0.24)',
+        swatch: 'rgba(0, 0, 0, 0.24)',
+        sources: [SOURCE.header, 'src/components/common/toast/toastContainer.module.scss'],
+      },
+      {
+        expression: 'rgba($mint-400, 0.3)',
+        swatch: 'rgba(74, 222, 128, 0.3)',
+        sources: [
+          'src/components/common/form/checkbox.module.scss',
+          'src/components/common/form/select.module.scss',
+        ],
+      },
+      {
+        expression: 'rgba($mint-600, 0.28 · 0.55) · rgba($mint-400, 0.2)',
+        swatch: 'rgba(5, 150, 105, 0.55)',
+        sources: [
+          'src/components/common/toast/toastContainer.module.scss',
+          'src/app/settings/_component/settingsSection.module.scss',
+        ],
+      },
+      {
+        expression: 'rgba($mint-600, 0.3) · rgba($mint-700, 0.35 · 0.4) · rgba($rose-700, 0.35)',
+        swatch: 'rgba(5, 150, 105, 0.3)',
+        sources: [
+          'src/app/lostark/my-characters/_component/mainCharactersPanel/section/arkGridSection.module.scss',
+          'src/app/ui-test/uiTestClient.module.scss',
+        ],
+      },
+      {
+        expression: 'rgba($rose-600, 0.28) · rgba($rose-900, 0.35 · 0.58) · rgba($rose-400, 0.12)',
+        swatch: 'rgba(225, 29, 72, 0.28)',
+        sources: [
+          'src/components/common/toast/toastContainer.module.scss',
+          'src/app/maplestory/equipment/_component/equipmentTable.module.scss',
+          'src/app/maplestory/union/_component/unionCharacterRow.module.scss',
+          SOURCE.clearGold,
+        ],
+      },
+      {
+        expression: 'rgba($gray-600, 0.88) · rgba($white, 0.04 · 0.12)',
+        swatch: 'rgba(69, 70, 78, 0.88)',
+        sources: [
+          'src/components/common/toast/toastContainer.module.scss',
+          'src/app/maplestory/equipment/_component/equipmentTable.module.scss',
+        ],
+      },
+      {
+        expression: 'rgba($mint-500, 0.3)',
+        swatch: 'rgba(16, 185, 129, 0.3)',
+        sources: [
+          'src/app/maplestory/mapledo/_component/mapledoTable/characterModal/characterModal.module.scss',
+          'src/app/maplestory/my-characters/_component/characterList.module.scss',
+        ],
+      },
+      {
+        expression: 'rgba($mint-300, 0.4 · 0.42) · rgba($mint-800, 0.7)',
+        swatch: 'rgba(134, 239, 172, 0.42)',
+        sources: [`${SOURCE.mainCharacter}extraEquipmentSection.module.scss`, SOURCE.clearGold],
+      },
+      {
+        expression: 'rgba($mint-400, 0.05 · 0.08 · 0.1)',
+        swatch: 'rgba(74, 222, 128, 0.1)',
+        sources: ['src/app/lostark/refining/_component/refiningResult.module.scss'],
+      },
+    ],
+  },
+  {
+    title: 'PWA manifest',
+    description: '설치형 웹 앱의 브라우저 테마 및 배경 설정입니다.',
+    decision: {
+      kind: 'keep-external',
+      label: '외부 소비자 값으로 유지',
+      reason:
+        'manifest의 브라우저 메타데이터는 Sass 변수를 직접 읽지 못합니다. 화면 토큰과 강제 동기화하지 않습니다.',
+    },
+    items: [
+      {
+        expression: '#18181b',
+        swatch: '#18181b',
+        sources: [SOURCE.manifest],
+        note: 'background_color, theme_color',
+      },
+    ],
+  },
+  {
+    title: '정적 SVG 자산',
+    description: '아이콘 내부의 fill, stroke, gradient stop 값입니다.',
+    decision: {
+      kind: 'keep-external',
+      label: '자산 내부 유지',
+      reason: 'SVG 자산은 Sass 토큰 범위 밖입니다. 자산별 일러스트레이션 팔레트로 관리합니다.',
+    },
+    items: [
+      {
+        expression: '#047857 · #064e3b · #4ade80 · #f4f4f6',
+        swatch: 'linear-gradient(135deg, #047857, #064e3b)',
+        sources: ['public/icons/maplestory/task-daily.svg'],
+      },
+      {
+        expression: '#6d28d9 · #3b0764 · #a78bfa · #f4f4f6',
+        swatch: 'linear-gradient(135deg, #6d28d9, #3b0764)',
+        sources: ['public/icons/maplestory/task-monthly.svg'],
+      },
+      {
+        expression: '#be123c · #881337 · #fb7185 · #f4f4f6',
+        swatch: 'linear-gradient(135deg, #be123c, #881337)',
+        sources: ['public/icons/maplestory/task-weekly.svg'],
+      },
+      {
+        expression: '#000 · black',
+        swatch: '#000',
+        sources: ['public/next.svg', 'public/vercel.svg'],
+      },
+    ],
+  },
+  {
+    title: '단독 fixed-rules HTML',
+    description: '앱 Sass 토큰을 상속하지 않는 재련 규칙 문서의 독립 스타일입니다.',
+    decision: {
+      kind: 'keep-external',
+      label: '독립 문서로 유지',
+      reason: '단독 HTML과 print media를 함께 가지므로 앱 전역 Sass 토큰으로 옮기지 않습니다.',
+    },
+    items: [
+      {
+        expression: '#0d1014 · #151a20 · #1b2129 · #202832 · #2a3540 · #3b4855',
+        swatch: '#151a20',
+        sources: [SOURCE.fixedRules],
+      },
+      {
+        expression: '#edf2f4 · #9cabb4 · #69e0c1 · #ff7f9f · #f5c36b · #79b8ff',
+        swatch: 'linear-gradient(90deg, #69e0c1, #ff7f9f, #f5c36b, #79b8ff)',
+        sources: [SOURCE.fixedRules],
+      },
+      {
+        expression: '#0b0e11 · #d7c39e · #8ea8ff · #202730 · #161b21 · #1a2428',
+        swatch: '#202730',
+        sources: [SOURCE.fixedRules],
+      },
+      {
+        expression: '#fff · #f4f5f6 · #ccd1d5 · #adb5bd · #111 · #525a61',
+        swatch: '#f4f5f6',
+        sources: [SOURCE.fixedRules],
+        note: 'print media',
+      },
+      {
+        expression:
+          'rgba(0, 0, 0, 0.24) · rgba(13, 16, 20, 0.32 · 0.36 · 0.38 · 0.88 · 0.92) · rgba(21, 26, 32, 0.78)',
+        swatch: 'rgba(13, 16, 20, 0.88)',
+        sources: [SOURCE.fixedRules],
+      },
+      {
+        expression:
+          'rgba(105, 224, 193, 0.055 · 0.08 · 0.12 · 0.35 · 0.38 · 0.42 · 0.5) · rgba(255, 127, 159, 0.07 · 0.12)',
+        swatch: 'rgba(105, 224, 193, 0.35)',
+        sources: [SOURCE.fixedRules],
+      },
+      {
+        expression: 'rgba(121, 184, 255, 0.11 · 0.38) · rgba(245, 195, 107, 0.12 · 0.32 · 0.4)',
+        swatch: 'rgba(121, 184, 255, 0.38)',
+        sources: [SOURCE.fixedRules],
+      },
+      {
+        expression: 'rgba(27, 33, 41, 0.96) · rgba(19, 24, 30, 0.96)',
+        swatch: 'linear-gradient(145deg, rgba(27, 33, 41, 0.96), rgba(19, 24, 30, 0.96))',
+        sources: [SOURCE.fixedRules],
+      },
+    ],
+  },
+  {
+    title: 'CSS 의미값 (스와치 없음)',
+    description: '색 자체가 아니라 브라우저 계산 또는 상속을 지시합니다.',
+    decision: {
+      kind: 'keep-external',
+      label: 'CSS 의미값 유지',
+      reason: 'transparent와 inherit은 색상 팔레트가 아니라 CSS 동작입니다.',
+    },
+    items: [
+      {
+        expression: 'transparent',
+        sources: [
+          'src/components/common/button/button.module.scss',
+          'src/components/common/buttonGroup/buttonGroup.module.scss',
+          'src/components/common/dropdownMenu/dropdownMenu.module.scss',
+          'src/components/common/form/checkbox.module.scss',
+          'src/components/common/form/select.module.scss',
+          'src/components/common/form/textInput.module.scss',
+          'src/components/common/form/textarea.module.scss',
+          'src/components/common/loading/boxLoading.module.scss',
+          'src/components/common/loading/fixedLoading.module.scss',
+          'src/components/common/tabs/tabs.module.scss',
+          'src/app/login/login.module.scss',
+          'src/app/lostark/all-characters/_component/characterList.module.scss',
+          'src/app/lostark/my-characters/_component/mainCharacterOrderModal.module.scss',
+          'src/app/lostark/my-characters/_component/mainCharactersPanel/section/engravingSection.module.scss',
+          'src/app/lostark/loado/_component/loadoTable/iconPickerModal/iconPickerModal.module.scss',
+          'src/app/lostark/my-characters/_component/specSummaryPanel/_shared/cellValueChip.module.scss',
+          'src/app/settings/_component/settingsSection.module.scss',
+          'src/app/lostark/refining/_component/refiningMaterialInputPanel.module.scss',
+          'src/app/ui-test/uiTestClient.module.scss',
+          'src/app/maplestory/my-characters/_component/characterList.module.scss',
+          'src/app/maplestory/union/_component/unionCharacterRow.module.scss',
+          SOURCE.fixedRules,
+        ],
+      },
+      {
+        expression: 'inherit',
+        sources: [
+          'src/app/lostark/reference-sites/referenceSites.module.scss',
+          'src/components/common/form/textInput.module.scss',
+          'src/components/common/form/textarea.module.scss',
+          SOURCE.fixedRules,
+        ],
+      },
+    ],
+  },
+];
+
+export const RUNTIME_COLOR_TRACE: TColorAuditSection = {
+  title: 'Lost Ark API 런타임 게임 데이터',
+  description:
+    '아래 값은 변수나 고정 팔레트가 아닙니다. 게임 API 응답에 따라 달라지는 표시용 예시입니다.',
+  decision: {
+    kind: 'keep-external',
+    label: '게임 데이터 그대로 유지',
+    reason: 'API가 보내는 표시값이므로 앱 토큰으로 치환하면 원문 정보가 손실됩니다.',
+  },
+  items: [
+    {
+      expression: '예시 #FE9600',
+      swatch: '#FE9600',
+      sources: [
+        'supabase/functions/lostark-character-details/index.ts: getColoredEffects() / <FONT COLOR> parse',
+        'src/api/lostark/type.ts: TLostarkColoredEffect',
+        'src/api/lostark/index.ts: summary 저장·재조회',
+        'src/app/lostark/my-characters/_component/mainCharactersPanel/section/EquipmentSection.tsx',
+        'src/app/lostark/my-characters/_component/mainCharactersPanel/section/ExtraEquipmentSection.tsx',
+        'src/app/lostark/my-characters/_component/specSummaryPanel/AccessorySection.tsx',
+        'src/app/lostark/my-characters/_component/specSummaryPanel/BraceletSection.tsx',
+      ],
+    },
+    {
+      expression: '예시 #99FF99',
+      swatch: '#99FF99',
+      note: '팔찌 옵션을 합쳐 표시하는 특수 게임 데이터 값',
+      sources: [
+        'supabase/functions/lostark-character-details/index.ts: <FONT COLOR> parse',
+        'src/api/lostark/type.ts: TLostarkColoredEffect',
+        'src/api/lostark/index.ts: summary 저장·재조회',
+        'src/app/lostark/my-characters/_component/mainCharactersPanel/section/ExtraEquipmentSection.tsx',
+        'src/app/lostark/my-characters/_component/specSummaryPanel/BraceletSection.tsx',
+      ],
+    },
+    {
+      expression: '예시 #00B5FF',
+      swatch: '#00B5FF',
+      sources: [
+        'supabase/functions/lostark-character-details/index.ts: response summary 구성',
+        'src/api/lostark/type.ts: TLostarkColoredEffect',
+        'src/api/lostark/index.ts: summary 저장·재조회',
+        'src/app/lostark/my-characters/_component/mainCharactersPanel/section/EquipmentSection.tsx',
+        'src/app/lostark/my-characters/_component/specSummaryPanel/AccessorySection.tsx',
+      ],
+    },
+  ],
+};
