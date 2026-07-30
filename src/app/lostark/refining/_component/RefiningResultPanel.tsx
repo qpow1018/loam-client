@@ -27,7 +27,7 @@ export default function RefiningResultPanel(props: {
 }) {
   const { condition, marketPrices, materials, refiningRule } = props;
   const [plan, setPlan] = useState<TRefiningPlan>();
-  const [calculationError, setCalculationError] = useState<string>();
+  const [isCalculationErrorOpen, setIsCalculationErrorOpen] = useState(false);
   const [isInputErrorOpen, setIsInputErrorOpen] = useState(false);
   const [isCalculating, setIsCalculating] = useState(false);
   const workerRef = useRef<Worker | undefined>(undefined);
@@ -43,19 +43,13 @@ export default function RefiningResultPanel(props: {
   function handleCalculate() {
     const input = validateRefiningInput({ condition, marketPrices, materials, step: refiningRule });
     if (!input) {
-      requestIdRef.current += 1;
-      workerRef.current?.terminate();
-      workerRef.current = undefined;
-      setPlan(undefined);
-      setCalculationError(undefined);
-      setIsCalculating(false);
       setIsInputErrorOpen(true);
       return;
     }
 
     workerRef.current?.terminate();
     setPlan(undefined);
-    setCalculationError(undefined);
+    setIsCalculationErrorOpen(false);
     setIsCalculating(true);
     const requestId = requestIdRef.current + 1;
     requestIdRef.current = requestId;
@@ -73,9 +67,7 @@ export default function RefiningResultPanel(props: {
         setIsCalculating(false);
 
         if ('error' in event.data) {
-          setCalculationError(
-            '계산 중 오류가 발생했습니다. 입력값을 확인한 뒤 다시 시도해 주세요.',
-          );
+          setIsCalculationErrorOpen(true);
           return;
         }
         setPlan(event.data.plan);
@@ -85,7 +77,7 @@ export default function RefiningResultPanel(props: {
         worker.terminate();
         workerRef.current = undefined;
         setIsCalculating(false);
-        setCalculationError('계산 중 오류가 발생했습니다. 입력값을 확인한 뒤 다시 시도해 주세요.');
+        setIsCalculationErrorOpen(true);
       });
 
       const request: TRefiningWorkerRequest = {
@@ -97,57 +89,85 @@ export default function RefiningResultPanel(props: {
       workerRef.current = undefined;
       setIsCalculating(false);
       setPlan(undefined);
-      setCalculationError('계산 중 오류가 발생했습니다. 입력값을 확인한 뒤 다시 시도해 주세요.');
+      setIsCalculationErrorOpen(true);
     }
   }
 
   return (
-    <>
-      <section
-        className={styles['result-panel']}
-        aria-labelledby="refining-result-heading"
-        aria-live="polite"
-      >
-        <h2 id="refining-result-heading">계산 결과</h2>
+    <section className={styles['result-panel']} aria-live="polite">
+      <div className={styles['result-panel-top']}>
         <Button
           theme="bg-pri"
           size="large"
-          isFullWidth
           isLoading={isCalculating}
           className={styles['calculate-button']}
           onClick={handleCalculate}
         >
-          {isCalculating ? '계산 중' : '계산하기'}
+          {isCalculating ? '계산 중' : '최적화 계산하기'}
         </Button>
-        {calculationError && (
-          <p className={styles['calculation-error']} role="alert">
-            {calculationError}
-          </p>
-        )}
-        {!plan && isCalculating ? (
+      </div>
+
+      <div className={styles['result-panel-content']}>
+        {isCalculating && (
           <div className={styles['loading-result']}>
             <BoxLoading height={120} />
             <p>최적 전략을 계산하고 있습니다.</p>
           </div>
-        ) : !plan ? (
-          <p className={styles['empty-result']}>보유 수량을 입력한 뒤 계산하기를 눌러 주세요.</p>
-        ) : (
-          <RefiningResult plan={plan} refiningRule={refiningRule} />
         )}
-      </section>
-      <Confirm
+        {!isCalculating && !plan && (
+          <p className={styles['empty-result']}>보유 수량을 입력한 뒤 계산하기를 눌러 주세요.</p>
+        )}
+        {!isCalculating && plan && <RefiningResult plan={plan} refiningRule={refiningRule} />}
+      </div>
+
+      <FormValidationErrorAlert
         isOpen={isInputErrorOpen}
         onClose={() => setIsInputErrorOpen(false)}
-        title="입력값을 확인해 주세요"
-        message="재련 조건과 보유 수량을 확인한 뒤 다시 계산해 주세요."
-        buttons={[
-          {
-            label: '확인',
-            theme: 'bg-pri',
-            onClick: () => setIsInputErrorOpen(false),
-          },
-        ]}
       />
-    </>
+      <CalculationErrorAlert
+        isOpen={isCalculationErrorOpen}
+        onClose={() => setIsCalculationErrorOpen(false)}
+      />
+    </section>
+  );
+}
+
+function FormValidationErrorAlert(props: { isOpen: boolean; onClose: () => void }) {
+  const { isOpen, onClose } = props;
+
+  return (
+    <Confirm
+      isOpen={isOpen}
+      onClose={onClose}
+      title="입력값을 확인해 주세요"
+      message="재련 조건과 보유 수량을 확인한 뒤 다시 계산해 주세요."
+      buttons={[
+        {
+          label: '확인',
+          theme: 'bg-pri',
+          onClick: onClose,
+        },
+      ]}
+    />
+  );
+}
+
+function CalculationErrorAlert(props: { isOpen: boolean; onClose: () => void }) {
+  const { isOpen, onClose } = props;
+
+  return (
+    <Confirm
+      isOpen={isOpen}
+      onClose={onClose}
+      title="계산 중 오류가 발생했습니다"
+      message="계산 중 문제가 발생했습니다. 잠시 후 다시 시도해 주세요."
+      buttons={[
+        {
+          label: '확인',
+          theme: 'bg-pri',
+          onClick: onClose,
+        },
+      ]}
+    />
   );
 }
