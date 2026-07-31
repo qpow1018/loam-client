@@ -109,6 +109,7 @@
     display: grid;
     gap: 20px;
     padding: 24px;
+    background: $bg;
   }
 
   .button-group-showcase {
@@ -135,6 +136,32 @@
   .dropdown-menu-showcase {
     display: flex;
     justify-content: center;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 16px;
+  }
+
+  .form-field {
+    display: grid;
+    gap: 8px;
+  }
+
+  .form-field > span,
+  .checkbox-field > span {
+    color: $text-secondary;
+    font-size: 13px;
+  }
+
+  .textarea-field {
+    grid-column: 1 / -1;
+  }
+
+  .checkbox-field {
+    display: grid;
+    gap: 8px;
   }
 
   .modal-preview-content {

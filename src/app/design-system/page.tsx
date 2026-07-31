@@ -2,6 +2,7 @@ import ButtonShowcase from './_component/ButtonShowcase';
 import ButtonGroupShowcase from './_component/ButtonGroupShowcase';
 import IconButtonShowcase from './_component/IconButtonShowcase';
 import DropdownMenuShowcase from './_component/DropdownMenuShowcase';
+import FormShowcase from './_component/FormShowcase';
 import ModalShowcase from './_component/ModalShowcase';
 
 import styles from './designSystem.module.scss';
@@ -20,6 +21,7 @@ export default function DesignSystemPage() {
         <IconButtonShowcase />
         <ButtonGroupShowcase />
         <DropdownMenuShowcase />
+        <FormShowcase />
         <ModalShowcase />
       </div>
     </main>

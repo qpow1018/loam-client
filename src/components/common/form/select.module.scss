@@ -9,7 +9,7 @@
     width: 100%;
     height: 40px;
     padding: 0 12px;
-    border: 1px solid $gray-500;
+    border: 1px solid $border-strong;
     border-radius: $border-radius;
     background: transparent;
     color: $text-primary;
@@ -19,8 +19,8 @@
     cursor: pointer;
 
     &:focus-visible {
-      border-color: $mint-accent;
-      outline: 2px solid $mint-light;
+      border-color: $rose-accent;
+      outline: 2px solid $rose-light;
       outline-offset: 1px;
     }
 
@@ -46,9 +46,9 @@
     margin: 0;
     padding: 4px;
     overflow-y: auto;
-    border: 1px solid $gray-600;
+    border: 1px solid $border;
     border-radius: $border-radius;
-    background: $gray-700;
+    background: $bg-light;
     box-shadow: $shadow-popover;
     list-style: none;
     outline: none;
@@ -62,11 +62,11 @@
 
       &.is-active,
       &:hover {
-        background: $gray-600;
+        background: $bg-accent;
       }
 
       &.is-selected {
-        color: $mint-accent;
+        color: $rose-accent;
       }
 
       &[aria-disabled='true'] {
