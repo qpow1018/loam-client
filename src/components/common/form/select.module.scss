@@ -39,7 +39,7 @@
   .options {
     position: absolute;
     top: calc(100% + 4px);
-    z-index: 10;
+    z-index: $z-index-popover;
     width: 100%;
     max-height: 240px;
     box-sizing: border-box;
