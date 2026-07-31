@@ -91,6 +91,20 @@ test('excludes selected raid difficulties and recalculates the top three raids',
   );
 });
 
+test('assigns the intended tones to horizon cathedral stages', () => {
+  const cathedral = CLEAR_GOLD_CATEGORIES.find((category) => category.id === 'abyss-dungeon')
+    ?.contents.find((content) => content.id === 'horizon-cathedral');
+
+  assert.deepEqual(
+    cathedral?.difficulties.map(({ name, tone }) => ({ name, tone })),
+    [
+      { name: '3단계', tone: 'nightmare' },
+      { name: '2단계', tone: 'hard' },
+      { name: '1단계', tone: 'normal' },
+    ],
+  );
+});
+
 function serializeClearGoldCategories(categories: readonly TClearGoldCategory[]) {
   return categories
     .map((category) => {

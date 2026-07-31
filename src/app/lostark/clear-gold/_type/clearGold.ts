@@ -4,9 +4,12 @@ export type TClearGoldGate = {
   boundGold: number;
 };
 
+export type TClearGoldDifficultyTone = 'normal' | 'hard' | 'nightmare';
+
 export type TClearGoldDifficulty = {
   id: string;
   name: string;
+  tone: TClearGoldDifficultyTone;
   entryItemLevel: number;
   updatedAt: string;
   gates: readonly TClearGoldGate[];

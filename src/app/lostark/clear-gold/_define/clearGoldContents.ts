@@ -14,6 +14,7 @@ export const CLEAR_GOLD_CATEGORIES = [
           {
             id: 'shadow-belgardin-nightmare',
             name: '나이트메어',
+            tone: 'nightmare',
             entryItemLevel: 1780,
             updatedAt: UPDATED_AT,
             gates: [
@@ -24,6 +25,7 @@ export const CLEAR_GOLD_CATEGORIES = [
           {
             id: 'shadow-belgardin-hard',
             name: '하드',
+            tone: 'hard',
             entryItemLevel: 1770,
             updatedAt: UPDATED_AT,
             gates: [
@@ -34,6 +36,7 @@ export const CLEAR_GOLD_CATEGORIES = [
           {
             id: 'shadow-belgardin-normal',
             name: '노말',
+            tone: 'normal',
             entryItemLevel: 1750,
             updatedAt: UPDATED_AT,
             gates: [
@@ -50,6 +53,7 @@ export const CLEAR_GOLD_CATEGORIES = [
           {
             id: 'shadow-serka-nightmare',
             name: '나이트메어',
+            tone: 'nightmare',
             entryItemLevel: 1740,
             updatedAt: UPDATED_AT,
             gates: [
@@ -60,6 +64,7 @@ export const CLEAR_GOLD_CATEGORIES = [
           {
             id: 'shadow-serka-hard',
             name: '하드',
+            tone: 'hard',
             entryItemLevel: 1730,
             updatedAt: UPDATED_AT,
             gates: [
@@ -70,6 +75,7 @@ export const CLEAR_GOLD_CATEGORIES = [
           {
             id: 'shadow-serka-normal',
             name: '노말',
+            tone: 'normal',
             entryItemLevel: 1710,
             updatedAt: UPDATED_AT,
             gates: [
@@ -92,6 +98,7 @@ export const CLEAR_GOLD_CATEGORIES = [
           {
             id: 'horizon-cathedral-stage-3',
             name: '3단계',
+            tone: 'nightmare',
             entryItemLevel: 1750,
             updatedAt: UPDATED_AT,
             gates: [
@@ -102,6 +109,7 @@ export const CLEAR_GOLD_CATEGORIES = [
           {
             id: 'horizon-cathedral-stage-2',
             name: '2단계',
+            tone: 'hard',
             entryItemLevel: 1720,
             updatedAt: UPDATED_AT,
             gates: [
@@ -112,6 +120,7 @@ export const CLEAR_GOLD_CATEGORIES = [
           {
             id: 'horizon-cathedral-stage-1',
             name: '1단계',
+            tone: 'normal',
             entryItemLevel: 1700,
             updatedAt: UPDATED_AT,
             gates: [
@@ -134,6 +143,7 @@ export const CLEAR_GOLD_CATEGORIES = [
           {
             id: 'kazeroth-finale-hard',
             name: '하드',
+            tone: 'hard',
             entryItemLevel: 1730,
             updatedAt: UPDATED_AT,
             gates: [
@@ -144,6 +154,7 @@ export const CLEAR_GOLD_CATEGORIES = [
           {
             id: 'kazeroth-finale-normal',
             name: '노말',
+            tone: 'normal',
             entryItemLevel: 1710,
             updatedAt: UPDATED_AT,
             gates: [
@@ -160,6 +171,7 @@ export const CLEAR_GOLD_CATEGORIES = [
           {
             id: 'kazeroth-act-4-hard',
             name: '하드',
+            tone: 'hard',
             entryItemLevel: 1720,
             updatedAt: UPDATED_AT,
             gates: [
@@ -170,6 +182,7 @@ export const CLEAR_GOLD_CATEGORIES = [
           {
             id: 'kazeroth-act-4-normal',
             name: '노말',
+            tone: 'normal',
             entryItemLevel: 1700,
             updatedAt: UPDATED_AT,
             gates: [
@@ -186,6 +199,7 @@ export const CLEAR_GOLD_CATEGORIES = [
           {
             id: 'kazeroth-act-3-hard',
             name: '하드',
+            tone: 'hard',
             entryItemLevel: 1700,
             updatedAt: UPDATED_AT,
             gates: [
@@ -197,6 +211,7 @@ export const CLEAR_GOLD_CATEGORIES = [
           {
             id: 'kazeroth-act-3-normal',
             name: '노말',
+            tone: 'normal',
             entryItemLevel: 1680,
             updatedAt: UPDATED_AT,
             gates: [
@@ -214,6 +229,7 @@ export const CLEAR_GOLD_CATEGORIES = [
           {
             id: 'kazeroth-act-2-hard',
             name: '하드',
+            tone: 'hard',
             entryItemLevel: 1690,
             updatedAt: UPDATED_AT,
             gates: [
@@ -224,6 +240,7 @@ export const CLEAR_GOLD_CATEGORIES = [
           {
             id: 'kazeroth-act-2-normal',
             name: '노말',
+            tone: 'normal',
             entryItemLevel: 1670,
             updatedAt: UPDATED_AT,
             gates: [
@@ -240,6 +257,7 @@ export const CLEAR_GOLD_CATEGORIES = [
           {
             id: 'kazeroth-act-1-hard',
             name: '하드',
+            tone: 'hard',
             entryItemLevel: 1680,
             updatedAt: UPDATED_AT,
             gates: [
@@ -250,6 +268,7 @@ export const CLEAR_GOLD_CATEGORIES = [
           {
             id: 'kazeroth-act-1-normal',
             name: '노말',
+            tone: 'normal',
             entryItemLevel: 1660,
             updatedAt: UPDATED_AT,
             gates: [
@@ -266,6 +285,7 @@ export const CLEAR_GOLD_CATEGORIES = [
           {
             id: 'kazeroth-prologue-hard',
             name: '하드',
+            tone: 'hard',
             entryItemLevel: 1640,
             updatedAt: UPDATED_AT,
             gates: [
@@ -276,6 +296,7 @@ export const CLEAR_GOLD_CATEGORIES = [
           {
             id: 'kazeroth-prologue-normal',
             name: '노말',
+            tone: 'normal',
             entryItemLevel: 1620,
             updatedAt: UPDATED_AT,
             gates: [
