@@ -38,7 +38,11 @@
     }
 
     .highlighted td {
-      background-color: $rose-surface;
+      background-color: $rose-tint;
+
+      &:first-child {
+        box-shadow: inset 3px 0 0 $rose;
+      }
     }
   }
 
