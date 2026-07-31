@@ -5,6 +5,7 @@ import DropdownMenuShowcase from './_component/DropdownMenuShowcase';
 import FormShowcase from './_component/FormShowcase';
 import ModalShowcase from './_component/ModalShowcase';
 import TabsShowcase from './_component/TabsShowcase';
+import ToastShowcase from './_component/ToastShowcase';
 
 import styles from './designSystem.module.scss';
 
@@ -24,6 +25,7 @@ export default function DesignSystemPage() {
         <DropdownMenuShowcase />
         <FormShowcase />
         <TabsShowcase />
+        <ToastShowcase />
         <ModalShowcase />
       </div>
     </main>

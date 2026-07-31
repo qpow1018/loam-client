@@ -168,6 +168,11 @@
     max-width: 480px;
   }
 
+  .toast-actions {
+    display: flex;
+    gap: 8px;
+  }
+
   .modal-preview-content {
     padding: 24px;
 
