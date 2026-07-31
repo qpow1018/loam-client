@@ -7,7 +7,7 @@ import api from '@/api';
 
 import styles from './header.module.scss';
 
-const BACKUP_REMINDER_INTERVAL_MS = 7 * 24 * 60 * 60 * 1000;
+const BACKUP_REMINDER_INTERVAL_MS = 14 * 24 * 60 * 60 * 1000;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 export default function CloudBackupReminder(props: { settingsLink: string }) {
