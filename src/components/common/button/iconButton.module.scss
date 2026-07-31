@@ -29,7 +29,7 @@
   }
 
   &.color-gray {
-    @include icon-button-color($gray-700, $gray);
+    @include icon-button-color($gray-700, $gray-600);
   }
 
   &.color-mint {

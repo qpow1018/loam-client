@@ -58,7 +58,7 @@
   }
 
   &.color-gray {
-    @include button-color($gray, $gray-light, $gray-accent, $gray-tint);
+    @include button-color($gray-600, $gray-300, $gray-500, rgba($gray-600, 0.1));
   }
 
   &.color-amber {

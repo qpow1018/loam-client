@@ -5,7 +5,7 @@ import styles from '../designSystem.module.scss';
 const BUTTON_COLORS: { color: TButtonColor; label: string; token: string }[] = [
   { color: 'mint', label: 'Mint', token: '$mint' },
   { color: 'rose', label: 'Rose', token: '$rose' },
-  { color: 'gray', label: 'Gray', token: '$gray' },
+  { color: 'gray', label: 'Gray', token: '$gray-600' },
   { color: 'amber', label: 'Amber', token: '$amber' },
   { color: 'violet', label: 'Violet', token: '$violet' },
   { color: 'azure', label: 'Azure', token: '$azure' },
