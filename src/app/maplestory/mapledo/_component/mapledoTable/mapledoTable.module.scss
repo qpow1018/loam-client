@@ -2,15 +2,15 @@
   min-width: 600px;
   padding: 12px;
   border-radius: 8px;
-  background-color: $gray-800;
+  background-color: $bg;
 
   .header-row {
     display: flex;
-    border-bottom: 1px solid $gray-600;
+    border-bottom: 1px solid $border;
   }
 
   .row {
     display: flex;
-    border-bottom: 1px solid $gray-700;
+    border-bottom: 1px solid $border-soft;
   }
 }

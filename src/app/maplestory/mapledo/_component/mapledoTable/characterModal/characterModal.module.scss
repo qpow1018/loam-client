@@ -14,8 +14,7 @@
     gap: 10px;
     min-width: 0;
     padding: 10px 12px;
-    background-color: $gray-700;
-    border: 1px solid $gray-600;
+    border: 1px solid $border;
     border-radius: $border-radius;
     color: $text-primary;
     cursor: pointer;
@@ -24,11 +23,11 @@
       border-color $transition;
 
     &:hover {
-      background-color: $gray-500;
+      background-color: $bg-accent;
     }
 
     &.selected {
-      border-color: $mint;
+      border-color: $rose-accent;
     }
 
     .class-name {
@@ -36,7 +35,7 @@
       max-width: 100%;
       padding: 3px 6px;
       border-radius: $border-radius;
-      background-color: $mint-surface;
+      background-color: $rose-surface;
       font-size: 10px;
       font-weight: 700;
       white-space: nowrap;
