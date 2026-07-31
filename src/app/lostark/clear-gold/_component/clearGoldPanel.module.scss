@@ -1,6 +1,6 @@
 .clear-gold-panel {
   display: grid;
-  grid-template-columns: 216px 800px;
+  grid-template-columns: 216px 1fr;
   gap: 20px;
 
   .content-list {
@@ -57,6 +57,7 @@
       font-weight: 500;
       color: $text-primary;
     }
+
     .difficulty-list {
       display: flex;
       flex-direction: column;
@@ -101,7 +102,7 @@
         .summary-item {
           min-width: 0;
 
-          & + .summary-item {
+          &+.summary-item {
             padding-left: 16px;
             border-left: 1px solid $border-soft;
           }
