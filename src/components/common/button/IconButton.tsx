@@ -1,16 +1,26 @@
+import type { MouseEventHandler, ReactNode } from 'react';
+
+import type { TButtonColor } from './Button';
 import styles from './iconButton.module.scss';
 
+type TIconButtonType = 'button' | 'submit';
 type TIconButtonSize = 'small' | 'medium' | 'large';
 
 export default function IconButton(props: {
+  type?: TIconButtonType;
+  color?: TButtonColor;
   size?: TIconButtonSize;
+  'aria-label': string;
   isDisabled?: boolean;
   className?: string;
-  onClick?: () => void;
-  children: React.ReactNode;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  children: ReactNode;
 }) {
   const {
+    type = 'button',
+    color = 'gray',
     size = 'medium',
+    'aria-label': ariaLabel,
     isDisabled = false,
     className,
     onClick,
@@ -19,13 +29,10 @@ export default function IconButton(props: {
 
   return (
     <button
-      type="button"
-      className={`
-        ${styles['icon-btn']}
-        ${styles[`size-${size}`]}
-        ${className ?? ''}
-      `}
+      type={type}
+      className={`${styles['icon-btn']} ${styles[`color-${color}`]} ${styles[`size-${size}`]} ${className ?? ''}`}
       disabled={isDisabled}
+      aria-label={ariaLabel}
       onClick={onClick}
     >
       {children}

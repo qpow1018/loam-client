@@ -1,15 +1,7 @@
-import Button, { type TButtonColor } from '@/components/common/button/Button';
+import ButtonShowcase from './_component/ButtonShowcase';
+import IconButtonShowcase from './_component/IconButtonShowcase';
 
 import styles from './designSystem.module.scss';
-
-const BUTTON_COLORS: { color: TButtonColor; label: string; token: string }[] = [
-  { color: 'mint', label: 'Mint', token: '$mint' },
-  { color: 'rose', label: 'Rose', token: '$rose' },
-  { color: 'gray', label: 'Gray', token: '$gray' },
-  { color: 'amber', label: 'Amber', token: '$amber' },
-  { color: 'violet', label: 'Violet', token: '$violet' },
-  { color: 'azure', label: 'Azure', token: '$azure' },
-];
 
 export default function DesignSystemPage() {
   return (
@@ -17,58 +9,12 @@ export default function DesignSystemPage() {
       <div className={styles['content']}>
         <header className={styles['page-header']}>
           <p>DESIGN SYSTEM</p>
-          <h1>Button</h1>
+          <h1>Components</h1>
           <span>완료된 공용 요소만 이 페이지에 추가합니다.</span>
         </header>
 
-        <section className={styles['section']} aria-labelledby="button-colors-title">
-          <div className={styles['section-heading']}>
-            <h2 id="button-colors-title">Color &amp; fill</h2>
-            <p>각 색상은 solid와 outline을 제공합니다.</p>
-          </div>
-
-          <div className={styles['button-grid']}>
-            {BUTTON_COLORS.map((buttonColor) => (
-              <article key={buttonColor.color} className={styles['button-card']}>
-                <div>
-                  <h3>{buttonColor.label}</h3>
-                  <code>{buttonColor.token}</code>
-                </div>
-                <div className={styles['button-pair']}>
-                  <Button color={buttonColor.color} fill="solid">
-                    Solid
-                  </Button>
-                  <Button color={buttonColor.color} fill="outline">
-                    Outline
-                  </Button>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className={styles['section']} aria-labelledby="button-states-title">
-          <div className={styles['section-heading']}>
-            <h2 id="button-states-title">Size &amp; state</h2>
-            <p>크기와 상태는 색상·fill과 독립적으로 조합합니다.</p>
-          </div>
-
-          <div className={styles['state-card']}>
-            <div className={styles['button-pair']}>
-              <Button size="small">Small</Button>
-              <Button>Medium</Button>
-              <Button size="large">Large</Button>
-            </div>
-            <div className={styles['button-pair']}>
-              <Button color="violet" fill="outline" isLoading>
-                Loading
-              </Button>
-              <Button color="gray" fill="outline" isDisabled>
-                Disabled
-              </Button>
-            </div>
-          </div>
-        </section>
+        <ButtonShowcase />
+        <IconButtonShowcase />
       </div>
     </main>
   );

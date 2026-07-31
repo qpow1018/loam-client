@@ -16,8 +16,6 @@ export default function Button(props: {
   isFullWidth?: boolean;
   isLoading?: boolean;
   isDisabled?: boolean;
-  'aria-expanded'?: boolean;
-  'aria-haspopup'?: 'dialog';
   onClick?: MouseEventHandler<HTMLButtonElement>;
   children?: ReactNode;
 }) {
@@ -30,8 +28,6 @@ export default function Button(props: {
     isFullWidth = false,
     isLoading = false,
     isDisabled = false,
-    'aria-expanded': ariaExpanded,
-    'aria-haspopup': ariaHasPopup,
     onClick,
     children,
   } = props;
@@ -42,8 +38,6 @@ export default function Button(props: {
       className={`${styles['btn']} ${styles[`color-${color}`]} ${styles[`fill-${fill}`]} ${styles[`size-${size}`]} ${isFullWidth ? styles['is-full-width'] : ''} ${isLoading ? styles['is-loading'] : ''} ${className ?? ''}`}
       disabled={isDisabled || isLoading}
       aria-busy={isLoading}
-      aria-expanded={ariaExpanded}
-      aria-haspopup={ariaHasPopup}
       onClick={onClick}
     >
       <span className={styles['content']}>{children}</span>

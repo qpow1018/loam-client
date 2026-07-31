@@ -20,7 +20,6 @@ import type {
 import { getRefiningRule } from '@/app/lostark/refining/_util/refiningRules';
 import type { TResLostarkCharacterSummary, TResLostarkMyCharacter } from '@/api/lostark/type';
 import Button from '@/components/common/button/Button';
-import IconButton from '@/components/common/button/IconButton';
 import ButtonGroup from '@/components/common/buttonGroup/ButtonGroup';
 import DraggableList from '@/components/common/draggableList/DraggableList';
 import DropdownMenu from '@/components/common/dropdownMenu/DropdownMenu';
@@ -393,41 +392,6 @@ export default function UiTestClient() {
             </ul>
           </div>
         </section>
-
-        <CatalogSection title="버튼" description="행동의 우선순위와 크기, 상태를 비교합니다.">
-          <div className={styles['button-list']}>
-            <Button color="mint" fill="solid">
-              주요 액션
-            </Button>
-            <Button color="rose" fill="solid">
-              주의 액션
-            </Button>
-            <Button color="gray" fill="solid">
-              보조 액션
-            </Button>
-            <Button color="gray" fill="outline">
-              테두리 버튼
-            </Button>
-            <Button color="mint" fill="solid" size="small">
-              작게
-            </Button>
-            <Button color="mint" fill="solid" size="large">
-              크게
-            </Button>
-            <Button color="gray" fill="outline">
-              Outline
-            </Button>
-            <Button color="mint" fill="solid" isLoading>
-              저장 중
-            </Button>
-            <Button color="gray" fill="solid" isDisabled>
-              비활성
-            </Button>
-            <IconButton onClick={() => toast.info('아이콘 버튼을 눌렀습니다.')}>
-              <MdAdd />
-            </IconButton>
-          </div>
-        </CatalogSection>
 
         <CatalogSection title="정렬 목록" description="순서를 직접 조정하는 목록입니다.">
           <DraggableList

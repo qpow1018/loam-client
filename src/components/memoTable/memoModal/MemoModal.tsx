@@ -71,6 +71,7 @@ export default function MemoModal(props: {
             {isEditMode && onDelete !== undefined && (
               <IconButton
                 size="large"
+                aria-label="메모 삭제"
                 className={styles['delete-btn']}
                 onClick={() => setIsConfirmOpen(true)}
               >

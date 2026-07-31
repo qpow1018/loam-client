@@ -94,6 +94,7 @@ export default function CharacterModal(props: {
             {isEditMode && onDelete !== undefined && (
               <IconButton
                 size="large"
+                aria-label="캐릭터 삭제"
                 className={styles['delete-btn']}
                 onClick={() => setIsConfirmOpen(true)}
               >

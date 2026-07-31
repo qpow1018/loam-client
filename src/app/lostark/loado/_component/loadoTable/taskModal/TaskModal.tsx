@@ -110,6 +110,7 @@ export default function TaskModal(props: {
             {isEdit && onDelete !== undefined && (
               <IconButton
                 size="large"
+                aria-label="할 일 삭제"
                 className={styles['delete-btn']}
                 onClick={() => setIsConfirmOpen(true)}
               >

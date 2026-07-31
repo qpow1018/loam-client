@@ -98,7 +98,7 @@ function CharacterListItem(props: {
           {props.isMain ? '메인 해제' : '메인 등록'}
         </Button>
 
-        <IconButton onClick={() => setIsConfirmOpen(true)}>
+        <IconButton aria-label="캐릭터 삭제" onClick={() => setIsConfirmOpen(true)}>
           <MdDeleteOutline />
         </IconButton>
       </div>

@@ -73,7 +73,11 @@ function CharacterListItem(props: {
           환산주스탯
         </Button>
 
-        <IconButton isDisabled={props.isDeleting} onClick={() => setIsConfirmOpen(true)}>
+        <IconButton
+          aria-label="캐릭터 삭제"
+          isDisabled={props.isDeleting}
+          onClick={() => setIsConfirmOpen(true)}
+        >
           <MdDeleteOutline />
         </IconButton>
       </div>

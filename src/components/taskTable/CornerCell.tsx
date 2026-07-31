@@ -13,7 +13,7 @@ export default function CornerCell(props: { items: TDropdownMenuItem[] }) {
     <div className={styles['corner-cell']}>
       <DropdownMenu
         trigger={({ toggle }) => (
-          <IconButton size="small" onClick={toggle}>
+          <IconButton size="small" aria-label="항목 추가" onClick={toggle}>
             <MdAdd />
           </IconButton>
         )}
