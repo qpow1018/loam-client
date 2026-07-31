@@ -1,6 +1,6 @@
 .design-system-page {
   min-height: 100vh;
-  background: $gray-900;
+  background: $bg-dark;
 
   .content {
     width: min($page-width, calc(100% - 48px));
@@ -10,7 +10,7 @@
 
   .page-header {
     padding-bottom: 32px;
-    border-bottom: 1px solid $gray-700;
+    border-bottom: 1px solid $border-soft;
 
     p,
     h1,
@@ -71,9 +71,9 @@
 
   .button-card,
   .state-card {
-    border: 1px solid $gray-700;
+    border: 1px solid $border-soft;
     border-radius: 10px;
-    background: $gray-800;
+    background: $bg;
   }
 
   .button-card {
@@ -93,7 +93,7 @@
 
     code {
       margin-top: 4px;
-      color: $gray-400;
+      color: $text-secondary;
       font-size: 11px;
     }
   }
@@ -109,5 +109,22 @@
     display: grid;
     gap: 20px;
     padding: 24px;
+  }
+
+  .modal-preview-content {
+    padding: 24px;
+
+    p {
+      margin: 0;
+      color: $text-secondary;
+      font-size: 14px;
+    }
+  }
+
+  .modal-preview-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 24px;
   }
 }

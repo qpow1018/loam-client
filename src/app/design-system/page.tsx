@@ -1,5 +1,6 @@
 import ButtonShowcase from './_component/ButtonShowcase';
 import IconButtonShowcase from './_component/IconButtonShowcase';
+import ModalShowcase from './_component/ModalShowcase';
 
 import styles from './designSystem.module.scss';
 
@@ -15,6 +16,7 @@ export default function DesignSystemPage() {
 
         <ButtonShowcase />
         <IconButtonShowcase />
+        <ModalShowcase />
       </div>
     </main>
   );

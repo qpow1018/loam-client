@@ -115,6 +115,7 @@ $border-strong: $gray-500;
 $border-focus: $gray-400;
 
 // Background
+$bg-overlay: rgba(0, 0, 0, 0.5);
 $bg-dark: $gray-900;
 $bg: $gray-800;
 $bg-light: $gray-700;
@@ -142,9 +143,6 @@ $loa-grade-epic: #df18e3;
 $loa-grade-legendary: #ea6811;
 $loa-grade-relic: #ab4102;
 $loa-grade-ancient: #f5dfab;
-
-// Overlay
-$bg-overlay: rgba(0, 0, 0, 0.5);
 
 // Size
 $page-width: 1024px;
