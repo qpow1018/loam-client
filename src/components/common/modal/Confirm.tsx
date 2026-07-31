@@ -1,6 +1,6 @@
 'use client';
 
-import Button, { type TButtonTheme } from '@/components/common/button/Button';
+import Button, { type TButtonColor } from '@/components/common/button/Button';
 import Modal from './Modal';
 
 import styles from './confirm.module.scss';
@@ -12,7 +12,8 @@ export default function Confirm(props: {
   message: string;
   buttons: {
     label: string;
-    theme: TButtonTheme;
+    color: TButtonColor;
+    fill: 'solid' | 'outline';
     onClick: () => void;
     isDisabled?: boolean;
   }[];
@@ -28,7 +29,8 @@ export default function Confirm(props: {
           {buttons.map((b, i) => (
             <Button
               key={i}
-              theme={b.theme}
+              color={b.color}
+              fill={b.fill}
               size="large"
               isDisabled={b.isDisabled}
               onClick={b.onClick}

@@ -1,0 +1,113 @@
+.design-system-page {
+  min-height: 100vh;
+  background: $gray-900;
+
+  .content {
+    width: min($page-width, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 72px 0 96px;
+  }
+
+  .page-header {
+    padding-bottom: 32px;
+    border-bottom: 1px solid $gray-700;
+
+    p,
+    h1,
+    span {
+      display: block;
+      margin: 0;
+    }
+
+    p {
+      color: $mint-accent;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    h1 {
+      margin-top: 8px;
+      font-size: 32px;
+      letter-spacing: -1px;
+    }
+
+    span {
+      margin-top: 10px;
+      color: $text-secondary;
+      font-size: 14px;
+    }
+  }
+
+  .section {
+    padding-top: 48px;
+  }
+
+  .section-heading {
+    margin-bottom: 16px;
+
+    h2,
+    p {
+      margin: 0;
+    }
+
+    h2 {
+      font-size: 20px;
+      letter-spacing: -0.5px;
+    }
+
+    p {
+      margin-top: 6px;
+      color: $text-secondary;
+      font-size: 13px;
+    }
+  }
+
+  .button-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .button-card,
+  .state-card {
+    border: 1px solid $gray-700;
+    border-radius: 10px;
+    background: $gray-800;
+  }
+
+  .button-card {
+    display: grid;
+    gap: 18px;
+    padding: 20px;
+
+    h3,
+    code {
+      display: block;
+      margin: 0;
+    }
+
+    h3 {
+      font-size: 15px;
+    }
+
+    code {
+      margin-top: 4px;
+      color: $gray-400;
+      font-size: 11px;
+    }
+  }
+
+  .button-pair {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .state-card {
+    display: grid;
+    gap: 20px;
+    padding: 24px;
+  }
+}

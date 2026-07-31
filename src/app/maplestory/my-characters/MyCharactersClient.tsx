@@ -72,7 +72,7 @@ export default function MyCharactersClient() {
         <section className={styles['character-section']}>
           <div className={styles['list-header']}>
             <p className={styles['title']}>내 캐릭터 목록</p>
-            <Button onClick={() => setIsCreateModalOpen(true)} theme="bg-pri">
+            <Button onClick={() => setIsCreateModalOpen(true)} color="mint" fill="solid">
               캐릭터 등록
             </Button>
           </div>

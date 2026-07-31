@@ -87,7 +87,8 @@ export default function MyCharactersClient() {
           </div>
 
           <Button
-            theme="bg-gray600"
+            color="gray"
+            fill="solid"
             onClick={() => setIsOrderModalOpen(true)}
             isDisabled={isLoading || mainCharacters.length === 0}
           >

@@ -107,7 +107,8 @@ export default function RefiningResultPanel(props: {
     <section className={styles['result-panel']} aria-live="polite">
       <div className={styles['result-panel-top']}>
         <Button
-          theme="bg-pri"
+          color="mint"
+          fill="solid"
           size="large"
           isLoading={isCalculating}
           className={styles['calculate-button']}
@@ -154,7 +155,8 @@ function FormValidationErrorAlert(props: { isOpen: boolean; onClose: () => void 
       buttons={[
         {
           label: '확인',
-          theme: 'bg-pri',
+          color: 'mint',
+          fill: 'solid',
           onClick: onClose,
         },
       ]}
@@ -174,7 +176,8 @@ function CalculationErrorAlert(props: { isOpen: boolean; onClose: () => void }) 
       buttons={[
         {
           label: '확인',
-          theme: 'bg-pri',
+          color: 'mint',
+          fill: 'solid',
           onClick: onClose,
         },
       ]}

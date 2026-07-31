@@ -31,7 +31,7 @@ export default function RefiningMaterialInputPanel(props: {
   return (
     <section className={styles['input-panel']} aria-label="재련 재료">
       <div className={styles['action-row']}>
-        <Button theme="bd-gray" size="small" isDisabled>
+        <Button color="gray" fill="outline" size="small" isDisabled>
           시세 새로고침
         </Button>
       </div>

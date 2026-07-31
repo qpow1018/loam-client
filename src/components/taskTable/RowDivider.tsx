@@ -36,12 +36,14 @@ export default function RowDivider(props: {
         buttons={[
           {
             label: '취소',
-            theme: 'bg-gray600',
+            color: 'gray',
+            fill: 'solid',
             onClick: () => setIsConfirmOpen(false),
           },
           {
             label: '삭제',
-            theme: 'bg-sec',
+            color: 'rose',
+            fill: 'solid',
             onClick: () => {
               setIsConfirmOpen(false);
               onDelete();

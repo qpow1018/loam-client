@@ -79,11 +79,12 @@ export default function CellSettingsModal(props: {
         )}
 
         <div className={styles['action-buttons']}>
-          <Button theme="bg-gray600" size="large" onClick={onClose}>
+          <Button color="gray" fill="solid" size="large" onClick={onClose}>
             취소
           </Button>
           <Button
-            theme="bg-pri"
+            color="mint"
+            fill="solid"
             size="large"
             className={styles['submit-btn']}
             onClick={handleSubmit}

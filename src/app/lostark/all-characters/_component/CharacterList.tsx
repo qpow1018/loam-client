@@ -89,7 +89,8 @@ function CharacterListItem(props: {
         </div>
 
         <Button
-          theme="bg-gray600"
+          color="gray"
+          fill="solid"
           size="small"
           isLoading={props.isMainToggleLoading}
           onClick={props.onToggleMain}
@@ -111,12 +112,14 @@ function CharacterListItem(props: {
           buttons={[
             {
               label: '취소',
-              theme: 'bg-gray600',
+              color: 'gray',
+              fill: 'solid',
               onClick: () => setIsConfirmOpen(false),
             },
             {
               label: '삭제',
-              theme: 'bg-sec',
+              color: 'rose',
+              fill: 'solid',
               onClick: () => {
                 setIsConfirmOpen(false);
                 props.onDelete();

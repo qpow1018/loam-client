@@ -58,11 +58,12 @@ export default function CreateCharacterModal(props: {
         </div>
 
         <div className={styles['action-buttons']}>
-          <Button theme="bg-gray600" size="large" onClick={props.onClose}>
+          <Button color="gray" fill="solid" size="large" onClick={props.onClose}>
             취소
           </Button>
           <Button
-            theme="bg-pri"
+            color="mint"
+            fill="solid"
             size="large"
             className={styles['submit-button']}
             onClick={handleSubmit}

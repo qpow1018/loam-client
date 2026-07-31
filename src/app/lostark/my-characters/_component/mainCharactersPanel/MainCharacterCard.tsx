@@ -41,7 +41,8 @@ export default function MainCharacterCard(props: {
 
         <div className={styles['actions']}>
           <Button
-            theme="bg-gray600"
+            color="gray"
+            fill="solid"
             size="small"
             isLoading={props.isRefreshing}
             isDisabled={props.isSaving}
@@ -50,7 +51,8 @@ export default function MainCharacterCard(props: {
             갱신
           </Button>
           <Button
-            theme="bg-pri"
+            color="mint"
+            fill="solid"
             size="small"
             isLoading={props.isSaving}
             isDisabled={props.isRefreshing || !props.hasUnsavedChanges}

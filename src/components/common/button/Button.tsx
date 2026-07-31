@@ -1,48 +1,52 @@
+import type { MouseEventHandler, ReactNode } from 'react';
+
 import styles from './button.module.scss';
 
-export type TButtonTheme = 'bg-pri' | 'bg-sec' | 'bg-gray600' | 'bd-gray';
-
+type TButtonType = 'button' | 'submit';
+export type TButtonColor = 'mint' | 'rose' | 'gray' | 'amber' | 'violet' | 'azure';
+type TButtonFill = 'solid' | 'outline';
 type TButtonSize = 'small' | 'medium' | 'large';
 
 export default function Button(props: {
-  theme: TButtonTheme;
+  type?: TButtonType;
+  color?: TButtonColor;
+  fill?: TButtonFill;
   size?: TButtonSize;
+  className?: string;
   isFullWidth?: boolean;
-  isRound?: boolean;
   isLoading?: boolean;
   isDisabled?: boolean;
-  className?: string;
-  onClick?: () => void;
-  children: React.ReactNode;
+  'aria-expanded'?: boolean;
+  'aria-haspopup'?: 'dialog';
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  children?: ReactNode;
 }) {
   const {
-    theme,
+    type = 'button',
+    color = 'mint',
+    fill = 'solid',
     size = 'medium',
+    className,
     isFullWidth = false,
-    isRound = false,
     isLoading = false,
     isDisabled = false,
-    className,
+    'aria-expanded': ariaExpanded,
+    'aria-haspopup': ariaHasPopup,
     onClick,
     children,
   } = props;
 
   return (
     <button
-      type="button"
-      className={`
-        ${styles['btn']}
-        ${styles[`theme-${theme}`]}
-        ${styles[`size-${size}`]}
-        ${isRound ? styles['is-round'] : ''}
-        ${isFullWidth ? styles['is-full-width'] : ''}
-        ${isLoading ? styles['is-loading'] : ''}
-        ${className ?? ''}
-      `}
+      type={type}
+      className={`${styles['btn']} ${styles[`color-${color}`]} ${styles[`fill-${fill}`]} ${styles[`size-${size}`]} ${isFullWidth ? styles['is-full-width'] : ''} ${isLoading ? styles['is-loading'] : ''} ${className ?? ''}`}
       disabled={isDisabled || isLoading}
+      aria-busy={isLoading}
+      aria-expanded={ariaExpanded}
+      aria-haspopup={ariaHasPopup}
       onClick={onClick}
     >
-      {children}
+      <span className={styles['content']}>{children}</span>
       {isLoading && <span className={styles['spinner']} aria-hidden="true" />}
     </button>
   );

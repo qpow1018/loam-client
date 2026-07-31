@@ -396,23 +396,31 @@ export default function UiTestClient() {
 
         <CatalogSection title="버튼" description="행동의 우선순위와 크기, 상태를 비교합니다.">
           <div className={styles['button-list']}>
-            <Button theme="bg-pri">주요 액션</Button>
-            <Button theme="bg-sec">주의 액션</Button>
-            <Button theme="bg-gray600">보조 액션</Button>
-            <Button theme="bd-gray">테두리 버튼</Button>
-            <Button theme="bg-pri" size="small">
+            <Button color="mint" fill="solid">
+              주요 액션
+            </Button>
+            <Button color="rose" fill="solid">
+              주의 액션
+            </Button>
+            <Button color="gray" fill="solid">
+              보조 액션
+            </Button>
+            <Button color="gray" fill="outline">
+              테두리 버튼
+            </Button>
+            <Button color="mint" fill="solid" size="small">
               작게
             </Button>
-            <Button theme="bg-pri" size="large">
+            <Button color="mint" fill="solid" size="large">
               크게
             </Button>
-            <Button theme="bd-gray" isRound>
-              둥근 버튼
+            <Button color="gray" fill="outline">
+              Outline
             </Button>
-            <Button theme="bg-pri" isLoading>
+            <Button color="mint" fill="solid" isLoading>
               저장 중
             </Button>
-            <Button theme="bg-gray600" isDisabled>
+            <Button color="gray" fill="solid" isDisabled>
               비활성
             </Button>
             <IconButton onClick={() => toast.info('아이콘 버튼을 눌렀습니다.')}>
@@ -658,7 +666,7 @@ export default function UiTestClient() {
                   <dd>312</dd>
                 </div>
               </dl>
-              <Button theme="bd-gray" isFullWidth>
+              <Button color="gray" fill="outline" isFullWidth>
                 상세 보기
               </Button>
             </article>
@@ -691,7 +699,9 @@ export default function UiTestClient() {
               </div>
               <h3>아직 등록된 항목이 없습니다</h3>
               <p>새 항목을 추가하면 이 영역에 목록이 표시됩니다.</p>
-              <Button theme="bg-pri">항목 추가</Button>
+              <Button color="mint" fill="solid">
+                항목 추가
+              </Button>
             </article>
           </div>
         </section>
@@ -706,26 +716,28 @@ export default function UiTestClient() {
             </div>
             <div className={styles['feedback-actions']}>
               <Button
-                theme="bg-gray600"
+                color="gray"
+                fill="solid"
                 onClick={() => toast.success('저장이 완료되었습니다.', { isShowCloseButton: true })}
               >
                 성공 토스트
               </Button>
               <Button
-                theme="bg-gray600"
+                color="gray"
+                fill="solid"
                 onClick={() =>
                   toast.error('요청을 처리하지 못했습니다.', { isShowCloseButton: true })
                 }
               >
                 오류 토스트
               </Button>
-              <Button theme="bd-gray" onClick={() => setIsModalOpen(true)}>
+              <Button color="gray" fill="outline" onClick={() => setIsModalOpen(true)}>
                 기본 모달
               </Button>
-              <Button theme="bd-gray" onClick={() => setIsConfirmOpen(true)}>
+              <Button color="gray" fill="outline" onClick={() => setIsConfirmOpen(true)}>
                 확인 모달
               </Button>
-              <Button theme="bd-gray" onClick={() => setIsFixedLoading(true)}>
+              <Button color="gray" fill="outline" onClick={() => setIsFixedLoading(true)}>
                 전체 로딩 보기
               </Button>
             </div>
@@ -736,7 +748,7 @@ export default function UiTestClient() {
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="기본 모달 예시">
         <div className={styles['modal-content']}>
           <p>모달은 독립적인 작업이나 추가 정보를 표시할 때 사용합니다.</p>
-          <Button theme="bg-pri" onClick={() => setIsModalOpen(false)}>
+          <Button color="mint" fill="solid" onClick={() => setIsModalOpen(false)}>
             확인
           </Button>
         </div>
@@ -747,8 +759,8 @@ export default function UiTestClient() {
         title="삭제할까요?"
         message="삭제한 항목은 되돌릴 수 없습니다."
         buttons={[
-          { label: '취소', theme: 'bd-gray', onClick: () => setIsConfirmOpen(false) },
-          { label: '삭제', theme: 'bg-sec', onClick: () => setIsConfirmOpen(false) },
+          { label: '취소', color: 'gray', fill: 'outline', onClick: () => setIsConfirmOpen(false) },
+          { label: '삭제', color: 'rose', fill: 'solid', onClick: () => setIsConfirmOpen(false) },
         ]}
       />
       {isFixedLoading && <FixedLoading />}

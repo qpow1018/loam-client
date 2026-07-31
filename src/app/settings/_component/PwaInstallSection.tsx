@@ -75,7 +75,13 @@ export default function PwaInstallSection() {
       description="LoaM을 브라우저 밖의 독립된 앱 창으로 설치합니다."
       status={status}
       actions={
-        <Button theme="bg-pri" size="small" isDisabled={!canInstall} onClick={handleInstallClick}>
+        <Button
+          color="mint"
+          fill="solid"
+          size="small"
+          isDisabled={!canInstall}
+          onClick={handleInstallClick}
+        >
           설치
         </Button>
       }

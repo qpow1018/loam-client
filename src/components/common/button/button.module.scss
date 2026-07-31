@@ -1,3 +1,26 @@
+@mixin button-color($color, $light, $accent, $tint) {
+  &.fill-solid {
+    background-color: $color;
+    border-color: $color;
+    color: $text-primary;
+
+    &:hover:not(:disabled) {
+      background-color: $accent;
+      border-color: $accent;
+    }
+  }
+
+  &.fill-outline {
+    background-color: transparent;
+    border-color: $accent;
+    color: $light;
+
+    &:hover:not(:disabled) {
+      background-color: $tint;
+    }
+  }
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -5,61 +28,50 @@
   gap: 4px;
   flex-shrink: 0;
   position: relative;
-  border: 1px solid transparent;
-  border-radius: $border-radius;
-  transition: background-color $transition, border-color $transition, color $transition;
-  font-family: $font-family;
-  font-weight: 500;
   min-width: 80px;
   padding: 0 16px;
+  border: 1px solid transparent;
+  border-radius: $border-radius;
   cursor: pointer;
+  font-family: $font-family;
+  font-weight: 500;
+  transition:
+    background-color $transition,
+    border-color $transition,
+    color $transition;
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
 
   &:disabled {
     cursor: not-allowed;
     opacity: 0.5;
   }
 
-  &.theme-bg-pri {
-    background-color: $mint;
-    border-color: $mint;
-    color: $text-primary;
-
-    &:hover:not(:disabled) {
-      background-color: $mint-surface;
-      border-color: $mint-surface;
-    }
+  &.color-mint {
+    @include button-color($mint, $mint-light, $mint-accent, $mint-tint);
   }
 
-  &.theme-bg-sec {
-    background-color: $rose;
-    border-color: $rose;
-    color: $text-primary;
-
-    &:hover:not(:disabled) {
-      background-color: $rose-surface;
-      border-color: $rose-surface;
-    }
+  &.color-rose {
+    @include button-color($rose, $rose-light, $rose-accent, $rose-tint);
   }
 
-  &.theme-bg-gray600 {
-    background-color: $gray-600;
-    border-color: $gray-600;
-    color: $text-primary;
-
-    &:hover:not(:disabled) {
-      background-color: $gray-500;
-      border-color: $gray-500;
-    }
+  &.color-gray {
+    @include button-color($gray, $gray-light, $gray-accent, $gray-tint);
   }
 
-  &.theme-bd-gray {
-    background-color: transparent;
-    border-color: $gray-500;
-    color: $text-primary;
+  &.color-amber {
+    @include button-color($amber, $amber-light, $amber-accent, $amber-tint);
+  }
 
-    &:hover:not(:disabled) {
-      border-color: $gray-400;
-    }
+  &.color-violet {
+    @include button-color($violet, $violet-light, $violet-accent, $violet-tint);
+  }
+
+  &.color-azure {
+    @include button-color($azure, $azure-light, $azure-accent, $azure-tint);
   }
 
   &.size-small {
@@ -77,18 +89,17 @@
     font-size: 14px;
   }
 
-  &.is-round {
-    border-radius: 60px;
-  }
-
   &.is-full-width {
     width: 100%;
   }
 
   &.is-loading {
-    color: transparent;
     cursor: wait;
     pointer-events: none;
+
+    .content {
+      visibility: hidden;
+    }
   }
 }
 
@@ -100,7 +111,7 @@
   height: 16px;
   margin-top: -8px;
   margin-left: -8px;
-  border: 2px solid $white;
+  border: 2px solid currentColor;
   border-top-color: transparent;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;

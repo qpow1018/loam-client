@@ -99,7 +99,8 @@ function PresetField(props: {
             <Button
               key={preset}
               className={styles['helper-button']}
-              theme="bd-gray"
+              color="gray"
+              fill="outline"
               size="small"
               onClick={() => onChange(preset)}
             >
