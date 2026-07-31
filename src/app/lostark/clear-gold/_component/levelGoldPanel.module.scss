@@ -69,7 +69,7 @@
       padding-right: 16px;
       border-right: 1px solid $border-soft;
 
-      strong {
+      .level-value {
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -105,13 +105,13 @@
           gap: 12px;
           margin-bottom: 12px;
 
-          >div>span {
+          .strategy-label {
             display: block;
             color: $text-secondary;
             font-size: 11px;
           }
 
-          >div>strong {
+          .strategy-gold {
             display: block;
             margin-top: 3px;
             font-size: 24px;
@@ -126,13 +126,14 @@
             white-space: nowrap;
             color: $text-primary;
 
-            span+span::before {
+            .gold-breakdown-item + .gold-breakdown-item::before {
               margin-right: 8px;
               content: '/';
             }
 
-            em {
-              font-style: normal;
+            .gold-breakdown-value {
+              color: $text-primary;
+              font-weight: 600;
             }
           }
         }

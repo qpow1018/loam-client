@@ -65,7 +65,7 @@ function LevelGoldCard(props: { row: TLevelGoldRow }) {
   return (
     <article className={styles['level-card']}>
       <div className={styles['level-rail']}>
-        <strong>{props.row.level}</strong>
+        <strong className={styles['level-value']}>{props.row.level}</strong>
       </div>
 
       <div className={styles['strategy-list']}>
@@ -86,16 +86,16 @@ function LevelGoldStrategy(props: {
   return (
     <section className={`${styles['strategy-panel']} ${styles[`tone-${props.tone}`]}`}>
       <header className={styles['strategy-header']}>
-        <div>
-          <span>{props.label}</span>
-          <strong>{formatGold(props.group.totalGold)} G</strong>
+        <div className={styles['strategy-total']}>
+          <span className={styles['strategy-label']}>{props.label}</span>
+          <strong className={styles['strategy-gold']}>{formatGold(props.group.totalGold)} G</strong>
         </div>
         <p className={styles['gold-breakdown']}>
-          <span>
-            일반 <em>{formatGold(summary.tradableGold)}</em>
+          <span className={styles['gold-breakdown-item']}>
+            일반 <strong className={styles['gold-breakdown-value']}>{formatGold(summary.tradableGold)}</strong>
           </span>
-          <span>
-            귀속 <em>{formatGold(summary.boundGold)}</em>
+          <span className={styles['gold-breakdown-item']}>
+            귀속 <strong className={styles['gold-breakdown-value']}>{formatGold(summary.boundGold)}</strong>
           </span>
         </p>
       </header>
