@@ -10,10 +10,8 @@ import styles from './loadoClient.module.scss';
 export default function LoadoClient() {
   return (
     <div className={styles['loado-client']}>
-      <div className={styles['loado-client-container']}>
-        <LoadoTable />
-        <MemoTable storageKey={StorageKey.LOADO_MEMOS} />
-      </div>
+      <LoadoTable />
+      <MemoTable storageKey={StorageKey.LOADO_MEMOS} />
     </div>
   );
 }

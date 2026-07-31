@@ -4,7 +4,7 @@
   gap: 8px;
   width: 100%;
   padding: 12px;
-  background-color: $gray-800;
+  background-color: $bg;
   border-radius: $border-radius;
 
   .memo-content {
@@ -20,7 +20,7 @@
     color: $text-primary;
     cursor: pointer;
 
-    > p {
+    >p {
       width: 100%;
     }
 
@@ -47,6 +47,6 @@
   }
 
   &:hover {
-    background-color: $gray-700;
+    background-color: $bg-light;
   }
 }
