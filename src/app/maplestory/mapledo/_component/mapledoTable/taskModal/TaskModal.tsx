@@ -95,6 +95,7 @@ export default function TaskModal(props: {
             {isEditMode && onDelete !== undefined && (
               <IconButton
                 size="large"
+                aria-label="할 일 삭제"
                 className={styles['delete-btn']}
                 onClick={() => setIsConfirmOpen(true)}
               >
@@ -102,11 +103,12 @@ export default function TaskModal(props: {
               </IconButton>
             )}
 
-            <Button theme="bg-gray600" size="large" onClick={onClose}>
+            <Button color="gray" fill="solid" size="large" onClick={onClose}>
               취소
             </Button>
             <Button
-              theme="bg-pri"
+              color="mint"
+              fill="solid"
               size="large"
               className={styles['submit-btn']}
               onClick={handleSave}
@@ -127,12 +129,14 @@ export default function TaskModal(props: {
           buttons={[
             {
               label: '취소',
-              theme: 'bg-gray600',
+              color: 'gray',
+              fill: 'solid',
               onClick: () => setIsConfirmOpen(false),
             },
             {
               label: '삭제',
-              theme: 'bg-sec',
+              color: 'rose',
+              fill: 'solid',
               onClick: () => {
                 setIsConfirmOpen(false);
                 onDelete();

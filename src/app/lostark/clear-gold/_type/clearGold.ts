@@ -4,9 +4,14 @@ export type TClearGoldGate = {
   boundGold: number;
 };
 
+export type TClearGoldDifficultyTone = 'normal' | 'hard' | 'nightmare';
+export type TLevelGoldStatus = 'non-preferred' | 'excluded';
+
 export type TClearGoldDifficulty = {
   id: string;
   name: string;
+  tone: TClearGoldDifficultyTone;
+  levelGoldStatus?: TLevelGoldStatus;
   entryItemLevel: number;
   updatedAt: string;
   gates: readonly TClearGoldGate[];
@@ -53,13 +58,5 @@ export type TLevelGoldRow = {
 };
 
 export type TCreateLevelGoldRowsOptions = {
-  excludedDifficultyIds?: readonly string[];
-};
-
-export type TLevelGoldDifficultyOption = {
-  contentId: string;
-  contentName: string;
-  difficultyId: string;
-  difficultyName: string;
-  entryItemLevel: number;
+  includeNonPreferred?: boolean;
 };

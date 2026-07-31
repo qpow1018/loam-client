@@ -1,23 +1,55 @@
+@mixin icon-button-color($color, $hover-color) {
+  background-color: $color;
+
+  &:hover:not(:disabled) {
+    background-color: $hover-color;
+  }
+}
+
 .icon-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  border: none;
   padding: 0;
+  border: none;
   border-radius: 50%;
-  background-color: $gray-700;
   color: $text-primary;
   cursor: pointer;
   transition: background-color $transition;
 
-  &:hover:not(:disabled) {
-    background-color: $gray-600;
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
   }
 
   &:disabled {
     cursor: not-allowed;
     opacity: 0.5;
+  }
+
+  &.color-gray {
+    @include icon-button-color($gray-700, $gray-600);
+  }
+
+  &.color-mint {
+    @include icon-button-color($mint, $mint-accent);
+  }
+
+  &.color-rose {
+    @include icon-button-color($rose, $rose-accent);
+  }
+
+  &.color-amber {
+    @include icon-button-color($amber, $amber-accent);
+  }
+
+  &.color-violet {
+    @include icon-button-color($violet, $violet-accent);
+  }
+
+  &.color-azure {
+    @include icon-button-color($azure, $azure-accent);
   }
 
   &.size-small {

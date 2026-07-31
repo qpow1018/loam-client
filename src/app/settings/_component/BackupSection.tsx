@@ -152,17 +152,18 @@ export default function BackupSection() {
         variant="primary"
       >
         <SettingsField label="파일 백업" value="JSON 파일로 보관합니다.">
-          <Button theme="bg-pri" size="small" onClick={handleExportClick}>
+          <Button color="mint" fill="solid" size="small" onClick={handleExportClick}>
             내보내기
           </Button>
-          <Button theme="bd-gray" size="small" onClick={handleImportClick}>
+          <Button color="gray" fill="outline" size="small" onClick={handleImportClick}>
             가져오기
           </Button>
         </SettingsField>
 
         <SettingsField label="클라우드" value={`마지막 백업: ${lastCloudBackup}`}>
           <Button
-            theme="bg-pri"
+            color="mint"
+            fill="solid"
             size="small"
             isLoading={isCloudBackupLoading}
             onClick={() => void handleCloudBackupClick()}
@@ -170,7 +171,8 @@ export default function BackupSection() {
             백업
           </Button>
           <Button
-            theme="bd-gray"
+            color="gray"
+            fill="outline"
             size="small"
             isLoading={isCloudRestoreLoading}
             onClick={handleCloudRestoreClick}
@@ -196,12 +198,14 @@ export default function BackupSection() {
         buttons={[
           {
             label: '취소',
-            theme: 'bd-gray',
+            color: 'gray',
+            fill: 'outline',
             onClick: () => setPendingBackup(null),
           },
           {
             label: '복원',
-            theme: 'bg-pri',
+            color: 'mint',
+            fill: 'solid',
             onClick: handleRestoreConfirm,
           },
         ]}
@@ -215,13 +219,15 @@ export default function BackupSection() {
         buttons={[
           {
             label: '취소',
-            theme: 'bd-gray',
+            color: 'gray',
+            fill: 'outline',
             isDisabled: isCloudRestoreLoading,
             onClick: () => setIsCloudRestoreConfirmOpen(false),
           },
           {
             label: '복원',
-            theme: 'bg-pri',
+            color: 'mint',
+            fill: 'solid',
             isDisabled: isCloudRestoreLoading,
             onClick: () => void handleCloudRestoreConfirm(),
           },

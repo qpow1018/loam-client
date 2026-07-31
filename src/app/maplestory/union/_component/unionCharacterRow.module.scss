@@ -8,7 +8,8 @@
   transition: background-color $transition;
 
   &.is-high-level {
-    background-color: $rose-soft;
+    background-color: $rose-tint;
+    box-shadow: inset 3px 0 0 $rose-accent;
 
     .class-name,
     .level-status {

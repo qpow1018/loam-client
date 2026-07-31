@@ -28,8 +28,15 @@ $rose-900: #4c0519;
 $rose: $rose-600;
 $rose-light: $rose-300;
 $rose-accent: $rose-400;
-$rose-ghost: rgba($rose-accent, 0.1);
-$rose-soft: $rose-900;
+$rose-tint: rgba($rose, 0.1);
+$rose-surface: $rose-800;
+
+// Error semantic
+$error: #dc2626;
+$error-light: #fecaca;
+$error-accent: #f87171;
+$error-tint: rgba($error, 0.1);
+$error-surface: #991b1b;
 
 // mint
 $mint-100: #e6fffa;
@@ -46,8 +53,8 @@ $mint-900: #14532d;
 $mint: $mint-600;
 $mint-light: $mint-200;
 $mint-accent: $mint-400;
-$mint-ghost: rgba($mint-accent, 0.1);
-$mint-soft: $mint-900;
+$mint-tint: rgba($mint, 0.1);
+$mint-surface: $mint-800;
 
 // Amber
 $amber-100: #fef3c7;
@@ -64,8 +71,8 @@ $amber-900: #78350f;
 $amber: $amber-600;
 $amber-light: $amber-200;
 $amber-accent: $amber-400;
-$amber-ghost: rgba($amber-accent, 0.1);
-$amber-soft: $amber-900;
+$amber-tint: rgba($amber, 0.1);
+$amber-surface: $amber-800;
 
 // Violet
 $violet-100: #f3e8ff;
@@ -82,8 +89,8 @@ $violet-900: #581c87;
 $violet: $violet-600;
 $violet-light: $violet-300;
 $violet-accent: $violet-400;
-$violet-ghost: rgba($violet-accent, 0.1);
-$violet-soft: $violet-900;
+$violet-tint: rgba($violet, 0.1);
+$violet-surface: $violet-800;
 
 // Azure
 $azure-100: #e0f2fe;
@@ -100,12 +107,26 @@ $azure-900: #0c4a6e;
 $azure: $azure-600;
 $azure-light: $azure-200;
 $azure-accent: $azure-400;
-$azure-ghost: rgba($azure-accent, 0.1);
-$azure-soft: $azure-900;
+$azure-tint: rgba($azure, 0.1);
+$azure-surface: $azure-800;
 
 // Text
-$text-primary: #f4f4f6; // gray-100
-$text-secondary: #8f9099; // gray-400
+$text-primary: $gray-100;
+$text-secondary: $gray-400;
+$text-muted: $gray-500;
+
+// Border
+$border-soft: $gray-700;
+$border: $gray-600;
+$border-strong: $gray-500;
+$border-focus: $gray-400;
+
+// Background
+$bg-overlay: rgba(0, 0, 0, 0.5);
+$bg-dark: $gray-900;
+$bg: $gray-800;
+$bg-light: $gray-700;
+$bg-accent: $gray-600;
 
 // Feature
 $chip-perfect-text: #ffd78a;
@@ -130,9 +151,6 @@ $loa-grade-legendary: #ea6811;
 $loa-grade-relic: #ab4102;
 $loa-grade-ancient: #f5dfab;
 
-// Overlay
-$bg-overlay: rgba(0, 0, 0, 0.5);
-
 // Size
 $page-width: 1024px;
 $page-wide-width: 1440px;
@@ -150,6 +168,7 @@ $shadow-popover: 0 8px 16px rgba(0, 0, 0, 0.3);
 $transition: 0.25s ease;
 
 // Z-index
+$z-index-popover: 10;
 $z-index-header: 100;
 $z-index-modal: 200;
 $z-index-loading: 300;

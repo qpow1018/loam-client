@@ -1,5 +1,11 @@
 import LoadoClient from './LoadoClient';
+import LostarkHeader from '@/components/lostark/header/LostarkHeader';
 
 export default function LoadoPage() {
-  return <LoadoClient />;
+  return (
+    <>
+      <LostarkHeader />
+      <LoadoClient />
+    </>
+  );
 }

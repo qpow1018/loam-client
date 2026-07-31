@@ -45,7 +45,8 @@ export default function MainCharacterOrderModal(props: {
 
         <div className={styles['action-buttons']}>
           <Button
-            theme="bg-gray600"
+            color="gray"
+            fill="solid"
             size="large"
             onClick={props.onClose}
             isDisabled={props.isSaving}
@@ -53,7 +54,8 @@ export default function MainCharacterOrderModal(props: {
             취소
           </Button>
           <Button
-            theme="bg-pri"
+            color="mint"
+            fill="solid"
             size="large"
             className={styles['submit-btn']}
             onClick={() => props.onSubmit(draftCharacters)}

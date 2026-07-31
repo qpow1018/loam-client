@@ -24,15 +24,15 @@
     pointer-events: auto;
 
     &.type-success {
-      background-color: $mint-soft;
+      background-color: $azure;
     }
 
     &.type-error {
-      background-color: $rose-soft;
+      background-color: $error;
     }
 
     &.type-info {
-      background-color: $gray-600;
+      background-color: $mint;
     }
 
     .message {

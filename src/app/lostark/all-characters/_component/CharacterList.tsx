@@ -89,7 +89,8 @@ function CharacterListItem(props: {
         </div>
 
         <Button
-          theme="bg-gray600"
+          color="gray"
+          fill="outline"
           size="small"
           isLoading={props.isMainToggleLoading}
           onClick={props.onToggleMain}
@@ -97,7 +98,7 @@ function CharacterListItem(props: {
           {props.isMain ? '메인 해제' : '메인 등록'}
         </Button>
 
-        <IconButton onClick={() => setIsConfirmOpen(true)}>
+        <IconButton aria-label="캐릭터 삭제" onClick={() => setIsConfirmOpen(true)}>
           <MdDeleteOutline />
         </IconButton>
       </div>
@@ -111,12 +112,14 @@ function CharacterListItem(props: {
           buttons={[
             {
               label: '취소',
-              theme: 'bg-gray600',
+              color: 'gray',
+              fill: 'solid',
               onClick: () => setIsConfirmOpen(false),
             },
             {
               label: '삭제',
-              theme: 'bg-sec',
+              color: 'rose',
+              fill: 'solid',
               onClick: () => {
                 setIsConfirmOpen(false);
                 props.onDelete();

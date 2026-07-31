@@ -14,7 +14,7 @@
     max-height: calc(100vh - 112px);
     display: flex;
     flex-direction: column;
-    background-color: $gray-700;
+    background-color: $bg;
     border-radius: $border-radius;
     overflow: hidden;
 
@@ -24,7 +24,7 @@
       align-items: center;
       height: $modal-header-height;
       padding: 0 16px;
-      border-bottom: 1px solid $gray-500;
+      border-bottom: 1px solid $border-strong;
 
       .header-title {
         font-size: 14px;

@@ -101,7 +101,7 @@ export default function CreateCharacterModal(props: {
             placeholder="캐릭터명을 입력하세요"
             className={styles['nickname-input']}
           />
-          <Button theme="bg-pri" onClick={handleSearch} isLoading={isLoading}>
+          <Button color="gray" fill="solid" size="large" onClick={handleSearch} isLoading={isLoading}>
             검색
           </Button>
         </div>
@@ -144,11 +144,12 @@ export default function CreateCharacterModal(props: {
         </div>
 
         <div className={styles['action-buttons']}>
-          <Button theme="bg-gray600" size="large" onClick={onClose}>
+          <Button color="gray" fill="solid" size="large" onClick={onClose}>
             취소
           </Button>
           <Button
-            theme="bg-pri"
+            color="mint"
+            fill="solid"
             size="large"
             className={styles['submit-btn']}
             onClick={handleSubmit}

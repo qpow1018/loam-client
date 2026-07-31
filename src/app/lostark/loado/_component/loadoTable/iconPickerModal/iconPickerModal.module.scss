@@ -11,7 +11,6 @@
     width: 40px;
     height: 40px;
     border-radius: $border-radius;
-    background-color: $gray-700;
     color: $text-secondary;
     cursor: pointer;
     transition:
@@ -20,11 +19,11 @@
     border: 1px solid transparent;
 
     &:hover {
-      background-color: $gray-500;
+      background-color: $bg-accent;
     }
 
     &.selected {
-      border-color: $mint;
+      border-color: $rose;
     }
 
     img {

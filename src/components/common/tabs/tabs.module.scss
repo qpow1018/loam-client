@@ -1,9 +1,10 @@
 .tabs {
   display: flex;
-  border-bottom: 1px solid $gray-500;
+  border-bottom: 1px solid $border-strong;
 
   .tab {
-    padding: 10px 12px;
+    height: 40px;
+    padding: 0 12px;
     background-color: transparent;
     color: $text-secondary;
     font-size: 13px;
@@ -20,7 +21,7 @@
 
   .tab-selected {
     color: $text-primary;
-    border-bottom-color: $rose;
+    border-bottom-color: $rose-accent;
 
     &:hover {
       color: $text-primary;

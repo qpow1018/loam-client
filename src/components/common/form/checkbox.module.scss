@@ -2,7 +2,8 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: $text-primary;
+  color: $text-secondary;
+  font-size: 13px;
   cursor: pointer;
 
   > input {
@@ -15,8 +16,8 @@
     white-space: nowrap;
 
     &:focus-visible + .control {
-      border-color: $mint-accent;
-      outline: 2px solid $mint-light;
+      border-color: $rose-accent;
+      outline: 2px solid $rose-light;
       outline-offset: 1px;
     }
   }
@@ -33,7 +34,7 @@
     width: 18px;
     height: 18px;
     box-sizing: border-box;
-    border: 1px solid $gray-500;
+    border: 1px solid $border-strong;
     border-radius: 4px;
     background: transparent;
     color: transparent;

@@ -8,7 +8,6 @@ import toast from '@/utils/toast';
 
 import Button from '@/components/common/button/Button';
 import BoxLoading from '@/components/common/loading/BoxLoading';
-import LostarkHeader from '@/components/lostark/header/LostarkHeader';
 import CharacterList from './_component/CharacterList';
 import CreateCharacterModal from './_component/CreateCharacterModal';
 
@@ -91,8 +90,6 @@ export default function AllCharactersClient() {
 
   return (
     <div className={styles['all-characters-client']}>
-      <LostarkHeader />
-
       <div className={styles['all-characters-client-container']}>
         <section className={styles['character-section']}>
           <div className={styles['list-header']}>
@@ -100,14 +97,15 @@ export default function AllCharactersClient() {
             <div className={styles['header-actions']}>
               <Button
                 onClick={handleRefreshCharacters}
-                theme="bg-gray600"
+                color="gray"
+                fill="solid"
                 isLoading={refreshMyCharacters.isPending}
                 isDisabled={allCharacters.length === 0}
               >
                 원정대 갱신
               </Button>
 
-              <Button onClick={() => setIsCreateModalOpen(true)} theme="bg-pri">
+              <Button onClick={() => setIsCreateModalOpen(true)} color="mint" fill="solid">
                 원정대 불러오기
               </Button>
             </div>

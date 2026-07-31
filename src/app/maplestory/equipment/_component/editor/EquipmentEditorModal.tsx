@@ -57,10 +57,16 @@ export default function EquipmentEditorModal(props: {
         )}
 
         <div className={styles['action-buttons']}>
-          <Button theme="bg-gray600" size="large" isDisabled={isSaving} onClick={onClose}>
+          <Button color="gray" fill="solid" size="large" isDisabled={isSaving} onClick={onClose}>
             취소
           </Button>
-          <Button theme="bg-sec" size="large" isLoading={isSaving} onClick={handleSubmit}>
+          <Button
+            color="rose"
+            fill="solid"
+            size="large"
+            isLoading={isSaving}
+            onClick={handleSubmit}
+          >
             저장
           </Button>
         </div>

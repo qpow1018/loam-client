@@ -85,7 +85,7 @@
 .notice {
   padding: 10px 12px;
   border-left: 3px solid $mint-accent;
-  background: $mint-ghost;
+  background: $mint-tint;
   color: $gray-300;
   font-size: 12px;
 
@@ -186,11 +186,11 @@
 }
 
 .strategy-row--changed {
-  background: $mint-ghost;
+  background: $mint-tint;
 }
 
 .strategy-row--guaranteed {
-  background: $mint-ghost;
+  background: $mint-tint;
 
   th {
     box-shadow: inset 3px 0 0 $mint-accent;

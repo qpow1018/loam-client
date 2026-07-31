@@ -59,7 +59,8 @@ export default function StorageResetSection(props: { game: TSettingsGame }) {
             {resetTargets.partial.map((target) => (
               <Button
                 key={target}
-                theme="bd-gray"
+                color="gray"
+                fill="outline"
                 size="small"
                 onClick={() => setPendingResetTarget(target)}
               >
@@ -71,7 +72,8 @@ export default function StorageResetSection(props: { game: TSettingsGame }) {
 
         <SettingsField label="전체 초기화" value={resetTargets.allDescription}>
           <Button
-            theme="bg-sec"
+            color="rose"
+            fill="solid"
             size="small"
             onClick={() => setPendingResetTarget(resetTargets.all)}
           >
@@ -92,12 +94,14 @@ export default function StorageResetSection(props: { game: TSettingsGame }) {
         buttons={[
           {
             label: '취소',
-            theme: 'bd-gray',
+            color: 'gray',
+            fill: 'outline',
             onClick: () => setPendingResetTarget(null),
           },
           {
             label: '초기화',
-            theme: 'bg-sec',
+            color: 'rose',
+            fill: 'solid',
             onClick: handleResetConfirm,
           },
         ]}

@@ -38,7 +38,13 @@ export default function AuthSection() {
       title="인증"
       description="현재 브라우저의 LoaM 로그인 세션을 종료합니다."
       actions={
-        <Button theme="bg-sec" size="large" isLoading={isSigningOut} onClick={handleSignOut}>
+        <Button
+          color="rose"
+          fill="solid"
+          size="large"
+          isLoading={isSigningOut}
+          onClick={handleSignOut}
+        >
           로그아웃
         </Button>
       }
