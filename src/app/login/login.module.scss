@@ -87,8 +87,8 @@
       opacity $transition;
 
     &:hover:not(:disabled) {
-      border-color: $mint-soft;
-      background: $mint-soft;
+      border-color: $mint-surface;
+      background: $mint-surface;
     }
 
     &:disabled {

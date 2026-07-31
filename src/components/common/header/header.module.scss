@@ -13,7 +13,7 @@
 
     .navigation-link:hover,
     .navigation-link.is-active {
-      background-color: $mint-soft;
+      background-color: $mint-surface;
     }
   }
 
@@ -22,7 +22,7 @@
 
     .navigation-link:hover,
     .navigation-link.is-active {
-      background-color: $rose-soft;
+      background-color: $rose-surface;
     }
   }
 
@@ -89,7 +89,7 @@
     font-size: 12px;
     font-weight: 700;
     color: $amber-light;
-    background-color: $amber-soft;
+    background-color: $amber-surface;
     border: 1px solid $amber;
     border-radius: 999px;
     box-shadow: 0 2px 8px rgba($black, 0.18);
@@ -106,7 +106,7 @@
       height: 7px;
       background-color: $amber-accent;
       border-radius: 50%;
-      box-shadow: 0 0 0 3px $amber-ghost;
+      box-shadow: 0 0 0 3px $amber-tint;
     }
   }
 }

@@ -25,8 +25,8 @@
     color: $text-primary;
 
     &:hover:not(:disabled) {
-      background-color: $mint-soft;
-      border-color: $mint-soft;
+      background-color: $mint-surface;
+      border-color: $mint-surface;
     }
   }
 
@@ -36,8 +36,8 @@
     color: $text-primary;
 
     &:hover:not(:disabled) {
-      background-color: $rose-soft;
-      border-color: $rose-soft;
+      background-color: $rose-surface;
+      border-color: $rose-surface;
     }
   }
 
