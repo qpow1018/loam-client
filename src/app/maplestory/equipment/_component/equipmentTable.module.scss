@@ -1,7 +1,7 @@
 .equipment-table-section {
   overflow: hidden;
   border-radius: $border-radius;
-  background-color: $gray-800;
+  background-color: $bg;
 
   .equipment-table {
     width: 100%;
@@ -23,9 +23,9 @@
     td {
       height: 40px;
       padding: 0;
-      background-color: $gray-800;
-      border-top: 1px solid $gray-700;
-      border-right: 1px solid $gray-700;
+      background-color: $bg;
+      border-top: 1px solid $border-soft;
+      border-right: 1px solid $border-soft;
       transition: background-color $transition;
 
       &:last-child {
@@ -51,7 +51,7 @@
       justify-content: center;
       width: 20px;
       height: 20px;
-      border: 1px solid $gray-500;
+      border: 1px solid $border-strong;
       border-radius: 4px;
       color: $rose-light;
       font-size: 15px;
@@ -73,7 +73,7 @@
     word-break: break-word;
 
     &:hover {
-      background-color: $gray-700;
+      background-color: $bg-light;
     }
 
     &.placeholder {

@@ -40,14 +40,14 @@
     gap: 6px;
     min-width: 0;
     padding-left: 12px;
-    border-left: 1px solid $gray-600;
+    border-left: 1px solid $border;
   }
 
   .helper-button {
     min-width: 0;
     height: 30px;
     padding: 0 8px;
-    border-color: $gray-600;
+    border-color: $border;
     color: $text-secondary;
     font-size: 11px;
   }
@@ -65,7 +65,7 @@
     width: 64px;
     height: 30px;
     padding: 0 8px;
-    border-color: $gray-600;
+    border-color: $border;
     color: $text-secondary;
     font-size: 11px;
   }
