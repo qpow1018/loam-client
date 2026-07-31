@@ -8,7 +8,7 @@
     border-radius: 4px;
     font-size: 13px;
     color: $text-secondary;
-    background-color: $gray-600;
+    border: 1px solid $border;
     transition: background-color $transition;
 
     &:hover {

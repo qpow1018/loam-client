@@ -101,7 +101,7 @@ export default function CreateCharacterModal(props: {
             placeholder="캐릭터명을 입력하세요"
             className={styles['nickname-input']}
           />
-          <Button color="mint" fill="solid" onClick={handleSearch} isLoading={isLoading}>
+          <Button color="gray" fill="solid" size="large" onClick={handleSearch} isLoading={isLoading}>
             검색
           </Button>
         </div>

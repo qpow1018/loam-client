@@ -11,7 +11,6 @@ import toast from '@/utils/toast';
 
 import Button from '@/components/common/button/Button';
 import BoxLoading from '@/components/common/loading/BoxLoading';
-import MaplestoryHeader from '@/components/maplestory/header/MaplestoryHeader';
 import CharacterList from './_component/CharacterList';
 import CreateCharacterModal from './_component/CreateCharacterModal';
 
@@ -66,8 +65,6 @@ export default function MyCharactersClient() {
 
   return (
     <div className={styles['my-characters-client']}>
-      <MaplestoryHeader />
-
       <div className={styles['my-characters-client-container']}>
         <section className={styles['character-section']}>
           <div className={styles['list-header']}>

@@ -90,7 +90,7 @@ function CharacterListItem(props: {
 
         <Button
           color="gray"
-          fill="solid"
+          fill="outline"
           size="small"
           isLoading={props.isMainToggleLoading}
           onClick={props.onToggleMain}
