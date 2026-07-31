@@ -8,14 +8,14 @@
     width: $page-width;
     padding: 16px;
     border-radius: $border-radius;
-    background: $gray-800;
+    background: $bg;
 
     .list-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding-bottom: 12px;
-      border-bottom: 1px solid $gray-600;
+      border-bottom: 1px solid $border;
 
       .title {
         font-size: 13px;
