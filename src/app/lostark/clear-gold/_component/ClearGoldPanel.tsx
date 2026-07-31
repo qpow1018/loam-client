@@ -2,9 +2,12 @@
 
 import { useState } from 'react';
 
-import type { TClearGoldCategory, TClearGoldContent } from '../_type/clearGold';
-import { CLEAR_GOLD_CATEGORIES } from '../_define/clearGoldContents';
-import { calculateClearGoldSummary, formatGold } from '../_util/clearGold';
+import { CLEAR_GOLD_CATEGORIES } from '@/app/lostark/clear-gold/_define/clearGoldContents';
+import type {
+  TClearGoldCategory,
+  TClearGoldContent,
+} from '@/app/lostark/clear-gold/_type/clearGold';
+import { calculateClearGoldSummary, formatGold } from '@/app/lostark/clear-gold/_util/clearGold';
 
 import styles from './clearGoldPanel.module.scss';
 

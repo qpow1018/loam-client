@@ -1,8 +1,15 @@
 import { assert, it as test } from 'vitest';
 
-import { CLEAR_GOLD_CATEGORIES } from '../_define/clearGoldContents';
-import type { TClearGoldCategory, TClearGoldGate } from '../_type/clearGold';
-import { calculateClearGoldSummary, createLevelGoldRows, formatGold } from './clearGold';
+import { CLEAR_GOLD_CATEGORIES } from '@/app/lostark/clear-gold/_define/clearGoldContents';
+import type {
+  TClearGoldCategory,
+  TClearGoldGate,
+} from '@/app/lostark/clear-gold/_type/clearGold';
+import {
+  calculateClearGoldSummary,
+  createLevelGoldRows,
+  formatGold,
+} from '@/app/lostark/clear-gold/_util/clearGold';
 
 test('returns zero totals for empty gates', () => {
   assert.deepEqual(calculateClearGoldSummary([]), {
@@ -40,7 +47,9 @@ test('creates level gold rows from actual raid entry levels between 1700 and 178
 });
 
 test('selects the highest three raids by total gold for each entry level', () => {
-  const rows = createLevelGoldRows(CLEAR_GOLD_CATEGORIES);
+  const rows = createLevelGoldRows(CLEAR_GOLD_CATEGORIES, {
+    includeNonPreferred: true,
+  });
   const level1740 = rows.find((row) => row.level === 1740);
 
   if (!level1740) {
@@ -55,7 +64,9 @@ test('selects the highest three raids by total gold for each entry level', () =>
 });
 
 test('selects the highest three raids by tradable gold when bound gold is excluded', () => {
-  const rows = createLevelGoldRows(CLEAR_GOLD_CATEGORIES);
+  const rows = createLevelGoldRows(CLEAR_GOLD_CATEGORIES, {
+    includeNonPreferred: true,
+  });
   const level1740 = rows.find((row) => row.level === 1740);
 
   if (!level1740) {
@@ -69,25 +80,27 @@ test('selects the highest three raids by tradable gold when bound gold is exclud
   );
 });
 
-test('excludes selected raid difficulties and recalculates the top three raids', () => {
+test('excludes defined raids and includes non-preferred raids only on request', () => {
   const rows = createLevelGoldRows(CLEAR_GOLD_CATEGORIES, {
-    excludedDifficultyIds: ['shadow-serka-nightmare'],
+    includeNonPreferred: true,
   });
-  const level1750 = rows.find((row) => row.level === 1750);
+  const defaultRows = createLevelGoldRows(CLEAR_GOLD_CATEGORIES);
+  const level1780 = rows.find((row) => row.level === 1780);
+  const defaultLevel1780 = defaultRows.find((row) => row.level === 1780);
 
-  if (!level1750) {
-    throw new Error('Level 1750 row was not created.');
+  if (!level1780 || !defaultLevel1780) {
+    throw new Error('Level 1780 row was not created.');
   }
 
-  assert.equal(level1750.withBound.totalGold, 148_000);
+  assert.equal(defaultLevel1780.withBound.totalGold, 160_000);
   assert.deepEqual(
-    level1750.withBound.raids.map((raid) => raid.difficultyId),
-    ['shadow-belgardin-normal', 'horizon-cathedral-stage-3', 'kazeroth-finale-hard'],
+    defaultLevel1780.withBound.raids.map((raid) => raid.difficultyId),
+    ['shadow-belgardin-hard', 'horizon-cathedral-stage-3', 'kazeroth-finale-hard'],
   );
-  assert.equal(level1750.withoutBound.totalGold, 142_000);
+  assert.equal(level1780.withBound.totalGold, 179_000);
   assert.deepEqual(
-    level1750.withoutBound.raids.map((raid) => raid.difficultyId),
-    ['shadow-belgardin-normal', 'kazeroth-finale-hard', 'shadow-serka-hard'],
+    level1780.withBound.raids.map((raid) => raid.difficultyId),
+    ['shadow-belgardin-nightmare', 'shadow-serka-nightmare', 'horizon-cathedral-stage-3'],
   );
 });
 

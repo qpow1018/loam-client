@@ -3,8 +3,8 @@
 import { useState } from 'react';
 
 import Tabs from '@/components/common/tabs/Tabs';
-import ClearGoldPanel from './_component/ClearGoldPanel';
-import LevelGoldPanel from './_component/LevelGoldPanel';
+import ClearGoldPanel from '@/app/lostark/clear-gold/_component/ClearGoldPanel';
+import LevelGoldPanel from '@/app/lostark/clear-gold/_component/LevelGoldPanel';
 
 import styles from './clearGoldClient.module.scss';
 
@@ -16,7 +16,7 @@ const CLEAR_GOLD_TABS = [
 ] as const;
 
 export default function ClearGoldClient() {
-  const [activeTab, setActiveTab] = useState<TClearGoldTab>('clear-gold');
+  const [activeTab, setActiveTab] = useState<TClearGoldTab>('level-gold');
 
   return (
     <div className={styles['clear-gold-client']}>

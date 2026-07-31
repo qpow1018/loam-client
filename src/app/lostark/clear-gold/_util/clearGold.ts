@@ -4,11 +4,10 @@ import type {
   TClearGoldContent,
   TClearGoldGate,
   TClearGoldSummary,
-  TLevelGoldDifficultyOption,
   TLevelGoldRaid,
   TLevelGoldRaidGroup,
   TLevelGoldRow,
-} from '../_type/clearGold';
+} from '@/app/lostark/clear-gold/_type/clearGold';
 
 const GOLD_NUMBER_FORMATTER = new Intl.NumberFormat('ko-KR');
 const LEVEL_GOLD_MIN_LEVEL = 1700;
@@ -40,14 +39,14 @@ export function createLevelGoldRows(
 ): TLevelGoldRow[] {
   const contents = categories.flatMap<TClearGoldContent>((category) => category.contents);
   const levels = getLevelGoldEntryLevels(contents);
-  const excludedDifficultyIds = new Set(options.excludedDifficultyIds ?? []);
+  const includeNonPreferred = options.includeNonPreferred ?? false;
 
   return levels.map((level) => {
     const withBoundRaids = contents
-      .map((content) => getBestEligibleRaid(content, level, 'totalGold', excludedDifficultyIds))
+      .map((content) => getBestEligibleRaid(content, level, 'totalGold', includeNonPreferred))
       .filter((raid): raid is TLevelGoldRaid => raid !== undefined);
     const withoutBoundRaids = contents
-      .map((content) => getBestEligibleRaid(content, level, 'tradableGold', excludedDifficultyIds))
+      .map((content) => getBestEligibleRaid(content, level, 'tradableGold', includeNonPreferred))
       .filter((raid): raid is TLevelGoldRaid => raid !== undefined);
 
     return {
@@ -56,22 +55,6 @@ export function createLevelGoldRows(
       withoutBound: createLevelGoldRaidGroup(withoutBoundRaids, 'tradableGold'),
     };
   });
-}
-
-export function createLevelGoldDifficultyOptions(
-  categories: readonly TClearGoldCategory[],
-): TLevelGoldDifficultyOption[] {
-  return categories.flatMap((category) =>
-    category.contents.flatMap((content) =>
-      content.difficulties.map((difficulty) => ({
-        contentId: content.id,
-        contentName: content.name,
-        difficultyId: difficulty.id,
-        difficultyName: difficulty.name,
-        entryItemLevel: difficulty.entryItemLevel,
-      })),
-    ),
-  );
 }
 
 function getLevelGoldEntryLevels(contents: readonly TClearGoldContent[]) {
@@ -90,12 +73,14 @@ function getBestEligibleRaid(
   content: TClearGoldContent,
   level: number,
   goldKey: 'totalGold' | 'tradableGold',
-  excludedDifficultyIds: ReadonlySet<string>,
+  includeNonPreferred: boolean,
 ) {
   return content.difficulties
     .filter(
       (difficulty) =>
-        difficulty.entryItemLevel <= level && !excludedDifficultyIds.has(difficulty.id),
+        difficulty.entryItemLevel <= level &&
+        difficulty.levelGoldStatus !== 'excluded' &&
+        (includeNonPreferred || difficulty.levelGoldStatus !== 'non-preferred'),
     )
     .map<TLevelGoldRaid>((difficulty) => {
       const summary = calculateClearGoldSummary(difficulty.gates);

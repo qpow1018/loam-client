@@ -1,4 +1,4 @@
-import type { TClearGoldCategory } from '../_type/clearGold';
+import type { TClearGoldCategory } from '@/app/lostark/clear-gold/_type/clearGold';
 
 const UPDATED_AT = '2026.06.24';
 
@@ -15,6 +15,7 @@ export const CLEAR_GOLD_CATEGORIES = [
             id: 'shadow-belgardin-nightmare',
             name: '나이트메어',
             tone: 'nightmare',
+            levelGoldStatus: 'non-preferred',
             entryItemLevel: 1780,
             updatedAt: UPDATED_AT,
             gates: [
@@ -54,6 +55,7 @@ export const CLEAR_GOLD_CATEGORIES = [
             id: 'shadow-serka-nightmare',
             name: '나이트메어',
             tone: 'nightmare',
+            levelGoldStatus: 'non-preferred',
             entryItemLevel: 1740,
             updatedAt: UPDATED_AT,
             gates: [
@@ -200,6 +202,7 @@ export const CLEAR_GOLD_CATEGORIES = [
             id: 'kazeroth-act-3-hard',
             name: '하드',
             tone: 'hard',
+            levelGoldStatus: 'excluded',
             entryItemLevel: 1700,
             updatedAt: UPDATED_AT,
             gates: [
@@ -230,6 +233,7 @@ export const CLEAR_GOLD_CATEGORIES = [
             id: 'kazeroth-act-2-hard',
             name: '하드',
             tone: 'hard',
+            levelGoldStatus: 'excluded',
             entryItemLevel: 1690,
             updatedAt: UPDATED_AT,
             gates: [
@@ -241,6 +245,7 @@ export const CLEAR_GOLD_CATEGORIES = [
             id: 'kazeroth-act-2-normal',
             name: '노말',
             tone: 'normal',
+            levelGoldStatus: 'excluded',
             entryItemLevel: 1670,
             updatedAt: UPDATED_AT,
             gates: [
@@ -258,6 +263,7 @@ export const CLEAR_GOLD_CATEGORIES = [
             id: 'kazeroth-act-1-hard',
             name: '하드',
             tone: 'hard',
+            levelGoldStatus: 'excluded',
             entryItemLevel: 1680,
             updatedAt: UPDATED_AT,
             gates: [
@@ -269,6 +275,7 @@ export const CLEAR_GOLD_CATEGORIES = [
             id: 'kazeroth-act-1-normal',
             name: '노말',
             tone: 'normal',
+            levelGoldStatus: 'excluded',
             entryItemLevel: 1660,
             updatedAt: UPDATED_AT,
             gates: [
@@ -286,6 +293,7 @@ export const CLEAR_GOLD_CATEGORIES = [
             id: 'kazeroth-prologue-hard',
             name: '하드',
             tone: 'hard',
+            levelGoldStatus: 'excluded',
             entryItemLevel: 1640,
             updatedAt: UPDATED_AT,
             gates: [
@@ -297,6 +305,7 @@ export const CLEAR_GOLD_CATEGORIES = [
             id: 'kazeroth-prologue-normal',
             name: '노말',
             tone: 'normal',
+            levelGoldStatus: 'excluded',
             entryItemLevel: 1620,
             updatedAt: UPDATED_AT,
             gates: [
