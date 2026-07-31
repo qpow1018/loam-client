@@ -73,13 +73,13 @@
   .state-card {
     border: 1px solid $border-soft;
     border-radius: 10px;
-    background: $bg;
   }
 
   .button-card {
     display: grid;
     gap: 18px;
     padding: 20px;
+    background: $bg;
 
     h3,
     code {
@@ -109,6 +109,27 @@
     display: grid;
     gap: 20px;
     padding: 24px;
+  }
+
+  .button-group-showcase {
+    display: grid;
+    gap: 16px;
+    padding: 16px;
+    border-radius: $border-radius;
+    background: $bg;
+  }
+
+  .button-group-sample {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    span {
+      width: 40px;
+      color: $text-secondary;
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+    }
   }
 
   .modal-preview-content {

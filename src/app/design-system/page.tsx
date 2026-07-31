@@ -1,4 +1,5 @@
 import ButtonShowcase from './_component/ButtonShowcase';
+import ButtonGroupShowcase from './_component/ButtonGroupShowcase';
 import IconButtonShowcase from './_component/IconButtonShowcase';
 import ModalShowcase from './_component/ModalShowcase';
 
@@ -16,6 +17,7 @@ export default function DesignSystemPage() {
 
         <ButtonShowcase />
         <IconButtonShowcase />
+        <ButtonGroupShowcase />
         <ModalShowcase />
       </div>
     </main>

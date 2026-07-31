@@ -2,16 +2,19 @@
 
 import styles from './buttonGroup.module.scss';
 
+export type TButtonGroupSize = 'small' | 'medium' | 'large';
+
 export default function ButtonGroup<T extends string>(props: {
   options: readonly { value: T; label: string }[];
   value: T;
   onChange: (next: T) => void;
+  size?: TButtonGroupSize;
   isDisabled?: boolean;
 }) {
-  const { options, value, onChange, isDisabled = false } = props;
+  const { options, value, onChange, size = 'medium', isDisabled = false } = props;
 
   return (
-    <div className={styles['button-group']}>
+    <div className={`${styles['button-group']} ${styles[`size-${size}`]}`}>
       {options.map((option) => (
         <button
           key={option.value}

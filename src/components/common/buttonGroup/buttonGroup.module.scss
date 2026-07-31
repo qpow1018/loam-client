@@ -1,13 +1,26 @@
 .button-group {
   display: inline-flex;
   padding: 2px;
-  background-color: $gray-800;
+  background-color: $bg-dark;
   border-radius: $border-radius;
   gap: 2px;
 
-  .option {
+  &.size-small .option {
     height: 28px;
     padding: 0 14px;
+  }
+
+  &.size-medium .option {
+    height: 32px;
+    padding: 0 16px;
+  }
+
+  &.size-large .option {
+    height: 36px;
+    padding: 0 18px;
+  }
+
+  .option {
     border-radius: 4px;
     background-color: transparent;
     color: $text-secondary;
@@ -27,11 +40,11 @@
   }
 
   .option-selected {
-    background-color: $gray-600;
+    background-color: $bg-light;
     color: $text-primary;
 
     &:hover {
-      background-color: $gray-600;
+      background-color: $bg-light;
     }
   }
 }
