@@ -29,6 +29,17 @@ export function calculateClearGoldSummary(gates: readonly TClearGoldGate[]): TCl
   };
 }
 
+export function calculateLevelGoldRaidSummary(raids: readonly TLevelGoldRaid[]): TClearGoldSummary {
+  return raids.reduce(
+    (summary, raid) => ({
+      tradableGold: summary.tradableGold + raid.tradableGold,
+      boundGold: summary.boundGold + raid.boundGold,
+      totalGold: summary.totalGold + raid.totalGold,
+    }),
+    { tradableGold: 0, boundGold: 0, totalGold: 0 },
+  );
+}
+
 export function formatGold(value: number) {
   return GOLD_NUMBER_FORMATTER.format(value);
 }
