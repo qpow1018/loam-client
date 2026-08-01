@@ -8,7 +8,11 @@ import type {
   TLevelGoldRaidGroup,
   TLevelGoldRow,
 } from '@/app/lostark/clear-gold/_type/clearGold';
-import { createLevelGoldRows, formatGold } from '@/app/lostark/clear-gold/_util/clearGold';
+import {
+  calculateLevelGoldRaidSummary,
+  createLevelGoldRows,
+  formatGold,
+} from '@/app/lostark/clear-gold/_util/clearGold';
 import Button from '@/components/common/button/Button';
 
 import styles from './levelGoldPanel.module.scss';
@@ -81,14 +85,14 @@ function LevelGoldStrategy(props: {
   label: string;
   tone: TLevelGoldStrategyTone;
 }) {
-  const summary = createStrategyGoldSummary(props.group.raids);
+  const summary = calculateLevelGoldRaidSummary(props.group.raids);
 
   return (
     <section className={`${styles['strategy-panel']} ${styles[`tone-${props.tone}`]}`}>
       <header className={styles['strategy-header']}>
         <div className={styles['strategy-total']}>
           <span className={styles['strategy-label']}>{props.label}</span>
-          <strong className={styles['strategy-gold']}>{formatGold(props.group.totalGold)} G</strong>
+          <strong className={styles['strategy-gold']}>{formatGold(summary.totalGold)} G</strong>
         </div>
         <p className={styles['gold-breakdown']}>
           <span className={styles['gold-breakdown-item']}>
@@ -113,18 +117,5 @@ function LevelGoldStrategy(props: {
         ))}
       </ol>
     </section>
-  );
-}
-
-function createStrategyGoldSummary(raids: readonly TLevelGoldRaid[]) {
-  return raids.reduce(
-    (summary, raid) => ({
-      tradableGold: summary.tradableGold + raid.tradableGold,
-      boundGold: summary.boundGold + raid.boundGold,
-    }),
-    {
-      tradableGold: 0,
-      boundGold: 0,
-    },
   );
 }

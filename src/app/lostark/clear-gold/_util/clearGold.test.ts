@@ -7,6 +7,7 @@ import type {
 } from '@/app/lostark/clear-gold/_type/clearGold';
 import {
   calculateClearGoldSummary,
+  calculateLevelGoldRaidSummary,
   createLevelGoldRows,
   formatGold,
 } from '@/app/lostark/clear-gold/_util/clearGold';
@@ -78,6 +79,21 @@ test('selects the highest three raids by tradable gold when bound gold is exclud
     level1740.withoutBound.raids.map((raid) => raid.difficultyId),
     ['shadow-serka-nightmare', 'kazeroth-finale-hard', 'kazeroth-act-4-hard'],
   );
+});
+
+test('keeps the actual total reward for raids selected by tradable gold', () => {
+  const level1720 = createLevelGoldRows(CLEAR_GOLD_CATEGORIES).find((row) => row.level === 1720);
+
+  if (!level1720) {
+    throw new Error('Level 1720 row was not created.');
+  }
+
+  assert.equal(level1720.withoutBound.totalGold, 70_000);
+  assert.deepEqual(calculateLevelGoldRaidSummary(level1720.withoutBound.raids), {
+    tradableGold: 70_000,
+    boundGold: 32_000,
+    totalGold: 102_000,
+  });
 });
 
 test('excludes defined raids and includes non-preferred raids only on request', () => {
