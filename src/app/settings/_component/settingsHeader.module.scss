@@ -1,0 +1,32 @@
+.settings-header {
+  position: sticky;
+  top: 0;
+  z-index: $z-index-header;
+  display: flex;
+  align-items: center;
+  height: $header-height;
+  padding: 0 16px;
+  border-bottom: 1px solid $border-soft;
+  background-color: $bg-dark;
+
+  .back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 12px;
+    color: $text-primary;
+    font-size: 13px;
+    font-weight: 600;
+    border: 0;
+    border-radius: $border-radius;
+    background-color: transparent;
+    text-decoration: none;
+    transition: background-color $transition;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $bg-light;
+    }
+  }
+}
