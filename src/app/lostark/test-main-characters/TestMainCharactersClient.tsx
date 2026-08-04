@@ -6,6 +6,7 @@ import type { TResLostarkMainCharacter } from '@/api/lostark/type';
 import lostarkQuery from '@/queries/lostarkQuery';
 import toast from '@/utils/toast';
 
+import Button from '@/components/common/button/Button';
 import BoxLoading from '@/components/common/loading/BoxLoading';
 import CharacterDetail from './_component/characterDetail/CharacterDetail';
 import CharacterSummaryList from './_component/CharacterSummaryList';
@@ -17,17 +18,77 @@ type TTestMainCharactersView = 'summary' | 'detail';
 export default function TestMainCharactersClient() {
   const [activeView, setActiveView] = useState<TTestMainCharactersView>('summary');
   const [selectedCharacterId, setSelectedCharacterId] = useState<string | null>(null);
+  const [draftCharacters, setDraftCharacters] = useState<Record<string, TResLostarkMainCharacter>>(
+    {},
+  );
 
-  const { data: characters = [], isLoading, isError } = lostarkQuery.useGetMainCharacters();
+  const {
+    data: savedCharacters = [],
+    isLoading,
+    isError,
+  } = lostarkQuery.useGetTestMainCharacters();
+  const initializeTestMainCharacters = lostarkQuery.useInitializeTestMainCharacters();
+  const refreshMainCharacter = lostarkQuery.useRefreshMainCharacter();
+  const saveTestMainCharacter = lostarkQuery.useSaveTestMainCharacter();
+  const characters = savedCharacters.map((character) => draftCharacters[character.id] ?? character);
 
   const selectedCharacter =
     characters.find((character) => character.id === selectedCharacterId) ?? characters[0] ?? null;
+  const hasUnsavedChanges = selectedCharacter
+    ? draftCharacters[selectedCharacter.id] !== undefined
+    : false;
 
   useEffect(() => {
     if (isError) {
-      toast.error('메인 캐릭터 목록을 불러오지 못했습니다.');
+      toast.error('테스트 메인 캐릭터 목록을 불러오지 못했습니다.');
     }
   }, [isError]);
+
+  async function handleInitializeTestCharacters() {
+    try {
+      const initializedCharacters = await initializeTestMainCharacters.mutateAsync();
+
+      if (initializedCharacters.length === 0) {
+        toast.error('복사할 운영 메인 캐릭터가 없습니다.');
+        return;
+      }
+
+      toast.success('운영 데이터를 테스트 테이블로 복사했습니다.');
+    } catch {
+      toast.error('테스트 데이터를 준비하지 못했습니다.');
+    }
+  }
+
+  async function handleRefreshCharacter() {
+    if (!selectedCharacter || refreshMainCharacter.isPending) return;
+
+    try {
+      const refreshedCharacter = await refreshMainCharacter.mutateAsync(selectedCharacter);
+      setDraftCharacters((prev) => ({
+        ...prev,
+        [refreshedCharacter.id]: refreshedCharacter,
+      }));
+      toast.success('테스트용 최신 정보를 불러왔습니다.');
+    } catch {
+      toast.error('테스트용 최신 정보를 불러오지 못했습니다.');
+    }
+  }
+
+  async function handleSaveCharacter() {
+    if (!selectedCharacter || !hasUnsavedChanges || saveTestMainCharacter.isPending) return;
+
+    try {
+      await saveTestMainCharacter.mutateAsync(selectedCharacter);
+      setDraftCharacters((prev) => {
+        const next = { ...prev };
+        delete next[selectedCharacter.id];
+        return next;
+      });
+      toast.success('테스트 테이블에 저장했습니다.');
+    } catch {
+      toast.error('테스트 테이블에 저장하지 못했습니다.');
+    }
+  }
 
   function handleOpenCharacterDetail(characterId: string) {
     setSelectedCharacterId(characterId);
@@ -47,12 +108,46 @@ export default function TestMainCharactersClient() {
         onSelectCharacter={handleOpenCharacterDetail}
       />
 
+      {activeView === 'detail' && selectedCharacter && (
+        <div className={styles['test-actions']}>
+          <Button
+            color="gray"
+            fill="solid"
+            size="small"
+            isLoading={refreshMainCharacter.isPending}
+            isDisabled={saveTestMainCharacter.isPending}
+            onClick={() => void handleRefreshCharacter()}
+          >
+            테스트 갱신
+          </Button>
+          <Button
+            color="rose"
+            fill="solid"
+            size="small"
+            isLoading={saveTestMainCharacter.isPending}
+            isDisabled={refreshMainCharacter.isPending || !hasUnsavedChanges}
+            onClick={() => void handleSaveCharacter()}
+          >
+            테스트 저장
+          </Button>
+        </div>
+      )}
+
       {isLoading && <BoxLoading height={280} />}
 
       {!isLoading && !isError && characters.length === 0 && (
         <div className={styles['empty']}>
-          <p>등록된 메인 캐릭터가 없습니다.</p>
-          <span>기존 메인캐릭터 페이지에서 캐릭터를 등록해 주세요.</span>
+          <p>테스트 데이터가 없습니다.</p>
+          <span>운영 메인 캐릭터를 복사해 별도 공간에서 작업합니다.</span>
+          <Button
+            color="rose"
+            fill="solid"
+            size="small"
+            isLoading={initializeTestMainCharacters.isPending}
+            onClick={() => void handleInitializeTestCharacters()}
+          >
+            운영 데이터 가져오기
+          </Button>
         </div>
       )}
 

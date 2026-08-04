@@ -35,7 +35,7 @@ export default function CharacterDetail(props: { selectedCharacter: TResLostarkM
 
       {!summary.isExtendedDetailsAvailable && (
         <p className={styles['update-notice']}>
-          카드·스킬·상세 정보는 메인 캐릭터 관리에서 갱신 후 저장하면 확인할 수 있습니다.
+          카드·스킬·상세 정보는 상단의 테스트 갱신 후 저장하면 확인할 수 있습니다.
         </p>
       )}
 
