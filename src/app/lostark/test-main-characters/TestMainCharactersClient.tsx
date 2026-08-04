@@ -7,7 +7,7 @@ import lostarkQuery from '@/queries/lostarkQuery';
 import toast from '@/utils/toast';
 
 import BoxLoading from '@/components/common/loading/BoxLoading';
-import CharacterDetail from './_component/CharacterDetail';
+import CharacterDetail from './_component/characterDetail/CharacterDetail';
 import CharacterSummaryList from './_component/CharacterSummaryList';
 
 import styles from './testMainCharactersClient.module.scss';
