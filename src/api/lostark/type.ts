@@ -78,6 +78,7 @@ export type TResLostarkMainCharacter = {
 };
 
 export type TResLostarkCharacterSummary = {
+  isExtendedDetailsAvailable: boolean;
   profiles: {
     characterName: string | null;
     serverName: string | null;
@@ -85,6 +86,11 @@ export type TResLostarkCharacterSummary = {
     itemAvgLevel: string | null;
     combatPower: string | null;
     characterImage: string | null;
+    stats: TLostarkCharacterStat[];
+    skillPoints: {
+      using: number | null;
+      total: number | null;
+    };
   };
   equipment: {
     gears: TLostarkGear[];
@@ -97,6 +103,15 @@ export type TResLostarkCharacterSummary = {
   arkPassive: TLostarkArkPassive;
   arkGrid: TLostarkArkGrid;
   legendaryAvatars: TLostarkLegendaryAvatar[];
+  avatars: TLostarkAvatar[];
+  cards: TLostarkCards;
+  combatSkills: TLostarkCombatSkill[];
+};
+
+export type TLostarkCharacterStat = {
+  type: string | null;
+  value: string | null;
+  tooltip: string | null;
 };
 
 export type TLostarkColoredEffect = {
@@ -192,4 +207,53 @@ export type TLostarkLegendaryAvatar = {
   name: string | null;
   type: string | null;
   grade: string | null;
+};
+
+export type TLostarkAvatar = {
+  icon: string | null;
+  name: string | null;
+  type: string | null;
+  grade: string | null;
+  isInner: boolean | null;
+  isSet: boolean | null;
+  basicEffects: string[];
+  tendencyEffects: string[];
+};
+
+export type TLostarkCards = {
+  cards: {
+    slot: number | null;
+    name: string | null;
+    icon: string | null;
+    awakeCount: number | null;
+    awakeTotal: number | null;
+    grade: string | null;
+  }[];
+  effects: {
+    index: number | null;
+    cardSlots: number[];
+    items: {
+      name: string | null;
+      description: string | null;
+    }[];
+  }[];
+};
+
+export type TLostarkCombatSkill = {
+  name: string | null;
+  icon: string | null;
+  level: number | null;
+  type: string | null;
+  isAwakening: boolean | null;
+  rune: {
+    name: string | null;
+    icon: string | null;
+    grade: string | null;
+  } | null;
+  tripods: {
+    slot: number | null;
+    name: string | null;
+    icon: string | null;
+    level: number | null;
+  }[];
 };

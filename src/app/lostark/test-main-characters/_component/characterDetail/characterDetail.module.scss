@@ -1,126 +1,269 @@
 .character-detail {
+  width: 1152px;
+  margin: 0 auto;
+
   .profile-header {
-    display: flex;
-    align-items: center;
-    min-height: 220px;
+    position: relative;
+    height: 240px;
     overflow: hidden;
-    background: linear-gradient(90deg, $gray-800, $gray-900);
+    background:
+      radial-gradient(circle at 50% 100%, rgba($violet-accent, 0.12), transparent 34%),
+      linear-gradient(90deg, $gray-900 0%, $gray-800 50%, $gray-900 100%);
     border: 1px solid $border-soft;
-    border-radius: $border-radius;
   }
-  .profile-image {
-    align-self: stretch;
+
+  .profile-copy {
+    position: relative;
+    z-index: 1;
+    display: flex;
     width: 340px;
-    background: radial-gradient(circle, $gray-600, $gray-900);
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    padding: 28px 32px;
   }
+
+  .profile-tags {
+    display: flex;
+    gap: 6px;
+  }
+
+  .profile-tags span {
+    padding: 4px 7px;
+    background: $gray-700;
+    border: 1px solid $border-soft;
+    color: $text-secondary;
+    font-size: 11px;
+  }
+
+  .profile-copy h1 {
+    margin-top: 14px;
+    color: $text-primary;
+    font-size: 26px;
+    font-weight: 700;
+  }
+
+  .headline-stats {
+    display: flex;
+    gap: 26px;
+    margin-top: 44px;
+  }
+
+  .headline-stats div {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .headline-stats span {
+    color: $text-secondary;
+    font-size: 11px;
+  }
+
+  .headline-stats strong {
+    color: $text-primary;
+    font-size: 20px;
+  }
+
+  .headline-stats div:nth-child(2) strong {
+    color: $rose-light;
+  }
+
+  .profile-image {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 440px;
+    transform: translateX(-50%);
+  }
+
   .profile-image img {
     width: 100%;
     height: 100%;
     object-fit: contain;
     object-position: center bottom;
+    mix-blend-mode: lighten;
+    transform: scale(1.1);
+    transform-origin: center bottom;
   }
-  .profile-copy {
-    padding: 28px;
-  }
-  .profile-copy > p {
-    color: $mint-accent;
-    font-size: 13px;
-  }
-  .profile-copy h1 {
-    margin-top: 6px;
-    color: $text-primary;
-    font-size: 30px;
-  }
-  .headline-stats {
-    display: flex;
-    gap: 40px;
-    margin-top: 24px;
-  }
-  .headline-stats div {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .headline-stats span {
-    color: $text-secondary;
+
+  .update-notice {
+    margin-top: 12px;
+    padding: 10px 12px;
+    background: $rose-tint;
+    border-left: 2px solid $rose-accent;
+    color: $rose-light;
     font-size: 12px;
   }
-  .headline-stats strong {
-    color: $text-primary;
-    font-size: 18px;
-  }
+
   .detail-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1.45fr) minmax(360px, 1fr);
-    gap: 12px;
-    margin-top: 12px;
+    grid-template-columns: 578px 263px 263px;
+    gap: 24px;
+    align-items: start;
+    margin-top: 16px;
   }
+
+  .primary-column,
+  .secondary-column,
+  .tertiary-column {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 16px;
+  }
+
   .section {
-    padding: 16px;
+    min-width: 0;
+    overflow: visible;
     background: $gray-800;
     border: 1px solid $border-soft;
-    border-radius: $border-radius;
   }
-  .section h2 {
-    margin-bottom: 14px;
+
+  .section-heading {
+    display: flex;
+    height: 44px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0 12px;
+    border-bottom: 1px solid $border-soft;
+  }
+
+  .section-heading h2 {
     color: $text-primary;
-    font-size: 15px;
+    font-size: 14px;
+    font-weight: 700;
   }
-  .equipment-list {
+
+  .section-heading span {
+    color: $text-secondary;
+    font-size: 10px;
+  }
+
+  .section-body {
+    padding: 12px;
+  }
+
+  .equipment-section .section-body {
+    padding: 0;
+  }
+
+  .equipment-columns {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
   }
-  .item-row {
+
+  .equipment-group {
+    min-width: 0;
+  }
+
+  .equipment-group + .equipment-group {
+    border-left: 1px solid $border-soft;
+  }
+
+  .equipment-group h3 {
     display: flex;
+    height: 32px;
+    align-items: center;
+    padding: 0 12px;
+    border-bottom: 1px solid $border-soft;
+    color: $text-secondary;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .equipment-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .item-row {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    min-height: 56px;
     align-items: center;
     gap: 8px;
-    min-width: 0;
-    padding: 6px;
-    background: $gray-900;
-    border-radius: 4px;
+    padding: 7px 10px;
+    border-bottom: 1px solid rgba($border-soft, 0.72);
+
+    &:hover,
+    &:focus {
+      z-index: $z-index-popover;
+
+      .item-detail-tooltip {
+        display: block;
+      }
+    }
+
+    &:focus-visible {
+      outline: 1px solid $border-focus;
+      outline-offset: -1px;
+    }
   }
-  .item-row div {
+
+  .item-copy {
     flex: 1;
     min-width: 0;
   }
+
   .item-row strong,
-  .item-row span {
+  .item-row span,
+  .item-copy strong,
+  .item-copy span {
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .item-row strong {
+
+  .item-copy strong {
     color: $text-primary;
     font-size: 12px;
+    font-weight: 600;
   }
-  .item-row span {
+
+  .item-copy span {
     margin-top: 2px;
     color: $text-secondary;
-    font-size: 11px;
+    font-size: 10px;
   }
+
   .extra-list {
     display: flex;
-    gap: 8px;
-    margin-top: 12px;
+    flex-direction: column;
   }
+
   .extra-item {
+    position: relative;
     display: grid;
-    grid-template-columns: 38px auto;
-    align-items: center;
+    min-width: 0;
+    min-height: 56px;
+    grid-template-columns: 38px minmax(0, 1fr);
     column-gap: 8px;
-    flex: 1;
-    padding: 8px;
-    background: $gray-900;
-    border-radius: 4px;
+    align-items: center;
+    padding: 8px 10px;
+    border-bottom: 1px solid rgba($border-soft, 0.72);
     color: $text-primary;
+    font-size: 11px;
+
+    &:hover,
+    &:focus {
+      z-index: $z-index-popover;
+
+      .item-detail-tooltip {
+        display: block;
+      }
+    }
   }
+
   .extra-item small {
     grid-column: 2;
     overflow: hidden;
     color: $text-secondary;
-    font-size: 11px;
+    font-size: 10px;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -128,128 +271,274 @@
   .effect-summary {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5px 14px;
+    padding: 10px 12px;
+    border-top: 1px solid $border-soft;
+  }
+
+  .effect-summary > div {
+    display: flex;
     gap: 6px;
-    margin-top: 12px;
+    min-width: 0;
+    font-size: 10px;
   }
-  .effect-summary span {
-    overflow: hidden;
-    padding: 7px 8px;
-    background: $gray-900;
-    border-radius: 4px;
-    color: $text-secondary;
-    font-size: 11px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+
   .effect-summary strong {
-    margin-right: 6px;
-    color: $mint-light;
+    flex: 0 0 auto;
+    color: $amber-light;
     font-weight: 500;
   }
-  .avatar-list {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    min-height: 54px;
-    margin-top: 12px;
-    padding: 8px;
-    background: $gray-900;
-    border-radius: 4px;
-  }
-  .avatar-list > p {
-    margin-right: 4px;
-    color: $text-secondary;
-    font-size: 11px;
-    white-space: nowrap;
-  }
-  .avatar-list > span {
-    color: $text-muted;
-    font-size: 11px;
-  }
-  .avatar-list > div {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    color: $text-primary;
-    font-size: 11px;
-  }
-  .engraving-list,
-  .ark-points,
-  .effect-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .engraving-list span,
-  .ark-points span,
-  .effect-list span {
-    padding: 6px 8px;
-    background: $gray-900;
-    border-radius: 4px;
-    color: $text-primary;
-    font-size: 12px;
-  }
-  .engraving-list strong,
-  .ark-points strong,
-  .effect-list strong {
-    color: $mint-accent;
-  }
-  .ark-points {
-    margin-top: 14px;
-  }
-  .gems-section {
-    grid-column: 1 / -1;
-  }
-  .gem-list {
-    display: grid;
-    grid-template-columns: repeat(11, minmax(0, 1fr));
-    gap: 8px;
-  }
-  .gem-item {
-    min-width: 0;
-    text-align: center;
-    color: $text-primary;
-  }
-  .gem-item > div {
-    margin: 0 auto 4px;
-  }
-  .gem-item span,
-  .gem-item small {
-    display: block;
+
+  .effect-summary span {
     overflow: hidden;
+    color: $text-secondary;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .gem-item span {
-    font-size: 11px;
+
+  .combat-stat-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-top: 1px solid $border-soft;
+    border-left: 1px solid $border-soft;
   }
-  .gem-item small {
-    margin-top: 2px;
+
+  .combat-stat-list > div {
+    display: flex;
+    min-height: 48px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    padding: 7px 9px;
+    border-right: 1px solid $border-soft;
+    border-bottom: 1px solid $border-soft;
+  }
+
+  .combat-stat-list span {
     color: $text-secondary;
     font-size: 10px;
   }
+
+  .combat-stat-list strong {
+    color: $text-primary;
+    font-size: 13px;
+  }
+
+  .skill-point,
+  .empty-info {
+    margin-top: 9px;
+    color: $text-secondary;
+    font-size: 10px;
+  }
+
+  .engraving-list,
+  .ark-points {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .engraving-list > span,
+  .ark-points > span {
+    display: flex;
+    min-height: 42px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    border-bottom: 1px solid rgba($border-soft, 0.72);
+    color: $text-primary;
+    font-size: 11px;
+  }
+
+  .engraving-list > span:last-child,
+  .ark-points > span:last-child {
+    border-bottom: 0;
+  }
+
+  .engraving-list b,
+  .ark-points b {
+    overflow: hidden;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .engraving-list strong {
+    flex: 0 0 auto;
+    color: $amber-light;
+  }
+
+  .ark-points strong {
+    flex: 0 0 auto;
+    color: $violet-light;
+  }
+
+  .gem-list {
+    display: grid;
+    grid-template-columns: repeat(11, 42px);
+    gap: 8px;
+  }
+
+  .gem-item {
+    position: relative;
+    min-width: 0;
+  }
+
+  .gem-item > span {
+    position: absolute;
+    right: -2px;
+    bottom: -2px;
+    min-width: 22px;
+    padding: 1px 3px;
+    background: rgba($gray-900, 0.92);
+    border: 1px solid $border-soft;
+    color: $text-primary;
+    font-size: 9px;
+    text-align: center;
+  }
+
   .core-list {
     display: flex;
     flex-direction: column;
-    gap: 6px;
   }
+
   .core-list > div {
     display: grid;
+    min-width: 0;
+    min-height: 48px;
     grid-template-columns: 36px minmax(0, 1fr) auto;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
+    border-bottom: 1px solid rgba($border-soft, 0.72);
     color: $text-primary;
-    font-size: 12px;
+    font-size: 10px;
   }
+
   .core-list span {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
   .core-list strong {
     color: $mint-accent;
   }
+
   .effect-list {
-    margin-top: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 10px;
+  }
+
+  .effect-list > span {
+    padding: 4px 6px;
+    background: $gray-900;
+    border: 1px solid $border-soft;
+    color: $text-secondary;
+    font-size: 10px;
+  }
+
+  .effect-list strong {
+    color: $mint-light;
+  }
+
+  .legacy-avatar-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .legacy-avatar-list > div {
+    display: grid;
+    min-height: 48px;
+    grid-template-columns: 36px minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid rgba($border-soft, 0.72);
+    color: $text-primary;
+    font-size: 11px;
+  }
+
+  .legacy-avatar-list > div:last-child {
+    border-bottom: 0;
+  }
+
+  .legacy-avatar-list span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .skills-section,
+  .avatars-section {
+    margin-top: 16px;
+  }
+
+  .item-detail-tooltip {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    z-index: $z-index-popover;
+    display: none;
+    width: 260px;
+    padding: 12px;
+    background: $gray-900;
+    border: 1px solid $border;
+    box-shadow: $shadow-popover;
+    color: $text-primary;
+    pointer-events: none;
+  }
+
+  .tooltip-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .tooltip-header strong {
+    overflow: hidden;
+    color: $text-primary;
+    font-size: 13px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .tooltip-header span {
+    flex: 0 0 auto;
+    color: $loa-gold;
+    font-size: 11px;
+  }
+
+  .tooltip-details,
+  .tooltip-effects {
+    display: flex;
+    gap: 5px 10px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid $border-soft;
+  }
+
+  .tooltip-details {
+    flex-wrap: wrap;
+  }
+
+  .tooltip-effects {
+    flex-direction: column;
+  }
+
+  .tooltip-details span,
+  .tooltip-effects span {
+    color: $text-secondary;
+    font-size: 11px;
+  }
+
+  .tooltip-details b {
+    margin-right: 4px;
+    color: $text-primary;
+    font-weight: 500;
+  }
+
+  .tooltip-effects span {
+    color: $mint-light;
   }
 }

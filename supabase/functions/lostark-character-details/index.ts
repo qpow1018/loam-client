@@ -1,3 +1,5 @@
+import { createClient } from 'npm:@supabase/supabase-js@2';
+
 const LOSTARK_API_BASE_URL = 'https://developer-lostark.game.onstove.com';
 
 const corsHeaders = {
@@ -43,6 +45,60 @@ type ParsedAvatarItem = {
   isSet: boolean | null;
   basicEffects: string[];
   tendencyEffects: string[];
+};
+
+type ParsedProfileStat = {
+  type: string | null;
+  value: string | null;
+  tooltip: string | null;
+};
+
+type ParsedSkillPoints = {
+  using: number | null;
+  total: number | null;
+};
+
+type ParsedCardItem = {
+  slot: number | null;
+  name: string | null;
+  icon: string | null;
+  awakeCount: number | null;
+  awakeTotal: number | null;
+  grade: string | null;
+};
+
+type ParsedCardEffectItem = {
+  name: string | null;
+  description: string | null;
+};
+
+type ParsedCardEffect = {
+  index: number | null;
+  cardSlots: number[];
+  items: ParsedCardEffectItem[];
+};
+
+type ParsedCombatSkillTripod = {
+  slot: number | null;
+  name: string | null;
+  icon: string | null;
+  level: number | null;
+};
+
+type ParsedCombatSkillRune = {
+  name: string | null;
+  icon: string | null;
+  grade: string | null;
+};
+
+type ParsedCombatSkill = {
+  name: string | null;
+  icon: string | null;
+  level: number | null;
+  type: string | null;
+  isAwakening: boolean | null;
+  rune: ParsedCombatSkillRune | null;
+  tripods: ParsedCombatSkillTripod[];
 };
 
 type LegendaryAvatarSummaryItem = {
@@ -156,6 +212,8 @@ const sections = [
   { key: 'engravings', path: 'engravings' },
   { key: 'gems', path: 'gems' },
   { key: 'avatars', path: 'avatars' },
+  { key: 'cards', path: 'cards' },
+  { key: 'combatSkills', path: 'combat-skills' },
   { key: 'arkpassive', path: 'arkpassive' },
   { key: 'arkgrid', path: 'arkgrid' },
 ] as const;
@@ -298,10 +356,7 @@ function parseAbilityStoneEngraving(text: string): ParsedAbilityStoneEngraving |
   };
 }
 
-function collectAbilityStoneEngravings(
-  value: unknown,
-  result: ParsedAbilityStoneEngraving[] = [],
-) {
+function collectAbilityStoneEngravings(value: unknown, result: ParsedAbilityStoneEngraving[] = []) {
   if (typeof value === 'string') {
     const engraving = parseAbilityStoneEngraving(value);
 
@@ -544,6 +599,92 @@ function parseLegendaryAvatars(avatars: unknown[]): LegendaryAvatarSummaryItem[]
     }));
 }
 
+function parseProfileStats(profile: Record<string, unknown>): ParsedProfileStat[] {
+  return asArray(profile.Stats).map((item) => {
+    const stat = asRecord(item);
+
+    return {
+      type: getString(stat, 'Type'),
+      value: getString(stat, 'Value'),
+      tooltip: stripHtml(getString(stat, 'Tooltip') ?? '') || null,
+    };
+  });
+}
+
+function parseSkillPoints(profile: Record<string, unknown>): ParsedSkillPoints {
+  return {
+    using: getNumber(profile, 'UsingSkillPoint'),
+    total: getNumber(profile, 'TotalSkillPoint'),
+  };
+}
+
+function parseCards(cards: Record<string, unknown>) {
+  return {
+    cards: asArray(cards.Cards).map((item) => {
+      const card = asRecord(item);
+
+      return {
+        slot: getNumber(card, 'Slot'),
+        name: getString(card, 'Name'),
+        icon: getString(card, 'Icon'),
+        awakeCount: getNumber(card, 'AwakeCount'),
+        awakeTotal: getNumber(card, 'AwakeTotal'),
+        grade: getString(card, 'Grade'),
+      } satisfies ParsedCardItem;
+    }),
+    effects: asArray(cards.Effects).map((item) => {
+      const effect = asRecord(item);
+
+      return {
+        index: getNumber(effect, 'Index'),
+        cardSlots: asArray(effect.CardSlots).filter(
+          (slot): slot is number => typeof slot === 'number',
+        ),
+        items: asArray(effect.Items).map((effectItem) => {
+          const cardEffectItem = asRecord(effectItem);
+
+          return {
+            name: getString(cardEffectItem, 'Name'),
+            description: stripHtml(getString(cardEffectItem, 'Description') ?? '') || null,
+          } satisfies ParsedCardEffectItem;
+        }),
+      } satisfies ParsedCardEffect;
+    }),
+  };
+}
+
+function parseCombatSkills(combatSkills: unknown[]): ParsedCombatSkill[] {
+  return combatSkills.map((item) => {
+    const skill = asRecord(item);
+    const rune = asRecord(skill.Rune);
+
+    return {
+      name: getString(skill, 'Name'),
+      icon: getString(skill, 'Icon'),
+      level: getNumber(skill, 'Level'),
+      type: getString(skill, 'Type'),
+      isAwakening: getBoolean(skill, 'IsAwakening'),
+      rune:
+        Object.keys(rune).length === 0
+          ? null
+          : {
+              name: getString(rune, 'Name'),
+              icon: getString(rune, 'Icon'),
+              grade: getString(rune, 'Grade'),
+            },
+      tripods: asArray(skill.Tripods)
+        .map(asRecord)
+        .filter((tripod) => getBoolean(tripod, 'IsSelected') === true)
+        .map((tripod) => ({
+          slot: getNumber(tripod, 'Slot'),
+          name: getString(tripod, 'Name'),
+          icon: getString(tripod, 'Icon'),
+          level: getNumber(tripod, 'Level'),
+        })),
+    };
+  });
+}
+
 function parseEngravings(engravings: Record<string, unknown>): ParsedEngravingItem[] {
   return asArray(engravings.ArkPassiveEffects).map((item) => {
     const itemRecord = asRecord(item);
@@ -709,11 +850,14 @@ function buildSummary(rawPayload: Record<string, unknown>) {
   const engravings = asRecord(rawPayload.engravings);
   const gems = asRecord(rawPayload.gems);
   const avatars = asArray(rawPayload.avatars);
+  const cards = asRecord(rawPayload.cards);
+  const combatSkills = asArray(rawPayload.combatSkills);
   const arkPassive = asRecord(rawPayload.arkpassive);
   const arkGrid = asRecord(rawPayload.arkgrid);
   const equipmentGroups = classifyEquipment(equipment);
 
   return {
+    isExtendedDetailsAvailable: true,
     profiles: {
       characterName: getString(profile, 'CharacterName'),
       serverName: getString(profile, 'ServerName'),
@@ -721,6 +865,8 @@ function buildSummary(rawPayload: Record<string, unknown>) {
       itemAvgLevel: getString(profile, 'ItemAvgLevel'),
       combatPower: profile.CombatPower ?? null,
       characterImage: getString(profile, 'CharacterImage'),
+      stats: parseProfileStats(profile),
+      skillPoints: parseSkillPoints(profile),
     },
     equipment: {
       gears: equipmentGroups.gear.map(buildGearSummary),
@@ -730,7 +876,10 @@ function buildSummary(rawPayload: Record<string, unknown>) {
     },
     engravings: parseEngravings(engravings),
     gems: parseGems(gems),
+    avatars: avatars.map(parseAvatarItem),
     legendaryAvatars: parseLegendaryAvatars(avatars),
+    cards: parseCards(cards),
+    combatSkills: parseCombatSkills(combatSkills),
     arkPassive: parseArkPassive(arkPassive),
     arkGrid: parseArkGrid(arkGrid),
   };
@@ -754,13 +903,18 @@ async function fetchSection(
   );
 
   if (!response.ok) {
-    return {
-      key: section.key,
-      data: null,
-    };
+    throw new Error(
+      `Lost Ark ${section.key} section request failed with status ${response.status}.`,
+    );
   }
 
-  const data = await response.json();
+  let data: unknown;
+
+  try {
+    data = await response.json();
+  } catch {
+    throw new Error(`Lost Ark ${section.key} section response could not be parsed.`);
+  }
 
   return {
     key: section.key,
@@ -778,6 +932,11 @@ Deno.serve(async (req) => {
   }
 
   try {
+    const authErrorResponse = await validateAuthorization(req);
+    if (authErrorResponse !== null) {
+      return authErrorResponse;
+    }
+
     const body = (await req.json()) as RequestBody;
     const characterName = body.characterName?.trim();
 
@@ -797,9 +956,18 @@ Deno.serve(async (req) => {
       );
     }
 
-    const results = await Promise.all(
-      sections.map((section) => fetchSection(characterName, section, apiKey)),
-    );
+    let results: SectionResult[];
+
+    try {
+      results = await Promise.all(
+        sections.map((section) => fetchSection(characterName, section, apiKey)),
+      );
+    } catch {
+      return Response.json(
+        { message: 'Failed to fetch character details.' },
+        { status: 502, headers: corsHeaders },
+      );
+    }
 
     const rawPayload: Record<string, unknown> = {};
 
@@ -825,13 +993,78 @@ Deno.serve(async (req) => {
       },
       { status: 200, headers: corsHeaders },
     );
-  } catch (error) {
+  } catch {
     return Response.json(
       {
         message: 'Unexpected function error.',
-        detail: error instanceof Error ? error.message : String(error),
       },
       { status: 500, headers: corsHeaders },
     );
   }
 });
+
+async function validateAuthorization(req: Request) {
+  const token = req.headers.get('authorization')?.replace(/^Bearer\s+/i, '');
+
+  if (token === undefined) {
+    return Response.json(
+      { message: 'Authentication is required.' },
+      { status: 401, headers: corsHeaders },
+    );
+  }
+
+  const supabaseUrl = Deno.env.get('SUPABASE_URL');
+  const supabaseKey = Deno.env.get('SB_PUBLISHABLE_KEY') ?? Deno.env.get('SUPABASE_ANON_KEY');
+
+  if (!supabaseUrl || !supabaseKey) {
+    return Response.json(
+      { message: 'Supabase Auth environment variables are required.' },
+      { status: 500, headers: corsHeaders },
+    );
+  }
+
+  const allowedEmails = getAllowedAuthEmails();
+
+  if (allowedEmails.length === 0) {
+    return Response.json(
+      { message: 'AUTH_ALLOWED_EMAILS is required.' },
+      { status: 500, headers: corsHeaders },
+    );
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseKey);
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser(token);
+
+  if (error || user === null) {
+    return Response.json(
+      { message: 'Authentication is required.' },
+      { status: 401, headers: corsHeaders },
+    );
+  }
+
+  if (!isAllowedAuthEmail(user.email, allowedEmails)) {
+    return Response.json(
+      { message: 'This account cannot access LoaM.' },
+      { status: 403, headers: corsHeaders },
+    );
+  }
+
+  return null;
+}
+
+function getAllowedAuthEmails() {
+  return (
+    Deno.env
+      .get('AUTH_ALLOWED_EMAILS')
+      ?.split(',')
+      .map((item) => item.trim().toLowerCase())
+      .filter(Boolean) ?? []
+  );
+}
+
+function isAllowedAuthEmail(email: string | undefined, allowedEmails: string[]) {
+  return email !== undefined && allowedEmails.includes(email.toLowerCase());
+}

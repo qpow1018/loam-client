@@ -11,10 +11,36 @@ import type {
   TReqUpsertLostarkMainCharacterRow,
   TResLostarkMainCharacterRow,
   TResLostarkMainCharacter,
+  TResLostarkCharacterSummary,
 } from './type';
 
 const LOSTARK_MY_CHARACTERS_TABLE = 'lostark_my_characters';
 const LOSTARK_MAIN_CHARACTERS_TABLE = 'lostark_main_characters';
+
+function normalizeCharacterSummary(
+  summary: TResLostarkCharacterSummary,
+): TResLostarkCharacterSummary {
+  return {
+    ...summary,
+    isExtendedDetailsAvailable:
+      summary.isExtendedDetailsAvailable ??
+      Boolean(summary.cards && summary.combatSkills && summary.avatars),
+    profiles: {
+      ...summary.profiles,
+      stats: summary.profiles.stats ?? [],
+      skillPoints: summary.profiles.skillPoints ?? {
+        using: null,
+        total: null,
+      },
+    },
+    avatars: summary.avatars ?? [],
+    cards: summary.cards ?? {
+      cards: [],
+      effects: [],
+    },
+    combatSkills: summary.combatSkills ?? [],
+  };
+}
 
 async function getCurrentUserId(): Promise<string> {
   const supabase = createClient();
@@ -77,7 +103,7 @@ export async function getMainCharacters(): Promise<TResLostarkMainCharacter[]> {
     characterClass: row.character_class,
     itemLevel: row.item_level,
     sortOrder: row.sort_order,
-    summary: row.summary,
+    summary: normalizeCharacterSummary(row.summary),
     rawPayload: row.raw_payload,
   }));
 }
@@ -94,7 +120,7 @@ export async function saveMainCharacter(
     character_class: character.characterClass,
     item_level: character.itemLevel,
     sort_order: character.sortOrder,
-    summary: character.summary,
+    summary: normalizeCharacterSummary(character.summary),
     raw_payload: character.rawPayload,
   };
 
@@ -120,7 +146,7 @@ export async function saveMainCharacter(
     characterClass: saved.character_class,
     itemLevel: saved.item_level,
     sortOrder: saved.sort_order,
-    summary: saved.summary,
+    summary: normalizeCharacterSummary(saved.summary),
     rawPayload: saved.raw_payload,
   };
 }
@@ -137,7 +163,7 @@ export async function reorderMainCharacters(
     character_class: character.characterClass,
     item_level: character.itemLevel,
     sort_order: index,
-    summary: character.summary,
+    summary: normalizeCharacterSummary(character.summary),
     raw_payload: character.rawPayload,
   }));
 
@@ -271,7 +297,7 @@ export async function registerMainCharacter(
     character_class: details.characterClass || character.className,
     item_level: details.itemLevel || character.itemLevel,
     sort_order: mainCharacters.length,
-    summary: details.summary,
+    summary: normalizeCharacterSummary(details.summary),
     raw_payload: details.rawPayload ?? null,
   };
 
@@ -343,7 +369,18 @@ export async function getSiblingCharacters(characterName: string) {
 
 // Lost Ark API에서 캐릭터 상세 정보를 조회한다.
 export async function getCharacterDetails(characterName: string) {
-  return supabaseFunctionClient.post<TResLostarkCharacterDetails>('/lostark-character-details', {
-    characterName,
-  });
+  const response = await supabaseFunctionClient.post<TResLostarkCharacterDetails>(
+    '/lostark-character-details',
+    {
+      characterName,
+    },
+  );
+
+  return {
+    ...response,
+    data: {
+      ...response.data,
+      summary: normalizeCharacterSummary(response.data.summary),
+    },
+  };
 }
