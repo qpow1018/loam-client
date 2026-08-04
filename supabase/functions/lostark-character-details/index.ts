@@ -174,9 +174,14 @@ type GearSummaryItem = {
   name: string | null;
   type: string | null;
   grade: string | null;
+  title: string | null;
+  tier: string | null;
   quality: number | null;
   itemLevel: string | null;
   enhancement: number | null;
+  basicEffects: string[];
+  additionalEffects: string[];
+  arkPassiveEffects: string[];
 };
 
 type AccessorySummaryItem = {
@@ -184,9 +189,13 @@ type AccessorySummaryItem = {
   name: string | null;
   type: string | null;
   grade: string | null;
+  title: string | null;
+  tier: string | null;
   quality: number | null;
   basicEffects: string[];
+  additionalEffects: string[];
   polishEffects: ParsedPolishEffect[];
+  arkPassiveEffects: string[];
 };
 
 type BraceletSummaryItem = {
@@ -194,6 +203,10 @@ type BraceletSummaryItem = {
   name: string | null;
   type: string | null;
   grade: string | null;
+  title: string | null;
+  tier: string | null;
+  basicEffects: string[];
+  additionalEffects: string[];
   braceletEffects: ParsedColoredEffect[];
 };
 
@@ -202,6 +215,10 @@ type AbilityStoneSummaryItem = {
   name: string | null;
   type: string | null;
   grade: string | null;
+  title: string | null;
+  tier: string | null;
+  basicEffects: string[];
+  additionalEffects: string[];
   abilityStoneBonusEffects: string[];
   abilityStoneEngravings: ParsedAbilityStoneEngraving[];
 };
@@ -506,9 +523,14 @@ function buildGearSummary(item: ParsedEquipmentItem): GearSummaryItem {
     name: item.name,
     type: item.type,
     grade: item.grade,
+    title: item.title,
+    tier: item.tier,
     quality: item.quality,
     itemLevel: item.itemLevel,
     enhancement: item.enhancement,
+    basicEffects: item.basicEffects,
+    additionalEffects: item.additionalEffects,
+    arkPassiveEffects: item.arkPassiveEffects,
   };
 }
 
@@ -518,9 +540,13 @@ function buildAccessorySummary(item: ParsedEquipmentItem): AccessorySummaryItem 
     name: item.name,
     type: item.type,
     grade: item.grade,
+    title: item.title,
+    tier: item.tier,
     quality: item.quality,
     basicEffects: item.basicEffects,
+    additionalEffects: item.additionalEffects,
     polishEffects: item.polishEffects,
+    arkPassiveEffects: item.arkPassiveEffects,
   };
 }
 
@@ -532,6 +558,10 @@ function buildBraceletSummary(item: ParsedEquipmentItem | null): BraceletSummary
     name: item.name,
     type: item.type,
     grade: item.grade,
+    title: item.title,
+    tier: item.tier,
+    basicEffects: item.basicEffects,
+    additionalEffects: item.additionalEffects,
     braceletEffects: item.braceletEffects,
   };
 }
@@ -546,6 +576,10 @@ function buildAbilityStoneSummary(
     name: item.name,
     type: item.type,
     grade: item.grade,
+    title: item.title,
+    tier: item.tier,
+    basicEffects: item.basicEffects,
+    additionalEffects: item.additionalEffects,
     abilityStoneBonusEffects: item.abilityStoneBonusEffects,
     abilityStoneEngravings: item.abilityStoneEngravings,
   };

@@ -34,6 +34,47 @@ function normalizeCharacterSummary(
         total: null,
       },
     },
+    equipment: {
+      ...summary.equipment,
+      gears: summary.equipment.gears.map((gear) => ({
+        ...gear,
+        title: gear.title ?? null,
+        tier: gear.tier ?? null,
+        basicEffects: gear.basicEffects ?? [],
+        additionalEffects: gear.additionalEffects ?? [],
+        arkPassiveEffects: gear.arkPassiveEffects ?? [],
+      })),
+      accessories: summary.equipment.accessories.map((accessory) => ({
+        ...accessory,
+        title: accessory.title ?? null,
+        tier: accessory.tier ?? null,
+        basicEffects: accessory.basicEffects ?? [],
+        additionalEffects: accessory.additionalEffects ?? [],
+        polishEffects: accessory.polishEffects ?? [],
+        arkPassiveEffects: accessory.arkPassiveEffects ?? [],
+      })),
+      bracelet: summary.equipment.bracelet
+        ? {
+            ...summary.equipment.bracelet,
+            title: summary.equipment.bracelet.title ?? null,
+            tier: summary.equipment.bracelet.tier ?? null,
+            basicEffects: summary.equipment.bracelet.basicEffects ?? [],
+            additionalEffects: summary.equipment.bracelet.additionalEffects ?? [],
+            braceletEffects: summary.equipment.bracelet.braceletEffects ?? [],
+          }
+        : null,
+      abilityStone: summary.equipment.abilityStone
+        ? {
+            ...summary.equipment.abilityStone,
+            title: summary.equipment.abilityStone.title ?? null,
+            tier: summary.equipment.abilityStone.tier ?? null,
+            basicEffects: summary.equipment.abilityStone.basicEffects ?? [],
+            additionalEffects: summary.equipment.abilityStone.additionalEffects ?? [],
+            abilityStoneBonusEffects: summary.equipment.abilityStone.abilityStoneBonusEffects ?? [],
+            abilityStoneEngravings: summary.equipment.abilityStone.abilityStoneEngravings ?? [],
+          }
+        : null,
+    },
     avatars: summary.avatars ?? [],
     cards: summary.cards ?? {
       cards: [],

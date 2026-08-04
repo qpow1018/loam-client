@@ -124,9 +124,14 @@ export type TLostarkGear = {
   name: string | null;
   type: string | null;
   grade: string | null;
+  title: string | null;
+  tier: string | null;
   quality: number | null;
   itemLevel: string | null;
   enhancement: number | null;
+  basicEffects: string[];
+  additionalEffects: string[];
+  arkPassiveEffects: string[];
 };
 
 export type TLostarkAccessory = {
@@ -134,9 +139,13 @@ export type TLostarkAccessory = {
   name: string | null;
   type: string | null;
   grade: string | null;
+  title: string | null;
+  tier: string | null;
   quality: number | null;
   basicEffects: string[];
+  additionalEffects: string[];
   polishEffects: TLostarkColoredEffect[];
+  arkPassiveEffects: string[];
 };
 
 export type TLostarkBracelet = {
@@ -144,6 +153,10 @@ export type TLostarkBracelet = {
   name: string | null;
   type: string | null;
   grade: string | null;
+  title: string | null;
+  tier: string | null;
+  basicEffects: string[];
+  additionalEffects: string[];
   braceletEffects: TLostarkColoredEffect[];
 };
 
@@ -152,6 +165,10 @@ export type TLostarkAbilityStone = {
   name: string | null;
   type: string | null;
   grade: string | null;
+  title: string | null;
+  tier: string | null;
+  basicEffects: string[];
+  additionalEffects: string[];
   abilityStoneBonusEffects: string[];
   abilityStoneEngravings: {
     name: string;
