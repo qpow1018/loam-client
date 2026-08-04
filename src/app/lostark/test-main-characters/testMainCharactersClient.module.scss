@@ -4,105 +4,58 @@
 
   .main-character-navigation {
     display: flex;
-    gap: 8px;
-    padding-bottom: 12px;
     border-bottom: 1px solid $border-strong;
-
-    .summary-button,
-    .character-button {
-      flex-shrink: 0;
-      border: 1px solid $border-soft;
-      border-radius: $border-radius;
-      color: $text-secondary;
-      cursor: pointer;
-      transition:
-        background-color $transition,
-        border-color $transition,
-        color $transition;
-
-      &:hover {
-        border-color: $gray-500;
-        color: $text-primary;
-      }
-
-      &:focus-visible {
-        outline: 2px solid $mint-accent;
-        outline-offset: 2px;
-      }
-    }
-
-    .summary-button {
-      min-width: 104px;
-      padding: 0 16px;
-      background: $gray-700;
-      font-size: 14px;
-      font-weight: 700;
-    }
+    margin-bottom: 16px;
 
     .character-list {
       display: flex;
-      gap: 8px;
       min-width: 0;
       overflow-x: auto;
     }
 
-    .character-button {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    .navigation-button {
+      min-height: 56px;
       min-width: 156px;
-      padding: 7px 10px 7px 7px;
+      padding: 0 10px;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
       text-align: left;
+      transition:
+        border-color $transition,
+        color $transition;
+
+      .navigation-item-level {
+        font-size: 11px;
+        color: $text-secondary;
+      }
+
+      .navigation-item-name {
+        display: block;
+        font-size: 13px;
+        font-weight: 500;
+        color: $text-primary;
+      }
+
+      &:hover {
+        .navigation-item-level,
+        .navigation-item-name {
+          color: $rose-light;
+        }
+      }
+
+      &.selected {
+        border-bottom-color: $rose-accent;
+
+        .navigation-item-level,
+        .navigation-item-name {
+          color: $rose-light;
+        }
+      }
+    }
+
+    .summary-button {
       background: $gray-800;
     }
-
-    .portrait {
-      display: block;
-      width: 32px;
-      height: 32px;
-      overflow: hidden;
-      background: $gray-700;
-      border-radius: 50%;
-    }
-
-    .portrait img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .character-copy {
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
-
-    .character-copy strong,
-    .character-copy small {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .character-copy strong {
-      color: $text-primary;
-      font-size: 12px;
-    }
-
-    .character-copy small {
-      color: $text-secondary;
-      font-size: 11px;
-    }
-
-    .selected {
-      border-color: $mint-accent;
-      background: $mint-tint;
-      color: $mint-light;
-    }
-  }
-
-  .panel {
-    margin-top: 16px;
   }
 
   .empty {
