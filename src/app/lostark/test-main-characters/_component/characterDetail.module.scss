@@ -1,0 +1,255 @@
+.character-detail {
+  .profile-header {
+    display: flex;
+    align-items: center;
+    min-height: 220px;
+    overflow: hidden;
+    background: linear-gradient(90deg, $gray-800, $gray-900);
+    border: 1px solid $border-soft;
+    border-radius: $border-radius;
+  }
+  .profile-image {
+    align-self: stretch;
+    width: 340px;
+    background: radial-gradient(circle, $gray-600, $gray-900);
+  }
+  .profile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center bottom;
+  }
+  .profile-copy {
+    padding: 28px;
+  }
+  .profile-copy > p {
+    color: $mint-accent;
+    font-size: 13px;
+  }
+  .profile-copy h1 {
+    margin-top: 6px;
+    color: $text-primary;
+    font-size: 30px;
+  }
+  .headline-stats {
+    display: flex;
+    gap: 40px;
+    margin-top: 24px;
+  }
+  .headline-stats div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .headline-stats span {
+    color: $text-secondary;
+    font-size: 12px;
+  }
+  .headline-stats strong {
+    color: $text-primary;
+    font-size: 18px;
+  }
+  .detail-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(360px, 1fr);
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .section {
+    padding: 16px;
+    background: $gray-800;
+    border: 1px solid $border-soft;
+    border-radius: $border-radius;
+  }
+  .section h2 {
+    margin-bottom: 14px;
+    color: $text-primary;
+    font-size: 15px;
+  }
+  .equipment-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .item-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    padding: 6px;
+    background: $gray-900;
+    border-radius: 4px;
+  }
+  .item-row div {
+    flex: 1;
+    min-width: 0;
+  }
+  .item-row strong,
+  .item-row span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .item-row strong {
+    color: $text-primary;
+    font-size: 12px;
+  }
+  .item-row span {
+    margin-top: 2px;
+    color: $text-secondary;
+    font-size: 11px;
+  }
+  .extra-list {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .extra-item {
+    display: grid;
+    grid-template-columns: 38px auto;
+    align-items: center;
+    column-gap: 8px;
+    flex: 1;
+    padding: 8px;
+    background: $gray-900;
+    border-radius: 4px;
+    color: $text-primary;
+  }
+  .extra-item small {
+    grid-column: 2;
+    overflow: hidden;
+    color: $text-secondary;
+    font-size: 11px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .effect-summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    margin-top: 12px;
+  }
+  .effect-summary span {
+    overflow: hidden;
+    padding: 7px 8px;
+    background: $gray-900;
+    border-radius: 4px;
+    color: $text-secondary;
+    font-size: 11px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .effect-summary strong {
+    margin-right: 6px;
+    color: $mint-light;
+    font-weight: 500;
+  }
+  .avatar-list {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 54px;
+    margin-top: 12px;
+    padding: 8px;
+    background: $gray-900;
+    border-radius: 4px;
+  }
+  .avatar-list > p {
+    margin-right: 4px;
+    color: $text-secondary;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .avatar-list > span {
+    color: $text-muted;
+    font-size: 11px;
+  }
+  .avatar-list > div {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: $text-primary;
+    font-size: 11px;
+  }
+  .engraving-list,
+  .ark-points,
+  .effect-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .engraving-list span,
+  .ark-points span,
+  .effect-list span {
+    padding: 6px 8px;
+    background: $gray-900;
+    border-radius: 4px;
+    color: $text-primary;
+    font-size: 12px;
+  }
+  .engraving-list strong,
+  .ark-points strong,
+  .effect-list strong {
+    color: $mint-accent;
+  }
+  .ark-points {
+    margin-top: 14px;
+  }
+  .gems-section {
+    grid-column: 1 / -1;
+  }
+  .gem-list {
+    display: grid;
+    grid-template-columns: repeat(11, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .gem-item {
+    min-width: 0;
+    text-align: center;
+    color: $text-primary;
+  }
+  .gem-item > div {
+    margin: 0 auto 4px;
+  }
+  .gem-item span,
+  .gem-item small {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .gem-item span {
+    font-size: 11px;
+  }
+  .gem-item small {
+    margin-top: 2px;
+    color: $text-secondary;
+    font-size: 10px;
+  }
+  .core-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .core-list > div {
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 8px;
+    color: $text-primary;
+    font-size: 12px;
+  }
+  .core-list span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .core-list strong {
+    color: $mint-accent;
+  }
+  .effect-list {
+    margin-top: 14px;
+  }
+}
