@@ -4,6 +4,7 @@ import ItemSlot from '@/components/lostark/itemSlot/ItemSlot';
 import QualityChip from '@/components/lostark/qualityChip/QualityChip';
 
 import AvatarSection from './AvatarSection';
+import ArkPassiveNodeSection from './ArkPassiveNodeSection';
 import CardSection from './CardSection';
 import styles from './characterDetail.module.scss';
 import DetailSection from './DetailSection';
@@ -243,6 +244,10 @@ export default function CharacterDetail(props: { selectedCharacter: TResLostarkM
           )}
         </div>
       </div>
+
+      <DetailSection title="아크 패시브 상세">
+        <ArkPassiveNodeSection arkPassive={summary.arkPassive} />
+      </DetailSection>
 
       {summary.isExtendedDetailsAvailable && (
         <SkillSection skills={summary.combatSkills} className={styles['skills-section']} />

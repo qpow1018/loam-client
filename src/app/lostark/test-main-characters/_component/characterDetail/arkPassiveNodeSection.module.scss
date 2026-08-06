@@ -1,0 +1,167 @@
+.ark-passive-node-section {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid $border-soft;
+  border-left: 1px solid $border-soft;
+}
+
+.category-section {
+  min-width: 0;
+  border-right: 1px solid $border-soft;
+  border-bottom: 1px solid $border-soft;
+}
+
+.category-header {
+  display: flex;
+  height: 56px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 14px;
+  background: $gray-900;
+  border-bottom: 1px solid $border-soft;
+
+  > div {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 6px;
+  }
+
+  strong {
+    color: $text-primary;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  span {
+    color: $text-secondary;
+    font-size: 10px;
+    white-space: nowrap;
+  }
+
+  > div span {
+    color: $violet-light;
+    font-weight: 600;
+  }
+}
+
+.node-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.node-row {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  min-height: 54px;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba($border-soft, 0.72);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  &:hover,
+  &:focus {
+    z-index: $z-index-popover;
+
+    .node-tooltip {
+      display: block;
+    }
+  }
+
+  &:focus-visible {
+    outline: 1px solid $border-focus;
+    outline-offset: -1px;
+  }
+}
+
+.node-level {
+  color: $violet-light;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.node-copy {
+  min-width: 0;
+
+  strong,
+  span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  strong {
+    color: $text-primary;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  span {
+    margin-top: 2px;
+    color: $text-secondary;
+    font-size: 10px;
+  }
+}
+
+.node-tooltip {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: $z-index-popover;
+  display: none;
+  width: 320px;
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 10px 12px;
+  background: $gray-900;
+  border: 1px solid $border;
+  box-shadow: $shadow-popover;
+  color: $text-secondary;
+  font-size: 11px;
+  pointer-events: none;
+
+  strong,
+  span,
+  p {
+    display: block;
+  }
+
+  strong {
+    color: $text-primary;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  span {
+    margin-top: 3px;
+    color: $violet-light;
+    font-size: 10px;
+  }
+
+  p {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid $border-soft;
+    white-space: pre-line;
+  }
+}
+
+.category-section:nth-child(3) .node-tooltip {
+  right: 0;
+  left: auto;
+}
+
+.empty-info {
+  padding: 14px;
+  color: $text-secondary;
+  font-size: 11px;
+}

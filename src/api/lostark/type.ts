@@ -204,6 +204,16 @@ export type TLostarkArkPassive = {
     value: number | null;
     description: string | null;
   }[];
+  nodes: TLostarkArkPassiveNode[];
+};
+
+export type TLostarkArkPassiveNode = {
+  category: string | null;
+  tier: number | null;
+  name: string | null;
+  level: number | null;
+  icon: string | null;
+  description: string | null;
 };
 
 export type TLostarkArkGrid = {

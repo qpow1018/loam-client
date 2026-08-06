@@ -135,9 +135,19 @@ type ParsedArkPassivePoint = {
   description: string | null;
 };
 
+type ParsedArkPassiveNode = {
+  category: string | null;
+  tier: number | null;
+  name: string | null;
+  level: number | null;
+  icon: string | null;
+  description: string | null;
+};
+
 type ParsedArkPassiveSummary = {
   title: string | null;
   points: ParsedArkPassivePoint[];
+  nodes: ParsedArkPassiveNode[];
 };
 
 type ParsedArkGridCore = {
@@ -852,7 +862,57 @@ function parseArkPassive(arkPassive: Record<string, unknown>): ParsedArkPassiveS
         description: getString(itemRecord, 'Description'),
       };
     }),
+    nodes: asArray(arkPassive.Effects).map(parseArkPassiveNode),
   };
+}
+
+function parseArkPassiveNode(item: unknown): ParsedArkPassiveNode {
+  const node = asRecord(item);
+  const tooltip = parseTooltip(node.ToolTip);
+  const elements = getTooltipElements(tooltip);
+  const nameTagText = getArkPassiveTooltipText(elements, 'NameTagBox');
+  const skillTitleText = getArkPassiveTooltipText(elements, 'CommonSkillTitle');
+  const tooltipDescription = getArkPassiveTooltipText(elements, 'MultiTextBox');
+  const fallbackDescription = stripHtml(getString(node, 'Description') ?? '');
+  const metadataText = [nameTagText, skillTitleText, fallbackDescription].filter(Boolean).join(' ');
+
+  return {
+    category: getArkPassiveCategory(metadataText) ?? getString(node, 'Name'),
+    tier: getArkPassiveTier(metadataText),
+    name:
+      getArkPassiveName(nameTagText) ??
+      getArkPassiveName(skillTitleText) ??
+      getString(node, 'Name'),
+    level: getArkPassiveLevel(skillTitleText) ?? getArkPassiveLevel(fallbackDescription),
+    icon: getString(node, 'Icon'),
+    description: tooltipDescription || fallbackDescription || null,
+  };
+}
+
+function getArkPassiveTooltipText(elements: Record<string, unknown>[], type: string) {
+  return elements
+    .filter((element) => getString(element, 'type') === type)
+    .flatMap((element) => collectNestedText(element.value))
+    .join('\n');
+}
+
+function getArkPassiveCategory(value: string) {
+  return value.match(/(진화|깨달음|도약)/)?.[1] ?? null;
+}
+
+function getArkPassiveTier(value: string) {
+  const tier = value.match(/(\d+)\s*티어/)?.[1];
+  return tier ? Number(tier) : null;
+}
+
+function getArkPassiveName(value: string) {
+  const name = value.replace(/Lv\.\s*\d+/i, '').trim();
+  return name || null;
+}
+
+function getArkPassiveLevel(value: string) {
+  const level = value.match(/Lv\.\s*(\d+)/i)?.[1];
+  return level ? Number(level) : null;
 }
 
 function parseArkGrid(arkGrid: Record<string, unknown>): ParsedArkGridSummary {

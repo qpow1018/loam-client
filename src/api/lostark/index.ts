@@ -75,6 +75,10 @@ function normalizeCharacterSummary(
           }
         : null,
     },
+    arkPassive: {
+      ...summary.arkPassive,
+      nodes: summary.arkPassive.nodes ?? [],
+    },
     avatars: summary.avatars ?? [],
     cards: summary.cards ?? {
       cards: [],
