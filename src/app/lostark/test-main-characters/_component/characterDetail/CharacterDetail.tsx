@@ -55,12 +55,6 @@ export default function CharacterDetail(props: { selectedCharacter: TResLostarkM
         <p>치적계산을 어디넣을까 - 프로필?</p>
       </div>
 
-      {!summary.isExtendedDetailsAvailable && (
-        <p className={styles['update-notice']}>
-          카드·스킬·상세 정보는 상단의 테스트 갱신 후 저장하면 확인할 수 있습니다.
-        </p>
-      )}
-
       <div className={styles['detail-grid']}>
         <div className={styles['primary-column']}>
           <DetailSection title="장비" className={styles['equipment-section']}>
@@ -183,30 +177,28 @@ export default function CharacterDetail(props: { selectedCharacter: TResLostarkM
             </div>
           </DetailSection>
 
-          {summary.isExtendedDetailsAvailable && <CardSection cards={summary.cards} />}
+          <CardSection cards={summary.cards} />
         </div>
 
         <div className={styles['secondary-column']}>
-          {summary.isExtendedDetailsAvailable && (
-            <DetailSection title="특성">
-              <div className={styles['combat-stat-list']}>
-                {getOrderedStats(summary.profiles.stats).map((stat, index) => (
-                  <div key={`${stat.type}-${index}`} title={stat.tooltip ?? ''}>
-                    <span>{stat.type ?? '-'}</span>
-                    <strong>{stat.value ?? '-'}</strong>
-                  </div>
-                ))}
-              </div>
-              {summary.profiles.skillPoints.total !== null && (
-                <p
-                  className={styles['skill-point']}
-                >{`스킬 포인트 ${summary.profiles.skillPoints.using ?? 0}/${summary.profiles.skillPoints.total}`}</p>
-              )}
-              {summary.profiles.stats.length === 0 && (
-                <p className={styles['empty-info']}>전투 정보가 없습니다.</p>
-              )}
-            </DetailSection>
-          )}
+          <DetailSection title="특성">
+            <div className={styles['combat-stat-list']}>
+              {getOrderedStats(summary.profiles.stats).map((stat, index) => (
+                <div key={`${stat.type}-${index}`} title={stat.tooltip ?? ''}>
+                  <span>{stat.type ?? '-'}</span>
+                  <strong>{stat.value ?? '-'}</strong>
+                </div>
+              ))}
+            </div>
+            {summary.profiles.skillPoints.total !== null && (
+              <p
+                className={styles['skill-point']}
+              >{`스킬 포인트 ${summary.profiles.skillPoints.using ?? 0}/${summary.profiles.skillPoints.total}`}</p>
+            )}
+            {summary.profiles.stats.length === 0 && (
+              <p className={styles['empty-info']}>전투 정보가 없습니다.</p>
+            )}
+          </DetailSection>
 
           <DetailSection title="각인">
             <div className={styles['engraving-list']}>
@@ -251,7 +243,7 @@ export default function CharacterDetail(props: { selectedCharacter: TResLostarkM
             </div>
           </DetailSection>
 
-          {!summary.isExtendedDetailsAvailable && summary.legendaryAvatars.length > 0 && (
+          {summary.legendaryAvatars.length > 0 && (
             <DetailSection title="전설 아바타">
               <div className={styles['legacy-avatar-list']}>
                 {summary.legendaryAvatars.map((avatar, index) => (
@@ -270,13 +262,9 @@ export default function CharacterDetail(props: { selectedCharacter: TResLostarkM
         <ArkPassiveNodeSection arkPassive={summary.arkPassive} />
       </DetailSection>
 
-      {summary.isExtendedDetailsAvailable && (
-        <SkillSection skills={summary.combatSkills} className={styles['skills-section']} />
-      )}
+      <SkillSection skills={summary.combatSkills} className={styles['skills-section']} />
 
-      {summary.isExtendedDetailsAvailable && (
-        <AvatarSection avatars={summary.avatars} className={styles['avatars-section']} />
-      )}
+      <AvatarSection avatars={summary.avatars} className={styles['avatars-section']} />
     </div>
   );
 }

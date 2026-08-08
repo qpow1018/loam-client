@@ -23,9 +23,6 @@ function normalizeCharacterSummary(
 ): TResLostarkCharacterSummary {
   return {
     ...summary,
-    isExtendedDetailsAvailable:
-      summary.isExtendedDetailsAvailable ??
-      Boolean(summary.cards && summary.combatSkills && summary.avatars),
     profiles: {
       ...summary.profiles,
       stats: summary.profiles.stats ?? [],

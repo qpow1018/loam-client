@@ -78,7 +78,6 @@ export type TResLostarkMainCharacter = {
 };
 
 export type TResLostarkCharacterSummary = {
-  isExtendedDetailsAvailable: boolean;
   profiles: {
     characterName: string | null;
     serverName: string | null;

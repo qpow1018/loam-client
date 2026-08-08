@@ -951,7 +951,6 @@ function buildSummary(rawPayload: Record<string, unknown>) {
   const equipmentGroups = classifyEquipment(equipment);
 
   return {
-    isExtendedDetailsAvailable: true,
     profiles: {
       characterName: getString(profile, 'CharacterName'),
       serverName: getString(profile, 'ServerName'),
