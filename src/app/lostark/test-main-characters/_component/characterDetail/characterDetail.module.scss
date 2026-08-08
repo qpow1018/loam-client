@@ -1,15 +1,16 @@
 .character-detail {
-  width: 1152px;
-  margin: 0 auto;
+  width: $page-width;
+  // width: $page-wide-width;
 
   .profile-header {
     position: relative;
     height: 240px;
     overflow: hidden;
-    background:
-      radial-gradient(circle at 50% 100%, rgba($violet-accent, 0.12), transparent 34%),
-      linear-gradient(90deg, $gray-900 0%, $gray-800 50%, $gray-900 100%);
+    // background:
+    //   radial-gradient(circle at 50% 100%, rgba($violet-accent, 0.12), transparent 34%),
+    //   linear-gradient(90deg, $gray-900 0%, $gray-800 50%, $gray-900 100%);
     border: 1px solid $border-soft;
+    background-color: #15181d;
   }
 
   .profile-copy {
