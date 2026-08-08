@@ -8,7 +8,9 @@ import ArkPassiveNodeSection from './ArkPassiveNodeSection';
 import CardSection from './CardSection';
 import styles from './characterDetail.module.scss';
 import DetailSection from './DetailSection';
+import EquipmentSection from './EquipmentSection';
 import ItemDetailTooltip from './ItemDetailTooltip';
+import ProfileHeader from './ProfileHeader';
 import SkillSection from './SkillSection';
 
 export default function CharacterDetail(props: { selectedCharacter: TResLostarkMainCharacter }) {
@@ -17,146 +19,115 @@ export default function CharacterDetail(props: { selectedCharacter: TResLostarkM
 
   return (
     <div className={styles['character-detail']}>
-      <section className={styles['profile-header']}>
-        <div className={styles['profile-copy']}>
-          <div className={styles['profile-tags']}>
-            <span>{profiles.serverName ?? '-'}</span>
-            <span>{profiles.characterClassName ?? '-'}</span>
-          </div>
+      <ProfileHeader profiles={profiles} />
 
-          <h1>{profiles.characterName ?? '-'}</h1>
-
-          <div className={styles['headline-stats']}>
-            <Stat label="아이템 레벨" value={profiles.itemAvgLevel ?? '-'} />
-            <Stat label="전투력" value={profiles.combatPower ?? '-'} />
-          </div>
-        </div>
-
-        <div className={styles['profile-image']}>
-          {profiles.characterImage && <img src={profiles.characterImage} alt="" />}
-        </div>
-        {/* TODO
-        <div>로펙, 일로아, 로아랩 버튼 + 치명타확률?, 로펙점수</div> */}
-      </section>
-
-      <div>
-        <p>TODO</p>
-        <p>$page-width: 1024px; $page-wide-width: 1440px;</p>
-        <p>일로아, 로펙, 로아업, 로아지지, 로아랩</p>
-        <p>장비 - 장비, 악세, 어빌, 팔찌, 보주, 완갑까지 + 아바타는 어쩔까</p>
-        <p>특성 - 힘민지최생, 치특신 - 프로필로 옮길까</p>
-        <p>각인 - 어빌돌 연계</p>
-        <p>보석</p>
-        <p>아크패시브 - 찍은것도 보여주기</p>
-        <p>아크그리드</p>
-        <p>카드</p>
-        <p>스킬</p>
-        <p>아바타</p>
-        <p>치적계산을 어디넣을까 - 프로필?</p>
-      </div>
-
-      <div className={styles['detail-grid']}>
-        <div className={styles['primary-column']}>
-          <DetailSection title="장비" className={styles['equipment-section']}>
-            <div className={styles['equipment-columns']}>
-              <div className={styles['equipment-group']}>
-                <h3>무기 · 방어구</h3>
-                <div className={styles['equipment-list']}>
-                  {equipment.gears.map((gear, index) => (
-                    <div key={`${gear.type}-${index}`} className={styles['item-row']} tabIndex={0}>
-                      <ItemSlot imageUrl={gear.icon} grade={gear.grade} size={42} />
-                      <div className={styles['item-copy']}>
-                        <strong>{gear.type ?? '-'}</strong>
-                        <span>{`${gear.enhancement ? `+${gear.enhancement} · ` : ''}${gear.itemLevel ?? gear.name ?? '-'}`}</span>
-                      </div>
-                      <QualityChip quality={gear.quality} />
-                      <ItemDetailTooltip
-                        name={gear.name}
-                        grade={gear.grade}
-                        details={[
-                          {
-                            label: '강화',
-                            value: gear.enhancement ? `+${gear.enhancement}` : null,
-                          },
-                          { label: '아이템 레벨', value: gear.itemLevel },
-                          { label: '품질', value: gear.quality },
-                        ]}
-                      />
+      <div className={styles['top-layout']}>
+        <EquipmentSection>
+          <div className={styles['equipment-columns']}>
+            <div className={styles['equipment-group']}>
+              <h3>무기 · 방어구</h3>
+              <div className={styles['equipment-list']}>
+                {equipment.gears.map((gear, index) => (
+                  <div key={`${gear.type}-${index}`} className={styles['item-row']} tabIndex={0}>
+                    <ItemSlot imageUrl={gear.icon} grade={gear.grade} size={42} />
+                    <div className={styles['item-copy']}>
+                      <strong>{gear.type ?? '-'}</strong>
+                      <span>{`${gear.enhancement ? `+${gear.enhancement} · ` : ''}${gear.itemLevel ?? gear.name ?? '-'}`}</span>
                     </div>
-                  ))}
-                </div>
-              </div>
-              <div className={styles['equipment-group']}>
-                <h3>장신구</h3>
-                <div className={styles['equipment-list']}>
-                  {equipment.accessories.map((accessory, index) => (
-                    <div
-                      key={`${accessory.type}-${index}`}
-                      className={styles['item-row']}
-                      tabIndex={0}
-                    >
-                      <ItemSlot imageUrl={accessory.icon} grade={accessory.grade} size={42} />
-                      <div className={styles['item-copy']}>
-                        <div className={styles['item-heading']}>
-                          <strong>{accessory.type ?? '-'}</strong>
-                          {accessory.tier && <span>{formatTier(accessory.tier)}</span>}
-                        </div>
-                        <span>{accessory.arkPassiveEffects[0] ?? accessory.name ?? '-'}</span>
-                        <div className={styles['item-effects']}>
-                          {accessory.polishEffects.map((effect, effectIndex) => (
-                            <span
-                              key={`${effect.text}-${effectIndex}`}
-                              title={effect.text}
-                              style={{ color: effect.color ?? undefined }}
-                            >
-                              {formatEquipmentEffect(effect.text)}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                      <QualityChip quality={accessory.quality} />
-                      <ItemDetailTooltip
-                        name={accessory.name}
-                        grade={accessory.grade}
-                        details={[{ label: '품질', value: accessory.quality }]}
-                        effects={[
-                          ...accessory.basicEffects.map((text) => ({ text })),
-                          ...accessory.additionalEffects.map((text) => ({ text })),
-                          ...accessory.polishEffects,
-                          ...accessory.arkPassiveEffects.map((text) => ({ text })),
-                        ]}
-                      />
-                    </div>
-                  ))}
-                </div>
-                <div className={styles['extra-list']}>
-                  <ExtraItem
-                    title="어빌리티 스톤"
-                    item={equipment.abilityStone}
-                    effects={[
-                      ...(equipment.abilityStone?.basicEffects ?? []),
-                      ...(equipment.abilityStone?.additionalEffects ?? []),
-                      ...(equipment.abilityStone?.abilityStoneBonusEffects ?? []),
-                    ]}
-                    labels={equipment.abilityStone?.abilityStoneEngravings.map((engraving) => ({
-                      label: engraving.name,
-                      value: engraving.level,
-                    }))}
-                  />
-                  <ExtraItem
-                    title="팔찌"
-                    item={equipment.bracelet}
-                    effects={equipment.bracelet?.braceletEffects.map((effect) => effect.text) ?? []}
-                    labels={equipment.bracelet?.braceletEffects.map((effect) => ({
-                      label: effect.text,
-                      value: null,
-                    }))}
-                  />
-                </div>
+                    <QualityChip quality={gear.quality} />
+                    <ItemDetailTooltip
+                      name={gear.name}
+                      grade={gear.grade}
+                      details={[
+                        {
+                          label: '강화',
+                          value: gear.enhancement ? `+${gear.enhancement}` : null,
+                        },
+                        { label: '아이템 레벨', value: gear.itemLevel },
+                        { label: '품질', value: gear.quality },
+                      ]}
+                    />
+                  </div>
+                ))}
               </div>
             </div>
-          </DetailSection>
+            <div className={styles['equipment-group']}>
+              <h3>장신구</h3>
+              <div className={styles['equipment-list']}>
+                {equipment.accessories.map((accessory, index) => (
+                  <div
+                    key={`${accessory.type}-${index}`}
+                    className={styles['item-row']}
+                    tabIndex={0}
+                  >
+                    <ItemSlot imageUrl={accessory.icon} grade={accessory.grade} size={42} />
+                    <div className={styles['item-copy']}>
+                      <div className={styles['item-heading']}>
+                        <strong>{accessory.type ?? '-'}</strong>
+                        {accessory.tier && <span>{formatTier(accessory.tier)}</span>}
+                      </div>
+                      <span>{accessory.arkPassiveEffects[0] ?? accessory.name ?? '-'}</span>
+                      <div className={styles['item-effects']}>
+                        {accessory.polishEffects.map((effect, effectIndex) => (
+                          <span
+                            key={`${effect.text}-${effectIndex}`}
+                            title={effect.text}
+                            style={{ color: effect.color ?? undefined }}
+                          >
+                            {formatEquipmentEffect(effect.text)}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <QualityChip quality={accessory.quality} />
+                    <ItemDetailTooltip
+                      name={accessory.name}
+                      grade={accessory.grade}
+                      details={[{ label: '품질', value: accessory.quality }]}
+                      effects={[
+                        ...accessory.basicEffects.map((text) => ({ text })),
+                        ...accessory.additionalEffects.map((text) => ({ text })),
+                        ...accessory.polishEffects,
+                        ...accessory.arkPassiveEffects.map((text) => ({ text })),
+                      ]}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className={styles['extra-list']}>
+                <ExtraItem
+                  title="어빌리티 스톤"
+                  item={equipment.abilityStone}
+                  effects={[
+                    ...(equipment.abilityStone?.basicEffects ?? []),
+                    ...(equipment.abilityStone?.additionalEffects ?? []),
+                    ...(equipment.abilityStone?.abilityStoneBonusEffects ?? []),
+                  ]}
+                  labels={equipment.abilityStone?.abilityStoneEngravings.map((engraving) => ({
+                    label: engraving.name,
+                    value: engraving.level,
+                  }))}
+                />
+                <ExtraItem
+                  title="팔찌"
+                  item={equipment.bracelet}
+                  effects={equipment.bracelet?.braceletEffects.map((effect) => effect.text) ?? []}
+                  labels={equipment.bracelet?.braceletEffects.map((effect) => ({
+                    label: effect.text,
+                    value: null,
+                  }))}
+                />
+              </div>
+            </div>
+          </div>
+        </EquipmentSection>
 
+        <section className={styles['right-top-section']} />
+        <section className={styles['right-bottom-section']} />
+      </div>
+
+      <div className={styles['additional-details']}>
+        <div className={styles['additional-primary-column']}>
           <DetailSection
             title="보석"
             summary={`피해 ${summary.gems.filter((gem) => gem.effectType === 'damage').length} · 재사용 ${summary.gems.filter((gem) => gem.effectType === 'cooldown').length}`}
@@ -180,7 +151,7 @@ export default function CharacterDetail(props: { selectedCharacter: TResLostarkM
           <CardSection cards={summary.cards} />
         </div>
 
-        <div className={styles['secondary-column']}>
+        <div className={styles['additional-secondary-column']}>
           <DetailSection title="특성">
             <div className={styles['combat-stat-list']}>
               {getOrderedStats(summary.profiles.stats).map((stat, index) => (
@@ -212,7 +183,7 @@ export default function CharacterDetail(props: { selectedCharacter: TResLostarkM
           </DetailSection>
         </div>
 
-        <div className={styles['tertiary-column']}>
+        <div className={styles['additional-tertiary-column']}>
           <DetailSection title="아크 패시브">
             <div className={styles['ark-points']}>
               {summary.arkPassive.points.map((point, index) => (
@@ -265,15 +236,23 @@ export default function CharacterDetail(props: { selectedCharacter: TResLostarkM
       <SkillSection skills={summary.combatSkills} className={styles['skills-section']} />
 
       <AvatarSection avatars={summary.avatars} className={styles['avatars-section']} />
-    </div>
-  );
-}
 
-function Stat(props: { label: string; value: string }) {
-  return (
-    <div>
-      <span>{props.label}</span>
-      <strong>{props.value}</strong>
+      <div>
+        <p>TODO</p>
+        <div>프로필 로펙/일로아/로아랩 버튼 + 치명타확률?, 로펙점수</div>
+        <p>$page-width: 1024px; $page-wide-width: 1440px;</p>
+        <p>일로아, 로펙, 로아업, 로아지지, 로아랩</p>
+        <p>장비 - 장비, 악세, 어빌, 팔찌, 보주, 완갑까지 + 아바타는 어쩔까</p>
+        <p>특성 - 힘민지최생, 치특신 - 프로필로 옮길까</p>
+        <p>각인 - 어빌돌 연계</p>
+        <p>보석</p>
+        <p>아크패시브 - 찍은것도 보여주기</p>
+        <p>아크그리드</p>
+        <p>카드</p>
+        <p>스킬</p>
+        <p>아바타</p>
+        <p>치적계산을 어디넣을까 - 프로필?</p>
+      </div>
     </div>
   );
 }
@@ -291,6 +270,7 @@ function getOrderedStats(stats: TResLostarkMainCharacter['summary']['profiles'][
     );
   });
 }
+
 function ExtraItem(props: {
   title: string;
   item: {
