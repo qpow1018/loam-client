@@ -10,7 +10,6 @@ import type {
   TResLostarkCharacterDetails,
   TReqUpsertLostarkMainCharacterRow,
   TResLostarkMainCharacterRow,
-  TResLostarkTestMainCharacterRow,
   TResLostarkMainCharacter,
   TResLostarkCharacterSummary,
   TLostarkManualMetrics,
@@ -18,7 +17,6 @@ import type {
 
 const LOSTARK_MY_CHARACTERS_TABLE = 'lostark_my_characters';
 const LOSTARK_MAIN_CHARACTERS_TABLE = 'lostark_main_characters';
-const LOSTARK_MAIN_CHARACTERS_TEST_TABLE = 'lostark_main_characters_test';
 
 function normalizeManualMetrics(
   manualMetrics: Partial<TLostarkManualMetrics> | null | undefined = {},
@@ -146,7 +144,7 @@ export async function getMainCharacters(): Promise<TResLostarkMainCharacter[]> {
   const { data, error } = await supabase
     .from(LOSTARK_MAIN_CHARACTERS_TABLE)
     .select(
-      'id, user_id, character_name, character_class, item_level, sort_order, summary, raw_payload, created_at, updated_at',
+      'id, user_id, character_name, character_class, item_level, sort_order, summary, raw_payload, manual_metrics, created_at, updated_at',
     )
     .eq('user_id', userId)
     .order('sort_order', { ascending: true })
@@ -164,139 +162,12 @@ export async function getMainCharacters(): Promise<TResLostarkMainCharacter[]> {
     sortOrder: row.sort_order,
     summary: normalizeCharacterSummary(row.summary),
     rawPayload: row.raw_payload,
-    manualMetrics: normalizeManualMetrics(),
-  }));
-}
-
-// 상세 화면 개발에 사용하는 테스트 메인 캐릭터 목록을 조회한다.
-export async function getTestMainCharacters(): Promise<TResLostarkMainCharacter[]> {
-  const supabase = createClient();
-  const userId = await getCurrentUserId();
-  const { data, error } = await supabase
-    .from(LOSTARK_MAIN_CHARACTERS_TEST_TABLE)
-    .select(
-      'id, user_id, character_name, character_class, item_level, sort_order, summary, raw_payload, manual_metrics, created_at, updated_at',
-    )
-    .eq('user_id', userId)
-    .order('sort_order', { ascending: true })
-    .order('created_at', { ascending: true });
-
-  if (error) {
-    throw error;
-  }
-
-  return ((data ?? []) as TResLostarkTestMainCharacterRow[]).map((row) => ({
-    id: row.id,
-    characterName: row.character_name,
-    characterClass: row.character_class,
-    itemLevel: row.item_level,
-    sortOrder: row.sort_order,
-    summary: normalizeCharacterSummary(row.summary),
-    rawPayload: row.raw_payload,
     manualMetrics: normalizeManualMetrics(row.manual_metrics),
   }));
 }
 
-// 테스트 테이블이 비어 있을 때 운영 메인 캐릭터 데이터를 한 번 복사한다.
-export async function initializeTestMainCharacters(): Promise<TResLostarkMainCharacter[]> {
-  const supabase = createClient();
-  const userId = await getCurrentUserId();
-  const { count, error: countError } = await supabase
-    .from(LOSTARK_MAIN_CHARACTERS_TEST_TABLE)
-    .select('id', { count: 'exact', head: true })
-    .eq('user_id', userId);
-
-  if (countError) {
-    throw countError;
-  }
-
-  if ((count ?? 0) > 0) {
-    return getTestMainCharacters();
-  }
-
-  const { data, error } = await supabase
-    .from(LOSTARK_MAIN_CHARACTERS_TABLE)
-    .select('character_name, character_class, item_level, sort_order, summary, raw_payload')
-    .eq('user_id', userId)
-    .order('sort_order', { ascending: true })
-    .order('created_at', { ascending: true });
-
-  if (error) {
-    throw error;
-  }
-
-  const rows = (data ?? []).map((row) => ({
-    user_id: userId,
-    character_name: row.character_name,
-    character_class: row.character_class,
-    item_level: row.item_level,
-    sort_order: row.sort_order,
-    summary: row.summary,
-    raw_payload: row.raw_payload,
-    manual_metrics: normalizeManualMetrics(),
-  }));
-
-  if (rows.length === 0) {
-    return [];
-  }
-
-  const { error: insertError } = await supabase
-    .from(LOSTARK_MAIN_CHARACTERS_TEST_TABLE)
-    .upsert(rows, { onConflict: 'user_id,character_name' });
-
-  if (insertError) {
-    throw insertError;
-  }
-
-  return getTestMainCharacters();
-}
-
 // 메인 캐릭터의 현재 상세 정보를 저장한다.
 export async function saveMainCharacter(
-  character: TResLostarkMainCharacter,
-): Promise<TResLostarkMainCharacter> {
-  const supabase = createClient();
-  const userId = await getCurrentUserId();
-  const row: TReqUpsertLostarkMainCharacterRow = {
-    user_id: userId,
-    character_name: character.characterName,
-    character_class: character.characterClass,
-    item_level: character.itemLevel,
-    sort_order: character.sortOrder,
-    summary: normalizeCharacterSummary(character.summary),
-    raw_payload: character.rawPayload,
-  };
-
-  const { data, error } = await supabase
-    .from(LOSTARK_MAIN_CHARACTERS_TABLE)
-    .update(row)
-    .eq('id', character.id)
-    .eq('user_id', userId)
-    .select(
-      'id, user_id, character_name, character_class, item_level, sort_order, summary, raw_payload, created_at, updated_at',
-    )
-    .single();
-
-  if (error) {
-    throw error;
-  }
-
-  const saved = data as TResLostarkMainCharacterRow;
-
-  return {
-    id: saved.id,
-    characterName: saved.character_name,
-    characterClass: saved.character_class,
-    itemLevel: saved.item_level,
-    sortOrder: saved.sort_order,
-    summary: normalizeCharacterSummary(saved.summary),
-    rawPayload: saved.raw_payload,
-    manualMetrics: normalizeManualMetrics(),
-  };
-}
-
-// 상세 화면에서 갱신한 메인 캐릭터 정보를 테스트 테이블에만 저장한다.
-export async function saveTestMainCharacter(
   character: TResLostarkMainCharacter,
 ): Promise<TResLostarkMainCharacter> {
   const supabase = createClient();
@@ -315,7 +186,7 @@ export async function saveTestMainCharacter(
   };
 
   const { data, error } = await supabase
-    .from(LOSTARK_MAIN_CHARACTERS_TEST_TABLE)
+    .from(LOSTARK_MAIN_CHARACTERS_TABLE)
     .update(row)
     .eq('id', character.id)
     .eq('user_id', userId)
@@ -328,7 +199,7 @@ export async function saveTestMainCharacter(
     throw error;
   }
 
-  const saved = data as TResLostarkTestMainCharacterRow;
+  const saved = data as TResLostarkMainCharacterRow;
 
   return {
     id: saved.id,

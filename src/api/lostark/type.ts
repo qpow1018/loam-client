@@ -69,12 +69,9 @@ export type TReqUpsertLostarkMainCharacterRow = {
 
 export type TResLostarkMainCharacterRow = TReqUpsertLostarkMainCharacterRow & {
   id: string;
+  manual_metrics: TLostarkManualMetrics | null;
   created_at: string;
   updated_at: string;
-};
-
-export type TResLostarkTestMainCharacterRow = TResLostarkMainCharacterRow & {
-  manual_metrics: TLostarkManualMetrics | null;
 };
 
 export type TResLostarkMainCharacter = {

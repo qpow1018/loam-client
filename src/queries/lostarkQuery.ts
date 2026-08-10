@@ -11,7 +11,6 @@ import type {
 
 const MY_CHARACTERS_QUERY_KEY = ['lostark', 'myCharacters'] as const;
 const MAIN_CHARACTERS_QUERY_KEY = ['lostark', 'mainCharacters'] as const;
-const TEST_MAIN_CHARACTERS_QUERY_KEY = ['lostark', 'testMainCharacters'] as const;
 
 function useMyCharactersMutation<TVariables>(
   mutationFn: (variables: TVariables) => Promise<TResLostarkMyCharacter[]>,
@@ -48,24 +47,6 @@ const lostarkQuery = {
     return useQuery({
       queryKey: MAIN_CHARACTERS_QUERY_KEY,
       queryFn: api.lostark.getMainCharacters,
-    });
-  },
-
-  useGetTestMainCharacters() {
-    return useQuery({
-      queryKey: TEST_MAIN_CHARACTERS_QUERY_KEY,
-      queryFn: api.lostark.getTestMainCharacters,
-    });
-  },
-
-  useInitializeTestMainCharacters() {
-    const queryClient = useQueryClient();
-
-    return useMutation({
-      mutationFn: api.lostark.initializeTestMainCharacters,
-      onSuccess(characters) {
-        queryClient.setQueryData(TEST_MAIN_CHARACTERS_QUERY_KEY, characters);
-      },
     });
   },
 
@@ -155,21 +136,6 @@ const lostarkQuery = {
       onSuccess(character) {
         queryClient.setQueryData<TResLostarkMainCharacter[]>(
           MAIN_CHARACTERS_QUERY_KEY,
-          (characters = []) =>
-            characters.map((item) => (item.id === character.id ? character : item)),
-        );
-      },
-    });
-  },
-
-  useSaveTestMainCharacter() {
-    const queryClient = useQueryClient();
-
-    return useMutation({
-      mutationFn: api.lostark.saveTestMainCharacter,
-      onSuccess(character) {
-        queryClient.setQueryData<TResLostarkMainCharacter[]>(
-          TEST_MAIN_CHARACTERS_QUERY_KEY,
           (characters = []) =>
             characters.map((item) => (item.id === character.id ? character : item)),
         );
