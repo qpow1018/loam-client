@@ -108,31 +108,6 @@ export default function TestMainCharactersClient() {
         onSelectCharacter={handleOpenCharacterDetail}
       />
 
-      {activeView === 'detail' && selectedCharacter && (
-        <div className={styles['test-actions']}>
-          <Button
-            color="gray"
-            fill="solid"
-            size="small"
-            isLoading={refreshMainCharacter.isPending}
-            isDisabled={saveTestMainCharacter.isPending}
-            onClick={() => void handleRefreshCharacter()}
-          >
-            테스트 갱신
-          </Button>
-          <Button
-            color="rose"
-            fill="solid"
-            size="small"
-            isLoading={saveTestMainCharacter.isPending}
-            isDisabled={refreshMainCharacter.isPending || !hasUnsavedChanges}
-            onClick={() => void handleSaveCharacter()}
-          >
-            테스트 저장
-          </Button>
-        </div>
-      )}
-
       {isLoading && <BoxLoading height={280} />}
 
       {!isLoading && !isError && characters.length === 0 && (
@@ -159,7 +134,14 @@ export default function TestMainCharactersClient() {
       )}
 
       {!isLoading && selectedCharacter && activeView === 'detail' && (
-        <CharacterDetail selectedCharacter={selectedCharacter} />
+        <CharacterDetail
+          selectedCharacter={selectedCharacter}
+          isRefreshing={refreshMainCharacter.isPending}
+          isSaving={saveTestMainCharacter.isPending}
+          isSaveDisabled={!hasUnsavedChanges}
+          onRefresh={() => void handleRefreshCharacter()}
+          onSave={() => void handleSaveCharacter()}
+        />
       )}
     </main>
   );

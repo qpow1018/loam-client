@@ -13,13 +13,27 @@ import ItemDetailTooltip from './ItemDetailTooltip';
 import ProfileHeader from './ProfileHeader';
 import SkillSection from './SkillSection';
 
-export default function CharacterDetail(props: { selectedCharacter: TResLostarkMainCharacter }) {
+export default function CharacterDetail(props: {
+  selectedCharacter: TResLostarkMainCharacter;
+  isRefreshing: boolean;
+  isSaving: boolean;
+  isSaveDisabled: boolean;
+  onRefresh: () => void;
+  onSave: () => void;
+}) {
   const { summary } = props.selectedCharacter;
   const { profiles, equipment } = summary;
 
   return (
     <div className={styles['character-detail']}>
-      <ProfileHeader profiles={profiles} />
+      <ProfileHeader
+        profiles={profiles}
+        isRefreshing={props.isRefreshing}
+        isSaving={props.isSaving}
+        isSaveDisabled={props.isSaveDisabled}
+        onRefresh={props.onRefresh}
+        onSave={props.onSave}
+      />
 
       <div className={styles['top-layout']}>
         <EquipmentSection>
