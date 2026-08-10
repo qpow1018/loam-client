@@ -265,7 +265,6 @@ export default function CharacterDetail(props: {
         <p>카드</p>
         <p>스킬</p>
         <p>아바타</p>
-        <p>치적계산을 어디넣을까 - 프로필?</p>
       </div>
     </div>
   );
