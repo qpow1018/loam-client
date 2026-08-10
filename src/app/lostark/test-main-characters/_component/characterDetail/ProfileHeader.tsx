@@ -122,7 +122,7 @@ function PrimaryInfo(props: { profiles: TResLostarkMainCharacter['summary']['pro
           <span className={styles['metric-label']}>아이템 레벨</span>
           <strong className={styles['metric-value']}>{profiles.itemAvgLevel ?? '-'}</strong>
         </div>
-        <div className={`${styles['metric-item']} ${styles['tone-mint']}`}>
+        <div className={`${styles['metric-item']} ${styles['tone-rose']}`}>
           <span className={styles['metric-label']}>전투력</span>
           <strong className={styles['metric-value']}>{profiles.combatPower ?? '-'}</strong>
         </div>
