@@ -11,7 +11,6 @@ const SETTING_METRICS = [
 ] as const;
 
 const LOPEC_SCORE = '2,450.32';
-const CRITICAL_RATE = '82.4%';
 
 const EXTERNAL_LINKS = [
   { name: '일로아', urlPrefix: 'https://iloa.gg/character/' },
@@ -46,13 +45,7 @@ export default function ProfileHeader(props: {
 
         <div className={styles['profile-content']}>
           <PrimaryInfo profiles={profiles} />
-
-          <div className={styles['support-metrics']}>
-            {SETTING_METRICS.map((metric) => (
-              <MetricChip key={metric.label} label={metric.label} value={metric.value} />
-            ))}
-            <MetricChip label="치명타" value={CRITICAL_RATE} isReference />
-          </div>
+          <SupportInfo />
         </div>
       </div>
     </section>
@@ -142,10 +135,17 @@ function PrimaryInfo(props: { profiles: TResLostarkMainCharacter['summary']['pro
   );
 }
 
-function MetricChip(props: { label: string; value: string; isReference?: boolean }) {
+function SupportInfo() {
   return (
-    <span className={`${styles['metric-chip']} ${props.isReference ? styles['is-reference'] : ''}`}>
-      {props.label} <strong>{props.value}</strong>
-    </span>
+    <div className={styles['support-info']}>
+      <div className={styles['setting-metrics']}>
+        {SETTING_METRICS.map((metric) => (
+          <div key={metric.label} className={styles['setting-metric']}>
+            <span className={styles['label']}>{metric.label}</span>
+            <span className={styles['value']}>{metric.value}</span>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
