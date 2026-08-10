@@ -17,7 +17,7 @@ import styles from './characterDetail.module.scss';
 import DetailSection from './DetailSection';
 import EquipmentSection from './EquipmentSection';
 import ItemDetailTooltip from './ItemDetailTooltip';
-import ProfileHeader from './ProfileHeader';
+import ProfileHeader from './profileHeader/ProfileHeader';
 import SkillSection from './SkillSection';
 
 export default function CharacterDetail(props: { characterId: string }) {

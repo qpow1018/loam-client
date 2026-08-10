@@ -1,50 +1,9 @@
-.profile-header {
+.profile-content {
+  flex: 1;
   display: flex;
-  gap: 16px;
-  height: 300px;
-  padding: 8px 16px 8px 8px;
-  background-color: $bg;
-  border: 1px solid $border-soft;
-
-  .profile-image {
-    flex-shrink: 0;
-    width: 260px;
-    background-color: $bg-dark;
-
-    img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      mix-blend-mode: lighten;
-      object-fit: cover;
-    }
-  }
-
-  .profile-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-  }
-
-  .profile-toolbar {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-
-    .actions-box {
-      display: flex;
-      gap: 6px;
-    }
-  }
-
-  .profile-content {
-    flex: 1;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    padding-bottom: 28px;
-  }
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-bottom: 28px;
 
   .primary-info {
     min-width: 0;
