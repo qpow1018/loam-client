@@ -113,6 +113,19 @@ async function getCurrentUserId(): Promise<string> {
   return user.id;
 }
 
+function toMainCharacter(row: TResLostarkMainCharacterRow): TResLostarkMainCharacter {
+  return {
+    id: row.id,
+    characterName: row.character_name,
+    characterClass: row.character_class,
+    itemLevel: row.item_level,
+    sortOrder: row.sort_order,
+    summary: normalizeCharacterSummary(row.summary),
+    rawPayload: row.raw_payload,
+    manualMetrics: normalizeManualMetrics(row.manual_metrics),
+  };
+}
+
 // 로그인한 사용자의 저장된 내 캐릭터 목록을 조회한다.
 export async function getMyCharacters(): Promise<TResLostarkMyCharacter[]> {
   const supabase = createClient();
@@ -154,16 +167,29 @@ export async function getMainCharacters(): Promise<TResLostarkMainCharacter[]> {
     throw error;
   }
 
-  return ((data ?? []) as TResLostarkMainCharacterRow[]).map((row) => ({
-    id: row.id,
-    characterName: row.character_name,
-    characterClass: row.character_class,
-    itemLevel: row.item_level,
-    sortOrder: row.sort_order,
-    summary: normalizeCharacterSummary(row.summary),
-    rawPayload: row.raw_payload,
-    manualMetrics: normalizeManualMetrics(row.manual_metrics),
-  }));
+  return ((data ?? []) as TResLostarkMainCharacterRow[]).map(toMainCharacter);
+}
+
+// 로그인한 사용자의 메인 캐릭터 상세를 조회한다.
+export async function getMainCharacterDetail(
+  characterId: string,
+): Promise<TResLostarkMainCharacter | null> {
+  const supabase = createClient();
+  const userId = await getCurrentUserId();
+  const { data, error } = await supabase
+    .from(LOSTARK_MAIN_CHARACTERS_TABLE)
+    .select(
+      'id, user_id, character_name, character_class, item_level, sort_order, summary, raw_payload, manual_metrics, created_at, updated_at',
+    )
+    .eq('id', characterId)
+    .eq('user_id', userId)
+    .maybeSingle();
+
+  if (error) {
+    throw error;
+  }
+
+  return data ? toMainCharacter(data as TResLostarkMainCharacterRow) : null;
 }
 
 // 메인 캐릭터의 현재 상세 정보를 저장한다.
@@ -199,18 +225,7 @@ export async function saveMainCharacter(
     throw error;
   }
 
-  const saved = data as TResLostarkMainCharacterRow;
-
-  return {
-    id: saved.id,
-    characterName: saved.character_name,
-    characterClass: saved.character_class,
-    itemLevel: saved.item_level,
-    sortOrder: saved.sort_order,
-    summary: normalizeCharacterSummary(saved.summary),
-    rawPayload: saved.raw_payload,
-    manualMetrics: normalizeManualMetrics(saved.manual_metrics),
-  };
+  return toMainCharacter(data as TResLostarkMainCharacterRow);
 }
 
 // 메인 캐릭터 목록의 표시 순서를 저장한다.
