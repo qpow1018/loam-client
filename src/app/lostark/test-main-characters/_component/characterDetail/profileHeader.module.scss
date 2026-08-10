@@ -1,12 +1,14 @@
 .profile-header {
-  display: grid;
-  grid-template-columns: 280px minmax(0, 1fr) auto;
-  padding: 8px;
+  display: flex;
+  gap: 16px;
+  height: 300px;
+  padding: 8px 16px 8px 8px;
   background-color: $bg;
   border: 1px solid $border-soft;
 
   .profile-image {
-    min-width: 0;
+    flex-shrink: 0;
+    width: 260px;
     background-color: $bg-dark;
 
     img {
@@ -14,100 +16,122 @@
       width: 100%;
       height: 100%;
       mix-blend-mode: lighten;
+      object-fit: cover;
     }
   }
 
   .profile-info {
+    flex: 1;
     display: flex;
-    grid-column: 2;
     flex-direction: column;
-    justify-content: center;
-    padding: 32px;
-    box-shadow: 0 0 1px red;
+    min-width: 0;
+  }
 
-    .profile-tags {
+  .profile-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    .actions-box {
       display: flex;
       gap: 6px;
+    }
+  }
 
-      span {
-        padding: 4px 7px;
-        background: $gray-700;
-        border: 1px solid $border-soft;
-        color: $text-secondary;
-        font-size: 11px;
+  .profile-content {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding-bottom: 28px;
+  }
+
+  .primary-info {
+    min-width: 0;
+
+    .profile-class-name {
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: $text-secondary;
+    }
+
+    .profile-name {
+      font-size: 26px;
+      font-weight: 700;
+      color: $text-primary;
+    }
+
+    .external-links {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+
+      a {
+        font-size: 12px;
+        color: $azure;
+        text-decoration: none;
       }
     }
 
-    h1 {
-      margin-top: 14px;
-      color: $text-primary;
-      font-size: 26px;
-      font-weight: 700;
-    }
+    .primary-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 150px);
+      margin-top: 28px;
 
-    .headline-stats {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 26px;
-      margin-top: 36px;
+      .metric-item {
+        min-width: 0;
 
-      .stat-item {
-        display: flex;
-        flex-direction: column;
-        gap: 3px;
-
-        .stat-label {
+        .metric-label {
+          display: block;
+          margin-bottom: 6px;
+          font-size: 12px;
           color: $text-secondary;
-          font-size: 11px;
         }
 
-        .stat-value {
-          color: $text-primary;
+        .metric-value {
           font-size: 20px;
+          font-weight: 700;
+          color: $text-primary;
         }
 
-        &.is-highlighted .stat-value {
-          color: $rose-light;
+        &.tone-rose .metric-value {
+          color: $rose-accent;
+        }
+
+        &.tone-mint .metric-value {
+          color: $mint-accent;
         }
       }
     }
   }
 
-  .profile-actions {
+  .support-metrics {
     display: flex;
-    grid-column: 3;
-    align-self: start;
-    justify-self: end;
-    gap: 8px;
-    margin: 16px;
+    width: 238px;
+    flex-shrink: 0;
+    flex-direction: column;
+    gap: 6px;
 
-    .external-links,
-    .test-actions {
-      display: flex;
-      gap: 6px;
-    }
-
-    .external-links a {
+    .metric-chip {
       display: inline-flex;
-      height: 32px;
+      min-height: 34px;
       align-items: center;
-      padding: 0 9px;
-      border: 1px solid rgba($border-soft, 0.9);
-      background: rgba($gray-900, 0.7);
+      justify-content: space-between;
+      gap: 12px;
+      padding: 6px 9px;
+      border: 1px solid $border-strong;
       color: $text-secondary;
       font-size: 11px;
-      transition:
-        border-color $transition,
-        color $transition;
 
-      &:hover {
-        border-color: $rose-accent;
-        color: $rose-light;
+      strong {
+        color: $text-primary;
+        font-weight: 700;
       }
 
-      &:focus-visible {
-        outline: 2px solid $border-focus;
-        outline-offset: 2px;
+      &.is-reference {
+        border-color: rgba($rose-light, 0.56);
+        color: $rose-light;
       }
     }
   }
