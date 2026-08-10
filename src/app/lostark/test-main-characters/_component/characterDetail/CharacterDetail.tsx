@@ -1,5 +1,12 @@
-import type { TLostarkManualMetrics, TResLostarkMainCharacter } from '@/api/lostark/type';
+'use client';
 
+import { useEffect, useState } from 'react';
+
+import type { TLostarkManualMetrics, TResLostarkMainCharacter } from '@/api/lostark/type';
+import lostarkQuery from '@/queries/lostarkQuery';
+import toast from '@/utils/toast';
+
+import BoxLoading from '@/components/common/loading/BoxLoading';
 import ItemSlot from '@/components/lostark/itemSlot/ItemSlot';
 import QualityChip from '@/components/lostark/qualityChip/QualityChip';
 
@@ -13,29 +20,83 @@ import ItemDetailTooltip from './ItemDetailTooltip';
 import ProfileHeader from './ProfileHeader';
 import SkillSection from './SkillSection';
 
-export default function CharacterDetail(props: {
-  selectedCharacter: TResLostarkMainCharacter;
-  isRefreshing: boolean;
-  isSaving: boolean;
-  isSaveDisabled: boolean;
-  onRefresh: () => void;
-  onSave: () => void;
-  onChangeManualMetrics: (manualMetrics: TLostarkManualMetrics) => void;
-}) {
-  const { summary } = props.selectedCharacter;
+export default function CharacterDetail(props: { characterId: string }) {
+  const [draftCharacter, setDraftCharacter] = useState<TResLostarkMainCharacter | null>(null);
+  const {
+    data: savedCharacter,
+    isLoading,
+    isError,
+  } = lostarkQuery.useGetMainCharacterDetail(props.characterId);
+  const refreshMainCharacter = lostarkQuery.useRefreshMainCharacter();
+  const saveMainCharacter = lostarkQuery.useSaveMainCharacter();
+  const character = draftCharacter ?? savedCharacter;
+  const hasUnsavedChanges = draftCharacter !== null;
+
+  useEffect(() => {
+    if (isError) {
+      toast.error('메인 캐릭터 정보를 불러오지 못했습니다.');
+    }
+  }, [isError]);
+
+  async function handleRefreshCharacter() {
+    if (!character || refreshMainCharacter.isPending) return;
+
+    try {
+      const refreshedCharacter = await refreshMainCharacter.mutateAsync(character);
+      setDraftCharacter(refreshedCharacter);
+      toast.success('최신 정보를 불러왔습니다.');
+    } catch {
+      toast.error('최신 정보를 불러오지 못했습니다.');
+    }
+  }
+
+  async function handleSaveCharacter() {
+    if (!character || !hasUnsavedChanges || saveMainCharacter.isPending) return;
+
+    try {
+      await saveMainCharacter.mutateAsync(character);
+      setDraftCharacter(null);
+      toast.success('메인 캐릭터 정보를 저장했습니다.');
+    } catch {
+      toast.error('메인 캐릭터 정보를 저장하지 못했습니다.');
+    }
+  }
+
+  function handleChangeManualMetrics(manualMetrics: TLostarkManualMetrics) {
+    if (!character) return;
+
+    setDraftCharacter({
+      ...character,
+      manualMetrics,
+    });
+  }
+
+  if (isLoading) {
+    return <BoxLoading height={280} />;
+  }
+
+  if (!character) {
+    return (
+      <div className={styles['character-detail']}>
+        <p className={styles['empty-info']}>메인 캐릭터 정보를 찾을 수 없습니다.</p>
+      </div>
+    );
+  }
+
+  const { summary } = character;
   const { profiles, equipment } = summary;
 
   return (
     <div className={styles['character-detail']}>
       <ProfileHeader
         profiles={profiles}
-        isRefreshing={props.isRefreshing}
-        isSaving={props.isSaving}
-        isSaveDisabled={props.isSaveDisabled}
-        onRefresh={props.onRefresh}
-        onSave={props.onSave}
-        manualMetrics={props.selectedCharacter.manualMetrics}
-        onChangeManualMetrics={props.onChangeManualMetrics}
+        isRefreshing={refreshMainCharacter.isPending}
+        isSaving={saveMainCharacter.isPending}
+        isSaveDisabled={!hasUnsavedChanges}
+        onRefresh={() => void handleRefreshCharacter()}
+        onSave={() => void handleSaveCharacter()}
+        manualMetrics={character.manualMetrics}
+        onChangeManualMetrics={handleChangeManualMetrics}
       />
 
       <div className={styles['top-layout']}>

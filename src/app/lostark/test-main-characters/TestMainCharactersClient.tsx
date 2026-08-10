@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import type { TLostarkManualMetrics, TResLostarkMainCharacter } from '@/api/lostark/type';
+import type { TResLostarkMainCharacter } from '@/api/lostark/type';
 import lostarkQuery from '@/queries/lostarkQuery';
 import toast from '@/utils/toast';
 
@@ -12,25 +12,10 @@ import CharacterSummaryList from './_component/CharacterSummaryList';
 
 import styles from './testMainCharactersClient.module.scss';
 
-type TTestMainCharactersView = 'summary' | 'detail';
-
 export default function TestMainCharactersClient() {
-  const [activeView, setActiveView] = useState<TTestMainCharactersView>('summary');
   const [selectedCharacterId, setSelectedCharacterId] = useState<string | null>(null);
-  const [draftCharacters, setDraftCharacters] = useState<Record<string, TResLostarkMainCharacter>>(
-    {},
-  );
 
-  const { data: savedCharacters = [], isLoading, isError } = lostarkQuery.useGetMainCharacters();
-  const refreshMainCharacter = lostarkQuery.useRefreshMainCharacter();
-  const saveMainCharacter = lostarkQuery.useSaveMainCharacter();
-  const characters = savedCharacters.map((character) => draftCharacters[character.id] ?? character);
-
-  const selectedCharacter =
-    characters.find((character) => character.id === selectedCharacterId) ?? characters[0] ?? null;
-  const hasUnsavedChanges = selectedCharacter
-    ? draftCharacters[selectedCharacter.id] !== undefined
-    : false;
+  const { data: characters = [], isLoading, isError } = lostarkQuery.useGetMainCharacters();
 
   useEffect(() => {
     if (isError) {
@@ -38,63 +23,19 @@ export default function TestMainCharactersClient() {
     }
   }, [isError]);
 
-  async function handleRefreshCharacter() {
-    if (!selectedCharacter || refreshMainCharacter.isPending) return;
-
-    try {
-      const refreshedCharacter = await refreshMainCharacter.mutateAsync(selectedCharacter);
-      setDraftCharacters((prev) => ({
-        ...prev,
-        [refreshedCharacter.id]: refreshedCharacter,
-      }));
-      toast.success('최신 정보를 불러왔습니다.');
-    } catch {
-      toast.error('최신 정보를 불러오지 못했습니다.');
-    }
-  }
-
-  async function handleSaveCharacter() {
-    if (!selectedCharacter || !hasUnsavedChanges || saveMainCharacter.isPending) return;
-
-    try {
-      await saveMainCharacter.mutateAsync(selectedCharacter);
-      setDraftCharacters((prev) => {
-        const next = { ...prev };
-        delete next[selectedCharacter.id];
-        return next;
-      });
-      toast.success('메인 캐릭터 정보를 저장했습니다.');
-    } catch {
-      toast.error('메인 캐릭터 정보를 저장하지 못했습니다.');
-    }
-  }
-
   function handleOpenCharacterDetail(characterId: string) {
     setSelectedCharacterId(characterId);
-    setActiveView('detail');
   }
 
   function handleOpenSummary() {
-    setActiveView('summary');
-  }
-
-  function handleChangeManualMetrics(manualMetrics: TLostarkManualMetrics) {
-    if (!selectedCharacter) return;
-
-    setDraftCharacters((prev) => ({
-      ...prev,
-      [selectedCharacter.id]: {
-        ...selectedCharacter,
-        manualMetrics,
-      },
-    }));
+    setSelectedCharacterId(null);
   }
 
   return (
     <main className={styles['test-main-characters-client']}>
       <MainCharacterNavigation
         characters={characters}
-        selectedCharacterId={activeView === 'detail' ? (selectedCharacter?.id ?? null) : null}
+        selectedCharacterId={selectedCharacterId}
         onSelectSummary={handleOpenSummary}
         onSelectCharacter={handleOpenCharacterDetail}
       />
@@ -108,23 +49,15 @@ export default function TestMainCharactersClient() {
         </div>
       )}
 
-      {!isLoading && characters.length > 0 && activeView === 'summary' && (
+      {!isLoading && characters.length > 0 && selectedCharacterId === null && (
         <CharacterSummaryList
           characters={characters}
           onSelectCharacter={handleOpenCharacterDetail}
         />
       )}
 
-      {!isLoading && selectedCharacter && activeView === 'detail' && (
-        <CharacterDetail
-          selectedCharacter={selectedCharacter}
-          isRefreshing={refreshMainCharacter.isPending}
-          isSaving={saveMainCharacter.isPending}
-          isSaveDisabled={!hasUnsavedChanges}
-          onRefresh={() => void handleRefreshCharacter()}
-          onSave={() => void handleSaveCharacter()}
-          onChangeManualMetrics={handleChangeManualMetrics}
-        />
+      {!isLoading && selectedCharacterId !== null && (
+        <CharacterDetail key={selectedCharacterId} characterId={selectedCharacterId} />
       )}
     </main>
   );
