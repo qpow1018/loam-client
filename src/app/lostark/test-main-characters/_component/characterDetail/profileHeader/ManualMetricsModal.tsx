@@ -11,6 +11,16 @@ import Modal from '@/components/common/modal/Modal';
 import styles from './manualMetricsModal.module.scss';
 
 type TManualMetricForm = Record<keyof TLostarkManualMetrics, string>;
+type TManualMetricField = {
+  key: keyof TLostarkManualMetrics;
+  label: string;
+};
+
+const MANUAL_METRIC_FIELDS: readonly TManualMetricField[] = [
+  { key: 'lopecScore', label: '로펙 점수' },
+  { key: 'braceletScore', label: '팔찌 점수 (%)' },
+  { key: 'gemConversionLevel', label: '젬 환산 (레벨)' },
+];
 
 export default function ManualMetricsModal(props: {
   manualMetrics: TLostarkManualMetrics;
@@ -34,26 +44,17 @@ export default function ManualMetricsModal(props: {
   }
 
   return (
-    <Modal isOpen onClose={props.onClose} title="직접입력">
+    <Modal isOpen onClose={props.onClose} title="직접입력" width={480}>
       <div className={styles['manual-metrics-modal']}>
         <div className={styles['form-list']}>
-          <MetricField
-            label="로펙 점수"
-            value={form.lopecScore}
-            onChange={(value) => handleChange('lopecScore', value)}
-          />
-          <MetricField
-            label="팔찌"
-            value={form.braceletScore}
-            suffix="%"
-            onChange={(value) => handleChange('braceletScore', value)}
-          />
-          <MetricField
-            label="젬 환산"
-            value={form.gemConversionLevel}
-            prefix="Lv."
-            onChange={(value) => handleChange('gemConversionLevel', value)}
-          />
+          {MANUAL_METRIC_FIELDS.map((field) => (
+            <MetricField
+              key={field.key}
+              label={field.label}
+              value={form[field.key]}
+              onChange={(value) => handleChange(field.key, value)}
+            />
+          ))}
         </div>
 
         {isApplyDisabled && (
@@ -80,27 +81,17 @@ export default function ManualMetricsModal(props: {
   );
 }
 
-function MetricField(props: {
-  label: string;
-  value: string;
-  prefix?: string;
-  suffix?: string;
-  onChange: (value: string) => void;
-}) {
+function MetricField(props: { label: string; value: string; onChange: (value: string) => void }) {
   return (
     <label className={styles['form-row']}>
       <span className={styles['label']}>{props.label}</span>
-      <div className={styles['input-wrap']}>
-        {props.prefix && <span className={styles['prefix']}>{props.prefix}</span>}
-        <TextInput
-          value={props.value}
-          inputMode="decimal"
-          placeholder="미입력"
-          onChange={props.onChange}
-          className={styles['metric-input']}
-        />
-        {props.suffix && <span className={styles['suffix']}>{props.suffix}</span>}
-      </div>
+      <TextInput
+        value={props.value}
+        inputMode="decimal"
+        placeholder="미입력"
+        onChange={props.onChange}
+        className={styles['metric-input']}
+      />
     </label>
   );
 }
