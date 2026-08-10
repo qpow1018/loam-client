@@ -14,19 +14,18 @@ const EXTERNAL_LINKS = [
 ] as const;
 
 export default function ProfileHeader(props: {
-  profiles: TResLostarkMainCharacter['summary']['profiles'];
+  character: TResLostarkMainCharacter;
   isRefreshing: boolean;
   isSaving: boolean;
   isSaveDisabled: boolean;
   onRefresh: () => void;
   onSave: () => void;
-  manualMetrics: TLostarkManualMetrics;
   onChangeManualMetrics: (manualMetrics: TLostarkManualMetrics) => void;
 }) {
   const [isManualMetricsModalOpen, setIsManualMetricsModalOpen] = useState(false);
-  const { profiles, isRefreshing, isSaving, isSaveDisabled, onRefresh, onSave, manualMetrics } =
-    props;
-  const isDirectInputDisabled = isRefreshing || isSaving;
+  const profiles = props.character.summary.profiles;
+  const manualMetrics = props.character.manualMetrics;
+  const isDirectInputDisabled = props.isRefreshing || props.isSaving;
 
   return (
     <section className={styles['profile-header']}>
@@ -36,12 +35,12 @@ export default function ProfileHeader(props: {
 
       <div className={styles['profile-info']}>
         <ProfileToolbar
-          isRefreshing={isRefreshing}
-          isSaving={isSaving}
-          isSaveDisabled={isSaveDisabled}
+          isRefreshing={props.isRefreshing}
+          isSaving={props.isSaving}
+          isSaveDisabled={props.isSaveDisabled}
           isDirectInputDisabled={isDirectInputDisabled}
-          onRefresh={onRefresh}
-          onSave={onSave}
+          onRefresh={props.onRefresh}
+          onSave={props.onSave}
           onOpenManualMetrics={() => setIsManualMetricsModalOpen(true)}
         />
 

@@ -84,18 +84,17 @@ export default function CharacterDetail(props: { characterId: string }) {
   }
 
   const { summary } = character;
-  const { profiles, equipment } = summary;
+  const { equipment } = summary;
 
   return (
     <div className={styles['character-detail']}>
       <ProfileHeader
-        profiles={profiles}
+        character={character}
         isRefreshing={refreshMainCharacter.isPending}
         isSaving={saveMainCharacter.isPending}
         isSaveDisabled={!hasUnsavedChanges}
         onRefresh={() => void handleRefreshCharacter()}
         onSave={() => void handleSaveCharacter()}
-        manualMetrics={character.manualMetrics}
         onChangeManualMetrics={handleChangeManualMetrics}
       />
 
