@@ -22,6 +22,7 @@ import SkillSection from './SkillSection';
 
 export default function CharacterDetail(props: { characterId: string }) {
   const [draftCharacter, setDraftCharacter] = useState<TResLostarkMainCharacter | null>(null);
+
   const {
     data: savedCharacter,
     isLoading,
@@ -29,6 +30,7 @@ export default function CharacterDetail(props: { characterId: string }) {
   } = lostarkQuery.useGetMainCharacterDetail(props.characterId);
   const refreshMainCharacter = lostarkQuery.useRefreshMainCharacter();
   const saveMainCharacter = lostarkQuery.useSaveMainCharacter();
+
   const character = draftCharacter ?? savedCharacter;
   const hasUnsavedChanges = draftCharacter !== null;
 
