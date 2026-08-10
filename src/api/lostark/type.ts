@@ -38,6 +38,12 @@ export type TResLostarkSiblingCharacter = {
 
 export type TLostarkCharacterRawPayload = Record<string, unknown>;
 
+export type TLostarkManualMetrics = {
+  lopecScore: number | null;
+  braceletScore: number | null;
+  gemConversionLevel: number | null;
+};
+
 export type TResLostarkCharacterDetails = {
   ok: boolean;
   status: number;
@@ -67,6 +73,10 @@ export type TResLostarkMainCharacterRow = TReqUpsertLostarkMainCharacterRow & {
   updated_at: string;
 };
 
+export type TResLostarkTestMainCharacterRow = TResLostarkMainCharacterRow & {
+  manual_metrics: TLostarkManualMetrics | null;
+};
+
 export type TResLostarkMainCharacter = {
   id: string;
   characterName: string;
@@ -75,6 +85,7 @@ export type TResLostarkMainCharacter = {
   sortOrder: number;
   summary: TResLostarkCharacterSummary;
   rawPayload: TLostarkCharacterRawPayload | null;
+  manualMetrics: TLostarkManualMetrics;
 };
 
 export type TResLostarkCharacterSummary = {

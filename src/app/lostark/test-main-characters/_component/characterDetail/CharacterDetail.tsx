@@ -1,4 +1,4 @@
-import type { TResLostarkMainCharacter } from '@/api/lostark/type';
+import type { TLostarkManualMetrics, TResLostarkMainCharacter } from '@/api/lostark/type';
 
 import ItemSlot from '@/components/lostark/itemSlot/ItemSlot';
 import QualityChip from '@/components/lostark/qualityChip/QualityChip';
@@ -20,6 +20,7 @@ export default function CharacterDetail(props: {
   isSaveDisabled: boolean;
   onRefresh: () => void;
   onSave: () => void;
+  onChangeManualMetrics: (manualMetrics: TLostarkManualMetrics) => void;
 }) {
   const { summary } = props.selectedCharacter;
   const { profiles, equipment } = summary;
@@ -33,6 +34,8 @@ export default function CharacterDetail(props: {
         isSaveDisabled={props.isSaveDisabled}
         onRefresh={props.onRefresh}
         onSave={props.onSave}
+        manualMetrics={props.selectedCharacter.manualMetrics}
+        onChangeManualMetrics={props.onChangeManualMetrics}
       />
 
       <div className={styles['top-layout']}>

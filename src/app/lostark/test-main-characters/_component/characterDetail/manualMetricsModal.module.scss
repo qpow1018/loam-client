@@ -1,0 +1,55 @@
+.manual-metrics-modal {
+  .form-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .form-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .label {
+      flex-shrink: 0;
+      width: 84px;
+      font-size: 14px;
+      color: $text-secondary;
+    }
+
+    .input-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+
+      .metric-input {
+        flex: 1;
+      }
+
+      .prefix,
+      .suffix {
+        flex-shrink: 0;
+        font-size: 14px;
+        color: $text-secondary;
+      }
+    }
+  }
+
+  .validation-message {
+    margin-top: 10px;
+    font-size: 12px;
+    color: $rose-accent;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 24px;
+
+    .apply-button {
+      flex: 1;
+    }
+  }
+}

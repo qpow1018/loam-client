@@ -10,13 +10,29 @@ import type {
   TResLostarkCharacterDetails,
   TReqUpsertLostarkMainCharacterRow,
   TResLostarkMainCharacterRow,
+  TResLostarkTestMainCharacterRow,
   TResLostarkMainCharacter,
   TResLostarkCharacterSummary,
+  TLostarkManualMetrics,
 } from './type';
 
 const LOSTARK_MY_CHARACTERS_TABLE = 'lostark_my_characters';
 const LOSTARK_MAIN_CHARACTERS_TABLE = 'lostark_main_characters';
 const LOSTARK_MAIN_CHARACTERS_TEST_TABLE = 'lostark_main_characters_test';
+
+function normalizeManualMetrics(
+  manualMetrics: Partial<TLostarkManualMetrics> | null | undefined = {},
+): TLostarkManualMetrics {
+  return {
+    lopecScore: typeof manualMetrics?.lopecScore === 'number' ? manualMetrics.lopecScore : null,
+    braceletScore:
+      typeof manualMetrics?.braceletScore === 'number' ? manualMetrics.braceletScore : null,
+    gemConversionLevel:
+      typeof manualMetrics?.gemConversionLevel === 'number'
+        ? manualMetrics.gemConversionLevel
+        : null,
+  };
+}
 
 function normalizeCharacterSummary(
   summary: TResLostarkCharacterSummary,
@@ -148,6 +164,7 @@ export async function getMainCharacters(): Promise<TResLostarkMainCharacter[]> {
     sortOrder: row.sort_order,
     summary: normalizeCharacterSummary(row.summary),
     rawPayload: row.raw_payload,
+    manualMetrics: normalizeManualMetrics(),
   }));
 }
 
@@ -158,7 +175,7 @@ export async function getTestMainCharacters(): Promise<TResLostarkMainCharacter[
   const { data, error } = await supabase
     .from(LOSTARK_MAIN_CHARACTERS_TEST_TABLE)
     .select(
-      'id, user_id, character_name, character_class, item_level, sort_order, summary, raw_payload, created_at, updated_at',
+      'id, user_id, character_name, character_class, item_level, sort_order, summary, raw_payload, manual_metrics, created_at, updated_at',
     )
     .eq('user_id', userId)
     .order('sort_order', { ascending: true })
@@ -168,7 +185,7 @@ export async function getTestMainCharacters(): Promise<TResLostarkMainCharacter[
     throw error;
   }
 
-  return ((data ?? []) as TResLostarkMainCharacterRow[]).map((row) => ({
+  return ((data ?? []) as TResLostarkTestMainCharacterRow[]).map((row) => ({
     id: row.id,
     characterName: row.character_name,
     characterClass: row.character_class,
@@ -176,6 +193,7 @@ export async function getTestMainCharacters(): Promise<TResLostarkMainCharacter[
     sortOrder: row.sort_order,
     summary: normalizeCharacterSummary(row.summary),
     rawPayload: row.raw_payload,
+    manualMetrics: normalizeManualMetrics(row.manual_metrics),
   }));
 }
 
@@ -215,6 +233,7 @@ export async function initializeTestMainCharacters(): Promise<TResLostarkMainCha
     sort_order: row.sort_order,
     summary: row.summary,
     raw_payload: row.raw_payload,
+    manual_metrics: normalizeManualMetrics(),
   }));
 
   if (rows.length === 0) {
@@ -272,6 +291,7 @@ export async function saveMainCharacter(
     sortOrder: saved.sort_order,
     summary: normalizeCharacterSummary(saved.summary),
     rawPayload: saved.raw_payload,
+    manualMetrics: normalizeManualMetrics(),
   };
 }
 
@@ -281,7 +301,9 @@ export async function saveTestMainCharacter(
 ): Promise<TResLostarkMainCharacter> {
   const supabase = createClient();
   const userId = await getCurrentUserId();
-  const row: TReqUpsertLostarkMainCharacterRow = {
+  const row: TReqUpsertLostarkMainCharacterRow & {
+    manual_metrics: TLostarkManualMetrics;
+  } = {
     user_id: userId,
     character_name: character.characterName,
     character_class: character.characterClass,
@@ -289,6 +311,7 @@ export async function saveTestMainCharacter(
     sort_order: character.sortOrder,
     summary: normalizeCharacterSummary(character.summary),
     raw_payload: character.rawPayload,
+    manual_metrics: normalizeManualMetrics(character.manualMetrics),
   };
 
   const { data, error } = await supabase
@@ -297,7 +320,7 @@ export async function saveTestMainCharacter(
     .eq('id', character.id)
     .eq('user_id', userId)
     .select(
-      'id, user_id, character_name, character_class, item_level, sort_order, summary, raw_payload, created_at, updated_at',
+      'id, user_id, character_name, character_class, item_level, sort_order, summary, raw_payload, manual_metrics, created_at, updated_at',
     )
     .single();
 
@@ -305,7 +328,7 @@ export async function saveTestMainCharacter(
     throw error;
   }
 
-  const saved = data as TResLostarkMainCharacterRow;
+  const saved = data as TResLostarkTestMainCharacterRow;
 
   return {
     id: saved.id,
@@ -315,6 +338,7 @@ export async function saveTestMainCharacter(
     sortOrder: saved.sort_order,
     summary: normalizeCharacterSummary(saved.summary),
     rawPayload: saved.raw_payload,
+    manualMetrics: normalizeManualMetrics(saved.manual_metrics),
   };
 }
 

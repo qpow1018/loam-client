@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import type { TResLostarkMainCharacter } from '@/api/lostark/type';
+import type { TLostarkManualMetrics, TResLostarkMainCharacter } from '@/api/lostark/type';
 import lostarkQuery from '@/queries/lostarkQuery';
 import toast from '@/utils/toast';
 
@@ -99,6 +99,18 @@ export default function TestMainCharactersClient() {
     setActiveView('summary');
   }
 
+  function handleChangeManualMetrics(manualMetrics: TLostarkManualMetrics) {
+    if (!selectedCharacter) return;
+
+    setDraftCharacters((prev) => ({
+      ...prev,
+      [selectedCharacter.id]: {
+        ...selectedCharacter,
+        manualMetrics,
+      },
+    }));
+  }
+
   return (
     <main className={styles['test-main-characters-client']}>
       <MainCharacterNavigation
@@ -141,6 +153,7 @@ export default function TestMainCharactersClient() {
           isSaveDisabled={!hasUnsavedChanges}
           onRefresh={() => void handleRefreshCharacter()}
           onSave={() => void handleSaveCharacter()}
+          onChangeManualMetrics={handleChangeManualMetrics}
         />
       )}
     </main>

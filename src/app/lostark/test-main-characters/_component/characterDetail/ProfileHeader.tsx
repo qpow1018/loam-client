@@ -1,16 +1,11 @@
-import type { TResLostarkMainCharacter } from '@/api/lostark/type';
+import { useState } from 'react';
+
+import type { TLostarkManualMetrics, TResLostarkMainCharacter } from '@/api/lostark/type';
 
 import Button from '@/components/common/button/Button';
 
+import ManualMetricsModal from './ManualMetricsModal';
 import styles from './profileHeader.module.scss';
-
-// TODO
-const SETTING_METRICS = [
-  { label: '팔찌', value: '12.38%' },
-  { label: '젬 환산', value: 'Lv. 102.92' },
-] as const;
-
-const LOPEC_SCORE = '2,450.32';
 
 const EXTERNAL_LINKS = [
   { name: '일로아', urlPrefix: 'https://iloa.gg/character/' },
@@ -25,8 +20,13 @@ export default function ProfileHeader(props: {
   isSaveDisabled: boolean;
   onRefresh: () => void;
   onSave: () => void;
+  manualMetrics: TLostarkManualMetrics;
+  onChangeManualMetrics: (manualMetrics: TLostarkManualMetrics) => void;
 }) {
-  const { profiles, isRefreshing, isSaving, isSaveDisabled, onRefresh, onSave } = props;
+  const [isManualMetricsModalOpen, setIsManualMetricsModalOpen] = useState(false);
+  const { profiles, isRefreshing, isSaving, isSaveDisabled, onRefresh, onSave, manualMetrics } =
+    props;
+  const isDirectInputDisabled = isRefreshing || isSaving;
 
   return (
     <section className={styles['profile-header']}>
@@ -39,15 +39,25 @@ export default function ProfileHeader(props: {
           isRefreshing={isRefreshing}
           isSaving={isSaving}
           isSaveDisabled={isSaveDisabled}
+          isDirectInputDisabled={isDirectInputDisabled}
           onRefresh={onRefresh}
           onSave={onSave}
+          onOpenManualMetrics={() => setIsManualMetricsModalOpen(true)}
         />
 
         <div className={styles['profile-content']}>
-          <PrimaryInfo profiles={profiles} />
-          <SupportInfo />
+          <PrimaryInfo profiles={profiles} manualMetrics={manualMetrics} />
+          <SupportInfo manualMetrics={manualMetrics} />
         </div>
       </div>
+
+      {isManualMetricsModalOpen && (
+        <ManualMetricsModal
+          manualMetrics={manualMetrics}
+          onClose={() => setIsManualMetricsModalOpen(false)}
+          onApply={props.onChangeManualMetrics}
+        />
+      )}
     </section>
   );
 }
@@ -56,8 +66,10 @@ function ProfileToolbar(props: {
   isRefreshing: boolean;
   isSaving: boolean;
   isSaveDisabled: boolean;
+  isDirectInputDisabled: boolean;
   onRefresh: () => void;
   onSave: () => void;
+  onOpenManualMetrics: () => void;
 }) {
   return (
     <div className={styles['profile-toolbar']}>
@@ -65,9 +77,8 @@ function ProfileToolbar(props: {
         <Button
           color="gray"
           fill="solid"
-          isLoading={props.isRefreshing}
-          isDisabled={props.isSaving}
-          // onClick={props.onRefresh}
+          isDisabled={props.isDirectInputDisabled}
+          onClick={props.onOpenManualMetrics}
         >
           직접입력
         </Button>
@@ -94,8 +105,11 @@ function ProfileToolbar(props: {
   );
 }
 
-function PrimaryInfo(props: { profiles: TResLostarkMainCharacter['summary']['profiles'] }) {
-  const { profiles } = props;
+function PrimaryInfo(props: {
+  profiles: TResLostarkMainCharacter['summary']['profiles'];
+  manualMetrics: TLostarkManualMetrics;
+}) {
+  const { profiles, manualMetrics } = props;
 
   const encodedCharacterName = encodeURIComponent(profiles.characterName ?? '');
 
@@ -128,18 +142,25 @@ function PrimaryInfo(props: { profiles: TResLostarkMainCharacter['summary']['pro
         </div>
         <div className={styles['metric-item']}>
           <span className={styles['metric-label']}>로펙 점수</span>
-          <strong className={styles['metric-value']}>{LOPEC_SCORE}</strong>
+          <strong className={styles['metric-value']}>
+            {formatMetric(manualMetrics.lopecScore)}
+          </strong>
         </div>
       </div>
     </div>
   );
 }
 
-function SupportInfo() {
+function SupportInfo(props: { manualMetrics: TLostarkManualMetrics }) {
+  const settingMetrics = [
+    { label: '팔찌', value: formatMetric(props.manualMetrics.braceletScore, '%') },
+    { label: '젬 환산', value: formatMetric(props.manualMetrics.gemConversionLevel, '', 'Lv. ') },
+  ];
+
   return (
     <div className={styles['support-info']}>
       <div className={styles['setting-metrics']}>
-        {SETTING_METRICS.map((metric) => (
+        {settingMetrics.map((metric) => (
           <div key={metric.label} className={styles['setting-metric']}>
             <span className={styles['label']}>{metric.label}</span>
             <span className={styles['value']}>{metric.value}</span>
@@ -148,4 +169,10 @@ function SupportInfo() {
       </div>
     </div>
   );
+}
+
+function formatMetric(value: number | null, suffix = '', prefix = '') {
+  if (value === null) return '-';
+
+  return `${prefix}${new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 2 }).format(value)}${suffix}`;
 }
