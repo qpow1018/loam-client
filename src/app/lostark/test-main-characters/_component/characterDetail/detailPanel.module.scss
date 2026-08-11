@@ -1,6 +1,6 @@
 .panel {
   min-width: 0;
-  background: $gray-800;
+  background: $bg;
   border: 1px solid $border-soft;
 
   .header {
@@ -8,6 +8,7 @@
     height: 44px;
     align-items: center;
     padding: 0 12px;
+    background-color: rgba($bg-dark, 0.3);
     border-bottom: 1px solid $border-soft;
     border-left: 3px solid $violet;
   }
