@@ -63,38 +63,6 @@
     font-size: 10px;
   }
 
-  .engraving-list {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .engraving-list > span {
-    display: flex;
-    min-height: 42px;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    border-bottom: 1px solid rgba($border-soft, 0.72);
-    color: $text-primary;
-    font-size: 11px;
-  }
-
-  .engraving-list > span:last-child {
-    border-bottom: 0;
-  }
-
-  .engraving-list b {
-    overflow: hidden;
-    font-weight: 500;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .engraving-list strong {
-    flex: 0 0 auto;
-    color: $amber-light;
-  }
-
   .core-list {
     display: flex;
     flex-direction: column;

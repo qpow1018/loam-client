@@ -9,6 +9,7 @@ import toast from '@/utils/toast';
 import BoxLoading from '@/components/common/loading/BoxLoading';
 import ProfileHeader from './profileHeader/ProfileHeader';
 import EquipmentSection from './equipmentSection/EquipmentSection';
+import EngravingSection from './EngravingSection';
 import GemSection from './GemSection';
 
 import ItemSlot from '@/components/lostark/itemSlot/ItemSlot';
@@ -123,16 +124,7 @@ export default function CharacterDetail(props: { characterId: string }) {
             )}
           </DetailPanel>
 
-          <DetailPanel title="각인">
-            <div className={styles['engraving-list']}>
-              {summary.engravings.map((engraving, index) => (
-                <span key={`${engraving.name}-${index}`} title={engraving.description ?? ''}>
-                  <b>{engraving.name ?? '-'}</b>
-                  <strong>&times;{engraving.level ?? 0}</strong>
-                </span>
-              ))}
-            </div>
-          </DetailPanel>
+          <EngravingSection engravings={summary.engravings} />
 
           {summary.legendaryAvatars.length > 0 && (
             <DetailPanel title="전설 아바타">

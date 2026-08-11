@@ -1,0 +1,51 @@
+.engraving-section {
+  .engraving-item {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 12px;
+    gap: 12px;
+    border-bottom: 1px solid $border-soft;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .icon-tooltip {
+      flex: 0 0 28px;
+
+      .icon {
+        display: block;
+        width: 28px;
+        height: 28px;
+      }
+    }
+
+    .name {
+      font-size: 12px;
+      color: $text-primary;
+    }
+
+    .level-value {
+      flex-shrink: 0;
+      margin-left: auto;
+      padding: 2px 5px;
+      font-size: 12px;
+      color: $amber-light;
+      border: 1px solid transparent;
+      border-radius: $border-radius;
+
+      &.max {
+        color: $chip-perfect-text;
+        background: $chip-perfect-bg;
+        box-shadow: $chip-perfect-shadow;
+      }
+
+      span {
+        margin-left: 3px;
+        font-size: 13px;
+        font-weight: 500;
+      }
+    }
+  }
+}
