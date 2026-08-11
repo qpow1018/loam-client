@@ -72,14 +72,12 @@
     font-size: 10px;
   }
 
-  .engraving-list,
-  .ark-points {
+  .engraving-list {
     display: flex;
     flex-direction: column;
   }
 
-  .engraving-list > span,
-  .ark-points > span {
+  .engraving-list > span {
     display: flex;
     min-height: 42px;
     align-items: center;
@@ -90,13 +88,11 @@
     font-size: 11px;
   }
 
-  .engraving-list > span:last-child,
-  .ark-points > span:last-child {
+  .engraving-list > span:last-child {
     border-bottom: 0;
   }
 
-  .engraving-list b,
-  .ark-points b {
+  .engraving-list b {
     overflow: hidden;
     font-weight: 500;
     text-overflow: ellipsis;
@@ -106,11 +102,6 @@
   .engraving-list strong {
     flex: 0 0 auto;
     color: $amber-light;
-  }
-
-  .ark-points strong {
-    flex: 0 0 auto;
-    color: $violet-light;
   }
 
   .gem-list {
@@ -209,8 +200,7 @@
     white-space: nowrap;
   }
 
-  .skills-section,
-  .avatars-section {
+  .skills-section {
     margin-top: 16px;
   }
 }

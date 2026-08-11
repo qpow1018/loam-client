@@ -6,12 +6,11 @@ import type { TLostarkManualMetrics, TResLostarkMainCharacter } from '@/api/lost
 import lostarkQuery from '@/queries/lostarkQuery';
 import toast from '@/utils/toast';
 
+import BoxLoading from '@/components/common/loading/BoxLoading';
 import ProfileHeader from './profileHeader/ProfileHeader';
 import EquipmentSection from './equipmentSection/EquipmentSection';
 
-import BoxLoading from '@/components/common/loading/BoxLoading';
 import ItemSlot from '@/components/lostark/itemSlot/ItemSlot';
-import AvatarSection from './AvatarSection';
 import ArkPassiveNodeSection from './ArkPassiveNodeSection';
 import CardSection from './CardSection';
 import DetailPanel from './DetailPanel';
@@ -159,17 +158,6 @@ export default function CharacterDetail(props: { characterId: string }) {
         </div>
 
         <div className={styles['additional-tertiary-column']}>
-          <DetailPanel title="아크 패시브">
-            <div className={styles['ark-points']}>
-              {summary.arkPassive.points.map((point, index) => (
-                <span key={`${point.name}-${index}`} title={point.description ?? ''}>
-                  <b>{point.name ?? '-'}</b>
-                  <strong>{point.value ?? 0}P</strong>
-                </span>
-              ))}
-            </div>
-          </DetailPanel>
-
           <DetailPanel title="아크 그리드">
             <div className={styles['core-list']}>
               {summary.arkGrid.cores.map((core, index) => (
@@ -210,10 +198,6 @@ export default function CharacterDetail(props: { characterId: string }) {
 
       <div className={styles['skills-section']}>
         <SkillSection skills={summary.combatSkills} />
-      </div>
-
-      <div className={styles['avatars-section']}>
-        <AvatarSection avatars={summary.avatars} />
       </div>
 
       <div>
