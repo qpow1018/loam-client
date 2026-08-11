@@ -1,7 +1,7 @@
 import type { TLostarkGem } from '@/api/lostark/type';
 
+import { ItemTooltip, ItemTooltipTrigger } from '@/components/lostark/itemTooltip/ItemTooltip';
 import ItemSlot from '@/components/lostark/itemSlot/ItemSlot';
-
 import DetailPanel from './DetailPanel';
 
 import styles from './gemSection.module.scss';
@@ -15,7 +15,8 @@ const GEM_LEVEL_GROUPS = [
 
 export default function GemSection(props: { gems: TLostarkGem[] }) {
   const { gems } = props;
-  const sortedGems = sortGems(gems);
+
+  const gemGroups = groupGems(gems);
   const basicAttackPower = getBasicAttackPower(gems);
   const gemLevelCounts = GEM_LEVEL_GROUPS.map((levelGroup) => ({
     label: levelGroup.label,
@@ -25,30 +26,29 @@ export default function GemSection(props: { gems: TLostarkGem[] }) {
   return (
     <DetailPanel title="보석">
       <div className={styles['gem-section']}>
-        <div className={styles['gem-summary']}>
-          <div className={styles['level-count-list']}>
-            {gemLevelCounts.map((levelGroup) => (
-              <span key={levelGroup.label} className={styles['level-count']}>
-                <span className={styles['level-label']}>{levelGroup.label}</span>
-                <strong className={styles['level-value']}>{levelGroup.count}개</strong>
-              </span>
-            ))}
-          </div>
-
+        <div className={styles['level-count-list']}>
+          {gemLevelCounts.map((levelGroup) => (
+            <span key={levelGroup.label} className={styles['level-count']}>
+              <span className={styles['level-label']}>{levelGroup.label}</span>
+              <strong className={styles['level-value']}>{levelGroup.count}개</strong>
+            </span>
+          ))}
           {basicAttackPower !== null && (
-            <div className={styles['basic-attack-power']}>
-              <span>기본 공격력</span>
-              <strong>{`+${basicAttackPower.toFixed(2)}%`}</strong>
-            </div>
+            <span className={styles['level-count']}>
+              <span className={styles['level-label']}>기본 공격력</span>
+              <strong
+                className={styles['level-value']}
+              >{`+${basicAttackPower.toFixed(2)}%`}</strong>
+            </span>
           )}
         </div>
 
         <div className={styles['gem-list']}>
-          {sortedGems.damage.map((gem, index) => (
+          {gemGroups.damage.map((gem, index) => (
             <GemItem key={`${gem.slot}-${index}`} gem={gem} />
           ))}
           <div className={styles['blank']} />
-          {sortedGems.cooldown.map((gem, index) => (
+          {gemGroups.cooldown.map((gem, index) => (
             <GemItem key={`${gem.slot}-${index}`} gem={gem} />
           ))}
         </div>
@@ -61,17 +61,17 @@ function GemItem(props: { gem: TLostarkGem }) {
   const { gem } = props;
 
   return (
-    <div
-      className={styles['gem-item']}
-      title={[gem.skillName, ...gem.effects, gem.bonusEffect].filter(Boolean).join('\n')}
-    >
-      <ItemSlot imageUrl={gem.icon} grade={gem.grade} />
+    <div className={styles['gem-item']}>
+      <ItemTooltipTrigger>
+        <ItemSlot imageUrl={gem.icon} grade={gem.grade} />
+        <ItemTooltip>TODO</ItemTooltip>
+      </ItemTooltipTrigger>
       <p className={styles['gem-title']}>{`${gem.level ?? '-'} ${gem.kind ?? '-'}`}</p>
     </div>
   );
 }
 
-function sortGems(gems: TLostarkGem[]) {
+function groupGems(gems: TLostarkGem[]) {
   const sortedGems = [...gems].sort((left, right) => {
     const levelOrder = (right.level ?? 0) - (left.level ?? 0);
 
