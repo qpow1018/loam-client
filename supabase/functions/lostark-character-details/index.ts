@@ -504,7 +504,9 @@ function isAccessoryType(type: string | null) {
 }
 
 function isGearType(type: string | null) {
-  return ['무기', '투구', '상의', '하의', '장갑', '어깨'].some((label) => type?.includes(label));
+  return ['무기', '투구', '상의', '하의', '장갑', '어깨', '완갑'].some((label) =>
+    type?.includes(label),
+  );
 }
 
 function classifyEquipment(equipment: unknown[]) {
