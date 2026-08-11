@@ -1,0 +1,19 @@
+.effect {
+  display: flex;
+  min-width: 0;
+  gap: 4px;
+
+  .effect-marker {
+    width: 8px;
+    height: 8px;
+    flex: 0 0 auto;
+    margin-top: 3px;
+    border-radius: 50%;
+  }
+
+  span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: pre-line;
+  }
+}

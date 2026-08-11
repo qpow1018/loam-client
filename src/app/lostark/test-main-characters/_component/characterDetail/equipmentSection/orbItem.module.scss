@@ -1,0 +1,41 @@
+.orb-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+
+  .info-box {
+    width: 52px;
+    flex: 0 0 auto;
+  }
+
+  .name-box {
+    display: flex;
+    min-height: 18px;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 2px;
+
+    strong {
+      overflow: hidden;
+      color: $text-primary;
+      font-size: 13px;
+      font-weight: 500;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .item-effect {
+    min-width: 0;
+    flex: 1;
+    color: $text-secondary;
+    font-size: 11px;
+
+    p {
+      display: -webkit-box;
+      overflow: hidden;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+  }
+}
