@@ -37,4 +37,8 @@
     color: $text-secondary;
     font-size: 10px;
   }
+
+  &.empty {
+    opacity: 0.5;
+  }
 }

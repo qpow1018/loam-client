@@ -11,8 +11,21 @@ import ItemDetailTooltip from '@/app/lostark/test-main-characters/_component/cha
 
 import styles from './gearItem.module.scss';
 
-export default function GearItem(props: { gear: TLostarkGear }) {
-  const { gear } = props;
+export default function GearItem(props: { type: string; gear: TLostarkGear | null }) {
+  const { type, gear } = props;
+
+  if (!gear) {
+    return (
+      <div className={`${styles['gear-item']} ${styles['empty']}`}>
+        <ItemSlot imageUrl={null} />
+        <div className={styles['info-box']}>
+          <div className={styles['name-box']}>
+            <strong>{type}</strong>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <ItemTooltipTrigger className={styles['gear-item']}>
@@ -20,7 +33,7 @@ export default function GearItem(props: { gear: TLostarkGear }) {
 
       <div className={styles['info-box']}>
         <div className={styles['name-box']}>
-          <strong>{`${gear.type ?? '-'}${gear.enhancement !== null ? ` +${gear.enhancement}` : ''}`}</strong>
+          <strong>{`${type}${gear.enhancement !== null ? ` +${gear.enhancement}` : ''}`}</strong>
           {gear.itemLevel && <span className={styles['level-chip']}>{gear.itemLevel}</span>}
         </div>
         <QualityChip quality={gear.quality} />

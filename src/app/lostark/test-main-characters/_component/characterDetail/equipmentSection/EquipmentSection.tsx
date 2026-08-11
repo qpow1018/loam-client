@@ -21,15 +21,15 @@ export default function EquipmentSection(props: {
 }) {
   const { equipment } = props;
 
-  const gears = sortGears(equipment.gears);
+  const gearSlots = getGearSlots(equipment.gears);
   const accessories = sortAccessories(equipment.accessories);
 
   return (
     <DetailPanel title="장비" className={styles['equipment-content']}>
       <section className={styles['equipment-section']}>
         <div className={styles['left-box']}>
-          {gears.map((gear, index) => (
-            <GearItem key={`${gear.type}-${index}`} gear={gear} />
+          {gearSlots.map((gearSlot) => (
+            <GearItem key={gearSlot.type} type={gearSlot.type} gear={gearSlot.gear} />
           ))}
           <AbilityStoneItem abilityStone={equipment.abilityStone} />
         </div>
@@ -52,11 +52,11 @@ function getTypeOrderIndex(type: string | null, typeOrder: string[]) {
   return index === -1 ? Number.MAX_SAFE_INTEGER : index;
 }
 
-function sortGears(gears: TLostarkGear[]) {
-  return [...gears].sort(
-    (left, right) =>
-      getTypeOrderIndex(left.type, GEAR_ORDER) - getTypeOrderIndex(right.type, GEAR_ORDER),
-  );
+function getGearSlots(gears: TLostarkGear[]) {
+  return GEAR_ORDER.map((type) => ({
+    type,
+    gear: gears.find((gear) => gear.type?.includes(type)) ?? null,
+  }));
 }
 
 function sortAccessories(accessories: TLostarkAccessory[]) {
