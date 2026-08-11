@@ -95,30 +95,6 @@
     color: $amber-light;
   }
 
-  .gem-list {
-    display: grid;
-    grid-template-columns: repeat(11, 42px);
-    gap: 8px;
-  }
-
-  .gem-item {
-    position: relative;
-    min-width: 0;
-  }
-
-  .gem-item > span {
-    position: absolute;
-    right: -2px;
-    bottom: -2px;
-    min-width: 22px;
-    padding: 1px 3px;
-    background: rgba($gray-900, 0.92);
-    border: 1px solid $border-soft;
-    color: $text-primary;
-    font-size: 9px;
-    text-align: center;
-  }
-
   .core-list {
     display: flex;
     flex-direction: column;

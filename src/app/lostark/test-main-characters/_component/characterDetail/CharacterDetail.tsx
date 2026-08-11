@@ -9,6 +9,7 @@ import toast from '@/utils/toast';
 import BoxLoading from '@/components/common/loading/BoxLoading';
 import ProfileHeader from './profileHeader/ProfileHeader';
 import EquipmentSection from './equipmentSection/EquipmentSection';
+import GemSection from './GemSection';
 
 import ItemSlot from '@/components/lostark/itemSlot/ItemSlot';
 import ArkPassiveNodeSection from './ArkPassiveNodeSection';
@@ -99,23 +100,7 @@ export default function CharacterDetail(props: { characterId: string }) {
       <div className={styles['top-layout']}>
         <div className={styles['equipment-column']}>
           <EquipmentSection equipment={summary.equipment} />
-
-          <DetailPanel title="보석">
-            <div className={styles['gem-list']}>
-              {summary.gems.map((gem, index) => (
-                <div
-                  key={`${gem.slot}-${index}`}
-                  className={styles['gem-item']}
-                  title={[gem.skillName, ...gem.effects, gem.bonusEffect]
-                    .filter(Boolean)
-                    .join('\n')}
-                >
-                  <ItemSlot imageUrl={gem.icon} grade={gem.grade} size={42} />
-                  <span>{`${gem.level ?? '-'}${gem.kind?.slice(0, 1) ?? ''}`}</span>
-                </div>
-              ))}
-            </div>
-          </DetailPanel>
+          <GemSection gems={summary.gems} />
         </div>
 
         <div className={styles['side-column']}>
