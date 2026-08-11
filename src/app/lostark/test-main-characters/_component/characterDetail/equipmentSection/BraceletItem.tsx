@@ -26,7 +26,7 @@ export default function BraceletItem(props: { bracelet: TLostarkBracelet | null 
           <strong>팔찌</strong>
         </div>
       </div>
-      <div className={styles['item-effect']}>
+      <div className={styles['effect-list']}>
         {getBraceletEffects(bracelet.braceletEffects).map((effect, index) => (
           <EffectItem key={`${effect.text}-${index}`} effect={effect} />
         ))}

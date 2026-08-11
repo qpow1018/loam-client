@@ -2,6 +2,8 @@
   display: flex;
   min-width: 0;
   gap: 4px;
+  color: $text-secondary;
+  font-size: 11px;
 
   .effect-marker {
     width: 8px;

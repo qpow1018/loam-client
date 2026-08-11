@@ -14,24 +14,15 @@
     gap: 8px;
     margin-bottom: 2px;
 
-    strong {
-      overflow: hidden;
-      color: $text-primary;
+    .item-name {
       font-size: 13px;
       font-weight: 500;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      color: $text-primary;
     }
   }
 
-  .item-effect {
+  .effect-list {
     min-width: 0;
     flex: 1;
-    color: $text-secondary;
-    font-size: 11px;
-  }
-
-  .basic-effect {
-    margin-bottom: 4px;
   }
 }
