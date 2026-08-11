@@ -6,9 +6,9 @@ import DetailSection from './DetailSection';
 
 import styles from './skillSection.module.scss';
 
-export default function SkillSection(props: { skills: TLostarkCombatSkill[]; className?: string }) {
+export default function SkillSection(props: { skills: TLostarkCombatSkill[] }) {
   return (
-    <DetailSection title="스킬" className={props.className}>
+    <DetailSection title="스킬">
       {props.skills.length === 0 && <p className={styles['empty']}>스킬 정보가 없습니다.</p>}
 
       {props.skills.length > 0 && (

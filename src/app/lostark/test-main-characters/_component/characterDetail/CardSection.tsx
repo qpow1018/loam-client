@@ -6,11 +6,11 @@ import DetailSection from './DetailSection';
 
 import styles from './cardSection.module.scss';
 
-export default function CardSection(props: { cards: TLostarkCards; className?: string }) {
+export default function CardSection(props: { cards: TLostarkCards }) {
   const { cards, effects } = props.cards;
 
   return (
-    <DetailSection title="카드" className={props.className}>
+    <DetailSection title="카드">
       {cards.length === 0 && <p className={styles['empty']}>카드 정보가 없습니다.</p>}
 
       {cards.length > 0 && (

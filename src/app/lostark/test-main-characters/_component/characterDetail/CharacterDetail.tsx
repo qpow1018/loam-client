@@ -106,10 +106,7 @@ export default function CharacterDetail(props: { characterId: string }) {
 
       <div className={styles['additional-details']}>
         <div className={styles['additional-primary-column']}>
-          <DetailSection
-            title="보석"
-            summary={`피해 ${summary.gems.filter((gem) => gem.effectType === 'damage').length} · 재사용 ${summary.gems.filter((gem) => gem.effectType === 'cooldown').length}`}
-          >
+          <DetailSection title="보석">
             <div className={styles['gem-list']}>
               {summary.gems.map((gem, index) => (
                 <div
@@ -211,9 +208,13 @@ export default function CharacterDetail(props: { characterId: string }) {
         <ArkPassiveNodeSection arkPassive={summary.arkPassive} />
       </DetailSection>
 
-      <SkillSection skills={summary.combatSkills} className={styles['skills-section']} />
+      <div className={styles['skills-section']}>
+        <SkillSection skills={summary.combatSkills} />
+      </div>
 
-      <AvatarSection avatars={summary.avatars} className={styles['avatars-section']} />
+      <div className={styles['avatars-section']}>
+        <AvatarSection avatars={summary.avatars} />
+      </div>
 
       <div>
         <p>TODO</p>

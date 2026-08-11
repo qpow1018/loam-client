@@ -6,9 +6,9 @@ import DetailSection from './DetailSection';
 
 import styles from './avatarSection.module.scss';
 
-export default function AvatarSection(props: { avatars: TLostarkAvatar[]; className?: string }) {
+export default function AvatarSection(props: { avatars: TLostarkAvatar[] }) {
   return (
-    <DetailSection title="아바타" className={props.className}>
+    <DetailSection title="아바타">
       {props.avatars.length === 0 && <p className={styles['empty']}>아바타 정보가 없습니다.</p>}
 
       {props.avatars.length > 0 && (

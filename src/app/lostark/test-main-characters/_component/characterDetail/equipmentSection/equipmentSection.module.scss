@@ -1,23 +1,5 @@
 .equipment-section {
-  min-width: 0;
-  overflow: visible;
   grid-area: equipment;
-  background: $gray-800;
-  border: 1px solid $border-soft;
-
-  .section-heading {
-    display: flex;
-    height: 44px;
-    align-items: center;
-    padding: 0 12px;
-    border-bottom: 1px solid $border-soft;
-  }
-
-  .section-heading h2 {
-    color: $text-primary;
-    font-size: 14px;
-    font-weight: 700;
-  }
 
   .equipment-columns {
     display: grid;
