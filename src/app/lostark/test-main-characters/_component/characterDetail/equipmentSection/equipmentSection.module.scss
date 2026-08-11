@@ -1,20 +1,30 @@
-.equipment-section {
+.equipment-content {
   display: flex;
+  flex-direction: column;
   gap: 12px;
   padding: 12px;
 
-  .left-box,
-  .right-box {
+  .equipment-section,
+  .extra-equipment-section {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
+    gap: 12px;
 
-  .left-box {
-    flex: 1;
-  }
+    .left-box,
+    .right-box,
+    .extra-right-box {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
 
-  .right-box {
-    flex: 1.7;
+    .left-box,
+    .ability-stone-box {
+      flex: 1;
+    }
+
+    .right-box,
+    .extra-right-box {
+      flex: 1.7;
+    }
   }
 }

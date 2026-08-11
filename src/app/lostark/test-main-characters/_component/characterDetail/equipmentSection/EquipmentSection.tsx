@@ -21,21 +21,31 @@ export default function EquipmentSection(props: {
   const accessories = sortAccessories(equipment.accessories);
 
   return (
-    <DetailPanel title="장비" className={styles['equipment-section']}>
-      <div className={styles['left-box']}>
-        {gearSlots.map((gearSlot) => (
-          <GearItem key={gearSlot.type} type={gearSlot.type} gear={gearSlot.gear} />
-        ))}
-        <AbilityStoneItem abilityStone={equipment.abilityStone} />
-      </div>
+    <DetailPanel title="장비" className={styles['equipment-content']}>
+      <section className={styles['equipment-section']}>
+        <div className={styles['left-box']}>
+          {gearSlots.map((gearSlot) => (
+            <GearItem key={gearSlot.type} type={gearSlot.type} gear={gearSlot.gear} />
+          ))}
+        </div>
 
-      <div className={styles['right-box']}>
-        {accessories.map((accessory, index) => (
-          <AccessoryItem key={`${accessory.type}-${index}`} accessory={accessory} />
-        ))}
-        <BraceletItem bracelet={equipment.bracelet} />
-        <OrbItem orb={equipment.orb} />
-      </div>
+        <div className={styles['right-box']}>
+          {accessories.map((accessory, index) => (
+            <AccessoryItem key={`${accessory.type}-${index}`} accessory={accessory} />
+          ))}
+          <BraceletItem bracelet={equipment.bracelet} />
+        </div>
+      </section>
+
+      <section className={styles['extra-equipment-section']}>
+        <div className={styles['ability-stone-box']}>
+          <AbilityStoneItem abilityStone={equipment.abilityStone} />
+        </div>
+
+        <div className={styles['extra-right-box']}>
+          <OrbItem orb={equipment.orb} />
+        </div>
+      </section>
     </DetailPanel>
   );
 }

@@ -1,10 +1,7 @@
 import type { TLostarkOrb } from '@/api/lostark/type';
 
 import ItemSlot from '@/components/lostark/itemSlot/ItemSlot';
-import {
-  ItemTooltip,
-  ItemTooltipTrigger,
-} from '@/components/lostark/itemTooltip/ItemTooltip';
+import { ItemTooltip, ItemTooltipTrigger } from '@/components/lostark/itemTooltip/ItemTooltip';
 
 import styles from './orbItem.module.scss';
 
@@ -27,7 +24,6 @@ export default function OrbItem(props: { orb: TLostarkOrb | null }) {
       <div className={styles['item-effect']}>
         <p>{orb.paradisePowerText ?? '낙원력 -'}</p>
       </div>
-
     </div>
   );
 }
