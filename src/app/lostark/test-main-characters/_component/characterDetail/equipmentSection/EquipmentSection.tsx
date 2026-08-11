@@ -3,7 +3,7 @@ import type { TResLostarkMainCharacter } from '@/api/lostark/type';
 import ItemSlot from '@/components/lostark/itemSlot/ItemSlot';
 import QualityChip from '@/components/lostark/qualityChip/QualityChip';
 
-import DetailSection from '../DetailSection';
+import DetailPanel from '../DetailPanel';
 import ItemDetailTooltip from './ItemDetailTooltip';
 
 import styles from './equipmentSection.module.scss';
@@ -15,7 +15,7 @@ export default function EquipmentSection(props: {
 
   return (
     <div className={styles['equipment-section']}>
-      <DetailSection title="장비">
+      <DetailPanel title="장비">
         <div className={styles['equipment-columns']}>
           <div className={styles['equipment-group']}>
             <h3>무기 · 방어구</h3>
@@ -106,7 +106,7 @@ export default function EquipmentSection(props: {
             </div>
           </div>
         </div>
-      </DetailSection>
+      </DetailPanel>
     </div>
   );
 }

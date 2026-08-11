@@ -14,7 +14,7 @@ import ItemSlot from '@/components/lostark/itemSlot/ItemSlot';
 import AvatarSection from './AvatarSection';
 import ArkPassiveNodeSection from './ArkPassiveNodeSection';
 import CardSection from './CardSection';
-import DetailSection from './DetailSection';
+import DetailPanel from './DetailPanel';
 import SkillSection from './SkillSection';
 
 import styles from './characterDetail.module.scss';
@@ -106,7 +106,7 @@ export default function CharacterDetail(props: { characterId: string }) {
 
       <div className={styles['additional-details']}>
         <div className={styles['additional-primary-column']}>
-          <DetailSection title="보석">
+          <DetailPanel title="보석">
             <div className={styles['gem-list']}>
               {summary.gems.map((gem, index) => (
                 <div
@@ -121,13 +121,13 @@ export default function CharacterDetail(props: { characterId: string }) {
                 </div>
               ))}
             </div>
-          </DetailSection>
+          </DetailPanel>
 
           <CardSection cards={summary.cards} />
         </div>
 
         <div className={styles['additional-secondary-column']}>
-          <DetailSection title="특성">
+          <DetailPanel title="특성">
             <div className={styles['combat-stat-list']}>
               {getOrderedStats(summary.profiles.stats).map((stat, index) => (
                 <div key={`${stat.type}-${index}`} title={stat.tooltip ?? ''}>
@@ -144,9 +144,9 @@ export default function CharacterDetail(props: { characterId: string }) {
             {summary.profiles.stats.length === 0 && (
               <p className={styles['empty-info']}>전투 정보가 없습니다.</p>
             )}
-          </DetailSection>
+          </DetailPanel>
 
-          <DetailSection title="각인">
+          <DetailPanel title="각인">
             <div className={styles['engraving-list']}>
               {summary.engravings.map((engraving, index) => (
                 <span key={`${engraving.name}-${index}`} title={engraving.description ?? ''}>
@@ -155,11 +155,11 @@ export default function CharacterDetail(props: { characterId: string }) {
                 </span>
               ))}
             </div>
-          </DetailSection>
+          </DetailPanel>
         </div>
 
         <div className={styles['additional-tertiary-column']}>
-          <DetailSection title="아크 패시브">
+          <DetailPanel title="아크 패시브">
             <div className={styles['ark-points']}>
               {summary.arkPassive.points.map((point, index) => (
                 <span key={`${point.name}-${index}`} title={point.description ?? ''}>
@@ -168,9 +168,9 @@ export default function CharacterDetail(props: { characterId: string }) {
                 </span>
               ))}
             </div>
-          </DetailSection>
+          </DetailPanel>
 
-          <DetailSection title="아크 그리드">
+          <DetailPanel title="아크 그리드">
             <div className={styles['core-list']}>
               {summary.arkGrid.cores.map((core, index) => (
                 <div key={`${core.name}-${index}`}>
@@ -187,10 +187,10 @@ export default function CharacterDetail(props: { characterId: string }) {
                 </span>
               ))}
             </div>
-          </DetailSection>
+          </DetailPanel>
 
           {summary.legendaryAvatars.length > 0 && (
-            <DetailSection title="전설 아바타">
+            <DetailPanel title="전설 아바타">
               <div className={styles['legacy-avatar-list']}>
                 {summary.legendaryAvatars.map((avatar, index) => (
                   <div key={`${avatar.type}-${index}`} title={avatar.name ?? ''}>
@@ -199,14 +199,14 @@ export default function CharacterDetail(props: { characterId: string }) {
                   </div>
                 ))}
               </div>
-            </DetailSection>
+            </DetailPanel>
           )}
         </div>
       </div>
 
-      <DetailSection title="아크 패시브 상세">
+      <DetailPanel title="아크 패시브 상세">
         <ArkPassiveNodeSection arkPassive={summary.arkPassive} />
-      </DetailSection>
+      </DetailPanel>
 
       <div className={styles['skills-section']}>
         <SkillSection skills={summary.combatSkills} />

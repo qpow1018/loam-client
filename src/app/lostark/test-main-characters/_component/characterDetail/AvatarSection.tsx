@@ -2,13 +2,13 @@ import type { TLostarkAvatar } from '@/api/lostark/type';
 
 import ItemSlot from '@/components/lostark/itemSlot/ItemSlot';
 
-import DetailSection from './DetailSection';
+import DetailPanel from './DetailPanel';
 
 import styles from './avatarSection.module.scss';
 
 export default function AvatarSection(props: { avatars: TLostarkAvatar[] }) {
   return (
-    <DetailSection title="아바타">
+    <DetailPanel title="아바타">
       {props.avatars.length === 0 && <p className={styles['empty']}>아바타 정보가 없습니다.</p>}
 
       {props.avatars.length > 0 && (
@@ -25,6 +25,6 @@ export default function AvatarSection(props: { avatars: TLostarkAvatar[] }) {
           ))}
         </div>
       )}
-    </DetailSection>
+    </DetailPanel>
   );
 }
