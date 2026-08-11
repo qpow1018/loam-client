@@ -4,37 +4,28 @@
   .top-layout {
     display: grid;
     grid-template-columns: 700px minmax(0, 1fr);
-    // grid-template-areas:
-    //   'equipment right-top'
-    //   'equipment right-bottom';
-    gap: 12px;
-    // align-items: start;
-    // margin-top: 16px;
-  }
-
-  .right-top-section {
-    grid-area: right-top;
-  }
-
-  .right-bottom-section {
-    grid-area: right-bottom;
-  }
-
-  .additional-details {
-    display: grid;
-    grid-template-columns: 578px 263px 263px;
-    gap: 24px;
+    column-gap: 12px;
     align-items: start;
-    margin-top: 16px;
   }
 
-  .additional-primary-column,
-  .additional-secondary-column,
-  .additional-tertiary-column {
+  .equipment-column,
+  .side-column,
+  .bottom-details {
     display: flex;
     min-width: 0;
     flex-direction: column;
     gap: 16px;
+  }
+
+  .ark-layout {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .bottom-details {
+    margin-top: 16px;
   }
 
   .combat-stat-list {
@@ -200,7 +191,4 @@
     white-space: nowrap;
   }
 
-  .skills-section {
-    margin-top: 16px;
-  }
 }

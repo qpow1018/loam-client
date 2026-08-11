@@ -97,14 +97,9 @@ export default function CharacterDetail(props: { characterId: string }) {
       />
 
       <div className={styles['top-layout']}>
-        <EquipmentSection equipment={summary.equipment} />
+        <div className={styles['equipment-column']}>
+          <EquipmentSection equipment={summary.equipment} />
 
-        <section className={styles['right-top-section']} />
-        <section className={styles['right-bottom-section']} />
-      </div>
-
-      <div className={styles['additional-details']}>
-        <div className={styles['additional-primary-column']}>
           <DetailPanel title="보석">
             <div className={styles['gem-list']}>
               {summary.gems.map((gem, index) => (
@@ -121,11 +116,9 @@ export default function CharacterDetail(props: { characterId: string }) {
               ))}
             </div>
           </DetailPanel>
-
-          <CardSection cards={summary.cards} />
         </div>
 
-        <div className={styles['additional-secondary-column']}>
+        <div className={styles['side-column']}>
           <DetailPanel title="특성">
             <div className={styles['combat-stat-list']}>
               {getOrderedStats(summary.profiles.stats).map((stat, index) => (
@@ -155,27 +148,6 @@ export default function CharacterDetail(props: { characterId: string }) {
               ))}
             </div>
           </DetailPanel>
-        </div>
-
-        <div className={styles['additional-tertiary-column']}>
-          <DetailPanel title="아크 그리드">
-            <div className={styles['core-list']}>
-              {summary.arkGrid.cores.map((core, index) => (
-                <div key={`${core.name}-${index}`}>
-                  <ItemSlot imageUrl={core.icon} grade={core.grade} size={36} />
-                  <span>{core.name?.split(':').at(-1)?.trim() ?? '-'}</span>
-                  <strong>{core.point ?? 0}P</strong>
-                </div>
-              ))}
-            </div>
-            <div className={styles['effect-list']}>
-              {summary.arkGrid.effects.map((effect, index) => (
-                <span key={`${effect.name}-${index}`}>
-                  {effect.name ?? '-'} <strong>Lv. {effect.level ?? 0}</strong>
-                </span>
-              ))}
-            </div>
-          </DetailPanel>
 
           {summary.legendaryAvatars.length > 0 && (
             <DetailPanel title="전설 아바타">
@@ -192,11 +164,34 @@ export default function CharacterDetail(props: { characterId: string }) {
         </div>
       </div>
 
-      <DetailPanel title="아크 패시브 상세">
-        <ArkPassiveNodeSection arkPassive={summary.arkPassive} />
-      </DetailPanel>
+      <div className={styles['ark-layout']}>
+        <DetailPanel title="아크 패시브 상세">
+          <ArkPassiveNodeSection arkPassive={summary.arkPassive} />
+        </DetailPanel>
 
-      <div className={styles['skills-section']}>
+        <DetailPanel title="아크 그리드">
+          <div className={styles['core-list']}>
+            {summary.arkGrid.cores.map((core, index) => (
+              <div key={`${core.name}-${index}`}>
+                <ItemSlot imageUrl={core.icon} grade={core.grade} size={36} />
+                <span>{core.name?.split(':').at(-1)?.trim() ?? '-'}</span>
+                <strong>{core.point ?? 0}P</strong>
+              </div>
+            ))}
+          </div>
+          <div className={styles['effect-list']}>
+            {summary.arkGrid.effects.map((effect, index) => (
+              <span key={`${effect.name}-${index}`}>
+                {effect.name ?? '-'} <strong>Lv. {effect.level ?? 0}</strong>
+              </span>
+            ))}
+          </div>
+        </DetailPanel>
+      </div>
+
+      <div className={styles['bottom-details']}>
+        <CardSection cards={summary.cards} />
+
         <SkillSection skills={summary.combatSkills} />
       </div>
 
