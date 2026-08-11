@@ -1,0 +1,231 @@
+.equipment-section {
+  min-width: 0;
+  overflow: visible;
+  grid-area: equipment;
+  background: $gray-800;
+  border: 1px solid $border-soft;
+
+  .section-heading {
+    display: flex;
+    height: 44px;
+    align-items: center;
+    padding: 0 12px;
+    border-bottom: 1px solid $border-soft;
+  }
+
+  .section-heading h2 {
+    color: $text-primary;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .equipment-columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .equipment-group {
+    min-width: 0;
+  }
+
+  .equipment-group + .equipment-group {
+    border-left: 1px solid $border-soft;
+  }
+
+  .equipment-group h3 {
+    display: flex;
+    height: 32px;
+    align-items: center;
+    padding: 0 12px;
+    border-bottom: 1px solid $border-soft;
+    color: $text-secondary;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .equipment-list,
+  .extra-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .item-row {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    min-height: 56px;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border-bottom: 1px solid rgba($border-soft, 0.72);
+
+    &:hover,
+    &:focus {
+      z-index: $z-index-popover;
+
+      .item-detail-tooltip {
+        display: block;
+      }
+    }
+
+    &:focus-visible {
+      outline: 1px solid $border-focus;
+      outline-offset: -1px;
+    }
+  }
+
+  .item-copy {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .item-row strong,
+  .item-row span,
+  .item-copy strong,
+  .item-copy span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .item-copy strong {
+    color: $text-primary;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .item-copy span {
+    margin-top: 2px;
+    color: $text-secondary;
+    font-size: 10px;
+  }
+
+  .item-heading {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .item-heading > span {
+    margin: 0;
+    color: $text-muted;
+    font-size: 9px;
+  }
+
+  .item-effects {
+    display: flex;
+    min-width: 0;
+    gap: 4px;
+    margin-top: 5px;
+  }
+
+  .item-effects > span {
+    min-width: 0;
+    overflow: hidden;
+    padding: 2px 4px;
+    background: $gray-900;
+    border: 1px solid $border-soft;
+    color: $text-secondary;
+    font-size: 9px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .item-effects b {
+    margin-right: 3px;
+    color: $amber-light;
+  }
+
+  .extra-item {
+    position: relative;
+    display: grid;
+    min-width: 0;
+    min-height: 64px;
+    grid-template-columns: 38px minmax(0, 1fr);
+    column-gap: 8px;
+    align-items: center;
+    padding: 8px 10px;
+    border-bottom: 1px solid rgba($border-soft, 0.72);
+    color: $text-primary;
+    font-size: 11px;
+
+    &:hover,
+    &:focus {
+      z-index: $z-index-popover;
+
+      .item-detail-tooltip {
+        display: block;
+      }
+    }
+  }
+
+  .item-detail-tooltip {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    z-index: $z-index-popover;
+    display: none;
+    width: 260px;
+    padding: 12px;
+    background: $gray-900;
+    border: 1px solid $border;
+    box-shadow: $shadow-popover;
+    color: $text-primary;
+    pointer-events: none;
+  }
+
+  .tooltip-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .tooltip-header strong {
+    overflow: hidden;
+    color: $text-primary;
+    font-size: 13px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .tooltip-header span {
+    flex: 0 0 auto;
+    color: $loa-gold;
+    font-size: 11px;
+  }
+
+  .tooltip-details,
+  .tooltip-effects {
+    display: flex;
+    gap: 5px 10px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid $border-soft;
+  }
+
+  .tooltip-details {
+    flex-wrap: wrap;
+  }
+
+  .tooltip-effects {
+    flex-direction: column;
+  }
+
+  .tooltip-details span,
+  .tooltip-effects span {
+    color: $text-secondary;
+    font-size: 11px;
+  }
+
+  .tooltip-details b {
+    margin-right: 4px;
+    color: $text-primary;
+    font-weight: 500;
+  }
+
+  .tooltip-effects span {
+    color: $mint-light;
+  }
+}

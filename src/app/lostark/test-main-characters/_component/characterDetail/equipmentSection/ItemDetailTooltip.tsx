@@ -1,4 +1,4 @@
-import styles from './characterDetail.module.scss';
+import styles from './equipmentSection.module.scss';
 
 type TItemDetailTooltipDetail = {
   label: string;
@@ -21,9 +21,7 @@ export default function ItemDetailTooltip(props: {
   );
   const effects = props.effects?.filter((effect) => effect.text.trim()) ?? [];
 
-  if (!props.name && details.length === 0 && effects.length === 0) {
-    return null;
-  }
+  if (!props.name && details.length === 0 && effects.length === 0) return null;
 
   return (
     <div className={styles['item-detail-tooltip']} role="tooltip">
