@@ -14,19 +14,19 @@ export function getEquipQualityBackground(quality: number | null | undefined) {
   }
 
   if (quality >= 100) {
-    return '#fe9600cc';
+    return '#fe9600bf';
   }
 
   if (quality >= 90) {
-    return '#ce43fccc';
+    return '#ce43fcbf';
   }
 
   if (quality >= 70) {
-    return '#00b5ffcc';
+    return '#00b5ffbf';
   }
 
   if (quality >= 30) {
-    return '#91fe02cc';
+    return '#91fe02bf';
   }
 
   return '#686660';
