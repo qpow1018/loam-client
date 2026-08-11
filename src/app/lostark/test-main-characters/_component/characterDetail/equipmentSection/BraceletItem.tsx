@@ -7,7 +7,6 @@ import {
 } from '@/components/lostark/itemTooltip/ItemTooltip';
 
 import EffectItem from '@/app/lostark/test-main-characters/_component/characterDetail/equipmentSection/EffectItem';
-import ItemDetailTooltip from '@/app/lostark/test-main-characters/_component/characterDetail/equipmentSection/ItemDetailTooltip';
 
 import styles from './braceletItem.module.scss';
 
@@ -17,8 +16,11 @@ export default function BraceletItem(props: { bracelet: TLostarkBracelet | null 
   if (!bracelet) return null;
 
   return (
-    <ItemTooltipTrigger className={styles['bracelet-item']}>
-      <ItemSlot imageUrl={bracelet.icon} grade={bracelet.grade} />
+    <div className={styles['bracelet-item']}>
+      <ItemTooltipTrigger>
+        <ItemSlot imageUrl={bracelet.icon} grade={bracelet.grade} />
+        <ItemTooltip>TODO</ItemTooltip>
+      </ItemTooltipTrigger>
       <div className={styles['info-box']}>
         <div className={styles['name-box']}>
           <strong>팔찌</strong>
@@ -30,15 +32,7 @@ export default function BraceletItem(props: { bracelet: TLostarkBracelet | null 
         ))}
       </div>
 
-      <ItemTooltip>
-        <ItemDetailTooltip
-          name={bracelet.name}
-          grade={bracelet.grade}
-          details={[]}
-          effects={bracelet.braceletEffects}
-        />
-      </ItemTooltip>
-    </ItemTooltipTrigger>
+    </div>
   );
 }
 

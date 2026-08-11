@@ -8,7 +8,6 @@ import {
 import QualityChip from '@/components/lostark/qualityChip/QualityChip';
 
 import EffectItem from '@/app/lostark/test-main-characters/_component/characterDetail/equipmentSection/EffectItem';
-import ItemDetailTooltip from '@/app/lostark/test-main-characters/_component/characterDetail/equipmentSection/ItemDetailTooltip';
 
 import styles from './accessoryItem.module.scss';
 
@@ -17,8 +16,11 @@ export default function AccessoryItem(props: { accessory: TLostarkAccessory }) {
   const basicEffect = getPrimaryStatBasicEffect(accessory.basicEffects);
 
   return (
-    <ItemTooltipTrigger className={styles['accessory-item']}>
-      <ItemSlot imageUrl={accessory.icon} grade={accessory.grade} />
+    <div className={styles['accessory-item']}>
+      <ItemTooltipTrigger>
+        <ItemSlot imageUrl={accessory.icon} grade={accessory.grade} />
+        <ItemTooltip>TODO</ItemTooltip>
+      </ItemTooltipTrigger>
 
       <div className={styles['info-box']}>
         <div className={styles['name-box']}>
@@ -34,20 +36,7 @@ export default function AccessoryItem(props: { accessory: TLostarkAccessory }) {
         ))}
       </div>
 
-      <ItemTooltip>
-        <ItemDetailTooltip
-          name={accessory.name}
-          grade={accessory.grade}
-          details={[{ label: '품질', value: accessory.quality }]}
-          effects={[
-            ...accessory.basicEffects.map((text) => ({ text })),
-            ...accessory.additionalEffects.map((text) => ({ text })),
-            ...accessory.polishEffects,
-            ...accessory.arkPassiveEffects.map((text) => ({ text })),
-          ]}
-        />
-      </ItemTooltip>
-    </ItemTooltipTrigger>
+    </div>
   );
 }
 

@@ -6,8 +6,6 @@ import {
   ItemTooltipTrigger,
 } from '@/components/lostark/itemTooltip/ItemTooltip';
 
-import ItemDetailTooltip from '@/app/lostark/test-main-characters/_component/characterDetail/equipmentSection/ItemDetailTooltip';
-
 import styles from './abilityStoneItem.module.scss';
 
 export default function AbilityStoneItem(props: {
@@ -22,8 +20,11 @@ export default function AbilityStoneItem(props: {
     .reduce((sum, engraving) => sum + (engraving.level ?? 0), 0);
 
   return (
-    <ItemTooltipTrigger className={styles['ability-stone-item']}>
-      <ItemSlot imageUrl={abilityStone.icon} grade={abilityStone.grade} />
+    <div className={styles['ability-stone-item']}>
+      <ItemTooltipTrigger>
+        <ItemSlot imageUrl={abilityStone.icon} grade={abilityStone.grade} />
+        <ItemTooltip>TODO</ItemTooltip>
+      </ItemTooltipTrigger>
 
       <div className={styles['info-box']}>
         <div className={styles['name-box']}>
@@ -43,18 +44,6 @@ export default function AbilityStoneItem(props: {
         </div>
       </div>
 
-      <ItemTooltip>
-        <ItemDetailTooltip
-          name={abilityStone.name}
-          grade={abilityStone.grade}
-          details={[]}
-          effects={[
-            ...abilityStone.basicEffects.map((text) => ({ text })),
-            ...abilityStone.additionalEffects.map((text) => ({ text })),
-            ...abilityStone.abilityStoneBonusEffects.map((text) => ({ text })),
-          ]}
-        />
-      </ItemTooltip>
-    </ItemTooltipTrigger>
+    </div>
   );
 }
