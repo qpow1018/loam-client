@@ -109,30 +109,4 @@
     color: $mint-light;
   }
 
-  .legacy-avatar-list {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .legacy-avatar-list > div {
-    display: grid;
-    min-height: 48px;
-    grid-template-columns: 36px minmax(0, 1fr);
-    align-items: center;
-    gap: 8px;
-    border-bottom: 1px solid rgba($border-soft, 0.72);
-    color: $text-primary;
-    font-size: 11px;
-  }
-
-  .legacy-avatar-list > div:last-child {
-    border-bottom: 0;
-  }
-
-  .legacy-avatar-list span {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
 }

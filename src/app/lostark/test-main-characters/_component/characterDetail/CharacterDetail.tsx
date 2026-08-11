@@ -11,6 +11,7 @@ import ProfileHeader from './profileHeader/ProfileHeader';
 import EquipmentSection from './equipmentSection/EquipmentSection';
 import EngravingSection from './EngravingSection';
 import GemSection from './GemSection';
+import LegendaryAvatarSection from './LegendaryAvatarSection';
 
 import ItemSlot from '@/components/lostark/itemSlot/ItemSlot';
 import ArkPassiveNodeSection from './ArkPassiveNodeSection';
@@ -126,18 +127,7 @@ export default function CharacterDetail(props: { characterId: string }) {
 
           <EngravingSection engravings={summary.engravings} />
 
-          {summary.legendaryAvatars.length > 0 && (
-            <DetailPanel title="전설 아바타">
-              <div className={styles['legacy-avatar-list']}>
-                {summary.legendaryAvatars.map((avatar, index) => (
-                  <div key={`${avatar.type}-${index}`} title={avatar.name ?? ''}>
-                    <ItemSlot imageUrl={avatar.icon} grade={avatar.grade} size={36} />
-                    <span>{avatar.type ?? '-'}</span>
-                  </div>
-                ))}
-              </div>
-            </DetailPanel>
-          )}
+          <LegendaryAvatarSection avatars={summary.legendaryAvatars} />
         </div>
       </div>
 
