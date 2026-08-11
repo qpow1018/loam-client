@@ -1,8 +1,7 @@
-.equipment-content {
-  .equipment-section {
-    display: flex;
-    gap: 12px;
-  }
+.equipment-section {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
 
   .left-box,
   .right-box {
@@ -16,6 +15,6 @@
   }
 
   .right-box {
-    flex: 2;
+    flex: 1.7;
   }
 }
