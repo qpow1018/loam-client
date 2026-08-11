@@ -218,11 +218,7 @@ export default function CharacterDetail(props: { characterId: string }) {
 
       <div>
         <p>TODO</p>
-        <div>프로필 로펙/일로아/로아랩 버튼 + 치명타확률?, 로펙점수</div>
-        <p>$page-width: 1024px; $page-wide-width: 1440px;</p>
-        <p>일로아, 로펙, 로아업, 로아지지, 로아랩</p>
-        <p>장비 - 장비, 악세, 어빌, 팔찌, 보주, 완갑까지 + 아바타는 어쩔까</p>
-        <p>특성 - 힘민지최생, 치특신 - 프로필로 옮길까</p>
+        <p>특성 - 힘민지최생, 치특신</p>
         <p>각인 - 어빌돌 연계</p>
         <p>보석</p>
         <p>아크패시브 - 찍은것도 보여주기</p>
