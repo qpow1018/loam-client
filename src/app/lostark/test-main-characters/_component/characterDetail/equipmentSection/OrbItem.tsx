@@ -18,7 +18,7 @@ export default function OrbItem(props: { orb: TLostarkOrb | null }) {
       </ItemTooltipTrigger>
       <div className={styles['info-box']}>
         <div className={styles['name-box']}>
-          <strong>보주</strong>
+          <p className={styles['item-name']}>보주</p>
         </div>
       </div>
       <div className={styles['item-effect']}>
