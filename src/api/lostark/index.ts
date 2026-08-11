@@ -85,6 +85,14 @@ function normalizeCharacterSummary(
             abilityStoneEngravings: summary.equipment.abilityStone.abilityStoneEngravings ?? [],
           }
         : null,
+      orb: summary.equipment.orb
+        ? {
+            ...summary.equipment.orb,
+            title: summary.equipment.orb.title ?? null,
+            tier: summary.equipment.orb.tier ?? null,
+            specialEffects: summary.equipment.orb.specialEffects ?? [],
+          }
+        : null,
     },
     arkPassive: {
       ...summary.arkPassive,

@@ -104,6 +104,7 @@ export type TResLostarkCharacterSummary = {
     accessories: TLostarkAccessory[];
     bracelet: TLostarkBracelet | null;
     abilityStone: TLostarkAbilityStone | null;
+    orb: TLostarkOrb | null;
   };
   engravings: TLostarkEngraving[];
   gems: TLostarkGem[];
@@ -181,6 +182,16 @@ export type TLostarkAbilityStone = {
     name: string;
     level: number | null;
   }[];
+};
+
+export type TLostarkOrb = {
+  icon: string | null;
+  name: string | null;
+  type: string | null;
+  grade: string | null;
+  title: string | null;
+  tier: string | null;
+  specialEffects: string[];
 };
 
 export type TLostarkEngraving = {

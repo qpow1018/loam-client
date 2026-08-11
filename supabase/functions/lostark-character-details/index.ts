@@ -34,6 +34,7 @@ type ParsedEquipmentItem = {
   braceletEffects: ParsedColoredEffect[];
   abilityStoneBonusEffects: string[];
   abilityStoneEngravings: ParsedAbilityStoneEngraving[];
+  specialEffects: string[];
 };
 
 type ParsedAvatarItem = {
@@ -231,6 +232,16 @@ type AbilityStoneSummaryItem = {
   additionalEffects: string[];
   abilityStoneBonusEffects: string[];
   abilityStoneEngravings: ParsedAbilityStoneEngraving[];
+};
+
+type OrbSummaryItem = {
+  icon: string | null;
+  name: string | null;
+  type: string | null;
+  grade: string | null;
+  title: string | null;
+  tier: string | null;
+  specialEffects: string[];
 };
 
 const sections = [
@@ -452,6 +463,7 @@ function parseEquipmentItem(item: unknown): ParsedEquipmentItem {
     braceletEffects: [],
     abilityStoneBonusEffects: [],
     abilityStoneEngravings: [],
+    specialEffects: [],
   };
 
   for (const element of elements) {
@@ -474,6 +486,8 @@ function parseEquipmentItem(item: unknown): ParsedEquipmentItem {
         parsed.braceletEffects.push(...getColoredEffects(value));
       } else if (title.includes('세공 단계 보너스')) {
         parsed.abilityStoneBonusEffects.push(...lines);
+      } else if (title.includes('특수 효과')) {
+        parsed.specialEffects.push(...lines);
       }
     }
 
@@ -499,6 +513,7 @@ function classifyEquipment(equipment: unknown[]) {
   const accessories: ParsedEquipmentItem[] = [];
   let bracelet: ParsedEquipmentItem | null = null;
   let abilityStone: ParsedEquipmentItem | null = null;
+  let orb: ParsedEquipmentItem | null = null;
 
   for (const item of parsedItems) {
     const type = item.type;
@@ -522,9 +537,14 @@ function classifyEquipment(equipment: unknown[]) {
       abilityStone = item;
       continue;
     }
+
+    if (type?.includes('보주')) {
+      orb = item;
+      continue;
+    }
   }
 
-  return { gear, accessories, bracelet, abilityStone };
+  return { gear, accessories, bracelet, abilityStone, orb };
 }
 
 function buildGearSummary(item: ParsedEquipmentItem): GearSummaryItem {
@@ -592,6 +612,20 @@ function buildAbilityStoneSummary(
     additionalEffects: item.additionalEffects,
     abilityStoneBonusEffects: item.abilityStoneBonusEffects,
     abilityStoneEngravings: item.abilityStoneEngravings,
+  };
+}
+
+function buildOrbSummary(item: ParsedEquipmentItem | null): OrbSummaryItem | null {
+  if (!item) return null;
+
+  return {
+    icon: item.icon,
+    name: item.name,
+    type: item.type,
+    grade: item.grade,
+    title: item.title,
+    tier: item.tier,
+    specialEffects: item.specialEffects,
   };
 }
 
@@ -966,6 +1000,7 @@ function buildSummary(rawPayload: Record<string, unknown>) {
       accessories: equipmentGroups.accessories.map(buildAccessorySummary),
       bracelet: buildBraceletSummary(equipmentGroups.bracelet),
       abilityStone: buildAbilityStoneSummary(equipmentGroups.abilityStone),
+      orb: buildOrbSummary(equipmentGroups.orb),
     },
     engravings: parseEngravings(engravings),
     gems: parseGems(gems),

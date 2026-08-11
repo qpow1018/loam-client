@@ -101,6 +101,11 @@ export default function EquipmentSection(props: {
               value: null,
             }))}
           />
+          <ExtraItem
+            title="보주"
+            item={equipment.orb}
+            effects={equipment.orb?.specialEffects ?? []}
+          />
         </div>
       </div>
     </DetailPanel>
