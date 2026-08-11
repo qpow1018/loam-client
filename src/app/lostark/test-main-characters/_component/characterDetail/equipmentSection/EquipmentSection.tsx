@@ -1,4 +1,12 @@
-import type { TResLostarkMainCharacter } from '@/api/lostark/type';
+import type {
+  TLostarkAbilityStone,
+  TLostarkAccessory,
+  TLostarkBracelet,
+  TLostarkColoredEffect,
+  TLostarkGear,
+  TLostarkOrb,
+  TResLostarkMainCharacter,
+} from '@/api/lostark/type';
 
 import ItemSlot from '@/components/lostark/itemSlot/ItemSlot';
 import QualityChip from '@/components/lostark/qualityChip/QualityChip';
@@ -8,177 +16,281 @@ import ItemDetailTooltip from '@/app/lostark/test-main-characters/_component/cha
 
 import styles from './equipmentSection.module.scss';
 
+const GEAR_ORDER = [
+  ['투구', '모자'],
+  ['어깨', '견갑'],
+  ['상의'],
+  ['하의'],
+  ['장갑'],
+  ['완갑'],
+  ['무기'],
+];
+const ACCESSORY_ORDER = ['목걸이', '귀걸이', '귀걸이', '반지', '반지'];
+
 export default function EquipmentSection(props: {
   equipment: TResLostarkMainCharacter['summary']['equipment'];
 }) {
   const { equipment } = props;
-
-  console.log('equipment', equipment);
+  const gears = sortGears(equipment.gears);
+  const accessories = sortAccessories(equipment.accessories);
 
   return (
-    <DetailPanel title="장비" className={styles['equipment-section']}>
-      <div className={styles['equipment-group']}>
-        <div className={styles['equipment-list']}>
-          {equipment.gears.map((gear, index) => (
-            <div key={`${gear.type}-${index}`} className={styles['item-row']} tabIndex={0}>
-              <ItemSlot imageUrl={gear.icon} grade={gear.grade} size={42} />
-              <div className={styles['item-copy']}>
-                <strong>{gear.type ?? '-'}</strong>
-                <span>{`${gear.enhancement ? `+${gear.enhancement} · ` : ''}${gear.itemLevel ?? gear.name ?? '-'}`}</span>
-              </div>
-              <QualityChip quality={gear.quality} />
-              <ItemDetailTooltip
-                name={gear.name}
-                grade={gear.grade}
-                details={[
-                  { label: '강화', value: gear.enhancement ? `+${gear.enhancement}` : null },
-                  { label: '아이템 레벨', value: gear.itemLevel },
-                  { label: '품질', value: gear.quality },
-                ]}
-              />
-            </div>
+    <DetailPanel title="장비" className={styles['equipment-content']}>
+      <section className={styles['equipment-section']}>
+        <div className={styles['left-box']}>
+          {gears.map((gear, index) => (
+            <GearItem key={`${gear.type}-${index}`} gear={gear} />
           ))}
         </div>
-      </div>
-      <div className={styles['equipment-group']}>
-        <div className={styles['equipment-list']}>
-          {equipment.accessories.map((accessory, index) => (
-            <div key={`${accessory.type}-${index}`} className={styles['item-row']} tabIndex={0}>
-              <ItemSlot imageUrl={accessory.icon} grade={accessory.grade} size={42} />
-              <div className={styles['item-copy']}>
-                <div className={styles['item-heading']}>
-                  <strong>{accessory.type ?? '-'}</strong>
-                  {accessory.tier && <span>{formatTier(accessory.tier)}</span>}
-                </div>
-                <span>{accessory.arkPassiveEffects[0] ?? accessory.name ?? '-'}</span>
-                <div className={styles['item-effects']}>
-                  {accessory.polishEffects.map((effect, effectIndex) => (
-                    <span
-                      key={`${effect.text}-${effectIndex}`}
-                      title={effect.text}
-                      style={{ color: effect.color ?? undefined }}
-                    >
-                      {formatEquipmentEffect(effect.text)}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <QualityChip quality={accessory.quality} />
-              <ItemDetailTooltip
-                name={accessory.name}
-                grade={accessory.grade}
-                details={[{ label: '품질', value: accessory.quality }]}
-                effects={[
-                  ...accessory.basicEffects.map((text) => ({ text })),
-                  ...accessory.additionalEffects.map((text) => ({ text })),
-                  ...accessory.polishEffects,
-                  ...accessory.arkPassiveEffects.map((text) => ({ text })),
-                ]}
-              />
-            </div>
+
+        <div className={styles['right-box']}>
+          {accessories.map((accessory, index) => (
+            <AccessoryItem key={`${accessory.type}-${index}`} accessory={accessory} />
           ))}
         </div>
-        <div className={styles['extra-list']}>
-          <ExtraItem
-            title="어빌리티 스톤"
-            item={equipment.abilityStone}
-            effects={[
-              ...(equipment.abilityStone?.basicEffects ?? []),
-              ...(equipment.abilityStone?.additionalEffects ?? []),
-              ...(equipment.abilityStone?.abilityStoneBonusEffects ?? []),
-            ]}
-            labels={equipment.abilityStone?.abilityStoneEngravings.map((engraving) => ({
-              label: engraving.name,
-              value: engraving.level,
-            }))}
-          />
-          <ExtraItem
-            title="팔찌"
-            item={equipment.bracelet}
-            effects={equipment.bracelet?.braceletEffects.map((effect) => effect.text) ?? []}
-            labels={equipment.bracelet?.braceletEffects.map((effect) => ({
-              label: effect.text,
-              value: null,
-            }))}
-          />
-          <ExtraItem
-            title="보주"
-            item={equipment.orb}
-            effects={equipment.orb?.specialEffects ?? []}
-          />
+      </section>
+
+      <section className={styles['extra-equipment-section']}>
+        <AbilityStoneItem abilityStone={equipment.abilityStone} />
+
+        <div className={styles['extra-right-box']}>
+          <BraceletItem bracelet={equipment.bracelet} />
+          <OrbItem orb={equipment.orb} />
         </div>
-      </div>
+      </section>
     </DetailPanel>
   );
 }
 
-function ExtraItem(props: {
-  title: string;
-  item: {
-    icon: string | null;
-    grade: string | null;
-    name: string | null;
-    tier: string | null;
-  } | null;
-  effects: string[];
-  labels?: { label: string; value: number | null }[];
-}) {
-  if (!props.item) return null;
+function GearItem(props: { gear: TLostarkGear }) {
+  const { gear } = props;
 
   return (
-    <div className={styles['extra-item']} tabIndex={0}>
-      <ItemSlot imageUrl={props.item.icon} grade={props.item.grade} size={38} />
-      <div className={styles['item-copy']}>
-        <div className={styles['item-heading']}>
-          <strong>{props.title}</strong>
-          {props.item.tier && <span>{formatTier(props.item.tier)}</span>}
+    <div className={styles['gear-item']} tabIndex={0}>
+      <ItemSlot imageUrl={gear.icon} grade={gear.grade} />
+
+      <div className={styles['info-box']}>
+        <div className={styles['name-box']}>
+          <strong>{`${gear.type ?? '-'}${gear.enhancement !== null ? ` +${gear.enhancement}` : ''}`}</strong>
+          {gear.itemLevel && <span className={styles['level-chip']}>{gear.itemLevel}</span>}
         </div>
-        <span>{props.item.name ?? '-'}</span>
-        {props.labels && props.labels.length > 0 && (
-          <div className={styles['item-effects']}>
-            {props.labels.map((label, index) => (
-              <span key={`${label.label}-${index}`} title={label.label}>
-                {label.value !== null && <b>{label.value}</b>}
-                {formatEquipmentEffect(label.label)}
-              </span>
-            ))}
-          </div>
-        )}
+        <QualityChip quality={gear.quality} />
       </div>
+
       <ItemDetailTooltip
-        name={props.item.name}
-        grade={props.item.grade}
-        details={[]}
-        effects={props.effects.map((text) => ({ text }))}
+        name={gear.name}
+        grade={gear.grade}
+        details={[
+          { label: '강화', value: gear.enhancement !== null ? `+${gear.enhancement}` : null },
+          { label: '아이템 레벨', value: gear.itemLevel },
+          { label: '품질', value: gear.quality },
+        ]}
+        effects={[
+          ...gear.basicEffects.map((text) => ({ text })),
+          ...gear.additionalEffects.map((text) => ({ text })),
+          ...gear.arkPassiveEffects.map((text) => ({ text })),
+        ]}
       />
     </div>
   );
 }
 
-function formatTier(tier: string) {
-  const tierNumber = tier.match(/\d+/)?.[0];
+function AccessoryItem(props: { accessory: TLostarkAccessory }) {
+  const { accessory } = props;
+  const basicEffect = getPrimaryStatBasicEffect(accessory.basicEffects);
 
-  return tierNumber ? `T${tierNumber}` : tier;
+  return (
+    <div className={styles['accessory-item']} tabIndex={0}>
+      <ItemSlot imageUrl={accessory.icon} grade={accessory.grade} />
+
+      <div className={styles['info-box']}>
+        <div className={styles['name-box']}>
+          <strong>{accessory.type ?? '-'}</strong>
+        </div>
+        <QualityChip quality={accessory.quality} />
+      </div>
+
+      <div className={styles['item-effect']}>
+        {basicEffect && <p className={styles['basic-effect']}>{`스텟 ${basicEffect}`}</p>}
+        {accessory.polishEffects.map((effect, index) => (
+          <EffectItem key={`${effect.text}-${index}`} effect={effect} />
+        ))}
+      </div>
+
+      <ItemDetailTooltip
+        name={accessory.name}
+        grade={accessory.grade}
+        details={[{ label: '품질', value: accessory.quality }]}
+        effects={[
+          ...accessory.basicEffects.map((text) => ({ text })),
+          ...accessory.additionalEffects.map((text) => ({ text })),
+          ...accessory.polishEffects,
+          ...accessory.arkPassiveEffects.map((text) => ({ text })),
+        ]}
+      />
+    </div>
+  );
 }
 
-function formatEquipmentEffect(effect: string) {
-  const effectLabels = [
-    ['세레나데, 신앙, 조화 게이지 획득량', '서폿 아덴'],
-    ['아군 공격력 강화 효과', '아군공%'],
-    ['백어택 스킬이 적에게 주는 피해', '백어택 주피증'],
-    ['공격이 치명타로 적중 시 적에게 주는 피해', '치명 주피증'],
-    ['무기 공격력', '무공'],
-    ['치명타 피해', '치피'],
-    ['치명타 적중률', '치적'],
-    ['적에게 주는 피해', '적피'],
-    ['추가 피해', '추피'],
-    ['공격력', '공'],
-  ] as const;
-  const matchedEffect = effectLabels.find(([text]) => effect.includes(text));
+function AbilityStoneItem(props: { abilityStone: TLostarkAbilityStone | null }) {
+  const { abilityStone } = props;
 
-  if (!matchedEffect) return effect;
+  if (!abilityStone) return null;
 
-  const value = effect.match(/[+-]?\d+(?:\.\d+)?%?/)?.[0];
+  const positiveLevelSum = abilityStone.abilityStoneEngravings
+    .slice(0, 2)
+    .reduce((sum, engraving) => sum + (engraving.level ?? 0), 0);
 
-  return value ? `${matchedEffect[1]} ${value}` : matchedEffect[1];
+  return (
+    <div className={styles['ability-stone-item']} tabIndex={0}>
+      <ItemSlot imageUrl={abilityStone.icon} grade={abilityStone.grade} />
+
+      <div className={styles['info-box']}>
+        <div className={styles['name-box']}>
+          <strong>어빌리티 스톤</strong>
+          {positiveLevelSum >= 5 && <span className={styles['stone-chip']}>97돌</span>}
+        </div>
+        <div className={styles['stone-engraving-list']}>
+          {abilityStone.abilityStoneEngravings.map((engraving, index) => (
+            <div
+              key={`${engraving.name}-${index}`}
+              className={`${styles['stone-engraving']} ${index >= 2 ? styles['negative'] : ''}`}
+            >
+              <b>{`+${engraving.level ?? 0}`}</b>
+              <span>{engraving.name}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <ItemDetailTooltip
+        name={abilityStone.name}
+        grade={abilityStone.grade}
+        details={[]}
+        effects={[
+          ...abilityStone.basicEffects.map((text) => ({ text })),
+          ...abilityStone.additionalEffects.map((text) => ({ text })),
+          ...abilityStone.abilityStoneBonusEffects.map((text) => ({ text })),
+        ]}
+      />
+    </div>
+  );
+}
+
+function BraceletItem(props: { bracelet: TLostarkBracelet | null }) {
+  const { bracelet } = props;
+
+  if (!bracelet) return null;
+
+  return (
+    <div className={styles['bracelet-item']} tabIndex={0}>
+      <ItemSlot imageUrl={bracelet.icon} grade={bracelet.grade} />
+      <div className={styles['info-box']}>
+        <div className={styles['name-box']}>
+          <strong>팔찌</strong>
+        </div>
+      </div>
+      <div className={styles['item-effect']}>
+        {getBraceletEffects(bracelet.braceletEffects).map((effect, index) => (
+          <EffectItem key={`${effect.text}-${index}`} effect={effect} />
+        ))}
+      </div>
+      <ItemDetailTooltip
+        name={bracelet.name}
+        grade={bracelet.grade}
+        details={[]}
+        effects={bracelet.braceletEffects}
+      />
+    </div>
+  );
+}
+
+function OrbItem(props: { orb: TLostarkOrb | null }) {
+  const { orb } = props;
+
+  if (!orb) return null;
+
+  return (
+    <div className={styles['orb-item']} tabIndex={0}>
+      <ItemSlot imageUrl={orb.icon} grade={orb.grade} />
+      <div className={styles['info-box']}>
+        <div className={styles['name-box']}>
+          <strong>보주</strong>
+        </div>
+      </div>
+      <div className={styles['item-effect']}>
+        {orb.specialEffects.slice(0, 2).map((effect, index) => (
+          <p key={`${effect}-${index}`}>{effect}</p>
+        ))}
+      </div>
+      <ItemDetailTooltip
+        name={orb.name}
+        grade={orb.grade}
+        details={[]}
+        effects={orb.specialEffects.map((text) => ({ text }))}
+      />
+    </div>
+  );
+}
+
+function EffectItem(props: { effect: TLostarkColoredEffect }) {
+  return (
+    <p className={styles['effect']}>
+      {props.effect.color && (
+        <span
+          className={styles['effect-marker']}
+          style={{ backgroundColor: `#${props.effect.color}` }}
+        />
+      )}
+      <span>{props.effect.text}</span>
+    </p>
+  );
+}
+
+function getPrimaryStatBasicEffect(effects: string[]) {
+  const basicEffect = effects
+    .map((effect) => effect.match(/(힘|민첩|지능)\s*\+?\s*([\d,]+)/)?.[2] ?? null)
+    .find((effect) => effect !== null);
+
+  return basicEffect ? `+${basicEffect}` : null;
+}
+
+function getBraceletEffects(effects: TLostarkColoredEffect[]) {
+  return effects.reduce<TLostarkColoredEffect[]>((combinedEffects, effect) => {
+    const previousEffect = combinedEffects[combinedEffects.length - 1];
+    const isCombinedOption = effect.color?.replace('#', '').toUpperCase() === '99FF99';
+
+    if (isCombinedOption && previousEffect) {
+      previousEffect.text = `${previousEffect.text}\n${effect.text}`;
+      return combinedEffects;
+    }
+
+    combinedEffects.push({ ...effect });
+    return combinedEffects;
+  }, []);
+}
+
+function getTypeOrderIndex(type: string | null, typeOrder: string[][]) {
+  const index = typeOrder.findIndex((typeLabels) =>
+    typeLabels.some((typeLabel) => type?.includes(typeLabel)),
+  );
+
+  return index === -1 ? Number.MAX_SAFE_INTEGER : index;
+}
+
+function sortGears(gears: TLostarkGear[]) {
+  return [...gears].sort(
+    (left, right) =>
+      getTypeOrderIndex(left.type, GEAR_ORDER) - getTypeOrderIndex(right.type, GEAR_ORDER),
+  );
+}
+
+function sortAccessories(accessories: TLostarkAccessory[]) {
+  return [...accessories].sort((left, right) => {
+    const accessoryOrder = ACCESSORY_ORDER.map((typeLabel) => [typeLabel]);
+
+    return (
+      getTypeOrderIndex(left.type, accessoryOrder) - getTypeOrderIndex(right.type, accessoryOrder)
+    );
+  });
 }

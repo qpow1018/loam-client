@@ -1,41 +1,43 @@
-.equipment-section {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+.equipment-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 
-  .equipment-group {
-    min-width: 0;
-  }
-
-  .equipment-group + .equipment-group {
-    border-left: 1px solid $border-soft;
-  }
-
-  .equipment-group h3 {
+  .equipment-section,
+  .extra-equipment-section {
     display: flex;
-    height: 32px;
-    align-items: center;
-    padding: 0 12px;
-    border-bottom: 1px solid $border-soft;
-    color: $text-secondary;
-    font-size: 11px;
-    font-weight: 500;
+    gap: 12px;
   }
 
-  .equipment-list,
-  .extra-list {
+  .left-box,
+  .right-box {
     display: flex;
     flex-direction: column;
+    gap: 8px;
   }
 
-  .item-row {
-    position: relative;
+  .left-box,
+  .ability-stone-item {
+    flex: 1;
+  }
+
+  .right-box,
+  .extra-right-box {
+    flex: 2;
+  }
+
+  .extra-right-box {
     display: flex;
-    min-width: 0;
-    min-height: 56px;
-    align-items: center;
-    gap: 8px;
-    padding: 7px 10px;
-    border-bottom: 1px solid rgba($border-soft, 0.72);
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .gear-item,
+  .accessory-item,
+  .ability-stone-item,
+  .bracelet-item,
+  .orb-item {
+    position: relative;
 
     &:hover,
     &:focus {
@@ -48,93 +50,144 @@
 
     &:focus-visible {
       outline: 1px solid $border-focus;
-      outline-offset: -1px;
+      outline-offset: 2px;
     }
   }
 
-  .item-copy {
+  .gear-item,
+  .ability-stone-item,
+  .bracelet-item,
+  .orb-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .gear-item,
+  .accessory-item,
+  .bracelet-item,
+  .orb-item {
+    .info-box {
+      width: 52px;
+      flex: 0 0 auto;
+    }
+  }
+
+  .name-box {
+    display: flex;
+    min-height: 18px;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 2px;
+
+    strong {
+      overflow: hidden;
+      color: $text-primary;
+      font-size: 13px;
+      font-weight: 500;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .gear-item .info-box,
+  .ability-stone-item .info-box {
     flex: 1;
     min-width: 0;
   }
 
-  .item-row strong,
-  .item-row span,
-  .item-copy strong,
-  .item-copy span {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .item-copy strong {
-    color: $text-primary;
-    font-size: 12px;
-    font-weight: 600;
-  }
-
-  .item-copy span {
-    margin-top: 2px;
+  .level-chip,
+  .stone-chip {
+    display: inline-flex;
+    height: 18px;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6px;
+    border: 1px solid $gray-500;
+    border-radius: 100px;
     color: $text-secondary;
     font-size: 10px;
   }
 
-  .item-heading {
+  .stone-chip {
+    border-color: $mint;
+    background: $mint-surface;
+    color: $mint-light;
+    font-weight: 700;
+  }
+
+  .accessory-item {
     display: flex;
-    align-items: center;
-    gap: 5px;
+    gap: 12px;
   }
 
-  .item-heading > span {
-    margin: 0;
-    color: $text-muted;
-    font-size: 9px;
+  .item-effect {
+    flex: 1;
+    min-width: 0;
+    color: $text-secondary;
+    font-size: 11px;
   }
 
-  .item-effects {
+  .basic-effect {
+    margin-bottom: 4px;
+  }
+
+  .effect {
     display: flex;
     min-width: 0;
     gap: 4px;
-    margin-top: 5px;
+
+    .effect-marker {
+      width: 8px;
+      height: 8px;
+      flex: 0 0 auto;
+      margin-top: 3px;
+      border-radius: 50%;
+    }
+
+    span:last-child {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: pre-line;
+    }
   }
 
-  .item-effects > span {
-    min-width: 0;
+  .orb-item .item-effect p {
+    display: -webkit-box;
     overflow: hidden;
-    padding: 2px 4px;
-    background: $gray-900;
-    border: 1px solid $border-soft;
-    color: $text-secondary;
-    font-size: 9px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
 
-  .item-effects b {
-    margin-right: 3px;
-    color: $amber-light;
+  .stone-engraving-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
   }
 
-  .extra-item {
-    position: relative;
-    display: grid;
+  .stone-engraving {
+    display: flex;
     min-width: 0;
-    min-height: 64px;
-    grid-template-columns: 38px minmax(0, 1fr);
-    column-gap: 8px;
     align-items: center;
-    padding: 8px 10px;
-    border-bottom: 1px solid rgba($border-soft, 0.72);
     color: $text-primary;
-    font-size: 11px;
 
-    &:hover,
-    &:focus {
-      z-index: $z-index-popover;
+    &.negative {
+      color: $text-secondary;
+    }
 
-      .item-detail-tooltip {
-        display: block;
-      }
+    b {
+      width: 24px;
+      flex: 0 0 auto;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 12px;
     }
   }
 
@@ -158,20 +211,20 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-  }
 
-  .tooltip-header strong {
-    overflow: hidden;
-    color: $text-primary;
-    font-size: 13px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+    strong {
+      overflow: hidden;
+      color: $text-primary;
+      font-size: 13px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
 
-  .tooltip-header span {
-    flex: 0 0 auto;
-    color: $loa-gold;
-    font-size: 11px;
+    span {
+      flex: 0 0 auto;
+      color: $loa-gold;
+      font-size: 11px;
+    }
   }
 
   .tooltip-details,
