@@ -2,12 +2,12 @@
   width: $page-width;
 
   .top-layout {
-    // display: grid;
-    // grid-template-columns: 578px minmax(0, 1fr);
+    display: grid;
+    grid-template-columns: 680px minmax(0, 1fr);
     // grid-template-areas:
     //   'equipment right-top'
     //   'equipment right-bottom';
-    // gap: 24px;
+    gap: 12px;
     // align-items: start;
     // margin-top: 16px;
   }
