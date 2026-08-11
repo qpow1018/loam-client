@@ -90,6 +90,7 @@ function normalizeCharacterSummary(
             ...summary.equipment.orb,
             title: summary.equipment.orb.title ?? null,
             tier: summary.equipment.orb.tier ?? null,
+            paradisePowerText: summary.equipment.orb.paradisePowerText ?? null,
             specialEffects: summary.equipment.orb.specialEffects ?? [],
           }
         : null,

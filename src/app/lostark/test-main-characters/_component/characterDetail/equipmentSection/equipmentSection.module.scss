@@ -1,10 +1,5 @@
 .equipment-content {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-
-  .equipment-section,
-  .extra-equipment-section {
+  .equipment-section {
     display: flex;
     gap: 12px;
   }
@@ -16,20 +11,12 @@
     gap: 8px;
   }
 
-  .left-box,
-  .ability-stone-item {
+  .left-box {
     flex: 1;
   }
 
-  .right-box,
-  .extra-right-box {
+  .right-box {
     flex: 2;
-  }
-
-  .extra-right-box {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
   }
 
   .gear-item,

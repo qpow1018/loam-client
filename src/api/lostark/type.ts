@@ -191,6 +191,7 @@ export type TLostarkOrb = {
   grade: string | null;
   title: string | null;
   tier: string | null;
+  paradisePowerText: string | null;
   specialEffects: string[];
 };
 

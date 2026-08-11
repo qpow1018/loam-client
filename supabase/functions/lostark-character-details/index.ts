@@ -241,6 +241,7 @@ type OrbSummaryItem = {
   grade: string | null;
   title: string | null;
   tier: string | null;
+  paradisePowerText: string | null;
   specialEffects: string[];
 };
 
@@ -627,8 +628,13 @@ function buildOrbSummary(item: ParsedEquipmentItem | null): OrbSummaryItem | nul
     grade: item.grade,
     title: item.title,
     tier: item.tier,
+    paradisePowerText: getOrbParadisePowerText(item.specialEffects),
     specialEffects: item.specialEffects,
   };
+}
+
+function getOrbParadisePowerText(specialEffects: string[]) {
+  return specialEffects.find((effect) => effect.includes('달성 최대 낙원력')) ?? null;
 }
 
 function parseAvatarItem(item: unknown): ParsedAvatarItem {

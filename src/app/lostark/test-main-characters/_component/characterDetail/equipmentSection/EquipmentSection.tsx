@@ -22,8 +22,8 @@ const GEAR_ORDER = [
   ['상의'],
   ['하의'],
   ['장갑'],
-  ['완갑'],
   ['무기'],
+  ['완갑'],
 ];
 const ACCESSORY_ORDER = ['목걸이', '귀걸이', '귀걸이', '반지', '반지'];
 
@@ -41,19 +41,13 @@ export default function EquipmentSection(props: {
           {gears.map((gear, index) => (
             <GearItem key={`${gear.type}-${index}`} gear={gear} />
           ))}
+          <AbilityStoneItem abilityStone={equipment.abilityStone} />
         </div>
 
         <div className={styles['right-box']}>
           {accessories.map((accessory, index) => (
             <AccessoryItem key={`${accessory.type}-${index}`} accessory={accessory} />
           ))}
-        </div>
-      </section>
-
-      <section className={styles['extra-equipment-section']}>
-        <AbilityStoneItem abilityStone={equipment.abilityStone} />
-
-        <div className={styles['extra-right-box']}>
           <BraceletItem bracelet={equipment.bracelet} />
           <OrbItem orb={equipment.orb} />
         </div>
@@ -219,9 +213,7 @@ function OrbItem(props: { orb: TLostarkOrb | null }) {
         </div>
       </div>
       <div className={styles['item-effect']}>
-        {orb.specialEffects.slice(0, 2).map((effect, index) => (
-          <p key={`${effect}-${index}`}>{effect}</p>
-        ))}
+        <p>{orb.paradisePowerText ?? '낙원력 -'}</p>
       </div>
       <ItemDetailTooltip
         name={orb.name}
