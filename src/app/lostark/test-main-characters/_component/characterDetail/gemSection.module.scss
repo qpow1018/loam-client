@@ -1,23 +1,89 @@
-.gem-list {
-  display: grid;
-  grid-template-columns: repeat(11, 42px);
-  gap: 8px;
-}
+.gem-section {
+  padding: 12px;
 
-.gem-item {
-  position: relative;
-  min-width: 0;
+  .gem-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
 
-  > span {
-    position: absolute;
-    right: -2px;
-    bottom: -2px;
-    min-width: 22px;
-    padding: 1px 3px;
-    background: rgba($gray-900, 0.92);
-    border: 1px solid $border-soft;
+  .level-count-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+
+  .level-count {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-right: 10px;
+    margin-right: 10px;
+    font-size: 12px;
+
+    &::after {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      width: 1px;
+      height: 10px;
+      background: $gray-600;
+      content: '';
+      transform: translateY(-50%);
+    }
+
+    &:last-child {
+      padding-right: 0;
+      margin-right: 0;
+
+      &::after {
+        display: none;
+      }
+    }
+  }
+
+  .level-label,
+  .basic-attack-power span {
+    color: $text-secondary;
+  }
+
+  .level-label {
+    margin-right: 6px;
+  }
+
+  .level-value,
+  .basic-attack-power strong {
     color: $text-primary;
-    font-size: 9px;
-    text-align: center;
+    font-weight: 500;
+  }
+
+  .basic-attack-power {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 6px;
+    font-size: 12px;
+  }
+
+  .gem-list {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .blank {
+    width: 8px;
+    height: 1px;
+  }
+
+  .gem-item {
+    .gem-title {
+      margin-top: 4px;
+      color: $text-primary;
+      font-size: 12px;
+      font-weight: 500;
+      text-align: center;
+    }
   }
 }
