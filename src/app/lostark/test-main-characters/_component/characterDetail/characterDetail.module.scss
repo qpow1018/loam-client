@@ -1,16 +1,15 @@
 .character-detail {
   width: $page-width;
-  // width: $page-wide-width;
 
   .top-layout {
-    display: grid;
-    grid-template-columns: 578px minmax(0, 1fr);
-    grid-template-areas:
-      'equipment right-top'
-      'equipment right-bottom';
-    gap: 24px;
-    align-items: start;
-    margin-top: 16px;
+    // display: grid;
+    // grid-template-columns: 578px minmax(0, 1fr);
+    // grid-template-areas:
+    //   'equipment right-top'
+    //   'equipment right-bottom';
+    // gap: 24px;
+    // align-items: start;
+    // margin-top: 16px;
   }
 
   .right-top-section {
