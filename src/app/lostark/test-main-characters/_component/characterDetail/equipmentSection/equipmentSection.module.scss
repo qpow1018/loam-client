@@ -20,28 +20,6 @@
   }
 
   .gear-item,
-  .accessory-item,
-  .ability-stone-item,
-  .bracelet-item,
-  .orb-item {
-    position: relative;
-
-    &:hover,
-    &:focus {
-      z-index: $z-index-popover;
-
-      .item-detail-tooltip {
-        display: block;
-      }
-    }
-
-    &:focus-visible {
-      outline: 1px solid $border-focus;
-      outline-offset: 2px;
-    }
-  }
-
-  .gear-item,
   .ability-stone-item,
   .bracelet-item,
   .orb-item {
@@ -176,74 +154,5 @@
       white-space: nowrap;
       font-size: 12px;
     }
-  }
-
-  .item-detail-tooltip {
-    position: absolute;
-    top: calc(100% + 6px);
-    left: 0;
-    z-index: $z-index-popover;
-    display: none;
-    width: 260px;
-    padding: 12px;
-    background: $gray-900;
-    border: 1px solid $border;
-    box-shadow: $shadow-popover;
-    color: $text-primary;
-    pointer-events: none;
-  }
-
-  .tooltip-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-
-    strong {
-      overflow: hidden;
-      color: $text-primary;
-      font-size: 13px;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    span {
-      flex: 0 0 auto;
-      color: $loa-gold;
-      font-size: 11px;
-    }
-  }
-
-  .tooltip-details,
-  .tooltip-effects {
-    display: flex;
-    gap: 5px 10px;
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px solid $border-soft;
-  }
-
-  .tooltip-details {
-    flex-wrap: wrap;
-  }
-
-  .tooltip-effects {
-    flex-direction: column;
-  }
-
-  .tooltip-details span,
-  .tooltip-effects span {
-    color: $text-secondary;
-    font-size: 11px;
-  }
-
-  .tooltip-details b {
-    margin-right: 4px;
-    color: $text-primary;
-    font-weight: 500;
-  }
-
-  .tooltip-effects span {
-    color: $mint-light;
   }
 }

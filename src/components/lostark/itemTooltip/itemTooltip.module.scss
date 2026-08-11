@@ -1,0 +1,26 @@
+.item-tooltip-trigger {
+  position: relative;
+
+  &:hover {
+    z-index: $z-index-popover;
+
+    .item-tooltip {
+      display: block;
+    }
+  }
+}
+
+.item-tooltip {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: calc(100% + 6px);
+  display: none;
+  width: 260px;
+  padding: 12px;
+  color: $text-primary;
+  background: $bg-dark;
+  border: 1px solid $border;
+  border-radius: $border-radius;
+  box-shadow: $shadow-popover;
+}

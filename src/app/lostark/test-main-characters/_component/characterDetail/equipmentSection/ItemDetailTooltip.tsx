@@ -1,4 +1,4 @@
-import styles from './equipmentSection.module.scss';
+import styles from './itemDetailTooltip.module.scss';
 
 type TItemDetailTooltipDetail = {
   label: string;
@@ -24,7 +24,7 @@ export default function ItemDetailTooltip(props: {
   if (!props.name && details.length === 0 && effects.length === 0) return null;
 
   return (
-    <div className={styles['item-detail-tooltip']} role="tooltip">
+    <>
       <div className={styles['tooltip-header']}>
         <strong>{props.name ?? '-'}</strong>
         {props.grade && <span>{props.grade}</span>}
@@ -48,6 +48,6 @@ export default function ItemDetailTooltip(props: {
           ))}
         </div>
       )}
-    </div>
+    </>
   );
 }
