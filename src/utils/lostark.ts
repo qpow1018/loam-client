@@ -10,24 +10,24 @@ export function convertItemLevelToNumber(itemLevel: string) {
 
 export function getEquipQualityBackground(quality: number | null | undefined) {
   if (quality === null || quality === undefined) {
-    return '#62636c';
+    return '#686660';
   }
 
   if (quality >= 100) {
-    return '#ea6811cc';
+    return '#fe9600cc';
   }
 
   if (quality >= 90) {
-    return '#df18e3cc';
+    return '#ce43fccc';
   }
 
   if (quality >= 70) {
-    return '#1260ebcc';
+    return '#00b5ffcc';
   }
 
   if (quality >= 30) {
-    return '#09ae09cc';
+    return '#91fe02cc';
   }
 
-  return '#62636c';
+  return '#686660';
 }
