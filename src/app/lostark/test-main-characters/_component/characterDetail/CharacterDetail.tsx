@@ -14,9 +14,7 @@ import EngravingSection from './EngravingSection';
 import GemSection from './GemSection';
 import LegendaryAvatarSection from './LegendaryAvatarSection';
 import ArkGridSection from './ArkGridSection';
-
-import ArkPassiveNodeSection from './ArkPassiveNodeSection';
-import DetailPanel from './DetailPanel';
+import ArkPassiveSection from './ArkPassiveSection';
 
 import styles from './characterDetail.module.scss';
 
@@ -114,9 +112,7 @@ export default function CharacterDetail(props: { characterId: string }) {
       <div className={styles['ark-layout']}>
         <ArkGridSection arkGrid={summary.arkGrid} />
 
-        <DetailPanel title="아크 패시브 상세">
-          <ArkPassiveNodeSection arkPassive={summary.arkPassive} />
-        </DetailPanel>
+        <ArkPassiveSection arkPassive={summary.arkPassive} />
       </div>
     </div>
   );
