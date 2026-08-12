@@ -1,0 +1,42 @@
+.combat-stat-section {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+
+  .combat-stat-list {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 20px;
+    align-content: center;
+    min-height: 0;
+    padding: 0 12px;
+
+    .combat-stat {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+
+      .stat-type {
+        color: $text-secondary;
+        font-size: 11px;
+      }
+
+      .stat-value {
+        font-size: 13px;
+        font-weight: 700;
+        color: $text-primary;
+      }
+
+      &.highest .stat-value {
+        color: $amber-accent;
+      }
+
+      &.second-highest .stat-value {
+        color: $azure-accent;
+      }
+    }
+  }
+}

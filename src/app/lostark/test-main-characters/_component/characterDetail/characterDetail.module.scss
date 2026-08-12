@@ -5,15 +5,21 @@
     display: grid;
     grid-template-columns: 700px minmax(0, 1fr);
     column-gap: 12px;
-    align-items: start;
+    align-items: stretch;
   }
 
   .equipment-column,
-  .side-column,
   .bottom-details {
     display: flex;
     min-width: 0;
     flex-direction: column;
+    gap: 16px;
+  }
+
+  .side-column {
+    display: grid;
+    min-width: 0;
+    grid-template-rows: minmax(0, 1fr) auto auto;
     gap: 16px;
   }
 
@@ -28,37 +34,7 @@
     margin-top: 16px;
   }
 
-  .combat-stat-list {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    border-top: 1px solid $border-soft;
-    border-left: 1px solid $border-soft;
-  }
-
-  .combat-stat-list > div {
-    display: flex;
-    min-height: 48px;
-    flex-direction: column;
-    justify-content: center;
-    gap: 2px;
-    padding: 7px 9px;
-    border-right: 1px solid $border-soft;
-    border-bottom: 1px solid $border-soft;
-  }
-
-  .combat-stat-list span {
-    color: $text-secondary;
-    font-size: 10px;
-  }
-
-  .combat-stat-list strong {
-    color: $text-primary;
-    font-size: 13px;
-  }
-
-  .skill-point,
   .empty-info {
-    margin-top: 9px;
     color: $text-secondary;
     font-size: 10px;
   }

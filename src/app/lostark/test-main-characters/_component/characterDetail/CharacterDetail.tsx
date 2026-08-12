@@ -9,6 +9,7 @@ import toast from '@/utils/toast';
 import BoxLoading from '@/components/common/loading/BoxLoading';
 import ProfileHeader from './profileHeader/ProfileHeader';
 import EquipmentSection from './equipmentSection/EquipmentSection';
+import CombatStatSection from './CombatStatSection';
 import EngravingSection from './EngravingSection';
 import GemSection from './GemSection';
 import LegendaryAvatarSection from './LegendaryAvatarSection';
@@ -106,27 +107,8 @@ export default function CharacterDetail(props: { characterId: string }) {
         </div>
 
         <div className={styles['side-column']}>
-          <DetailPanel title="특성">
-            <div className={styles['combat-stat-list']}>
-              {getOrderedStats(summary.profiles.stats).map((stat, index) => (
-                <div key={`${stat.type}-${index}`} title={stat.tooltip ?? ''}>
-                  <span>{stat.type ?? '-'}</span>
-                  <strong>{stat.value ?? '-'}</strong>
-                </div>
-              ))}
-            </div>
-            {summary.profiles.skillPoints.total !== null && (
-              <p
-                className={styles['skill-point']}
-              >{`스킬 포인트 ${summary.profiles.skillPoints.using ?? 0}/${summary.profiles.skillPoints.total}`}</p>
-            )}
-            {summary.profiles.stats.length === 0 && (
-              <p className={styles['empty-info']}>전투 정보가 없습니다.</p>
-            )}
-          </DetailPanel>
-
+          <CombatStatSection stats={summary.profiles.stats} />
           <EngravingSection engravings={summary.engravings} />
-
           <LegendaryAvatarSection avatars={summary.legendaryAvatars} />
         </div>
       </div>
@@ -175,18 +157,4 @@ export default function CharacterDetail(props: { characterId: string }) {
       </div>
     </div>
   );
-}
-
-function getOrderedStats(stats: TResLostarkMainCharacter['summary']['profiles']['stats']) {
-  const priorityTypes = ['치명', '특화', '신속', '공격력', '최대 생명력'];
-
-  return [...stats].sort((left, right) => {
-    const leftIndex = priorityTypes.indexOf(left.type ?? '');
-    const rightIndex = priorityTypes.indexOf(right.type ?? '');
-
-    return (
-      (leftIndex === -1 ? priorityTypes.length : leftIndex) -
-      (rightIndex === -1 ? priorityTypes.length : rightIndex)
-    );
-  });
 }
