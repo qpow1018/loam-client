@@ -13,8 +13,8 @@ import CombatStatSection from './CombatStatSection';
 import EngravingSection from './EngravingSection';
 import GemSection from './GemSection';
 import LegendaryAvatarSection from './LegendaryAvatarSection';
+import ArkGridSection from './ArkGridSection';
 
-import ItemSlot from '@/components/lostark/itemSlot/ItemSlot';
 import ArkPassiveNodeSection from './ArkPassiveNodeSection';
 import DetailPanel from './DetailPanel';
 
@@ -112,27 +112,10 @@ export default function CharacterDetail(props: { characterId: string }) {
       </div>
 
       <div className={styles['ark-layout']}>
+        <ArkGridSection arkGrid={summary.arkGrid} />
+
         <DetailPanel title="아크 패시브 상세">
           <ArkPassiveNodeSection arkPassive={summary.arkPassive} />
-        </DetailPanel>
-
-        <DetailPanel title="아크 그리드">
-          <div className={styles['core-list']}>
-            {summary.arkGrid.cores.map((core, index) => (
-              <div key={`${core.name}-${index}`}>
-                <ItemSlot imageUrl={core.icon} grade={core.grade} size={36} />
-                <span>{core.name?.split(':').at(-1)?.trim() ?? '-'}</span>
-                <strong>{core.point ?? 0}P</strong>
-              </div>
-            ))}
-          </div>
-          <div className={styles['effect-list']}>
-            {summary.arkGrid.effects.map((effect, index) => (
-              <span key={`${effect.name}-${index}`}>
-                {effect.name ?? '-'} <strong>Lv. {effect.level ?? 0}</strong>
-              </span>
-            ))}
-          </div>
         </DetailPanel>
       </div>
     </div>
