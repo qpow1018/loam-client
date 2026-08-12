@@ -78,7 +78,7 @@ export default function CharacterDetail(props: { characterId: string }) {
   if (!character) {
     return (
       <div className={styles['character-detail']}>
-        <p className={styles['empty-info']}>메인 캐릭터 정보를 찾을 수 없습니다.</p>
+        <p className={styles['empty-character']}>메인 캐릭터 정보를 찾을 수 없습니다.</p>
       </div>
     );
   }
@@ -111,7 +111,6 @@ export default function CharacterDetail(props: { characterId: string }) {
 
       <div className={styles['ark-layout']}>
         <ArkGridSection arkGrid={summary.arkGrid} />
-
         <ArkPassiveSection arkPassive={summary.arkPassive} />
       </div>
     </div>
