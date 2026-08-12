@@ -1,46 +1,90 @@
 .ark-grid-section {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  padding: 12px;
+
   .core-list {
     display: flex;
     flex-direction: column;
+    gap: 8px;
+    min-width: 0;
 
-    > div {
-      display: grid;
+    .core-item {
+      display: flex;
       min-width: 0;
-      min-height: 48px;
-      grid-template-columns: 36px minmax(0, 1fr) auto;
       align-items: center;
-      gap: 7px;
-      border-bottom: 1px solid rgba($border-soft, 0.72);
-      color: $text-primary;
-      font-size: 10px;
+      gap: 10px;
 
-      span {
+      .core-info {
+        min-width: 0;
+      }
+
+      .core-name {
         overflow: hidden;
+        margin-bottom: 2px;
+        color: $text-primary;
+        font-size: 12px;
+        font-weight: 500;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
 
-      strong {
+      .core-point {
         color: $mint-accent;
+        font-size: 13px;
+        font-weight: 700;
       }
     }
   }
 
-  .effect-list {
+  .effect-section {
     display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-top: 10px;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
 
-    > span {
-      padding: 4px 6px;
-      background: $gray-900;
-      border: 1px solid $border-soft;
-      color: $text-secondary;
-      font-size: 10px;
+    .effect-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
 
-      strong {
+      .effect-item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 12px;
+
+        .effect-name {
+          color: $text-primary;
+        }
+
+        .effect-level {
+          color: $mint-accent;
+          font-weight: 500;
+        }
+      }
+    }
+
+    .boss-damage-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: $mint-surface;
+      border-radius: $border-radius;
+
+      .boss-damage-label {
+        color: $text-primary;
+        font-size: 11px;
+        font-weight: 700;
+      }
+
+      .boss-damage-level {
+        flex-shrink: 0;
         color: $mint-light;
+        font-size: 13px;
+        font-weight: 700;
       }
     }
   }
