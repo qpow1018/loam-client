@@ -16,9 +16,7 @@ import LegendaryAvatarSection from './LegendaryAvatarSection';
 
 import ItemSlot from '@/components/lostark/itemSlot/ItemSlot';
 import ArkPassiveNodeSection from './ArkPassiveNodeSection';
-import CardSection from './CardSection';
 import DetailPanel from './DetailPanel';
-import SkillSection from './SkillSection';
 
 import styles from './characterDetail.module.scss';
 
@@ -136,24 +134,6 @@ export default function CharacterDetail(props: { characterId: string }) {
             ))}
           </div>
         </DetailPanel>
-      </div>
-
-      <div className={styles['bottom-details']}>
-        <CardSection cards={summary.cards} />
-
-        <SkillSection skills={summary.combatSkills} />
-      </div>
-
-      <div>
-        <p>TODO</p>
-        <p>특성 - 힘민지최생, 치특신</p>
-        <p>각인 - 어빌돌 연계</p>
-        <p>보석</p>
-        <p>아크패시브 - 찍은것도 보여주기</p>
-        <p>아크그리드</p>
-        <p>카드</p>
-        <p>스킬</p>
-        <p>아바타</p>
       </div>
     </div>
   );

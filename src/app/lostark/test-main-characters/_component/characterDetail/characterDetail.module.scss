@@ -8,8 +8,7 @@
     align-items: stretch;
   }
 
-  .equipment-column,
-  .bottom-details {
+  .equipment-column {
     display: flex;
     min-width: 0;
     flex-direction: column;
@@ -27,10 +26,6 @@
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
-    margin-top: 16px;
-  }
-
-  .bottom-details {
     margin-top: 16px;
   }
 
