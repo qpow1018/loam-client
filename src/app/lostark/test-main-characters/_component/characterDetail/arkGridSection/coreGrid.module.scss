@@ -1,7 +1,18 @@
 .core-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 8px;
+
+  .core-group {
+    min-width: 0;
+
+    .core-group-title {
+      margin-bottom: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      color: $text-secondary;
+    }
+  }
 
   .core-list {
     display: flex;
@@ -24,15 +35,14 @@
         margin-bottom: 2px;
         color: $text-primary;
         font-size: 12px;
-        font-weight: 500;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
 
       .core-point {
-        color: $mint-accent;
         font-size: 13px;
-        font-weight: 700;
+        font-weight: 500;
+        color: $mint-accent;
       }
     }
   }
