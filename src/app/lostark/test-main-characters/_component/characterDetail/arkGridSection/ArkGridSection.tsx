@@ -18,10 +18,11 @@ export default function ArkGridSection(props: { arkGrid: TLostarkArkGrid }) {
       .filter((core) => core.name?.startsWith(`${type}의`))
       .sort((a, b) => getCoreOrder(a.name) - getCoreOrder(b.name)),
   }));
+  const [orderTypeCoreGroup, chaosTypeCoreGroup] = coreGroups;
 
   return (
     <DetailPanel title="아크 그리드" className={styles['ark-grid-section']}>
-      <CoreGrid coreGroups={coreGroups} />
+      <CoreGrid orderTypeCoreGroup={orderTypeCoreGroup} chaosTypeCoreGroup={chaosTypeCoreGroup} />
       <GemEffectTable coreGroups={coreGroups} />
     </DetailPanel>
   );
