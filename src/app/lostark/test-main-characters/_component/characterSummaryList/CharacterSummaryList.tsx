@@ -1,6 +1,9 @@
 import type { TResLostarkMainCharacter } from '@/api/lostark/type';
 
-import SummaryItem from './SummaryItem';
+import ArkSummary from './arkSummary/ArkSummary';
+import EquipmentSummary from './equipmentSummary/EquipmentSummary';
+import ProfileSummary from './profileSummary/ProfileSummary';
+import SettingSummary from './settingSummary/SettingSummary';
 
 import styles from './characterSummaryList.module.scss';
 
@@ -10,21 +13,23 @@ export default function CharacterSummaryList(props: {
 }) {
   return (
     <div className={styles['character-summary-list']}>
-      <div className={styles['intro']}>
-        <p className={styles['eyebrow']}>등록한 메인 캐릭터</p>
-        <h1>전체 캐릭터 요약</h1>
-        <p>장비와 세팅 상태를 빠르게 비교하고, 캐릭터를 선택해 상세 정보를 확인하세요.</p>
-      </div>
-
-      <div className={styles['list']}>
-        {props.characters.map((character) => (
-          <SummaryItem
-            key={character.id}
+      {props.characters.map((character) => (
+        <div
+          key={character.id}
+          className={styles['summary-item']}
+        >
+          <ProfileSummary
             character={character}
             onSelect={() => props.onSelectCharacter(character.id)}
           />
-        ))}
-      </div>
+          <EquipmentSummary equipment={character.summary.equipment} />
+
+          <div className={styles['detail-layout']}>
+            <SettingSummary summary={character.summary} />
+            <ArkSummary summary={character.summary} />
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

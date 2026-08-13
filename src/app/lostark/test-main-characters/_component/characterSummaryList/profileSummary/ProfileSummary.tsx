@@ -1,8 +1,13 @@
 import type { TResLostarkMainCharacter } from '@/api/lostark/type';
 
+import Button from '@/components/common/button/Button';
+
 import styles from './profileSummary.module.scss';
 
-export default function ProfileSummary(props: { character: TResLostarkMainCharacter }) {
+export default function ProfileSummary(props: {
+  character: TResLostarkMainCharacter;
+  onSelect: () => void;
+}) {
   const { profiles, equipment } = props.character.summary;
   const { manualMetrics } = props.character;
   const abilityStoneEngravings = equipment.abilityStone?.abilityStoneEngravings.slice(0, 2) ?? [];
@@ -44,6 +49,10 @@ export default function ProfileSummary(props: { character: TResLostarkMainCharac
           </div>
         )}
       </div>
+
+      <Button color="mint" fill="outline" size="small" onClick={props.onSelect}>
+        상세 보기
+      </Button>
     </div>
   );
 }

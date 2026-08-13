@@ -1,28 +1,13 @@
 .character-summary-list {
+  display: flex;
+  flex-direction: column;
   width: $page-width;
+  gap: 16px;
 
-  .intro {
-    margin: 8px 0 20px;
-
-    .eyebrow {
-      color: $mint-accent;
-      font-size: 12px;
-    }
-    h1 {
-      margin-top: 4px;
-      color: $text-primary;
-      font-size: 24px;
-    }
-    > p:last-child {
-      margin-top: 8px;
-      color: $text-secondary;
-      font-size: 13px;
-    }
-  }
-
-  .list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+  .summary-item {
+    width: 100%;
+    background: $bg;
+    border: 1px solid $border-soft;
+    border-radius: $border-radius;
   }
 }
