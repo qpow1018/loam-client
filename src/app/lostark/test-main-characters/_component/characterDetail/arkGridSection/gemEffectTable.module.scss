@@ -29,32 +29,31 @@
 
     .effect-name {
       overflow: hidden;
-      color: $text-primary;
+      color: $text-secondary;
       font-weight: 400;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
     .effect-value {
-      color: $text-primary;
+      color: $text-secondary;
       font-weight: 400;
       text-align: right;
     }
 
     .total-value {
-      color: $text-primary;
-      font-weight: 500;
+      color: $amber-accent;
       text-align: right;
     }
 
     &.important {
       .effect-name {
-        color: $amber-light;
+        color: $text-primary;
         font-weight: 500;
       }
 
       .effect-value {
-        color: $amber-light;
+        color: $text-primary;
         font-weight: 500;
       }
 
