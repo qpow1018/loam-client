@@ -13,7 +13,7 @@ import CombatStatSection from './CombatStatSection';
 import EngravingSection from './EngravingSection';
 import GemSection from './GemSection';
 import LegendaryAvatarSection from './LegendaryAvatarSection';
-import ArkGridSection from './ArkGridSection';
+import ArkGridSection from './arkGridSection/ArkGridSection';
 import ArkPassiveSection from './ArkPassiveSection';
 
 import styles from './characterDetail.module.scss';

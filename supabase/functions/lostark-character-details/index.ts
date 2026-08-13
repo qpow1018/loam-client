@@ -1005,7 +1005,7 @@ function parseArkGridGem(gem: Record<string, unknown>): ParsedArkGridGem {
 }
 
 function getTooltipNumber(lines: string[], label: string) {
-  const matchedLine = lines.find((line) => new RegExp(`^${label}\s*:`).test(line));
+  const matchedLine = lines.find((line) => new RegExp(`^${label}\\s*:`).test(line));
   const value = matchedLine?.match(/:\s*(\d+)/)?.[1];
 
   return value ? Number(value) : null;
