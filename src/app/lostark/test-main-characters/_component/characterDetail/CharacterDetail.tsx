@@ -10,7 +10,7 @@ import BoxLoading from '@/components/common/loading/BoxLoading';
 import ProfileHeader from './profileHeader/ProfileHeader';
 import EquipmentSection from './equipmentSection/EquipmentSection';
 import CombatStatSection from './CombatStatSection';
-import EngravingSection from './EngravingSection';
+import EngravingSection from './engravingSection/EngravingSection';
 import GemSection from './gemSection/GemSection';
 import LegendaryAvatarSection from './LegendaryAvatarSection';
 import ArkGridSection from './arkGridSection/ArkGridSection';

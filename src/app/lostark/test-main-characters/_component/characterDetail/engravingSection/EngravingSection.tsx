@@ -2,8 +2,9 @@ import type { TLostarkEngraving } from '@/api/lostark/type';
 import { engravingIconUrlByName } from '@/define/lostark/engravingIcons';
 
 import { ItemTooltip, ItemTooltipTrigger } from '@/components/lostark/itemTooltip/ItemTooltip';
+import DetailPanel from '@/app/lostark/test-main-characters/_component/characterDetail/DetailPanel';
 
-import DetailPanel from './DetailPanel';
+import EngravingTooltip from './EngravingTooltip';
 
 import styles from './engravingSection.module.scss';
 
@@ -30,13 +31,13 @@ function EngravingItem(props: { engraving: TLostarkEngraving }) {
       {iconUrl && (
         <ItemTooltipTrigger className={styles['icon-tooltip']}>
           <img src={iconUrl} alt="" className={styles['icon']} />
-          <ItemTooltip>TODO</ItemTooltip>
+          <ItemTooltip>
+            <EngravingTooltip engraving={engraving} />
+          </ItemTooltip>
         </ItemTooltipTrigger>
       )}
       <p className={styles['name']}>{engraving.name ?? '-'}</p>
-      <p
-        className={`${styles['level-value']} ${engraving.level === 4 ? styles['max'] : ''}`}
-      >
+      <p className={`${styles['level-value']} ${engraving.level === 4 ? styles['max'] : ''}`}>
         &times;
         <span>{engraving.level ?? 0}</span>
       </p>
