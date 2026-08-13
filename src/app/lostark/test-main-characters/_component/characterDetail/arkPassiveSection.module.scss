@@ -1,14 +1,14 @@
-.ark-passive-node-section {
+.ark-passive-section {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  border-top: 1px solid $border-soft;
-  border-left: 1px solid $border-soft;
+  gap: 8px;
+  padding: 12px;
 }
 
 .category-section {
   min-width: 0;
-  border-right: 1px solid $border-soft;
-  border-bottom: 1px solid $border-soft;
+  background: $bg-dark;
+  border: 1px solid $border-soft;
 }
 
 .category-header {
