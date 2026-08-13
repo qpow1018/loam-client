@@ -1,6 +1,9 @@
 import type { TLostarkArkGrid } from '@/api/lostark/type';
 
+import { ItemTooltip, ItemTooltipTrigger } from '@/components/lostark/itemTooltip/ItemTooltip';
 import ItemSlot from '@/components/lostark/itemSlot/ItemSlot';
+
+import ArkGridCoreTooltip from './ArkGridCoreTooltip';
 
 import styles from './coreGrid.module.scss';
 
@@ -33,7 +36,12 @@ function CoreGroup(props: { coreGroup: TCoreGroup }) {
       <div className={styles['core-list']}>
         {coreGroup.cores.map((core, index) => (
           <div key={`${core.name}-${index}`} className={styles['core-item']}>
-            <ItemSlot imageUrl={core.icon} grade={core.grade} size={44} />
+            <ItemTooltipTrigger>
+              <ItemSlot imageUrl={core.icon} grade={core.grade} size={44} />
+              <ItemTooltip>
+                <ArkGridCoreTooltip core={core} />
+              </ItemTooltip>
+            </ItemTooltipTrigger>
 
             <div className={styles['core-info']}>
               <p className={styles['core-name']}>{getCoreDisplayName(core.name)}</p>
