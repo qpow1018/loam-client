@@ -2,7 +2,9 @@ import type { TLostarkGem } from '@/api/lostark/type';
 
 import { ItemTooltip, ItemTooltipTrigger } from '@/components/lostark/itemTooltip/ItemTooltip';
 import ItemSlot from '@/components/lostark/itemSlot/ItemSlot';
-import DetailPanel from './DetailPanel';
+import DetailPanel from '@/app/lostark/test-main-characters/_component/characterDetail/DetailPanel';
+
+import GemTooltip from './GemTooltip';
 
 import styles from './gemSection.module.scss';
 
@@ -30,15 +32,13 @@ export default function GemSection(props: { gems: TLostarkGem[] }) {
           {gemLevelCounts.map((levelGroup) => (
             <span key={levelGroup.label} className={styles['level-count']}>
               <span className={styles['level-label']}>{levelGroup.label}</span>
-              <strong className={styles['level-value']}>{levelGroup.count}개</strong>
+              <span className={styles['level-value']}>{levelGroup.count}개</span>
             </span>
           ))}
           {basicAttackPower !== null && (
             <span className={styles['level-count']}>
               <span className={styles['level-label']}>기본 공격력</span>
-              <strong
-                className={styles['level-value']}
-              >{`+${basicAttackPower.toFixed(2)}%`}</strong>
+              <span className={styles['level-value']}>{`+${basicAttackPower.toFixed(2)}%`}</span>
             </span>
           )}
         </div>
@@ -64,7 +64,9 @@ function GemItem(props: { gem: TLostarkGem }) {
     <div className={styles['gem-item']}>
       <ItemTooltipTrigger>
         <ItemSlot imageUrl={gem.icon} grade={gem.grade} />
-        <ItemTooltip>TODO</ItemTooltip>
+        <ItemTooltip>
+          <GemTooltip gem={gem} />
+        </ItemTooltip>
       </ItemTooltipTrigger>
       <p className={styles['gem-title']}>{`${gem.level ?? '-'} ${gem.kind ?? '-'}`}</p>
     </div>
