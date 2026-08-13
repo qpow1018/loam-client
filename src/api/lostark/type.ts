@@ -241,6 +241,19 @@ export type TLostarkArkGrid = {
     name: string | null;
     grade: string | null;
     point: number | null;
+    gems: {
+      grade: string | null;
+      name: string | null;
+      type: '질서' | '혼돈' | null;
+      point: number | null;
+      willpower: number | null;
+      corePoint: number | null;
+      effects: {
+        name: string;
+        level: number | null;
+        description: string | null;
+      }[];
+    }[];
   }[];
   effects: {
     name: string | null;

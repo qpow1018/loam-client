@@ -99,6 +99,13 @@ function normalizeCharacterSummary(
       ...summary.arkPassive,
       nodes: summary.arkPassive.nodes ?? [],
     },
+    arkGrid: {
+      ...summary.arkGrid,
+      cores: summary.arkGrid.cores.map((core) => ({
+        ...core,
+        gems: core.gems ?? [],
+      })),
+    },
     avatars: summary.avatars ?? [],
     cards: summary.cards ?? {
       cards: [],

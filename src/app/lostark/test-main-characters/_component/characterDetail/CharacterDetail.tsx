@@ -84,6 +84,7 @@ export default function CharacterDetail(props: { characterId: string }) {
   }
 
   const { summary } = character;
+
   return (
     <div className={styles['character-detail']}>
       <ProfileHeader

@@ -156,6 +156,23 @@ type ParsedArkGridCore = {
   name: string | null;
   grade: string | null;
   point: number | null;
+  gems: ParsedArkGridGem[];
+};
+
+type ParsedArkGridGem = {
+  grade: string | null;
+  name: string | null;
+  type: '질서' | '혼돈' | null;
+  point: number | null;
+  willpower: number | null;
+  corePoint: number | null;
+  effects: ParsedArkGridGemEffect[];
+};
+
+type ParsedArkGridGemEffect = {
+  name: string;
+  level: number | null;
+  description: string | null;
 };
 
 type ParsedArkGridEffect = {
@@ -957,6 +974,58 @@ function getArkPassiveLevel(value: string) {
   return level ? Number(level) : null;
 }
 
+function parseArkGridGem(gem: Record<string, unknown>): ParsedArkGridGem {
+  const tooltip = parseTooltip(gem.Tooltip);
+  const elements = getTooltipElements(tooltip);
+  const nameTag = elements.find((element) => getString(element, 'type') === 'NameTagBox');
+  const fullName = stripHtml(getString(nameTag, 'value') ?? '');
+  const nameMatch = fullName.match(/^(질서|혼돈)의 젬\s*:\s*(.+)$/);
+  const effectLines = elements.flatMap((element) => {
+    if (getString(element, 'type') !== 'ItemPartBox') return [];
+
+    const value = asRecord(element.value);
+    return getPartBoxTitle(value) === '젬 효과' ? getPartBoxLines(value) : [];
+  });
+  const basicInfoLines = elements.flatMap((element) => {
+    if (getString(element, 'type') !== 'ItemPartBox') return [];
+
+    const value = asRecord(element.value);
+    return getPartBoxTitle(value) === '젬 기본 정보' ? getPartBoxLines(value) : [];
+  });
+
+  return {
+    grade: getString(gem, 'Grade'),
+    name: nameMatch?.[2]?.trim() || null,
+    type: nameMatch?.[1] === '질서' || nameMatch?.[1] === '혼돈' ? nameMatch[1] : null,
+    point: getTooltipNumber(basicInfoLines, '젬 포인트'),
+    willpower: getTooltipNumber(effectLines, '필요 의지력'),
+    corePoint: getTooltipNumber(effectLines, '(?:질서|혼돈) 포인트'),
+    effects: getArkGridGemEffects(effectLines),
+  };
+}
+
+function getTooltipNumber(lines: string[], label: string) {
+  const matchedLine = lines.find((line) => new RegExp(`^${label}\s*:`).test(line));
+  const value = matchedLine?.match(/:\s*(\d+)/)?.[1];
+
+  return value ? Number(value) : null;
+}
+
+function getArkGridGemEffects(lines: string[]): ParsedArkGridGemEffect[] {
+  return lines.flatMap((line, index) => {
+    const matched = line.match(/^\[([^\]]+)\]\s*Lv\.?\s*(\d+)/);
+    if (!matched) return [];
+
+    const nextLine = lines[index + 1];
+
+    return {
+      name: matched[1],
+      level: Number(matched[2]),
+      description: nextLine && !nextLine.startsWith('[') ? nextLine : null,
+    };
+  });
+}
+
 function parseArkGrid(arkGrid: Record<string, unknown>): ParsedArkGridSummary {
   return {
     cores: asArray(arkGrid.Slots).map((item) => {
@@ -967,6 +1036,7 @@ function parseArkGrid(arkGrid: Record<string, unknown>): ParsedArkGridSummary {
         name: getString(itemRecord, 'Name'),
         grade: getString(itemRecord, 'Grade'),
         point: getNumber(itemRecord, 'Point'),
+        gems: asArray(itemRecord.Gems).map((gem) => parseArkGridGem(asRecord(gem))),
       };
     }),
     effects: asArray(arkGrid.Effects).map((item) => {

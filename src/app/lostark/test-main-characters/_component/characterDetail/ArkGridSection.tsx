@@ -11,6 +11,7 @@ const EFFECT_ORDER = ['보스 피해', '추가 피해', '공격력'];
 
 export default function ArkGridSection(props: { arkGrid: TLostarkArkGrid }) {
   const { arkGrid } = props;
+
   const sortedCores = [...arkGrid.cores].sort(
     (a, b) => getCoreOrder(a.name) - getCoreOrder(b.name),
   );
