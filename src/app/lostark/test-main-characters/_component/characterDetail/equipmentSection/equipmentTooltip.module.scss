@@ -1,0 +1,69 @@
+.equipment-tooltip {
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    .item-name {
+      overflow: hidden;
+      color: $text-primary;
+      font-size: 13px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .item-grade {
+      flex: 0 0 auto;
+      color: $text-secondary;
+      font-size: 11px;
+    }
+  }
+
+  .detail-list,
+  .effect-groups {
+    display: flex;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid $border-soft;
+  }
+
+  .detail-list {
+    gap: 5px 10px;
+    flex-wrap: wrap;
+
+    .detail-item {
+      color: $text-secondary;
+      font-size: 11px;
+    }
+
+    .detail-label {
+      margin-right: 4px;
+      color: $text-primary;
+      font-weight: 500;
+    }
+  }
+
+  .effect-groups {
+    flex-direction: column;
+    gap: 10px;
+
+    .effect-group-label {
+      margin-bottom: 5px;
+      color: $text-muted;
+      font-size: 11px;
+    }
+
+    .effect-list {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .effect-item {
+      color: $text-primary;
+      font-size: 11px;
+      white-space: pre-line;
+    }
+  }
+}

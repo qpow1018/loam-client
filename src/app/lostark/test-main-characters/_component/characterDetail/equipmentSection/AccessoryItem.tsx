@@ -5,6 +5,8 @@ import ItemSlot from '@/components/lostark/itemSlot/ItemSlot';
 import QualityChip from '@/components/lostark/qualityChip/QualityChip';
 import EffectItem from '@/app/lostark/test-main-characters/_component/characterDetail/equipmentSection/EffectItem';
 
+import EquipmentTooltip from './EquipmentTooltip';
+
 import styles from './accessoryItem.module.scss';
 
 export default function AccessoryItem(props: { accessory: TLostarkAccessory }) {
@@ -14,7 +16,33 @@ export default function AccessoryItem(props: { accessory: TLostarkAccessory }) {
     <div className={styles['accessory-item']}>
       <ItemTooltipTrigger>
         <ItemSlot imageUrl={accessory.icon} grade={accessory.grade} />
-        <ItemTooltip>TODO</ItemTooltip>
+        <ItemTooltip>
+          <EquipmentTooltip
+            name={accessory.name}
+            grade={accessory.grade}
+            details={[
+              { label: '상세 이름', value: accessory.title },
+              { label: '종류', value: accessory.type },
+              { label: '티어', value: accessory.tier },
+              { label: '품질', value: accessory.quality },
+            ]}
+            effectGroups={[
+              {
+                label: '기본 효과',
+                effects: accessory.basicEffects.map((text) => ({ text, color: null })),
+              },
+              {
+                label: '추가 효과',
+                effects: accessory.additionalEffects.map((text) => ({ text, color: null })),
+              },
+              { label: '연마 효과', effects: accessory.polishEffects },
+              {
+                label: '아크 패시브 효과',
+                effects: accessory.arkPassiveEffects.map((text) => ({ text, color: null })),
+              },
+            ]}
+          />
+        </ItemTooltip>
       </ItemTooltipTrigger>
 
       <div className={styles['info-box']}>
