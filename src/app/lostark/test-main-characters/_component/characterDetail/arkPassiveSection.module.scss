@@ -1,167 +1,72 @@
 .ark-passive-section {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-  padding: 12px;
-}
+  padding: 16px 0;
 
-.category-section {
-  min-width: 0;
-  background: $bg-dark;
-  border: 1px solid $border-soft;
-}
-
-.category-header {
-  display: flex;
-  height: 56px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 0 14px;
-  background: $gray-900;
-  border-bottom: 1px solid $border-soft;
-
-  > div {
-    display: flex;
+  .category-section {
     min-width: 0;
-    align-items: center;
-    gap: 6px;
-  }
+    padding: 0 16px;
+    border-left: 1px solid $border-soft;
 
-  strong {
-    color: $text-primary;
-    font-size: 13px;
-    font-weight: 700;
-  }
-
-  span {
-    color: $text-secondary;
-    font-size: 10px;
-    white-space: nowrap;
-  }
-
-  > div span {
-    color: $violet-light;
-    font-weight: 600;
-  }
-}
-
-.node-list {
-  display: flex;
-  flex-direction: column;
-}
-
-.node-row {
-  position: relative;
-  display: grid;
-  min-width: 0;
-  min-height: 54px;
-  grid-template-columns: 36px minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
-  border-bottom: 1px solid rgba($border-soft, 0.72);
-
-  &:last-child {
-    border-bottom: 0;
-  }
-
-  &:hover,
-  &:focus {
-    z-index: $z-index-popover;
-
-    .node-tooltip {
-      display: block;
+    &:first-of-type {
+      border-left: none;
     }
   }
 
-  &:focus-visible {
-    outline: 1px solid $border-focus;
-    outline-offset: -1px;
-  }
-}
+  .category-header {
+    margin-bottom: 20px;
 
-.node-level {
-  color: $violet-light;
-  font-size: 11px;
-  font-weight: 700;
-  white-space: nowrap;
-}
+    .category-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+      font-size: 13px;
 
-.node-copy {
-  min-width: 0;
+      .category-name {
+        font-weight: 500;
+        color: $text-primary;
+      }
 
-  strong,
-  span {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+      .category-point {
+        color: $text-secondary;
+      }
+    }
 
-  strong {
-    color: $text-primary;
-    font-size: 11px;
-    font-weight: 600;
+    .category-description {
+      font-size: 12px;
+      font-weight: 500;
+      color: $amber-accent;
+    }
   }
 
-  span {
-    margin-top: 2px;
-    color: $text-secondary;
-    font-size: 10px;
-  }
-}
-
-.node-tooltip {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
-  z-index: $z-index-popover;
-  display: none;
-  width: 320px;
-  max-height: 320px;
-  overflow-y: auto;
-  padding: 10px 12px;
-  background: $gray-900;
-  border: 1px solid $border;
-  box-shadow: $shadow-popover;
-  color: $text-secondary;
-  font-size: 11px;
-  pointer-events: none;
-
-  strong,
-  span,
-  p {
-    display: block;
+  .node-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 
-  strong {
-    color: $text-primary;
-    font-size: 13px;
-    font-weight: 600;
+  .node-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    .node-icon {
+      display: block;
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+    }
+
+    .node-name {
+      font-size: 12px;
+      color: $text-primary;
+    }
+
+    .node-level {
+      font-size: 12px;
+      font-weight: 500;
+      color: $amber-light;
+    }
   }
-
-  span {
-    margin-top: 3px;
-    color: $violet-light;
-    font-size: 10px;
-  }
-
-  p {
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px solid $border-soft;
-    white-space: pre-line;
-  }
-}
-
-.category-section:nth-child(3) .node-tooltip {
-  right: 0;
-  left: auto;
-}
-
-.empty-info {
-  padding: 14px;
-  color: $text-secondary;
-  font-size: 11px;
 }
