@@ -8,7 +8,7 @@ import toast from '@/utils/toast';
 
 import BoxLoading from '@/components/common/loading/BoxLoading';
 import CharacterDetail from './_component/characterDetail/CharacterDetail';
-import CharacterSummaryList from './_component/CharacterSummaryList';
+import CharacterSummaryList from './_component/characterSummaryList/CharacterSummaryList';
 
 import styles from './testMainCharactersClient.module.scss';
 

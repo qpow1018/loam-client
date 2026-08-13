@@ -1,0 +1,57 @@
+.setting-summary {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: 1fr;
+}
+.setting-summary > section + section {
+  border-top: 1px solid $border-soft;
+}
+
+.gem-list,
+.engraving-list,
+.avatar-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.gem-list span,
+.engraving-list span {
+  padding: 5px 7px;
+  border-radius: 4px;
+  background: $gray-700;
+  color: $text-primary;
+  font-size: 11px;
+}
+.engraving-list span {
+  white-space: nowrap;
+}
+.empty-value {
+  color: $text-muted !important;
+}
+.avatar-list {
+  align-items: center;
+}
+.avatar-list span {
+  display: inline-flex;
+  width: 30px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid $border;
+  border-radius: 4px;
+  font-size: 10px;
+}
+.avatar-equipped {
+  color: $amber-light;
+  background: $amber-tint;
+  border-color: $amber !important;
+}
+.avatar-empty {
+  color: $text-muted;
+  background: $gray-700;
+}
+.avatar-list b {
+  margin-left: 3px;
+  color: $text-primary;
+  font-size: 12px;
+}
