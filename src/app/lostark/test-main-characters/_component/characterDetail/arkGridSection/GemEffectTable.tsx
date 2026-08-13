@@ -14,36 +14,53 @@ export default function GemEffectTable(props: {
   coreGroups: { type: string; cores: TArkGridCore[] }[];
 }) {
   const { coreGroups } = props;
+
   const totalEffects = getGemEffects(coreGroups.flatMap(({ cores }) => cores));
   const gemEffectsByType = coreGroups.map(({ type, cores }) => ({
     type,
     effects: getGemEffects(cores),
   }));
+  const importantEffects = totalEffects.filter((effect) => EFFECT_ORDER.includes(effect.name));
+  const secondaryEffects = totalEffects.filter((effect) => !EFFECT_ORDER.includes(effect.name));
 
   return (
-    <div className={styles['effect-table-section']}>
-      <table className={styles['effect-table']}>
-        <thead>
-          <tr>
-            <th>효과</th>
-            {coreGroups.map(({ type }) => (
-              <th key={type}>{type}</th>
-            ))}
-            <th>전체</th>
-          </tr>
-        </thead>
-        <tbody>
-          {totalEffects.map((effect) => (
-            <tr key={effect.name}>
-              <th>{effect.name}</th>
-              {gemEffectsByType.map(({ type, effects }) => (
-                <td key={type}>Lv. {getEffectLevel(effects, effect.name)}</td>
-              ))}
-              <td>Lv. {effect.level}</td>
-            </tr>
+    <div className={styles['gem-effect-table']}>
+      <div className={styles['effect-header']}>
+        <span className={styles['effect-label']}>효과</span>
+        {coreGroups.map(({ type }) => (
+          <span key={type} className={styles['effect-value']}>
+            {type}
+          </span>
+        ))}
+        <span className={styles['total-value']}>전체</span>
+      </div>
+
+      <EffectList effects={importantEffects} gemEffectsByType={gemEffectsByType} isImportant />
+      <EffectList effects={secondaryEffects} gemEffectsByType={gemEffectsByType} />
+    </div>
+  );
+}
+
+function EffectList(props: {
+  effects: TGemEffect[];
+  gemEffectsByType: { type: string; effects: TGemEffect[] }[];
+  isImportant?: boolean;
+}) {
+  const { effects, gemEffectsByType, isImportant = false } = props;
+
+  return (
+    <div className={`${styles['effect-list']} ${isImportant ? styles['important'] : ''}`}>
+      {effects.map((effect) => (
+        <div key={effect.name} className={styles['effect-row']}>
+          <span className={styles['effect-name']}>{effect.name}</span>
+          {gemEffectsByType.map(({ type, effects: effectsByType }) => (
+            <span key={type} className={styles['effect-value']}>
+              Lv. {getEffectLevel(effectsByType, effect.name)}
+            </span>
           ))}
-        </tbody>
-      </table>
+          <span className={styles['total-value']}>Lv. {effect.level}</span>
+        </div>
+      ))}
     </div>
   );
 }
