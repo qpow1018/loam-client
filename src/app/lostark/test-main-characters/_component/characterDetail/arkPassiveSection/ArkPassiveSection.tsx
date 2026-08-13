@@ -1,6 +1,9 @@
 import type { TLostarkArkPassive, TLostarkArkPassiveNode } from '@/api/lostark/type';
 
-import DetailPanel from './DetailPanel';
+import { ItemTooltip, ItemTooltipTrigger } from '@/components/lostark/itemTooltip/ItemTooltip';
+import DetailPanel from '@/app/lostark/test-main-characters/_component/characterDetail/DetailPanel';
+
+import ArkPassiveTooltip from './ArkPassiveTooltip';
 
 import styles from './arkPassiveSection.module.scss';
 
@@ -39,7 +42,14 @@ function NodeItem(props: { node: TLostarkArkPassiveNode }) {
 
   return (
     <div className={styles['node-item']}>
-      {node.icon && <img src={node.icon} alt="" className={styles['node-icon']} />}
+      {node.icon && (
+        <ItemTooltipTrigger>
+          <img src={node.icon} alt="" className={styles['node-icon']} />
+          <ItemTooltip>
+            <ArkPassiveTooltip node={node} />
+          </ItemTooltip>
+        </ItemTooltipTrigger>
+      )}
       <span className={styles['node-name']}>{node.name ?? '-'}</span>
       {node.level !== null && <span className={styles['node-level']}>{`Lv. ${node.level}`}</span>}
     </div>
