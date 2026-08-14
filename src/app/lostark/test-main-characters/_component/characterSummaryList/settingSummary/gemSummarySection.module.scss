@@ -1,0 +1,37 @@
+.gem-table {
+  overflow: hidden;
+  border: 1px solid $border;
+  border-radius: $border-radius;
+
+  .gem-table-row {
+    display: grid;
+    grid-template-columns: 48px repeat(4, minmax(0, 1fr));
+    border-top: 1px solid $border;
+
+    &:first-of-type {
+      border-top: 0;
+    }
+
+    .gem-table-cell {
+      display: flex;
+      min-width: 0;
+      min-height: 30px;
+      align-items: center;
+      justify-content: center;
+      border-left: 1px solid $border;
+      color: $text-primary;
+      font-size: 11px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .gem-row-label {
+      justify-content: flex-start;
+      padding-left: 8px;
+      border-left: none;
+      background: $bg-light;
+      color: $text-secondary;
+      font-weight: 400;
+    }
+  }
+}
