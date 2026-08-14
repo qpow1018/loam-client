@@ -4,31 +4,30 @@
 
   .passive-item {
     display: flex;
-    min-height: 34px;
     align-items: center;
     justify-content: space-between;
+    width: 140px;
+    height: 34px;
     padding: 0 10px;
-    border-radius: 4px;
-    font-size: 11px;
-  }
+    background: $bg-light;
+    color: $text-primary;
 
-  .passive-level {
-    font-size: 14px;
-    font-weight: 600;
-  }
+    .passive-name {
+      font-size: 11px;
+    }
 
-  .passive-high {
-    color: $chip-high-text;
-    background: $chip-high-bg;
-  }
+    .passive-level {
+      font-size: 12px;
+      font-weight: 500;
+    }
 
-  .passive-middle {
-    color: $chip-middle-text;
-    background: $chip-middle-bg;
-  }
+    &.passive-high {
+      color: $mint-light;
+      background: $mint-tint;
 
-  .passive-low {
-    color: $chip-low-text;
-    background: $chip-low-bg;
+      .passive-level {
+        color: $mint-light;
+      }
+    }
   }
 }

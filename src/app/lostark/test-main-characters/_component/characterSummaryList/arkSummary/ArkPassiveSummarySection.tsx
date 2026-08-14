@@ -17,7 +17,7 @@ export default function ArkPassiveSummarySection(props: { arkPassive: TLostarkAr
           return (
             <div
               key={category}
-              className={`${styles['passive-item']} ${getArkPassiveClassName(level)}`}
+              className={`${styles['passive-item']} ${level >= 26 ? styles['passive-high'] : ''}`}
             >
               <span className={styles['passive-name']}>{category}</span>
               <span className={styles['passive-level']}>{level}</span>
@@ -31,11 +31,4 @@ export default function ArkPassiveSummarySection(props: { arkPassive: TLostarkAr
 
 function getArkPassiveLevel(description: string) {
   return Number(description.match(/(\d+)레벨/)?.[1] ?? 0);
-}
-
-function getArkPassiveClassName(level: number) {
-  if (level >= 26) return styles['passive-high'];
-  if (level >= 21) return styles['passive-middle'];
-
-  return styles['passive-low'];
 }
