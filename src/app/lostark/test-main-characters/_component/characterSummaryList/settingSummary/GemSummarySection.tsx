@@ -14,7 +14,10 @@ export default function GemSummarySection(props: { gems: TResLostarkCharacterSum
       <div className={styles['gem-table']}>
         <GemTableRow label="레벨">
           {gemCounts.map((group) => (
-            <span key={group.level} className={styles['gem-table-cell']}>
+            <span
+              key={group.level}
+              className={`${styles['gem-table-cell']} ${styles['gem-level']}`}
+            >
               {group.label}
             </span>
           ))}
@@ -22,7 +25,13 @@ export default function GemSummarySection(props: { gems: TResLostarkCharacterSum
 
         <GemTableRow label="개수">
           {gemCounts.map((group) => (
-            <span key={group.level} className={styles['gem-table-cell']}>
+            <span
+              key={group.level}
+              className={`
+                ${styles['gem-table-cell']}
+                ${group.tier ? styles[`gem-tier-${group.tier}`] : ''}
+              `}
+            >
               {group.count > 0 ? `${group.count}개` : '-'}
             </span>
           ))}
@@ -49,12 +58,21 @@ function getGemCounts(gems: TResLostarkCharacterSummary['gems']) {
     { level: 9, label: '9레벨' },
     { level: 8, label: '8레벨' },
     { level: 7, label: '7레벨 이하' },
-  ].map(({ level, label }) => ({
-    label,
-    level,
-    count:
+  ].map(({ level, label }) => {
+    const count =
       level === 7
         ? gems.filter((gem) => (gem.level ?? 0) <= level).length
-        : gems.filter((gem) => gem.level === level).length,
-  }));
+        : gems.filter((gem) => gem.level === level).length;
+
+    return { label, level, count, tier: getGemTier(level, count) };
+  });
+}
+
+function getGemTier(level: number, count: number) {
+  if (count === 0) return 'none';
+  if (level === 10) return 'perfect';
+  if (level === 9) return 'middle';
+  if (level === 7) return 'low';
+
+  return null;
 }

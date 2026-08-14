@@ -5,24 +5,47 @@
 
   .gem-table-row {
     display: grid;
-    grid-template-columns: 48px repeat(4, minmax(0, 1fr));
+    grid-template-columns: 64px repeat(4, minmax(0, 1fr));
     border-top: 1px solid $border;
 
     &:first-of-type {
-      border-top: 0;
+      border-top: none;
     }
 
     .gem-table-cell {
       display: flex;
-      min-width: 0;
-      min-height: 30px;
       align-items: center;
       justify-content: center;
+      min-width: 0;
+      min-height: 30px;
       border-left: 1px solid $border;
-      color: $text-primary;
+      white-space: nowrap;
       font-size: 11px;
       font-weight: 500;
-      white-space: nowrap;
+      color: $text-primary;
+
+      &.gem-tier-low {
+        color: $text-secondary;
+      }
+
+      &.gem-tier-middle {
+        background: $mint-tint;
+        color: $mint-light;
+      }
+
+      &.gem-tier-perfect {
+        background: $amber-tint;
+        color: $amber-light;
+      }
+
+      &.gem-tier-none {
+        color: $text-muted;
+      }
+    }
+
+    .gem-level {
+      font-weight: 400;
+      color: $text-secondary;
     }
 
     .gem-row-label {
