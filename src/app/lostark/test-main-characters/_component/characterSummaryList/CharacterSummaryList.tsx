@@ -24,13 +24,7 @@ export default function CharacterSummaryList(props: {
             braceletScore={character.manualMetrics.braceletScore}
           />
           <SettingSummary summary={character.summary} />
-
-          <div className={styles['detail-layout']}>
-            <div className={styles['setting-row']}></div>
-            <div className={styles['ark-row']}>
-              <ArkSummary summary={character.summary} />
-            </div>
-          </div>
+          <ArkSummary summary={character.summary} />
         </div>
       ))}
     </div>
