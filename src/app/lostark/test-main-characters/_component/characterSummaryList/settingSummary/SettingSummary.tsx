@@ -13,25 +13,31 @@ export default function SettingSummary(props: { summary: TResLostarkCharacterSum
 
   return (
     <div className={styles['setting-summary']}>
+      <SummarySection title="각인">
+        <div className={styles['engraving-list']}>
+          {props.summary.engravings.map((engraving, index) => (
+            <span
+              key={`${engraving.name}-${index}`}
+              className={`${styles['engraving']} ${
+                engraving.level === 4 ? styles['engraving-max-level'] : ''
+              }`}
+            >
+              <span className={styles['engraving-level']}>{engraving.level ?? 0}</span>
+              <span className={styles['engraving-name']}>{engraving.name ?? '-'}</span>
+            </span>
+          ))}
+          {props.summary.engravings.length === 0 && (
+            <span className={styles['empty-value']}>-</span>
+          )}
+        </div>
+      </SummarySection>
+
       <SummarySection title="보석">
         <div className={styles['gem-list']}>
           {getGemCounts(props.summary.gems).map((group) => (
             <span key={group.level}>{`${group.level}레벨 ${group.count}개`}</span>
           ))}
           {props.summary.gems.length === 0 && <span className={styles['empty-value']}>-</span>}
-        </div>
-      </SummarySection>
-
-      <SummarySection title="각인">
-        <div className={styles['engraving-list']}>
-          {props.summary.engravings.map((engraving, index) => (
-            <span
-              key={`${engraving.name}-${index}`}
-            >{`${engraving.name ?? '-'} ×${engraving.level ?? 0}`}</span>
-          ))}
-          {props.summary.engravings.length === 0 && (
-            <span className={styles['empty-value']}>-</span>
-          )}
         </div>
       </SummarySection>
 

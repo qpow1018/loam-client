@@ -1,86 +1,105 @@
 .ark-summary {
   display: grid;
   min-width: 0;
-  grid-template-columns: 1fr;
-}
-.ark-summary > section + section {
-  border-top: 1px solid $border-soft;
-}
-
-.ark-passive-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.ark-passive-list span {
-  display: flex;
-  min-width: 56px;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  padding: 5px 8px;
-  border-radius: 4px;
-  font-size: 11px;
-}
-.ark-passive-list small {
-  font-size: 10px;
-}
-.ark-passive-list b {
-  font-size: 14px;
-}
-.ark-passive-high {
-  color: $chip-high-text;
-  background: $chip-high-bg;
-}
-.ark-passive-middle {
-  color: $chip-middle-text;
-  background: $chip-middle-bg;
-}
-.ark-passive-low {
-  color: $chip-low-text;
-  background: $chip-low-bg;
-}
-
-.ark-grid-list {
-  display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-}
-.ark-core-group > p {
-  margin-bottom: 5px;
-  color: $text-secondary;
-  font-size: 11px;
-}
-.ark-core-group > div {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 4px;
-}
-.ark-core,
-.ark-core-empty {
-  min-width: 0;
-  min-height: 42px;
-  padding: 5px;
-  border: 1px solid $border;
-  border-radius: 4px;
-  background: $gray-700;
-}
-.ark-core b {
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: $text-primary;
-  font-size: 10px;
-}
-.ark-core span,
-.ark-core-empty {
-  color: $text-secondary;
-  font-size: 9px;
-}
-.ark-core-empty {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-style: dashed;
+
+  > section + section {
+    padding-left: 16px;
+    border-left: 1px solid $border-soft;
+  }
+
+  .ark-passive-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+
+    span {
+      display: flex;
+      min-width: 56px;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      padding: 5px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+    }
+
+    small {
+      font-size: 10px;
+    }
+
+    b {
+      font-size: 14px;
+    }
+  }
+
+  .ark-passive-high {
+    color: $chip-high-text;
+    background: $chip-high-bg;
+  }
+
+  .ark-passive-middle {
+    color: $chip-middle-text;
+    background: $chip-middle-bg;
+  }
+
+  .ark-passive-low {
+    color: $chip-low-text;
+    background: $chip-low-bg;
+  }
+
+  .ark-grid-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+
+    .ark-core-group {
+      > p {
+        margin-bottom: 5px;
+        color: $text-secondary;
+        font-size: 11px;
+      }
+
+      > div {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 4px;
+      }
+    }
+  }
+
+  .ark-core,
+  .ark-core-empty {
+    min-width: 0;
+    min-height: 42px;
+    padding: 5px;
+    border: 1px solid $border;
+    border-radius: 4px;
+    background: $bg-light;
+  }
+
+  .ark-core {
+    b {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: $text-primary;
+      font-size: 10px;
+    }
+
+    span {
+      color: $text-secondary;
+      font-size: 9px;
+    }
+  }
+
+  .ark-core-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-style: dashed;
+    color: $text-secondary;
+    font-size: 9px;
+  }
 }
