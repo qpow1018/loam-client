@@ -9,19 +9,19 @@ export default function EngravingSummarySection(props: {
 }) {
   return (
     <SummarySection title="각인">
-      <div className={styles['engraving-list']}>
+      <div className={styles['engraving-grid']}>
         {props.engravings.map((engraving, index) => (
-          <span
-            key={`${engraving.name}-${index}`}
-            className={`${styles['engraving']} ${
-              engraving.level === 4 ? styles['engraving-max-level'] : ''
-            }`}
-          >
-            <span className={styles['engraving-level']}>{engraving.level ?? 0}</span>
+          <span key={`${engraving.name}-${index}`} className={styles['engraving-item']}>
+            <span
+              className={`${styles['engraving-level']} ${
+                engraving.level === 4 ? styles['engraving-level-max'] : ''
+              }`}
+            >
+              {engraving.level ?? 0}
+            </span>
             <span className={styles['engraving-name']}>{engraving.name ?? '-'}</span>
           </span>
         ))}
-        {props.engravings.length === 0 && <span className={styles['empty-value']}>-</span>}
       </div>
     </SummarySection>
   );
