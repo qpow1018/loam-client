@@ -1,0 +1,23 @@
+.accessory-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.accessory-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 48px;
+  padding: 8px 7px;
+  border: 1px solid $border;
+  border-radius: 4px;
+  background: $gray-700;
+}
+.accessory-item span {
+  color: $text-secondary;
+  font-size: 10px;
+}
+.accessory-item b {
+  color: $text-primary;
+  font-size: 11px;
+}

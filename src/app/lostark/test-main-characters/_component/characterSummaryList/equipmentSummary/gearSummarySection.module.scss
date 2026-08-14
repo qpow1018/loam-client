@@ -1,0 +1,37 @@
+.gear-comparison {
+  overflow: hidden;
+  border: 1px solid $border;
+  border-radius: 4px;
+}
+.gear-comparison-row {
+  display: grid;
+  grid-template-columns: 64px repeat(7, minmax(0, 1fr));
+}
+.gear-comparison-row + .gear-comparison-row {
+  border-top: 1px solid $border;
+}
+.gear-comparison-row > span,
+.gear-comparison-row > b {
+  display: flex;
+  min-height: 30px;
+  align-items: center;
+  justify-content: center;
+  border-left: 1px solid $border;
+  font-size: 11px;
+}
+.gear-comparison-row > :nth-child(2) {
+  border-left: 0;
+}
+.gear-row-label {
+  justify-content: flex-start !important;
+  padding-left: 9px;
+  background: $gray-700;
+  color: $text-secondary;
+}
+.gear-enhancement {
+  color: $text-primary;
+  font-weight: 500;
+}
+.gear-quality {
+  color: $mint-light;
+}
