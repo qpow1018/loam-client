@@ -1,8 +1,12 @@
 import type { TLostarkAccessory, TResLostarkCharacterSummary } from '@/api/lostark/type';
 
-import SummarySection from '../SummarySection';
+import SummarySection from '@/app/lostark/test-main-characters/_component/characterSummaryList/SummarySection';
 
 import styles from './accessorySummarySection.module.scss';
+
+const POLISH_GRADES = ['상', '중', '하'] as const;
+
+type TPolishGrade = (typeof POLISH_GRADES)[number];
 
 const ACCESSORY_SLOTS = [
   { label: '목', type: '목걸이', index: 0 },
@@ -12,39 +16,46 @@ const ACCESSORY_SLOTS = [
   { label: '반2', type: '반지', index: 1 },
 ] as const;
 
+const POLISH_GRADE_LABELS: Record<string, TPolishGrade> = {
+  FE9600: '상',
+  CE43FC: '중',
+  '00B5FF': '하',
+};
+
 export default function AccessorySummarySection(props: {
   accessories: TResLostarkCharacterSummary['equipment']['accessories'];
 }) {
+  const accessorySlots = ACCESSORY_SLOTS.map((slot) => ({
+    label: slot.label,
+    grades: getPolishGrades(
+      props.accessories.filter((accessory) => accessory.type?.includes(slot.type))[slot.index],
+    ),
+  }));
+
   return (
     <SummarySection title="악세서리 연마">
-      <div className={styles['accessory-list']}>
-        {ACCESSORY_SLOTS.map((slot) => (
-          <AccessorySummary
-            key={slot.label}
-            label={slot.label}
-            accessory={
-              props.accessories.filter((item) => item.type?.includes(slot.type))[slot.index]
-            }
-          />
+      <div className={styles['accessory-summary']}>
+        {accessorySlots.map((slot) => (
+          <div key={slot.label} className={styles['chip-item']}>
+            <span className={styles['accessory-label']}>{slot.label}</span>
+            <span className={styles['grade-text']}>
+              {slot.grades.length === 0 ? '-' : slot.grades.join('')}
+            </span>
+          </div>
         ))}
       </div>
     </SummarySection>
   );
 }
 
-function AccessorySummary(props: { label: string; accessory: TLostarkAccessory | undefined }) {
-  const grades =
-    props.accessory?.polishEffects
-      .filter((effect) => isValidPolishEffect(effect.text))
-      .map((effect) => getPolishGrade(effect.color))
-      .filter((grade): grade is '상' | '중' | '하' => grade !== null) ?? [];
+function getPolishGrades(accessory: TLostarkAccessory | undefined): TPolishGrade[] {
+  if (!accessory) return [];
 
-  return (
-    <div className={styles['accessory-item']}>
-      <span>{props.label}</span>
-      <b>{grades.length === 0 ? '-' : grades.join('')}</b>
-    </div>
-  );
+  return accessory.polishEffects
+    .filter((effect) => isValidPolishEffect(effect.text))
+    .map((effect) => POLISH_GRADE_LABELS[effect.color?.toUpperCase() ?? ''])
+    .filter((grade) => grade !== undefined)
+    .sort((first, second) => POLISH_GRADES.indexOf(first) - POLISH_GRADES.indexOf(second));
 }
 
 function isValidPolishEffect(text: string) {
@@ -55,12 +66,4 @@ function isValidPolishEffect(text: string) {
     text.includes('치명타 적중률') ||
     text.includes('치명타 피해')
   );
-}
-
-function getPolishGrade(color: string | null) {
-  if (color?.toUpperCase() === 'FE9600') return '상';
-  if (color?.toUpperCase() === 'CE43FC') return '중';
-  if (color?.toUpperCase() === '00B5FF') return '하';
-
-  return null;
 }
