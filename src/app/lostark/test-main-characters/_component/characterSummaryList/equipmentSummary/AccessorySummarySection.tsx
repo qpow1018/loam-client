@@ -33,7 +33,7 @@ export default function AccessorySummarySection(props: {
   }));
 
   return (
-    <SummarySection title="악세서리 연마">
+    <SummarySection title="악세서리">
       <div className={styles['accessory-summary']}>
         {accessorySlots.map((slot) => (
           <div key={slot.label} className={styles['chip-item']}>

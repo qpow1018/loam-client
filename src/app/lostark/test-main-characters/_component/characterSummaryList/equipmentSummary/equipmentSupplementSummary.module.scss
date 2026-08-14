@@ -1,0 +1,64 @@
+.equipment-supplement-summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .bracelet-summary {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 120px;
+    height: 50px;
+    padding: 0 8px;
+    border: 1px solid $border;
+    border-radius: $border-radius;
+
+    .label {
+      margin-bottom: 4px;
+      font-size: 10px;
+      color: $text-secondary;
+    }
+    .bracelet-score {
+      font-size: 12px;
+      font-weight: 500;
+      color: $text-primary;
+    }
+  }
+
+  .ability-stone {
+    display: flex;
+    min-width: 120px;
+    height: 50px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    padding: 0 12px;
+    border: 1px solid $border;
+    border-radius: $border-radius;
+
+    .stone-engraving {
+      display: flex;
+      gap: 4px;
+      color: $text-secondary;
+      font-size: 11px;
+      white-space: nowrap;
+
+      .stone-level {
+        width: 16px;
+        font-size: 11px;
+        font-weight: 500;
+        color: $mint-light;
+      }
+    }
+
+    &.ability-stone-high-level {
+      background: $amber-tint;
+      border-color: $amber;
+
+      .stone-engraving,
+      .stone-level {
+        color: $amber-light;
+      }
+    }
+  }
+}

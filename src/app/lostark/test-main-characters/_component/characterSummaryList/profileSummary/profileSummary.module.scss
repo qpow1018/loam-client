@@ -1,6 +1,6 @@
 .profile-summary {
   display: grid;
-  grid-template-columns: minmax(230px, 1fr) auto minmax(250px, 0.9fr) auto;
+  grid-template-columns: minmax(230px, 1fr) auto auto;
   gap: 24px;
   align-items: center;
   padding: 18px 20px;
@@ -27,7 +27,6 @@
   }
   .class-name,
   .identity span,
-  .ability-stone > p,
   .stat span {
     color: $text-secondary;
     font-size: 11px;
@@ -57,31 +56,5 @@
   }
   .accent-stat strong {
     color: $rose-light;
-  }
-  .ability-stone {
-    min-height: 56px;
-    padding-left: 18px;
-    border-left: 1px solid $border-soft;
-  }
-  .ability-stone > p {
-    margin-bottom: 7px;
-  }
-  .ability-stone-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px 12px;
-    color: $text-primary;
-    font-size: 12px;
-  }
-  .ability-stone-list span {
-    white-space: nowrap;
-  }
-  .ability-stone-list b {
-    margin-right: 4px;
-    color: $mint-accent;
-  }
-  .empty-value {
-    color: $text-muted;
-    font-size: 12px;
   }
 }

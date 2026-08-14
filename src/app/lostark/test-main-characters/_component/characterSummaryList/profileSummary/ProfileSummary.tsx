@@ -8,9 +8,8 @@ export default function ProfileSummary(props: {
   character: TResLostarkMainCharacter;
   onSelect: () => void;
 }) {
-  const { profiles, equipment } = props.character.summary;
+  const { profiles } = props.character.summary;
   const { manualMetrics } = props.character;
-  const abilityStoneEngravings = equipment.abilityStone?.abilityStoneEngravings.slice(0, 2) ?? [];
 
   return (
     <div className={styles['profile-summary']}>
@@ -27,27 +26,10 @@ export default function ProfileSummary(props: {
 
       <div className={styles['primary-stats']}>
         <Stat label="전투력" value={profiles.combatPower ?? '-'} isAccent />
-        <Stat label="팔찌 점수" value={formatMetric(manualMetrics.braceletScore, '%')} />
         <Stat
           label="젬 환산 레벨"
           value={formatMetric(manualMetrics.gemConversionLevel, '', 'Lv. ')}
         />
-      </div>
-
-      <div className={styles['ability-stone']}>
-        <p>어빌리티 스톤</p>
-        {abilityStoneEngravings.length === 0 ? (
-          <span className={styles['empty-value']}>미장착</span>
-        ) : (
-          <div className={styles['ability-stone-list']}>
-            {abilityStoneEngravings.map((engraving, index) => (
-              <span key={`${engraving.name}-${index}`}>
-                <b>{`+${engraving.level ?? 0}`}</b>
-                {engraving.name}
-              </span>
-            ))}
-          </div>
-        )}
       </div>
 
       <Button color="mint" fill="outline" size="small" onClick={props.onSelect}>

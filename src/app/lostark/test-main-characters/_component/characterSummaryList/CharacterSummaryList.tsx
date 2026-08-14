@@ -14,15 +14,15 @@ export default function CharacterSummaryList(props: {
   return (
     <div className={styles['character-summary-list']}>
       {props.characters.map((character) => (
-        <div
-          key={character.id}
-          className={styles['summary-item']}
-        >
+        <div key={character.id} className={styles['summary-item']}>
           <ProfileSummary
             character={character}
             onSelect={() => props.onSelectCharacter(character.id)}
           />
-          <EquipmentSummary equipment={character.summary.equipment} />
+          <EquipmentSummary
+            equipment={character.summary.equipment}
+            braceletScore={character.manualMetrics.braceletScore}
+          />
 
           <div className={styles['detail-layout']}>
             <SettingSummary summary={character.summary} />
