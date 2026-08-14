@@ -9,5 +9,15 @@
     background: $bg;
     border: 1px solid $border-soft;
     border-radius: $border-radius;
+
+    .detail-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-top: 1px solid $border-soft;
+
+      > div + div {
+        border-left: 1px solid $border-soft;
+      }
+    }
   }
 }
