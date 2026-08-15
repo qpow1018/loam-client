@@ -10,26 +10,14 @@ import Button from '@/components/common/button/Button';
 import BoxLoading from '@/components/common/loading/BoxLoading';
 import LostarkHeader from '@/components/lostark/header/LostarkHeader';
 import MainCharacterOrderModal from './_component/MainCharacterOrderModal';
-import MainCharactersPanel from './_component/mainCharactersPanel/MainCharactersPanel';
 
 import styles from './myCharactersClient.module.scss';
 
 export default function MyCharactersClient() {
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
-  const [draftCharacters, setDraftCharacters] = useState<Record<string, TResLostarkMainCharacter>>(
-    {},
-  );
 
-  const {
-    data: savedMainCharacters = [],
-    isLoading,
-    isError,
-  } = lostarkQuery.useGetMainCharacters();
+  const { data: mainCharacters = [], isLoading, isError } = lostarkQuery.useGetMainCharacters();
   const reorderMainCharacters = lostarkQuery.useReorderMainCharacters();
-
-  const mainCharacters = savedMainCharacters.map(
-    (character) => draftCharacters[character.id] ?? character,
-  );
 
   useEffect(() => {
     if (isError) {
@@ -45,21 +33,6 @@ export default function MyCharactersClient() {
     } catch {
       toast.error('메인 캐릭터 순서를 저장하지 못했습니다.');
     }
-  }
-
-  function handleChangeMainCharacter(character: TResLostarkMainCharacter) {
-    setDraftCharacters((prev) => ({
-      ...prev,
-      [character.id]: character,
-    }));
-  }
-
-  function handleSaveMainCharacter(characterId: string) {
-    setDraftCharacters((prev) => {
-      const next = { ...prev };
-      delete next[characterId];
-      return next;
-    });
   }
 
   return (
@@ -85,15 +58,6 @@ export default function MyCharactersClient() {
             <div className={styles['empty']}>
               <p className={styles['empty-message']}>등록된 메인 캐릭터가 없습니다.</p>
             </div>
-          )}
-
-          {!isLoading && mainCharacters.length > 0 && (
-            <MainCharactersPanel
-              characters={mainCharacters}
-              unsavedCharacterIds={new Set(Object.keys(draftCharacters))}
-              onChangeCharacter={handleChangeMainCharacter}
-              onSaveCharacter={handleSaveMainCharacter}
-            />
           )}
 
         </div>
