@@ -6,16 +6,20 @@ import type { TResLostarkMainCharacter } from '@/api/lostark/type';
 import lostarkQuery from '@/queries/lostarkQuery';
 import toast from '@/utils/toast';
 
+import Button from '@/components/common/button/Button';
 import BoxLoading from '@/components/common/loading/BoxLoading';
 import CharacterDetail from './_component/characterDetail/CharacterDetail';
 import CharacterSummaryList from './_component/characterSummaryList/CharacterSummaryList';
+import MainCharacterOrderModal from './_component/mainCharacterOrder/MainCharacterOrderModal';
 
 import styles from './testMainCharactersClient.module.scss';
 
 export default function TestMainCharactersClient() {
   const [selectedCharacterId, setSelectedCharacterId] = useState<string | null>(null);
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
 
   const { data: characters = [], isLoading, isError } = lostarkQuery.useGetMainCharacters();
+  const reorderMainCharacters = lostarkQuery.useReorderMainCharacters();
 
   useEffect(() => {
     if (isError) {
@@ -31,6 +35,16 @@ export default function TestMainCharactersClient() {
     setSelectedCharacterId(null);
   }
 
+  async function handleSubmitMainCharacterOrder(nextCharacters: TResLostarkMainCharacter[]) {
+    try {
+      await reorderMainCharacters.mutateAsync(nextCharacters);
+      setIsOrderModalOpen(false);
+      toast.success('메인 캐릭터 순서를 저장했습니다.');
+    } catch {
+      toast.error('메인 캐릭터 순서를 저장하지 못했습니다.');
+    }
+  }
+
   return (
     <main className={styles['test-main-characters-client']}>
       <MainCharacterNavigation
@@ -38,6 +52,8 @@ export default function TestMainCharactersClient() {
         selectedCharacterId={selectedCharacterId}
         onSelectSummary={handleOpenSummary}
         onSelectCharacter={handleOpenCharacterDetail}
+        onOpenOrder={() => setIsOrderModalOpen(true)}
+        isOrderDisabled={isLoading || characters.length < 2}
       />
 
       {isLoading && <BoxLoading height={280} />}
@@ -59,6 +75,16 @@ export default function TestMainCharactersClient() {
       {!isLoading && selectedCharacterId !== null && (
         <CharacterDetail key={selectedCharacterId} characterId={selectedCharacterId} />
       )}
+
+      {isOrderModalOpen && (
+        <MainCharacterOrderModal
+          isOpen={isOrderModalOpen}
+          isSaving={reorderMainCharacters.isPending}
+          characters={characters}
+          onClose={() => setIsOrderModalOpen(false)}
+          onSubmit={handleSubmitMainCharacterOrder}
+        />
+      )}
     </main>
   );
 }
@@ -68,6 +94,8 @@ function MainCharacterNavigation(props: {
   selectedCharacterId: string | null;
   onSelectSummary: () => void;
   onSelectCharacter: (characterId: string) => void;
+  onOpenOrder: () => void;
+  isOrderDisabled: boolean;
 }) {
   return (
     <nav className={styles['main-character-navigation']} aria-label="메인 캐릭터 보기">
@@ -104,6 +132,17 @@ function MainCharacterNavigation(props: {
           );
         })}
       </div>
+
+      <Button
+        color="gray"
+        fill="solid"
+        size="small"
+        className={styles['order-button']}
+        onClick={props.onOpenOrder}
+        isDisabled={props.isOrderDisabled}
+      >
+        순서 변경
+      </Button>
     </nav>
   );
 }

@@ -9,8 +9,14 @@
 
     .character-list {
       display: flex;
+      flex: 1;
       min-width: 0;
       overflow-x: auto;
+    }
+
+    .order-button {
+      flex-shrink: 0;
+      margin-left: 12px;
     }
 
     .navigation-button {
