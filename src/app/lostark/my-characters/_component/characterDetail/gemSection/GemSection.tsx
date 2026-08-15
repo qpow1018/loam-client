@@ -2,7 +2,7 @@ import type { TLostarkGem } from '@/api/lostark/type';
 
 import { ItemTooltip, ItemTooltipTrigger } from '@/components/lostark/itemTooltip/ItemTooltip';
 import ItemSlot from '@/components/lostark/itemSlot/ItemSlot';
-import DetailPanel from '@/app/lostark/test-main-characters/_component/characterDetail/DetailPanel';
+import DetailPanel from '@/app/lostark/my-characters/_component/characterDetail/DetailPanel';
 
 import GemTooltip from './GemTooltip';
 

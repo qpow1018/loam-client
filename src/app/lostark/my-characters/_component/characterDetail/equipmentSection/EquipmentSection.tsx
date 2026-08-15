@@ -1,11 +1,11 @@
 import type { TLostarkAccessory, TLostarkGear, TResLostarkMainCharacter } from '@/api/lostark/type';
 
-import DetailPanel from '@/app/lostark/test-main-characters/_component/characterDetail/DetailPanel';
-import AbilityStoneItem from '@/app/lostark/test-main-characters/_component/characterDetail/equipmentSection/AbilityStoneItem';
-import AccessoryItem from '@/app/lostark/test-main-characters/_component/characterDetail/equipmentSection/AccessoryItem';
-import BraceletItem from '@/app/lostark/test-main-characters/_component/characterDetail/equipmentSection/BraceletItem';
-import GearItem from '@/app/lostark/test-main-characters/_component/characterDetail/equipmentSection/GearItem';
-import OrbItem from '@/app/lostark/test-main-characters/_component/characterDetail/equipmentSection/OrbItem';
+import DetailPanel from '@/app/lostark/my-characters/_component/characterDetail/DetailPanel';
+import AbilityStoneItem from '@/app/lostark/my-characters/_component/characterDetail/equipmentSection/AbilityStoneItem';
+import AccessoryItem from '@/app/lostark/my-characters/_component/characterDetail/equipmentSection/AccessoryItem';
+import BraceletItem from '@/app/lostark/my-characters/_component/characterDetail/equipmentSection/BraceletItem';
+import GearItem from '@/app/lostark/my-characters/_component/characterDetail/equipmentSection/GearItem';
+import OrbItem from '@/app/lostark/my-characters/_component/characterDetail/equipmentSection/OrbItem';
 
 import styles from './equipmentSection.module.scss';
 

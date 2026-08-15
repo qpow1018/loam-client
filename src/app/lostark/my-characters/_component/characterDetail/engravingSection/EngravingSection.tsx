@@ -2,7 +2,7 @@ import type { TLostarkEngraving } from '@/api/lostark/type';
 import { engravingIconUrlByName } from '@/define/lostark/engravingIcons';
 
 import { ItemTooltip, ItemTooltipTrigger } from '@/components/lostark/itemTooltip/ItemTooltip';
-import DetailPanel from '@/app/lostark/test-main-characters/_component/characterDetail/DetailPanel';
+import DetailPanel from '@/app/lostark/my-characters/_component/characterDetail/DetailPanel';
 
 import EngravingTooltip from './EngravingTooltip';
 

@@ -3,7 +3,7 @@ import type { TLostarkBracelet, TLostarkColoredEffect } from '@/api/lostark/type
 import ItemSlot from '@/components/lostark/itemSlot/ItemSlot';
 import { ItemTooltip, ItemTooltipTrigger } from '@/components/lostark/itemTooltip/ItemTooltip';
 
-import EffectItem from '@/app/lostark/test-main-characters/_component/characterDetail/equipmentSection/EffectItem';
+import EffectItem from '@/app/lostark/my-characters/_component/characterDetail/equipmentSection/EffectItem';
 
 import EquipmentTooltip from './EquipmentTooltip';
 

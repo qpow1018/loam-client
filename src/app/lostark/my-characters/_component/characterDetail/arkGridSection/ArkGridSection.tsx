@@ -1,6 +1,6 @@
 import type { TLostarkArkGrid } from '@/api/lostark/type';
 
-import DetailPanel from '@/app/lostark/test-main-characters/_component/characterDetail/DetailPanel';
+import DetailPanel from '@/app/lostark/my-characters/_component/characterDetail/DetailPanel';
 import CoreGrid from './CoreGrid';
 import GemEffectTable from './GemEffectTable';
 

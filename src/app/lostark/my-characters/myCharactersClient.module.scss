@@ -1,21 +1,107 @@
 .my-characters-client {
-  .my-characters-client-container {
-    width: $page-wide-width;
-    padding: 16px;
-  }
+  width: 100%;
+  padding: 16px 16px 80px 16px;
 
-  .character-section {
-    margin-top: 12px;
+  .main-character-navigation {
+    display: flex;
+    border-bottom: 1px solid $border-strong;
+    margin-bottom: 16px;
+
+    .character-list {
+      display: flex;
+      flex: 1;
+      min-width: 0;
+      overflow-x: auto;
+    }
+
+    .order-action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      flex-shrink: 0;
+      min-width: 76px;
+      min-height: 56px;
+      margin-left: 8px;
+      padding: 0 10px;
+      border-left: 1px solid $border-strong;
+      color: $text-secondary;
+      cursor: pointer;
+      font-size: 12px;
+      transition: color $transition;
+
+      > svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      &:hover:not(:disabled) {
+        color: $mint-light;
+      }
+
+      &:disabled {
+        cursor: default;
+        opacity: 0.45;
+      }
+    }
+
+    .navigation-button {
+      min-height: 56px;
+      min-width: 156px;
+      padding: 0 10px;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      text-align: left;
+      transition:
+        border-color $transition,
+        color $transition;
+
+      .navigation-item-level {
+        font-size: 11px;
+        color: $text-secondary;
+      }
+
+      .navigation-item-name {
+        display: block;
+        font-size: 13px;
+        font-weight: 500;
+        color: $text-primary;
+      }
+
+      &:hover {
+        .navigation-item-level,
+        .navigation-item-name {
+          color: $rose-light;
+        }
+      }
+
+      &.selected {
+        border-bottom-color: $rose-accent;
+
+        .navigation-item-level,
+        .navigation-item-name {
+          color: $rose-light;
+        }
+      }
+    }
+
+    .summary-button {
+      background: $gray-800;
+    }
   }
 
   .empty {
     display: flex;
-    justify-content: center;
-    padding: 100px 0;
-    border-radius: $border-radius;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 120px 0;
     background: $gray-800;
+    border: 1px solid $border-soft;
+    border-radius: $border-radius;
+    color: $text-primary;
 
-    .empty-message {
+    span {
       font-size: 13px;
       color: $text-secondary;
     }

@@ -3,7 +3,6 @@ import Header, { type THeaderMenu } from '@/components/common/header/Header';
 const PRIMARY_MENUS: THeaderMenu[] = [
   { name: '할일', link: '/lostark/loado' },
   { name: '메인캐릭터', link: '/lostark/my-characters' },
-  { name: '테스트 - 메인캐릭터', link: '/lostark/test-main-characters' },
   { name: '전체캐릭터', link: '/lostark/all-characters' },
   { name: '클리어 골드', link: '/lostark/clear-gold' },
   { name: '재련 최적화', link: '/lostark/refining' },

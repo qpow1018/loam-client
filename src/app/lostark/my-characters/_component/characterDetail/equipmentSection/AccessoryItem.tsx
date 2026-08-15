@@ -3,7 +3,7 @@ import type { TLostarkAccessory } from '@/api/lostark/type';
 import { ItemTooltip, ItemTooltipTrigger } from '@/components/lostark/itemTooltip/ItemTooltip';
 import ItemSlot from '@/components/lostark/itemSlot/ItemSlot';
 import QualityChip from '@/components/lostark/qualityChip/QualityChip';
-import EffectItem from '@/app/lostark/test-main-characters/_component/characterDetail/equipmentSection/EffectItem';
+import EffectItem from '@/app/lostark/my-characters/_component/characterDetail/equipmentSection/EffectItem';
 
 import EquipmentTooltip from './EquipmentTooltip';
 

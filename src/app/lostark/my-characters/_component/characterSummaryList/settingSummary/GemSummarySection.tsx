@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import type { TResLostarkCharacterSummary } from '@/api/lostark/type';
 
-import SummarySection from '@/app/lostark/test-main-characters/_component/characterSummaryList/SummarySection';
+import SummarySection from '@/app/lostark/my-characters/_component/characterSummaryList/SummarySection';
 
 import styles from './gemSummarySection.module.scss';
 

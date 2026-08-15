@@ -4,7 +4,7 @@ import styles from './gemTooltip.module.scss';
 
 type TGemTooltipDetail = {
   label: string;
-  value: string | number | null;
+  value: string | null;
 };
 
 export default function GemTooltip(props: { gem: TLostarkGem }) {
