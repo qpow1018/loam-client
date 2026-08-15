@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { MdReorder } from 'react-icons/md';
 
 import type { TResLostarkMainCharacter } from '@/api/lostark/type';
 import lostarkQuery from '@/queries/lostarkQuery';
 import toast from '@/utils/toast';
 
-import Button from '@/components/common/button/Button';
 import BoxLoading from '@/components/common/loading/BoxLoading';
 import CharacterDetail from './_component/characterDetail/CharacterDetail';
 import CharacterSummaryList from './_component/characterSummaryList/CharacterSummaryList';
@@ -133,16 +133,17 @@ function MainCharacterNavigation(props: {
         })}
       </div>
 
-      <Button
-        color="gray"
-        fill="solid"
-        size="small"
-        className={styles['order-button']}
+      <button
+        type="button"
+        className={styles['order-action']}
         onClick={props.onOpenOrder}
-        isDisabled={props.isOrderDisabled}
+        disabled={props.isOrderDisabled}
+        aria-label="캐릭터 순서 변경"
+        title="캐릭터 순서 변경"
       >
-        순서 변경
-      </Button>
+        <MdReorder aria-hidden="true" />
+        <span>순서</span>
+      </button>
     </nav>
   );
 }
