@@ -1,0 +1,28 @@
+.accessory-item {
+  display: flex;
+  gap: 12px;
+
+  .info-box {
+    width: 52px;
+    flex: 0 0 auto;
+  }
+
+  .name-box {
+    display: flex;
+    min-height: 18px;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 2px;
+
+    .item-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: $text-primary;
+    }
+  }
+
+  .effect-list {
+    min-width: 0;
+    flex: 1;
+  }
+}

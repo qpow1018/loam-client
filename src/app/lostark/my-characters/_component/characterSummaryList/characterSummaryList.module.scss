@@ -1,0 +1,13 @@
+.character-summary-list {
+  display: flex;
+  flex-direction: column;
+  width: $page-width;
+  gap: 16px;
+
+  .summary-item {
+    width: 100%;
+    background: $bg;
+    border: 1px solid $border-soft;
+    border-radius: $border-radius;
+  }
+}

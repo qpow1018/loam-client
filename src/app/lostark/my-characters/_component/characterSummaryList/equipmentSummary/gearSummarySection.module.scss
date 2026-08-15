@@ -1,0 +1,63 @@
+.gear-table {
+  overflow: hidden;
+  border: 1px solid $border;
+  border-radius: $border-radius;
+
+  .gear-table-row {
+    display: grid;
+    grid-template-columns: 64px repeat(7, minmax(0, 1fr));
+    border-top: 1px solid $border;
+
+    &:first-of-type {
+      border-top: 0;
+    }
+
+    .gear-table-cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 30px;
+      font-size: 11px;
+      border-left: 1px solid $border;
+    }
+
+    .gear-row-label {
+      justify-content: flex-start;
+      padding-left: 8px;
+      color: $text-secondary;
+      background: $bg-light;
+      border-left: none;
+    }
+
+    .gear-slot-name {
+      color: $text-secondary;
+    }
+
+    .gear-enhancement {
+      font-weight: 500;
+      color: $text-primary;
+    }
+
+    .gear-quality {
+      font-weight: 500;
+
+      &.quality-low {
+        color: $text-secondary;
+      }
+
+      &.quality-middle {
+        background: $mint-tint;
+        color: $mint-light;
+      }
+
+      &.quality-perfect {
+        background: $amber-tint;
+        color: $amber-light;
+      }
+
+      &.quality-none {
+        color: $text-muted;
+      }
+    }
+  }
+}

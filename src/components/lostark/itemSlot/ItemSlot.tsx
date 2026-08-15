@@ -1,8 +1,8 @@
 import styles from './itemSlot.module.scss';
 
 const GRADE_CLASS_MAP = {
-  레어: 'item-slot-rare',
-  에픽: 'item-slot-epic',
+  희귀: 'item-slot-rare',
+  영웅: 'item-slot-epic',
   전설: 'item-slot-legendary',
   유물: 'item-slot-relic',
   고대: 'item-slot-ancient',

@@ -38,6 +38,12 @@ export type TResLostarkSiblingCharacter = {
 
 export type TLostarkCharacterRawPayload = Record<string, unknown>;
 
+export type TLostarkManualMetrics = {
+  lopecScore: number | null;
+  braceletScore: number | null;
+  gemConversionLevel: number | null;
+};
+
 export type TResLostarkCharacterDetails = {
   ok: boolean;
   status: number;
@@ -63,6 +69,7 @@ export type TReqUpsertLostarkMainCharacterRow = {
 
 export type TResLostarkMainCharacterRow = TReqUpsertLostarkMainCharacterRow & {
   id: string;
+  manual_metrics: TLostarkManualMetrics | null;
   created_at: string;
   updated_at: string;
 };
@@ -75,6 +82,7 @@ export type TResLostarkMainCharacter = {
   sortOrder: number;
   summary: TResLostarkCharacterSummary;
   rawPayload: TLostarkCharacterRawPayload | null;
+  manualMetrics: TLostarkManualMetrics;
 };
 
 export type TResLostarkCharacterSummary = {
@@ -85,18 +93,33 @@ export type TResLostarkCharacterSummary = {
     itemAvgLevel: string | null;
     combatPower: string | null;
     characterImage: string | null;
+    stats: TLostarkCharacterStat[];
+    skillPoints: {
+      using: number | null;
+      total: number | null;
+    };
   };
   equipment: {
     gears: TLostarkGear[];
     accessories: TLostarkAccessory[];
     bracelet: TLostarkBracelet | null;
     abilityStone: TLostarkAbilityStone | null;
+    orb: TLostarkOrb | null;
   };
   engravings: TLostarkEngraving[];
   gems: TLostarkGem[];
   arkPassive: TLostarkArkPassive;
   arkGrid: TLostarkArkGrid;
   legendaryAvatars: TLostarkLegendaryAvatar[];
+  avatars: TLostarkAvatar[];
+  cards: TLostarkCards;
+  combatSkills: TLostarkCombatSkill[];
+};
+
+export type TLostarkCharacterStat = {
+  type: string | null;
+  value: string | null;
+  tooltip: string | null;
 };
 
 export type TLostarkColoredEffect = {
@@ -109,9 +132,14 @@ export type TLostarkGear = {
   name: string | null;
   type: string | null;
   grade: string | null;
+  title: string | null;
+  tier: string | null;
   quality: number | null;
   itemLevel: string | null;
   enhancement: number | null;
+  basicEffects: string[];
+  additionalEffects: string[];
+  arkPassiveEffects: string[];
 };
 
 export type TLostarkAccessory = {
@@ -119,9 +147,13 @@ export type TLostarkAccessory = {
   name: string | null;
   type: string | null;
   grade: string | null;
+  title: string | null;
+  tier: string | null;
   quality: number | null;
   basicEffects: string[];
+  additionalEffects: string[];
   polishEffects: TLostarkColoredEffect[];
+  arkPassiveEffects: string[];
 };
 
 export type TLostarkBracelet = {
@@ -129,6 +161,10 @@ export type TLostarkBracelet = {
   name: string | null;
   type: string | null;
   grade: string | null;
+  title: string | null;
+  tier: string | null;
+  basicEffects: string[];
+  additionalEffects: string[];
   braceletEffects: TLostarkColoredEffect[];
 };
 
@@ -137,11 +173,26 @@ export type TLostarkAbilityStone = {
   name: string | null;
   type: string | null;
   grade: string | null;
+  title: string | null;
+  tier: string | null;
+  basicEffects: string[];
+  additionalEffects: string[];
   abilityStoneBonusEffects: string[];
   abilityStoneEngravings: {
     name: string;
     level: number | null;
   }[];
+};
+
+export type TLostarkOrb = {
+  icon: string | null;
+  name: string | null;
+  type: string | null;
+  grade: string | null;
+  title: string | null;
+  tier: string | null;
+  paradisePowerText: string | null;
+  specialEffects: string[];
 };
 
 export type TLostarkEngraving = {
@@ -172,6 +223,16 @@ export type TLostarkArkPassive = {
     value: number | null;
     description: string | null;
   }[];
+  nodes: TLostarkArkPassiveNode[];
+};
+
+export type TLostarkArkPassiveNode = {
+  category: string | null;
+  tier: number | null;
+  name: string | null;
+  level: number | null;
+  icon: string | null;
+  description: string | null;
 };
 
 export type TLostarkArkGrid = {
@@ -180,6 +241,19 @@ export type TLostarkArkGrid = {
     name: string | null;
     grade: string | null;
     point: number | null;
+    gems: {
+      grade: string | null;
+      name: string | null;
+      type: '질서' | '혼돈' | null;
+      point: number | null;
+      willpower: number | null;
+      corePoint: number | null;
+      effects: {
+        name: string;
+        level: number | null;
+        description: string | null;
+      }[];
+    }[];
   }[];
   effects: {
     name: string | null;
@@ -192,4 +266,53 @@ export type TLostarkLegendaryAvatar = {
   name: string | null;
   type: string | null;
   grade: string | null;
+};
+
+export type TLostarkAvatar = {
+  icon: string | null;
+  name: string | null;
+  type: string | null;
+  grade: string | null;
+  isInner: boolean | null;
+  isSet: boolean | null;
+  basicEffects: string[];
+  tendencyEffects: string[];
+};
+
+export type TLostarkCards = {
+  cards: {
+    slot: number | null;
+    name: string | null;
+    icon: string | null;
+    awakeCount: number | null;
+    awakeTotal: number | null;
+    grade: string | null;
+  }[];
+  effects: {
+    index: number | null;
+    cardSlots: number[];
+    items: {
+      name: string | null;
+      description: string | null;
+    }[];
+  }[];
+};
+
+export type TLostarkCombatSkill = {
+  name: string | null;
+  icon: string | null;
+  level: number | null;
+  type: string | null;
+  isAwakening: boolean | null;
+  rune: {
+    name: string | null;
+    icon: string | null;
+    grade: string | null;
+  } | null;
+  tripods: {
+    slot: number | null;
+    name: string | null;
+    icon: string | null;
+    level: number | null;
+  }[];
 };

@@ -1,0 +1,45 @@
+.ark-grid-core-tooltip {
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .core-name {
+    overflow: hidden;
+    color: $text-primary;
+    font-size: 13px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .core-grade {
+    flex: 0 0 auto;
+    color: $text-secondary;
+    font-size: 11px;
+  }
+
+  .detail-list {
+    display: flex;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid $border-soft;
+  }
+
+  .detail-list {
+    flex-wrap: wrap;
+    gap: 5px 10px;
+
+    .detail-item {
+      color: $text-secondary;
+      font-size: 11px;
+    }
+
+    .detail-label {
+      margin-right: 4px;
+      color: $text-primary;
+      font-weight: 500;
+    }
+  }
+}

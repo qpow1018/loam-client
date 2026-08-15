@@ -34,6 +34,7 @@ type ParsedEquipmentItem = {
   braceletEffects: ParsedColoredEffect[];
   abilityStoneBonusEffects: string[];
   abilityStoneEngravings: ParsedAbilityStoneEngraving[];
+  specialEffects: string[];
 };
 
 type ParsedAvatarItem = {
@@ -45,6 +46,60 @@ type ParsedAvatarItem = {
   isSet: boolean | null;
   basicEffects: string[];
   tendencyEffects: string[];
+};
+
+type ParsedProfileStat = {
+  type: string | null;
+  value: string | null;
+  tooltip: string | null;
+};
+
+type ParsedSkillPoints = {
+  using: number | null;
+  total: number | null;
+};
+
+type ParsedCardItem = {
+  slot: number | null;
+  name: string | null;
+  icon: string | null;
+  awakeCount: number | null;
+  awakeTotal: number | null;
+  grade: string | null;
+};
+
+type ParsedCardEffectItem = {
+  name: string | null;
+  description: string | null;
+};
+
+type ParsedCardEffect = {
+  index: number | null;
+  cardSlots: number[];
+  items: ParsedCardEffectItem[];
+};
+
+type ParsedCombatSkillTripod = {
+  slot: number | null;
+  name: string | null;
+  icon: string | null;
+  level: number | null;
+};
+
+type ParsedCombatSkillRune = {
+  name: string | null;
+  icon: string | null;
+  grade: string | null;
+};
+
+type ParsedCombatSkill = {
+  name: string | null;
+  icon: string | null;
+  level: number | null;
+  type: string | null;
+  isAwakening: boolean | null;
+  rune: ParsedCombatSkillRune | null;
+  tripods: ParsedCombatSkillTripod[];
 };
 
 type LegendaryAvatarSummaryItem = {
@@ -81,9 +136,19 @@ type ParsedArkPassivePoint = {
   description: string | null;
 };
 
+type ParsedArkPassiveNode = {
+  category: string | null;
+  tier: number | null;
+  name: string | null;
+  level: number | null;
+  icon: string | null;
+  description: string | null;
+};
+
 type ParsedArkPassiveSummary = {
   title: string | null;
   points: ParsedArkPassivePoint[];
+  nodes: ParsedArkPassiveNode[];
 };
 
 type ParsedArkGridCore = {
@@ -91,6 +156,23 @@ type ParsedArkGridCore = {
   name: string | null;
   grade: string | null;
   point: number | null;
+  gems: ParsedArkGridGem[];
+};
+
+type ParsedArkGridGem = {
+  grade: string | null;
+  name: string | null;
+  type: '질서' | '혼돈' | null;
+  point: number | null;
+  willpower: number | null;
+  corePoint: number | null;
+  effects: ParsedArkGridGemEffect[];
+};
+
+type ParsedArkGridGemEffect = {
+  name: string;
+  level: number | null;
+  description: string | null;
 };
 
 type ParsedArkGridEffect = {
@@ -120,9 +202,14 @@ type GearSummaryItem = {
   name: string | null;
   type: string | null;
   grade: string | null;
+  title: string | null;
+  tier: string | null;
   quality: number | null;
   itemLevel: string | null;
   enhancement: number | null;
+  basicEffects: string[];
+  additionalEffects: string[];
+  arkPassiveEffects: string[];
 };
 
 type AccessorySummaryItem = {
@@ -130,9 +217,13 @@ type AccessorySummaryItem = {
   name: string | null;
   type: string | null;
   grade: string | null;
+  title: string | null;
+  tier: string | null;
   quality: number | null;
   basicEffects: string[];
+  additionalEffects: string[];
   polishEffects: ParsedPolishEffect[];
+  arkPassiveEffects: string[];
 };
 
 type BraceletSummaryItem = {
@@ -140,6 +231,10 @@ type BraceletSummaryItem = {
   name: string | null;
   type: string | null;
   grade: string | null;
+  title: string | null;
+  tier: string | null;
+  basicEffects: string[];
+  additionalEffects: string[];
   braceletEffects: ParsedColoredEffect[];
 };
 
@@ -148,8 +243,23 @@ type AbilityStoneSummaryItem = {
   name: string | null;
   type: string | null;
   grade: string | null;
+  title: string | null;
+  tier: string | null;
+  basicEffects: string[];
+  additionalEffects: string[];
   abilityStoneBonusEffects: string[];
   abilityStoneEngravings: ParsedAbilityStoneEngraving[];
+};
+
+type OrbSummaryItem = {
+  icon: string | null;
+  name: string | null;
+  type: string | null;
+  grade: string | null;
+  title: string | null;
+  tier: string | null;
+  paradisePowerText: string | null;
+  specialEffects: string[];
 };
 
 const sections = [
@@ -158,6 +268,8 @@ const sections = [
   { key: 'engravings', path: 'engravings' },
   { key: 'gems', path: 'gems' },
   { key: 'avatars', path: 'avatars' },
+  { key: 'cards', path: 'cards' },
+  { key: 'combatSkills', path: 'combat-skills' },
   { key: 'arkpassive', path: 'arkpassive' },
   { key: 'arkgrid', path: 'arkgrid' },
 ] as const;
@@ -300,10 +412,7 @@ function parseAbilityStoneEngraving(text: string): ParsedAbilityStoneEngraving |
   };
 }
 
-function collectAbilityStoneEngravings(
-  value: unknown,
-  result: ParsedAbilityStoneEngraving[] = [],
-) {
+function collectAbilityStoneEngravings(value: unknown, result: ParsedAbilityStoneEngraving[] = []) {
   if (typeof value === 'string') {
     const engraving = parseAbilityStoneEngraving(value);
 
@@ -372,6 +481,7 @@ function parseEquipmentItem(item: unknown): ParsedEquipmentItem {
     braceletEffects: [],
     abilityStoneBonusEffects: [],
     abilityStoneEngravings: [],
+    specialEffects: [],
   };
 
   for (const element of elements) {
@@ -394,6 +504,8 @@ function parseEquipmentItem(item: unknown): ParsedEquipmentItem {
         parsed.braceletEffects.push(...getColoredEffects(value));
       } else if (title.includes('세공 단계 보너스')) {
         parsed.abilityStoneBonusEffects.push(...lines);
+      } else if (title.includes('특수 효과')) {
+        parsed.specialEffects.push(...lines);
       }
     }
 
@@ -410,7 +522,9 @@ function isAccessoryType(type: string | null) {
 }
 
 function isGearType(type: string | null) {
-  return ['무기', '투구', '상의', '하의', '장갑', '어깨'].some((label) => type?.includes(label));
+  return ['무기', '투구', '상의', '하의', '장갑', '어깨', '완갑'].some((label) =>
+    type?.includes(label),
+  );
 }
 
 function classifyEquipment(equipment: unknown[]) {
@@ -419,6 +533,7 @@ function classifyEquipment(equipment: unknown[]) {
   const accessories: ParsedEquipmentItem[] = [];
   let bracelet: ParsedEquipmentItem | null = null;
   let abilityStone: ParsedEquipmentItem | null = null;
+  let orb: ParsedEquipmentItem | null = null;
 
   for (const item of parsedItems) {
     const type = item.type;
@@ -442,9 +557,14 @@ function classifyEquipment(equipment: unknown[]) {
       abilityStone = item;
       continue;
     }
+
+    if (type?.includes('보주')) {
+      orb = item;
+      continue;
+    }
   }
 
-  return { gear, accessories, bracelet, abilityStone };
+  return { gear, accessories, bracelet, abilityStone, orb };
 }
 
 function buildGearSummary(item: ParsedEquipmentItem): GearSummaryItem {
@@ -453,9 +573,14 @@ function buildGearSummary(item: ParsedEquipmentItem): GearSummaryItem {
     name: item.name,
     type: item.type,
     grade: item.grade,
+    title: item.title,
+    tier: item.tier,
     quality: item.quality,
     itemLevel: item.itemLevel,
     enhancement: item.enhancement,
+    basicEffects: item.basicEffects,
+    additionalEffects: item.additionalEffects,
+    arkPassiveEffects: item.arkPassiveEffects,
   };
 }
 
@@ -465,9 +590,13 @@ function buildAccessorySummary(item: ParsedEquipmentItem): AccessorySummaryItem 
     name: item.name,
     type: item.type,
     grade: item.grade,
+    title: item.title,
+    tier: item.tier,
     quality: item.quality,
     basicEffects: item.basicEffects,
+    additionalEffects: item.additionalEffects,
     polishEffects: item.polishEffects,
+    arkPassiveEffects: item.arkPassiveEffects,
   };
 }
 
@@ -479,6 +608,10 @@ function buildBraceletSummary(item: ParsedEquipmentItem | null): BraceletSummary
     name: item.name,
     type: item.type,
     grade: item.grade,
+    title: item.title,
+    tier: item.tier,
+    basicEffects: item.basicEffects,
+    additionalEffects: item.additionalEffects,
     braceletEffects: item.braceletEffects,
   };
 }
@@ -493,9 +626,32 @@ function buildAbilityStoneSummary(
     name: item.name,
     type: item.type,
     grade: item.grade,
+    title: item.title,
+    tier: item.tier,
+    basicEffects: item.basicEffects,
+    additionalEffects: item.additionalEffects,
     abilityStoneBonusEffects: item.abilityStoneBonusEffects,
     abilityStoneEngravings: item.abilityStoneEngravings,
   };
+}
+
+function buildOrbSummary(item: ParsedEquipmentItem | null): OrbSummaryItem | null {
+  if (!item) return null;
+
+  return {
+    icon: item.icon,
+    name: item.name,
+    type: item.type,
+    grade: item.grade,
+    title: item.title,
+    tier: item.tier,
+    paradisePowerText: getOrbParadisePowerText(item.specialEffects),
+    specialEffects: item.specialEffects,
+  };
+}
+
+function getOrbParadisePowerText(specialEffects: string[]) {
+  return specialEffects.find((effect) => effect.includes('달성 최대 낙원력')) ?? null;
 }
 
 function parseAvatarItem(item: unknown): ParsedAvatarItem {
@@ -544,6 +700,92 @@ function parseLegendaryAvatars(avatars: unknown[]): LegendaryAvatarSummaryItem[]
       type: avatar.type,
       grade: avatar.grade,
     }));
+}
+
+function parseProfileStats(profile: Record<string, unknown>): ParsedProfileStat[] {
+  return asArray(profile.Stats).map((item) => {
+    const stat = asRecord(item);
+
+    return {
+      type: getString(stat, 'Type'),
+      value: getString(stat, 'Value'),
+      tooltip: stripHtml(getString(stat, 'Tooltip') ?? '') || null,
+    };
+  });
+}
+
+function parseSkillPoints(profile: Record<string, unknown>): ParsedSkillPoints {
+  return {
+    using: getNumber(profile, 'UsingSkillPoint'),
+    total: getNumber(profile, 'TotalSkillPoint'),
+  };
+}
+
+function parseCards(cards: Record<string, unknown>) {
+  return {
+    cards: asArray(cards.Cards).map((item) => {
+      const card = asRecord(item);
+
+      return {
+        slot: getNumber(card, 'Slot'),
+        name: getString(card, 'Name'),
+        icon: getString(card, 'Icon'),
+        awakeCount: getNumber(card, 'AwakeCount'),
+        awakeTotal: getNumber(card, 'AwakeTotal'),
+        grade: getString(card, 'Grade'),
+      } satisfies ParsedCardItem;
+    }),
+    effects: asArray(cards.Effects).map((item) => {
+      const effect = asRecord(item);
+
+      return {
+        index: getNumber(effect, 'Index'),
+        cardSlots: asArray(effect.CardSlots).filter(
+          (slot): slot is number => typeof slot === 'number',
+        ),
+        items: asArray(effect.Items).map((effectItem) => {
+          const cardEffectItem = asRecord(effectItem);
+
+          return {
+            name: getString(cardEffectItem, 'Name'),
+            description: stripHtml(getString(cardEffectItem, 'Description') ?? '') || null,
+          } satisfies ParsedCardEffectItem;
+        }),
+      } satisfies ParsedCardEffect;
+    }),
+  };
+}
+
+function parseCombatSkills(combatSkills: unknown[]): ParsedCombatSkill[] {
+  return combatSkills.map((item) => {
+    const skill = asRecord(item);
+    const rune = asRecord(skill.Rune);
+
+    return {
+      name: getString(skill, 'Name'),
+      icon: getString(skill, 'Icon'),
+      level: getNumber(skill, 'Level'),
+      type: getString(skill, 'Type'),
+      isAwakening: getBoolean(skill, 'IsAwakening'),
+      rune:
+        Object.keys(rune).length === 0
+          ? null
+          : {
+              name: getString(rune, 'Name'),
+              icon: getString(rune, 'Icon'),
+              grade: getString(rune, 'Grade'),
+            },
+      tripods: asArray(skill.Tripods)
+        .map(asRecord)
+        .filter((tripod) => getBoolean(tripod, 'IsSelected') === true)
+        .map((tripod) => ({
+          slot: getNumber(tripod, 'Slot'),
+          name: getString(tripod, 'Name'),
+          icon: getString(tripod, 'Icon'),
+          level: getNumber(tripod, 'Level'),
+        })),
+    };
+  });
 }
 
 function parseEngravings(engravings: Record<string, unknown>): ParsedEngravingItem[] {
@@ -679,7 +921,109 @@ function parseArkPassive(arkPassive: Record<string, unknown>): ParsedArkPassiveS
         description: getString(itemRecord, 'Description'),
       };
     }),
+    nodes: asArray(arkPassive.Effects).map(parseArkPassiveNode),
   };
+}
+
+function parseArkPassiveNode(item: unknown): ParsedArkPassiveNode {
+  const node = asRecord(item);
+  const tooltip = parseTooltip(node.ToolTip);
+  const elements = getTooltipElements(tooltip);
+  const nameTagText = getArkPassiveTooltipText(elements, 'NameTagBox');
+  const skillTitleText = getArkPassiveTooltipText(elements, 'CommonSkillTitle');
+  const tooltipDescription = getArkPassiveTooltipText(elements, 'MultiTextBox');
+  const fallbackDescription = stripHtml(getString(node, 'Description') ?? '');
+  const metadataText = [nameTagText, skillTitleText, fallbackDescription].filter(Boolean).join(' ');
+
+  return {
+    category: getArkPassiveCategory(metadataText) ?? getString(node, 'Name'),
+    tier: getArkPassiveTier(metadataText),
+    name:
+      getArkPassiveName(nameTagText) ??
+      getArkPassiveName(skillTitleText) ??
+      getString(node, 'Name'),
+    level: getArkPassiveLevel(skillTitleText) ?? getArkPassiveLevel(fallbackDescription),
+    icon: getString(node, 'Icon'),
+    description: tooltipDescription || fallbackDescription || null,
+  };
+}
+
+function getArkPassiveTooltipText(elements: Record<string, unknown>[], type: string) {
+  return elements
+    .filter((element) => getString(element, 'type') === type)
+    .flatMap((element) => collectNestedText(element.value))
+    .join('\n');
+}
+
+function getArkPassiveCategory(value: string) {
+  return value.match(/(진화|깨달음|도약)/)?.[1] ?? null;
+}
+
+function getArkPassiveTier(value: string) {
+  const tier = value.match(/(\d+)\s*티어/)?.[1];
+  return tier ? Number(tier) : null;
+}
+
+function getArkPassiveName(value: string) {
+  const name = value.replace(/Lv\.\s*\d+/i, '').trim();
+  return name || null;
+}
+
+function getArkPassiveLevel(value: string) {
+  const level = value.match(/Lv\.\s*(\d+)/i)?.[1];
+  return level ? Number(level) : null;
+}
+
+function parseArkGridGem(gem: Record<string, unknown>): ParsedArkGridGem {
+  const tooltip = parseTooltip(gem.Tooltip);
+  const elements = getTooltipElements(tooltip);
+  const nameTag = elements.find((element) => getString(element, 'type') === 'NameTagBox');
+  const fullName = stripHtml(getString(nameTag, 'value') ?? '');
+  const nameMatch = fullName.match(/^(질서|혼돈)의 젬\s*:\s*(.+)$/);
+  const effectLines = elements.flatMap((element) => {
+    if (getString(element, 'type') !== 'ItemPartBox') return [];
+
+    const value = asRecord(element.value);
+    return getPartBoxTitle(value) === '젬 효과' ? getPartBoxLines(value) : [];
+  });
+  const basicInfoLines = elements.flatMap((element) => {
+    if (getString(element, 'type') !== 'ItemPartBox') return [];
+
+    const value = asRecord(element.value);
+    return getPartBoxTitle(value) === '젬 기본 정보' ? getPartBoxLines(value) : [];
+  });
+
+  return {
+    grade: getString(gem, 'Grade'),
+    name: nameMatch?.[2]?.trim() || null,
+    type: nameMatch?.[1] === '질서' || nameMatch?.[1] === '혼돈' ? nameMatch[1] : null,
+    point: getTooltipNumber(basicInfoLines, '젬 포인트'),
+    willpower: getTooltipNumber(effectLines, '필요 의지력'),
+    corePoint: getTooltipNumber(effectLines, '(?:질서|혼돈) 포인트'),
+    effects: getArkGridGemEffects(effectLines),
+  };
+}
+
+function getTooltipNumber(lines: string[], label: string) {
+  const matchedLine = lines.find((line) => new RegExp(`^${label}\\s*:`).test(line));
+  const value = matchedLine?.match(/:\s*(\d+)/)?.[1];
+
+  return value ? Number(value) : null;
+}
+
+function getArkGridGemEffects(lines: string[]): ParsedArkGridGemEffect[] {
+  return lines.flatMap((line, index) => {
+    const matched = line.match(/^\[([^\]]+)\]\s*Lv\.?\s*(\d+)/);
+    if (!matched) return [];
+
+    const nextLine = lines[index + 1];
+
+    return {
+      name: matched[1],
+      level: Number(matched[2]),
+      description: nextLine && !nextLine.startsWith('[') ? nextLine : null,
+    };
+  });
 }
 
 function parseArkGrid(arkGrid: Record<string, unknown>): ParsedArkGridSummary {
@@ -692,6 +1036,7 @@ function parseArkGrid(arkGrid: Record<string, unknown>): ParsedArkGridSummary {
         name: getString(itemRecord, 'Name'),
         grade: getString(itemRecord, 'Grade'),
         point: getNumber(itemRecord, 'Point'),
+        gems: asArray(itemRecord.Gems).map((gem) => parseArkGridGem(asRecord(gem))),
       };
     }),
     effects: asArray(arkGrid.Effects).map((item) => {
@@ -711,6 +1056,8 @@ function buildSummary(rawPayload: Record<string, unknown>) {
   const engravings = asRecord(rawPayload.engravings);
   const gems = asRecord(rawPayload.gems);
   const avatars = asArray(rawPayload.avatars);
+  const cards = asRecord(rawPayload.cards);
+  const combatSkills = asArray(rawPayload.combatSkills);
   const arkPassive = asRecord(rawPayload.arkpassive);
   const arkGrid = asRecord(rawPayload.arkgrid);
   const equipmentGroups = classifyEquipment(equipment);
@@ -723,16 +1070,22 @@ function buildSummary(rawPayload: Record<string, unknown>) {
       itemAvgLevel: getString(profile, 'ItemAvgLevel'),
       combatPower: profile.CombatPower ?? null,
       characterImage: getString(profile, 'CharacterImage'),
+      stats: parseProfileStats(profile),
+      skillPoints: parseSkillPoints(profile),
     },
     equipment: {
       gears: equipmentGroups.gear.map(buildGearSummary),
       accessories: equipmentGroups.accessories.map(buildAccessorySummary),
       bracelet: buildBraceletSummary(equipmentGroups.bracelet),
       abilityStone: buildAbilityStoneSummary(equipmentGroups.abilityStone),
+      orb: buildOrbSummary(equipmentGroups.orb),
     },
     engravings: parseEngravings(engravings),
     gems: parseGems(gems),
+    avatars: avatars.map(parseAvatarItem),
     legendaryAvatars: parseLegendaryAvatars(avatars),
+    cards: parseCards(cards),
+    combatSkills: parseCombatSkills(combatSkills),
     arkPassive: parseArkPassive(arkPassive),
     arkGrid: parseArkGrid(arkGrid),
   };
@@ -756,13 +1109,18 @@ async function fetchSection(
   );
 
   if (!response.ok) {
-    return {
-      key: section.key,
-      data: null,
-    };
+    throw new Error(
+      `Lost Ark ${section.key} section request failed with status ${response.status}.`,
+    );
   }
 
-  const data = await response.json();
+  let data: unknown;
+
+  try {
+    data = await response.json();
+  } catch {
+    throw new Error(`Lost Ark ${section.key} section response could not be parsed.`);
+  }
 
   return {
     key: section.key,
@@ -804,9 +1162,18 @@ Deno.serve(async (req) => {
       );
     }
 
-    const results = await Promise.all(
-      sections.map((section) => fetchSection(characterName, section, apiKey)),
-    );
+    let results: SectionResult[];
+
+    try {
+      results = await Promise.all(
+        sections.map((section) => fetchSection(characterName, section, apiKey)),
+      );
+    } catch {
+      return Response.json(
+        { message: 'Failed to fetch character details.' },
+        { status: 502, headers: corsHeaders },
+      );
+    }
 
     const rawPayload: Record<string, unknown> = {};
 
@@ -832,11 +1199,10 @@ Deno.serve(async (req) => {
       },
       { status: 200, headers: corsHeaders },
     );
-  } catch (error) {
+  } catch {
     return Response.json(
       {
         message: 'Unexpected function error.',
-        detail: error instanceof Error ? error.message : String(error),
       },
       { status: 500, headers: corsHeaders },
     );
@@ -863,6 +1229,15 @@ async function validateAuthorization(req: Request) {
     );
   }
 
+  const allowedEmails = getAllowedAuthEmails();
+
+  if (allowedEmails.length === 0) {
+    return Response.json(
+      { message: 'AUTH_ALLOWED_EMAILS is required.' },
+      { status: 500, headers: corsHeaders },
+    );
+  }
+
   const supabase = createClient(supabaseUrl, supabaseKey);
   const {
     data: { user },
@@ -876,7 +1251,7 @@ async function validateAuthorization(req: Request) {
     );
   }
 
-  if (!isAllowedAuthEmail(user.email)) {
+  if (!isAllowedAuthEmail(user.email, allowedEmails)) {
     return Response.json(
       { message: 'This account cannot access LoaM.' },
       { status: 403, headers: corsHeaders },
@@ -886,16 +1261,16 @@ async function validateAuthorization(req: Request) {
   return null;
 }
 
-function isAllowedAuthEmail(email: string | undefined) {
-  const allowedEmails = Deno.env
-    .get('AUTH_ALLOWED_EMAILS')
-    ?.split(',')
-    .map((item) => item.trim().toLowerCase())
-    .filter(Boolean);
+function getAllowedAuthEmails() {
+  return (
+    Deno.env
+      .get('AUTH_ALLOWED_EMAILS')
+      ?.split(',')
+      .map((item) => item.trim().toLowerCase())
+      .filter(Boolean) ?? []
+  );
+}
 
-  if (allowedEmails === undefined || allowedEmails.length === 0) {
-    return false;
-  }
-
+function isAllowedAuthEmail(email: string | undefined, allowedEmails: string[]) {
   return email !== undefined && allowedEmails.includes(email.toLowerCase());
 }

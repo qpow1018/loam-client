@@ -48,7 +48,7 @@ npm run build:webpack
 
 - 프론트엔드 TypeScript, React, Next.js route, TanStack Query, 클라이언트 저장소, UI, SCSS 작성·수정·리뷰·리팩터링에는 프로젝트 스킬 `$following-loam-frontend-style`을 적용하세요.
 - `src/api`, `src/lib`, Supabase Auth/RLS, SQL migration, Edge Function, 외부 API 서버 호출, 비밀, DB 계약 작성·수정·리뷰·리팩터링에는 프로젝트 스킬 `$following-loam-backend-boundaries`를 적용하세요.
-- 여러 영역에 걸친 큰 기능, 구조 변경, 기획·설계·구현·독립 검증이 필요한 작업에는 프로젝트 스킬 `$orchestrating-loam-large-work`를 적용하세요.
+- 여러 영역에 걸친 큰 기능, 구조 변경, 기획·설계·구현·독립 검증이 필요한 작업은 프로젝트 스킬 `$orchestrating-loam-large-work` 적용 여부를 먼저 사용자에게 물어보고, 명시적 승인 후에만 적용하세요.
 
 ## API와 Supabase
 

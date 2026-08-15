@@ -1,0 +1,30 @@
+.equipment-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+
+  .equipment-section,
+  .extra-equipment-section {
+    display: flex;
+    gap: 12px;
+
+    .left-box,
+    .right-box,
+    .extra-right-box {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .left-box,
+    .ability-stone-box {
+      flex: 1;
+    }
+
+    .right-box,
+    .extra-right-box {
+      flex: 1.9;
+    }
+  }
+}

@@ -8,7 +8,7 @@ const PRIMARY_MENUS: THeaderMenu[] = [
 ];
 
 const GAME_SWITCH_MENU: THeaderMenu = { name: '로아 홈', link: '/lostark/loado' };
-const SETTINGS_MENU: THeaderMenu = { name: '설정', link: '/settings?game=maplestory' };
+const SETTINGS_MENU: THeaderMenu = { name: '설정', link: '/settings' };
 
 export default function MaplestoryHeader(props: { isBackupReminderVisible?: boolean }) {
   const { isBackupReminderVisible = true } = props;
@@ -20,7 +20,7 @@ export default function MaplestoryHeader(props: { isBackupReminderVisible?: bool
       primaryMenus={PRIMARY_MENUS}
       gameSwitchMenu={GAME_SWITCH_MENU}
       settingsMenu={SETTINGS_MENU}
-      backupReminderLink={isBackupReminderVisible ? '/settings?game=maplestory#backup' : undefined}
+      backupReminderLink={isBackupReminderVisible ? '/settings#backup' : undefined}
     />
   );
 }

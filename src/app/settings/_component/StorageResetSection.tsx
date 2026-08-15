@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 
-import type { TSettingsGame } from '@/app/settings/_type/settings';
 import {
   RESET_TARGETS,
   resetStorageTarget,
@@ -14,25 +13,27 @@ import Confirm from '@/components/common/modal/Confirm';
 import SettingsField from '@/app/settings/_component/SettingsField';
 import SettingsSection from '@/app/settings/_component/SettingsSection';
 
-const RESET_TARGETS_BY_GAME: Record<
-  TSettingsGame,
-  { partial: TResetTarget[]; all: TResetTarget; allDescription: string }
-> = {
-  lostark: {
+const RESET_GROUPS: Array<{
+  label: string;
+  description: string;
+  partial: TResetTarget[];
+  all: TResetTarget;
+}> = [
+  {
+    label: '로스트아크',
+    description: 'Loado 할일과 메모 데이터를 삭제합니다.',
     partial: ['loado', 'loadoMemo'],
     all: 'lostark',
-    allDescription: 'Loado 할일과 메모 데이터를 삭제합니다.',
   },
-  maplestory: {
+  {
+    label: '메이플스토리',
+    description: 'Mapledo 할일과 메모 데이터를 삭제합니다.',
     partial: ['mapledo', 'mapledoMemo'],
     all: 'maplestory',
-    allDescription: 'Mapledo 할일과 메모 데이터를 삭제합니다.',
   },
-};
+];
 
-export default function StorageResetSection(props: { game: TSettingsGame }) {
-  const { game } = props;
-  const resetTargets = RESET_TARGETS_BY_GAME[game];
+export default function StorageResetSection() {
 
   const [resetStatus, setResetStatus] = useState<string>();
   const [pendingResetTarget, setPendingResetTarget] = useState<TResetTarget | null>(null);
@@ -54,9 +55,9 @@ export default function StorageResetSection(props: { game: TSettingsGame }) {
         description="선택한 저장 데이터를 삭제합니다. 전체 초기화도 백업 파일 자체는 삭제하지 않습니다."
         status={resetStatus}
       >
-        {resetTargets.partial.length > 0 && (
-          <SettingsField label="부분 초기화" value="선택한 데이터만 삭제합니다.">
-            {resetTargets.partial.map((target) => (
+        {RESET_GROUPS.map((group) => (
+          <SettingsField key={group.all} label={group.label} value={group.description}>
+            {group.partial.map((target) => (
               <Button
                 key={target}
                 color="gray"
@@ -67,19 +68,16 @@ export default function StorageResetSection(props: { game: TSettingsGame }) {
                 {RESET_TARGETS[target].actionLabel}
               </Button>
             ))}
+            <Button
+              color="rose"
+              fill="solid"
+              size="small"
+              onClick={() => setPendingResetTarget(group.all)}
+            >
+              전체 초기화
+            </Button>
           </SettingsField>
-        )}
-
-        <SettingsField label="전체 초기화" value={resetTargets.allDescription}>
-          <Button
-            color="rose"
-            fill="solid"
-            size="small"
-            onClick={() => setPendingResetTarget(resetTargets.all)}
-          >
-            {RESET_TARGETS[resetTargets.all].actionLabel}
-          </Button>
-        </SettingsField>
+        ))}
       </SettingsSection>
 
       <Confirm

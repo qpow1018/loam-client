@@ -1,0 +1,12 @@
+.equipment-summary {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 16px;
+  padding: 16px;
+
+  .accessory-column {
+    display: grid;
+    align-content: start;
+    gap: 12px;
+  }
+}

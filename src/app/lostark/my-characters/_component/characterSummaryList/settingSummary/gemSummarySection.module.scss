@@ -1,0 +1,60 @@
+.gem-table {
+  overflow: hidden;
+  border: 1px solid $border;
+  border-radius: $border-radius;
+
+  .gem-table-row {
+    display: grid;
+    grid-template-columns: 64px repeat(4, minmax(0, 1fr));
+    border-top: 1px solid $border;
+
+    &:first-of-type {
+      border-top: none;
+    }
+
+    .gem-table-cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+      min-height: 30px;
+      border-left: 1px solid $border;
+      white-space: nowrap;
+      font-size: 11px;
+      font-weight: 500;
+      color: $text-primary;
+
+      &.gem-tier-low {
+        color: $text-secondary;
+      }
+
+      &.gem-tier-middle {
+        background: $mint-tint;
+        color: $mint-light;
+      }
+
+      &.gem-tier-perfect {
+        background: $amber-tint;
+        color: $amber-light;
+      }
+
+      &.gem-tier-none {
+        color: $text-muted;
+      }
+    }
+
+    .gem-level {
+      font-weight: 400;
+      color: $text-secondary;
+    }
+
+    .gem-row-label {
+      justify-content: flex-start;
+      padding-left: 8px;
+      border-left: none;
+      background: $bg-light;
+      color: $text-secondary;
+      font-weight: 400;
+    }
+  }
+}

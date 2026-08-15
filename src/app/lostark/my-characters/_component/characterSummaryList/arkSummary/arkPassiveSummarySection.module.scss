@@ -1,0 +1,33 @@
+.ark-passive-summary {
+  display: grid;
+  gap: 4px;
+
+  .passive-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 140px;
+    height: 34px;
+    padding: 0 10px;
+    background: $bg-light;
+    color: $text-primary;
+
+    .passive-name {
+      font-size: 11px;
+    }
+
+    .passive-level {
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    &.passive-high {
+      color: $mint-light;
+      background: $mint-tint;
+
+      .passive-level {
+        color: $mint-light;
+      }
+    }
+  }
+}

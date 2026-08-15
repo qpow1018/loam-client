@@ -1,0 +1,33 @@
+.legendary-avatar-section {
+  .avatar-item {
+    display: grid;
+    min-height: 48px;
+    grid-template-columns: 36px 36px minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    border-bottom: 1px solid $border-soft;
+
+    &:last-child {
+      border-bottom: 0;
+    }
+
+    .part {
+      color: $text-secondary;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .name {
+      overflow: hidden;
+      color: $text-primary;
+      font-size: 12px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      &.empty {
+        color: $text-muted;
+      }
+    }
+  }
+}

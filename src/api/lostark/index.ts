@@ -11,10 +11,109 @@ import type {
   TReqUpsertLostarkMainCharacterRow,
   TResLostarkMainCharacterRow,
   TResLostarkMainCharacter,
+  TResLostarkCharacterSummary,
+  TLostarkManualMetrics,
 } from './type';
 
 const LOSTARK_MY_CHARACTERS_TABLE = 'lostark_my_characters';
 const LOSTARK_MAIN_CHARACTERS_TABLE = 'lostark_main_characters';
+
+function normalizeManualMetrics(
+  manualMetrics: Partial<TLostarkManualMetrics> | null | undefined = {},
+): TLostarkManualMetrics {
+  return {
+    lopecScore: typeof manualMetrics?.lopecScore === 'number' ? manualMetrics.lopecScore : null,
+    braceletScore:
+      typeof manualMetrics?.braceletScore === 'number' ? manualMetrics.braceletScore : null,
+    gemConversionLevel:
+      typeof manualMetrics?.gemConversionLevel === 'number'
+        ? manualMetrics.gemConversionLevel
+        : null,
+  };
+}
+
+function normalizeCharacterSummary(
+  summary: TResLostarkCharacterSummary,
+): TResLostarkCharacterSummary {
+  return {
+    ...summary,
+    profiles: {
+      ...summary.profiles,
+      stats: summary.profiles.stats ?? [],
+      skillPoints: summary.profiles.skillPoints ?? {
+        using: null,
+        total: null,
+      },
+    },
+    equipment: {
+      ...summary.equipment,
+      gears: summary.equipment.gears.map((gear) => ({
+        ...gear,
+        title: gear.title ?? null,
+        tier: gear.tier ?? null,
+        basicEffects: gear.basicEffects ?? [],
+        additionalEffects: gear.additionalEffects ?? [],
+        arkPassiveEffects: gear.arkPassiveEffects ?? [],
+      })),
+      accessories: summary.equipment.accessories.map((accessory) => ({
+        ...accessory,
+        title: accessory.title ?? null,
+        tier: accessory.tier ?? null,
+        basicEffects: accessory.basicEffects ?? [],
+        additionalEffects: accessory.additionalEffects ?? [],
+        polishEffects: accessory.polishEffects ?? [],
+        arkPassiveEffects: accessory.arkPassiveEffects ?? [],
+      })),
+      bracelet: summary.equipment.bracelet
+        ? {
+            ...summary.equipment.bracelet,
+            title: summary.equipment.bracelet.title ?? null,
+            tier: summary.equipment.bracelet.tier ?? null,
+            basicEffects: summary.equipment.bracelet.basicEffects ?? [],
+            additionalEffects: summary.equipment.bracelet.additionalEffects ?? [],
+            braceletEffects: summary.equipment.bracelet.braceletEffects ?? [],
+          }
+        : null,
+      abilityStone: summary.equipment.abilityStone
+        ? {
+            ...summary.equipment.abilityStone,
+            title: summary.equipment.abilityStone.title ?? null,
+            tier: summary.equipment.abilityStone.tier ?? null,
+            basicEffects: summary.equipment.abilityStone.basicEffects ?? [],
+            additionalEffects: summary.equipment.abilityStone.additionalEffects ?? [],
+            abilityStoneBonusEffects: summary.equipment.abilityStone.abilityStoneBonusEffects ?? [],
+            abilityStoneEngravings: summary.equipment.abilityStone.abilityStoneEngravings ?? [],
+          }
+        : null,
+      orb: summary.equipment.orb
+        ? {
+            ...summary.equipment.orb,
+            title: summary.equipment.orb.title ?? null,
+            tier: summary.equipment.orb.tier ?? null,
+            paradisePowerText: summary.equipment.orb.paradisePowerText ?? null,
+            specialEffects: summary.equipment.orb.specialEffects ?? [],
+          }
+        : null,
+    },
+    arkPassive: {
+      ...summary.arkPassive,
+      nodes: summary.arkPassive.nodes ?? [],
+    },
+    arkGrid: {
+      ...summary.arkGrid,
+      cores: summary.arkGrid.cores.map((core) => ({
+        ...core,
+        gems: core.gems ?? [],
+      })),
+    },
+    avatars: summary.avatars ?? [],
+    cards: summary.cards ?? {
+      cards: [],
+      effects: [],
+    },
+    combatSkills: summary.combatSkills ?? [],
+  };
+}
 
 async function getCurrentUserId(): Promise<string> {
   const supabase = createClient();
@@ -28,6 +127,19 @@ async function getCurrentUserId(): Promise<string> {
   }
 
   return user.id;
+}
+
+function toMainCharacter(row: TResLostarkMainCharacterRow): TResLostarkMainCharacter {
+  return {
+    id: row.id,
+    characterName: row.character_name,
+    characterClass: row.character_class,
+    itemLevel: row.item_level,
+    sortOrder: row.sort_order,
+    summary: normalizeCharacterSummary(row.summary),
+    rawPayload: row.raw_payload,
+    manualMetrics: normalizeManualMetrics(row.manual_metrics),
+  };
 }
 
 // 로그인한 사용자의 저장된 내 캐릭터 목록을 조회한다.
@@ -61,7 +173,7 @@ export async function getMainCharacters(): Promise<TResLostarkMainCharacter[]> {
   const { data, error } = await supabase
     .from(LOSTARK_MAIN_CHARACTERS_TABLE)
     .select(
-      'id, user_id, character_name, character_class, item_level, sort_order, summary, raw_payload, created_at, updated_at',
+      'id, user_id, character_name, character_class, item_level, sort_order, summary, raw_payload, manual_metrics, created_at, updated_at',
     )
     .eq('user_id', userId)
     .order('sort_order', { ascending: true })
@@ -71,15 +183,29 @@ export async function getMainCharacters(): Promise<TResLostarkMainCharacter[]> {
     throw error;
   }
 
-  return ((data ?? []) as TResLostarkMainCharacterRow[]).map((row) => ({
-    id: row.id,
-    characterName: row.character_name,
-    characterClass: row.character_class,
-    itemLevel: row.item_level,
-    sortOrder: row.sort_order,
-    summary: row.summary,
-    rawPayload: row.raw_payload,
-  }));
+  return ((data ?? []) as TResLostarkMainCharacterRow[]).map(toMainCharacter);
+}
+
+// 로그인한 사용자의 메인 캐릭터 상세를 조회한다.
+export async function getMainCharacterDetail(
+  characterId: string,
+): Promise<TResLostarkMainCharacter | null> {
+  const supabase = createClient();
+  const userId = await getCurrentUserId();
+  const { data, error } = await supabase
+    .from(LOSTARK_MAIN_CHARACTERS_TABLE)
+    .select(
+      'id, user_id, character_name, character_class, item_level, sort_order, summary, raw_payload, manual_metrics, created_at, updated_at',
+    )
+    .eq('id', characterId)
+    .eq('user_id', userId)
+    .maybeSingle();
+
+  if (error) {
+    throw error;
+  }
+
+  return data ? toMainCharacter(data as TResLostarkMainCharacterRow) : null;
 }
 
 // 메인 캐릭터의 현재 상세 정보를 저장한다.
@@ -88,14 +214,17 @@ export async function saveMainCharacter(
 ): Promise<TResLostarkMainCharacter> {
   const supabase = createClient();
   const userId = await getCurrentUserId();
-  const row: TReqUpsertLostarkMainCharacterRow = {
+  const row: TReqUpsertLostarkMainCharacterRow & {
+    manual_metrics: TLostarkManualMetrics;
+  } = {
     user_id: userId,
     character_name: character.characterName,
     character_class: character.characterClass,
     item_level: character.itemLevel,
     sort_order: character.sortOrder,
-    summary: character.summary,
+    summary: normalizeCharacterSummary(character.summary),
     raw_payload: character.rawPayload,
+    manual_metrics: normalizeManualMetrics(character.manualMetrics),
   };
 
   const { data, error } = await supabase
@@ -104,7 +233,7 @@ export async function saveMainCharacter(
     .eq('id', character.id)
     .eq('user_id', userId)
     .select(
-      'id, user_id, character_name, character_class, item_level, sort_order, summary, raw_payload, created_at, updated_at',
+      'id, user_id, character_name, character_class, item_level, sort_order, summary, raw_payload, manual_metrics, created_at, updated_at',
     )
     .single();
 
@@ -112,17 +241,7 @@ export async function saveMainCharacter(
     throw error;
   }
 
-  const saved = data as TResLostarkMainCharacterRow;
-
-  return {
-    id: saved.id,
-    characterName: saved.character_name,
-    characterClass: saved.character_class,
-    itemLevel: saved.item_level,
-    sortOrder: saved.sort_order,
-    summary: saved.summary,
-    rawPayload: saved.raw_payload,
-  };
+  return toMainCharacter(data as TResLostarkMainCharacterRow);
 }
 
 // 메인 캐릭터 목록의 표시 순서를 저장한다.
@@ -137,7 +256,7 @@ export async function reorderMainCharacters(
     character_class: character.characterClass,
     item_level: character.itemLevel,
     sort_order: index,
-    summary: character.summary,
+    summary: normalizeCharacterSummary(character.summary),
     raw_payload: character.rawPayload,
   }));
 
@@ -271,7 +390,7 @@ export async function registerMainCharacter(
     character_class: details.characterClass || character.className,
     item_level: details.itemLevel || character.itemLevel,
     sort_order: mainCharacters.length,
-    summary: details.summary,
+    summary: normalizeCharacterSummary(details.summary),
     raw_payload: details.rawPayload ?? null,
   };
 
@@ -365,7 +484,18 @@ export async function getSiblingCharacters(characterName: string) {
 
 // Lost Ark API에서 캐릭터 상세 정보를 조회한다.
 export async function getCharacterDetails(characterName: string) {
-  return supabaseFunctionClient.post<TResLostarkCharacterDetails>('/lostark-character-details', {
-    characterName,
-  });
+  const response = await supabaseFunctionClient.post<TResLostarkCharacterDetails>(
+    '/lostark-character-details',
+    {
+      characterName,
+    },
+  );
+
+  return {
+    ...response,
+    data: {
+      ...response.data,
+      summary: normalizeCharacterSummary(response.data.summary),
+    },
+  };
 }

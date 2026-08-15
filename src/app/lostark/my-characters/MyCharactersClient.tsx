@@ -1,51 +1,39 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { MdReorder } from 'react-icons/md';
 
 import type { TResLostarkMainCharacter } from '@/api/lostark/type';
 import lostarkQuery from '@/queries/lostarkQuery';
 import toast from '@/utils/toast';
 
-import Button from '@/components/common/button/Button';
 import BoxLoading from '@/components/common/loading/BoxLoading';
-import Tabs from '@/components/common/tabs/Tabs';
-import LostarkHeader from '@/components/lostark/header/LostarkHeader';
-import MainCharacterOrderModal from './_component/MainCharacterOrderModal';
-import MainCharactersPanel from './_component/mainCharactersPanel/MainCharactersPanel';
-import SpecSummaryPanel from './_component/specSummaryPanel/SpecSummaryPanel';
+import CharacterDetail from './_component/characterDetail/CharacterDetail';
+import CharacterSummaryList from './_component/characterSummaryList/CharacterSummaryList';
+import MainCharacterOrderModal from './_component/mainCharacterOrder/MainCharacterOrderModal';
 
 import styles from './myCharactersClient.module.scss';
 
-type TMyCharactersTab = 'main' | 'spec-summary';
-
-const MY_CHARACTER_TABS = [
-  { value: 'main', label: '메인캐릭터' },
-  { value: 'spec-summary', label: '스펙요약' },
-] as const;
-
 export default function MyCharactersClient() {
-  const [activeTab, setActiveTab] = useState<TMyCharactersTab>('main');
+  const [selectedCharacterId, setSelectedCharacterId] = useState<string | null>(null);
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
-  const [draftCharacters, setDraftCharacters] = useState<Record<string, TResLostarkMainCharacter>>(
-    {},
-  );
 
-  const {
-    data: savedMainCharacters = [],
-    isLoading,
-    isError,
-  } = lostarkQuery.useGetMainCharacters();
+  const { data: characters = [], isLoading, isError } = lostarkQuery.useGetMainCharacters();
   const reorderMainCharacters = lostarkQuery.useReorderMainCharacters();
-
-  const mainCharacters = savedMainCharacters.map(
-    (character) => draftCharacters[character.id] ?? character,
-  );
 
   useEffect(() => {
     if (isError) {
       toast.error('메인 캐릭터 목록을 불러오지 못했습니다.');
     }
   }, [isError]);
+
+  function handleOpenCharacterDetail(characterId: string) {
+    setSelectedCharacterId(characterId);
+  }
+
+  function handleOpenSummary() {
+    setSelectedCharacterId(null);
+  }
 
   async function handleSubmitMainCharacterOrder(nextCharacters: TResLostarkMainCharacter[]) {
     try {
@@ -57,78 +45,105 @@ export default function MyCharactersClient() {
     }
   }
 
-  function handleChangeMainCharacter(character: TResLostarkMainCharacter) {
-    setDraftCharacters((prev) => ({
-      ...prev,
-      [character.id]: character,
-    }));
-  }
-
-  function handleSaveMainCharacter(characterId: string) {
-    setDraftCharacters((prev) => {
-      const next = { ...prev };
-      delete next[characterId];
-      return next;
-    });
-  }
-
   return (
-    <div className={styles['my-characters-client']}>
-      <LostarkHeader />
+    <main className={styles['my-characters-client']}>
+      <MainCharacterNavigation
+        characters={characters}
+        selectedCharacterId={selectedCharacterId}
+        onSelectSummary={handleOpenSummary}
+        onSelectCharacter={handleOpenCharacterDetail}
+        onOpenOrder={() => setIsOrderModalOpen(true)}
+        isOrderDisabled={isLoading || characters.length < 2}
+      />
 
-      <div className={styles['my-characters-client-container']}>
-        <div className={styles['tab-section']}>
-          <div className={styles['tab-box']}>
-            <Tabs<TMyCharactersTab>
-              options={MY_CHARACTER_TABS}
-              value={activeTab}
-              onChange={(next) => setActiveTab(next)}
-            />
-          </div>
+      {isLoading && <BoxLoading height={280} />}
 
-          <Button
-            color="gray"
-            fill="solid"
-            onClick={() => setIsOrderModalOpen(true)}
-            isDisabled={isLoading || mainCharacters.length === 0}
-          >
-            순서변경
-          </Button>
+      {!isLoading && !isError && characters.length === 0 && (
+        <div className={styles['empty']}>
+          <p>등록된 메인 캐릭터가 없습니다.</p>
+          <span>내 캐릭터 관리에서 메인 캐릭터를 등록해주세요.</span>
         </div>
+      )}
 
-        <div className={styles['character-section']}>
-          {isLoading && <BoxLoading height={180} />}
+      {!isLoading && characters.length > 0 && selectedCharacterId === null && (
+        <CharacterSummaryList
+          characters={characters}
+          onSelectCharacter={handleOpenCharacterDetail}
+        />
+      )}
 
-          {!isLoading && !isError && mainCharacters.length === 0 && (
-            <div className={styles['empty']}>
-              <p className={styles['empty-message']}>등록된 메인 캐릭터가 없습니다.</p>
-            </div>
-          )}
-
-          {!isLoading && mainCharacters.length > 0 && activeTab === 'main' && (
-            <MainCharactersPanel
-              characters={mainCharacters}
-              unsavedCharacterIds={new Set(Object.keys(draftCharacters))}
-              onChangeCharacter={handleChangeMainCharacter}
-              onSaveCharacter={handleSaveMainCharacter}
-            />
-          )}
-
-          {!isLoading && mainCharacters.length > 0 && activeTab === 'spec-summary' && (
-            <SpecSummaryPanel characters={mainCharacters} />
-          )}
-        </div>
-      </div>
+      {!isLoading && selectedCharacterId !== null && (
+        <CharacterDetail key={selectedCharacterId} characterId={selectedCharacterId} />
+      )}
 
       {isOrderModalOpen && (
         <MainCharacterOrderModal
           isOpen={isOrderModalOpen}
           isSaving={reorderMainCharacters.isPending}
-          characters={mainCharacters}
+          characters={characters}
           onClose={() => setIsOrderModalOpen(false)}
           onSubmit={handleSubmitMainCharacterOrder}
         />
       )}
-    </div>
+    </main>
+  );
+}
+
+function MainCharacterNavigation(props: {
+  characters: TResLostarkMainCharacter[];
+  selectedCharacterId: string | null;
+  onSelectSummary: () => void;
+  onSelectCharacter: (characterId: string) => void;
+  onOpenOrder: () => void;
+  isOrderDisabled: boolean;
+}) {
+  return (
+    <nav className={styles['main-character-navigation']} aria-label="메인 캐릭터 보기">
+      <button
+        type="button"
+        className={`${styles['navigation-button']} ${styles['summary-button']} ${
+          props.selectedCharacterId === null ? styles['selected'] : ''
+        }`}
+        aria-pressed={props.selectedCharacterId === null}
+        onClick={props.onSelectSummary}
+      >
+        <span className={styles['navigation-item-level']}>
+          {`${props.characters.length}캐릭터`}
+        </span>
+        <span className={styles['navigation-item-name']}>요약 목록</span>
+      </button>
+
+      <div className={styles['character-list']}>
+        {props.characters.map((character) => {
+          const profile = character.summary.profiles;
+          const isSelected = character.id === props.selectedCharacterId;
+
+          return (
+            <button
+              key={character.id}
+              type="button"
+              className={`${styles['navigation-button']} ${isSelected ? styles['selected'] : ''}`}
+              aria-pressed={isSelected}
+              onClick={() => props.onSelectCharacter(character.id)}
+            >
+              <span className={styles['navigation-item-level']}>{profile.itemAvgLevel ?? '-'}</span>
+              <span className={styles['navigation-item-name']}>{profile.characterName ?? '-'}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      <button
+        type="button"
+        className={styles['order-action']}
+        onClick={props.onOpenOrder}
+        disabled={props.isOrderDisabled}
+        aria-label="캐릭터 순서 변경"
+        title="캐릭터 순서 변경"
+      >
+        <MdReorder aria-hidden="true" />
+        <span>순서</span>
+      </button>
+    </nav>
   );
 }

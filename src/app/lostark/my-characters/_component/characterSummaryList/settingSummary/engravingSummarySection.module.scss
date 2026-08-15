@@ -1,0 +1,40 @@
+.engraving-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  row-gap: 4px;
+  column-gap: 6px;
+
+  .engraving-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 30px;
+    padding-right: 8px;
+    font-size: 11px;
+    color: $text-primary;
+    border: 1px solid $border;
+    border-radius: $border-radius;
+
+    .engraving-level {
+      flex: 0 0 auto;
+      display: flex;
+      align-self: stretch;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      font-weight: 500;
+      border-right: 1px solid $border;
+    }
+
+    .engraving-level-max {
+      background: $mint-tint;
+      color: $mint-light;
+    }
+
+    .engraving-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}

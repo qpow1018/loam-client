@@ -1,0 +1,66 @@
+.gem-effect-table {
+  margin-top: 16px;
+
+  .effect-header,
+  .effect-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) repeat(3, 80px);
+    align-items: center;
+  }
+
+  .effect-header {
+    padding: 0 8px 8px 8px;
+    font-size: 11px;
+    color: $text-secondary;
+
+    .effect-value,
+    .total-value {
+      text-align: right;
+    }
+  }
+
+  .effect-list {
+    .effect-row {
+      min-height: 36px;
+      padding: 0 8px;
+      font-size: 12px;
+      border-top: 1px solid $border-soft;
+    }
+
+    .effect-name {
+      overflow: hidden;
+      color: $text-secondary;
+      font-weight: 400;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .effect-value {
+      color: $text-secondary;
+      font-weight: 400;
+      text-align: right;
+    }
+
+    .total-value {
+      color: $amber-accent;
+      text-align: right;
+    }
+
+    &.important {
+      .effect-name {
+        color: $text-primary;
+        font-weight: 500;
+      }
+
+      .effect-value {
+        color: $text-primary;
+        font-weight: 500;
+      }
+
+      .total-value {
+        color: $amber-accent;
+        font-weight: 700;
+      }
+    }
+  }
+}

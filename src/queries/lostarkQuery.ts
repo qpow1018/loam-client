@@ -12,6 +12,10 @@ import type {
 const MY_CHARACTERS_QUERY_KEY = ['lostark', 'myCharacters'] as const;
 const MAIN_CHARACTERS_QUERY_KEY = ['lostark', 'mainCharacters'] as const;
 
+function getMainCharacterDetailQueryKey(characterId: string) {
+  return ['lostark', 'mainCharacterDetail', characterId] as const;
+}
+
 function useMyCharactersMutation<TVariables>(
   mutationFn: (variables: TVariables) => Promise<TResLostarkMyCharacter[]>,
 ) {
@@ -47,6 +51,13 @@ const lostarkQuery = {
     return useQuery({
       queryKey: MAIN_CHARACTERS_QUERY_KEY,
       queryFn: api.lostark.getMainCharacters,
+    });
+  },
+
+  useGetMainCharacterDetail(characterId: string) {
+    return useQuery({
+      queryKey: getMainCharacterDetailQueryKey(characterId),
+      queryFn: () => api.lostark.getMainCharacterDetail(characterId),
     });
   },
 
@@ -139,6 +150,7 @@ const lostarkQuery = {
           (characters = []) =>
             characters.map((item) => (item.id === character.id ? character : item)),
         );
+        queryClient.setQueryData(getMainCharacterDetailQueryKey(character.id), character);
       },
     });
   },
