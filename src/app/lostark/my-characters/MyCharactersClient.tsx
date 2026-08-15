@@ -8,23 +8,13 @@ import toast from '@/utils/toast';
 
 import Button from '@/components/common/button/Button';
 import BoxLoading from '@/components/common/loading/BoxLoading';
-import Tabs from '@/components/common/tabs/Tabs';
 import LostarkHeader from '@/components/lostark/header/LostarkHeader';
 import MainCharacterOrderModal from './_component/MainCharacterOrderModal';
 import MainCharactersPanel from './_component/mainCharactersPanel/MainCharactersPanel';
-import SpecSummaryPanel from './_component/specSummaryPanel/SpecSummaryPanel';
 
 import styles from './myCharactersClient.module.scss';
 
-type TMyCharactersTab = 'main' | 'spec-summary';
-
-const MY_CHARACTER_TABS = [
-  { value: 'main', label: '메인캐릭터' },
-  { value: 'spec-summary', label: '스펙요약' },
-] as const;
-
 export default function MyCharactersClient() {
-  const [activeTab, setActiveTab] = useState<TMyCharactersTab>('main');
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
   const [draftCharacters, setDraftCharacters] = useState<Record<string, TResLostarkMainCharacter>>(
     {},
@@ -77,15 +67,7 @@ export default function MyCharactersClient() {
       <LostarkHeader />
 
       <div className={styles['my-characters-client-container']}>
-        <div className={styles['tab-section']}>
-          <div className={styles['tab-box']}>
-            <Tabs<TMyCharactersTab>
-              options={MY_CHARACTER_TABS}
-              value={activeTab}
-              onChange={(next) => setActiveTab(next)}
-            />
-          </div>
-
+        <div className={styles['order-action-section']}>
           <Button
             color="gray"
             fill="solid"
@@ -105,7 +87,7 @@ export default function MyCharactersClient() {
             </div>
           )}
 
-          {!isLoading && mainCharacters.length > 0 && activeTab === 'main' && (
+          {!isLoading && mainCharacters.length > 0 && (
             <MainCharactersPanel
               characters={mainCharacters}
               unsavedCharacterIds={new Set(Object.keys(draftCharacters))}
@@ -114,9 +96,6 @@ export default function MyCharactersClient() {
             />
           )}
 
-          {!isLoading && mainCharacters.length > 0 && activeTab === 'spec-summary' && (
-            <SpecSummaryPanel characters={mainCharacters} />
-          )}
         </div>
       </div>
 

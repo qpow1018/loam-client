@@ -4,15 +4,10 @@
     padding: 16px;
   }
 
-  .tab-section {
+  .order-action-section {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-
-    .tab-box {
-      flex: 1;
-    }
+    justify-content: flex-end;
   }
 
   .character-section {
