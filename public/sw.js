@@ -1,5 +1,5 @@
 const CACHE_NAME = 'loam-cache-v1';
-const APP_SHELL = ['/', '/loado', '/my-characters', '/reference-sites', '/settings'];
+const APP_SHELL = ['/', '/loado', '/my-characters', '/settings'];
 const STATIC_ASSETS = [
   '/brand/loam-app-icon-source-centered.png',
   '/icons/icon-192.png',
