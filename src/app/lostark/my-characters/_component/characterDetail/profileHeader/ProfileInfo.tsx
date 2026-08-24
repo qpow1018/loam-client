@@ -67,7 +67,7 @@ function PrimaryInfo(props: {
 function SupportInfo(props: { manualMetrics: TLostarkManualMetrics }) {
   const settingMetrics = [
     { label: '팔찌', value: formatMetric(props.manualMetrics.braceletScore, '%') },
-    { label: '젬 환산', value: formatMetric(props.manualMetrics.gemConversionLevel, '', 'Lv. ') },
+    { label: '젬 환산', value: formatMetric(props.manualMetrics.gemConversionLevel, '%') },
   ];
 
   return (

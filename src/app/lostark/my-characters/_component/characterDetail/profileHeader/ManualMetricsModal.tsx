@@ -19,7 +19,7 @@ type TManualMetricField = {
 const MANUAL_METRIC_FIELDS: readonly TManualMetricField[] = [
   { key: 'lopecScore', label: '로펙 점수' },
   { key: 'braceletScore', label: '팔찌 점수 (%)' },
-  { key: 'gemConversionLevel', label: '젬 환산 (레벨)' },
+  { key: 'gemConversionLevel', label: '젬 환산 (%)' },
 ];
 
 export default function ManualMetricsModal(props: {

@@ -28,8 +28,8 @@ export default function ProfileSummary(props: {
         <ProfileStat label="전투력" value={profiles.combatPower ?? '-'} isHighlighted />
         <ProfileStat label="로펙 점수" value={formatMetric(manualMetrics.lopecScore)} />
         <ProfileStat
-          label="젬 환산 레벨"
-          value={formatMetric(manualMetrics.gemConversionLevel, '', 'Lv. ')}
+          label="젬 환산"
+          value={formatMetric(manualMetrics.gemConversionLevel, '%')}
         />
       </div>
 
