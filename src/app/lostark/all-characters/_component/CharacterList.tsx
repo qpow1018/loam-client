@@ -16,6 +16,7 @@ import { MdDragHandle, MdDeleteOutline } from 'react-icons/md';
 
 export default function CharacterList(props: {
   characters: TResLostarkMyCharacter[];
+  isMainTogglePending: boolean;
   togglingMainCharacterId?: string | null;
   onReorder: (characters: TResLostarkMyCharacter[]) => void;
   onDeleteItem: (id: string) => void;
@@ -36,7 +37,10 @@ export default function CharacterList(props: {
             itemLevel={character.itemLevel}
             thumbnail={getClassImageUrl(character.className)}
             isMain={character.isMain === true}
-            isMainToggleLoading={props.togglingMainCharacterId === character.id}
+            isMainToggleLoading={
+              props.isMainTogglePending && props.togglingMainCharacterId === character.id
+            }
+            isMainToggleDisabled={props.isMainTogglePending}
             dragHandleProps={dragHandleProps}
             onToggleMain={() => props.onToggleMain(character)}
             onDelete={() => props.onDeleteItem(character.id)}
@@ -54,6 +58,7 @@ function CharacterListItem(props: {
   thumbnail?: string;
   isMain: boolean;
   isMainToggleLoading?: boolean;
+  isMainToggleDisabled: boolean;
   dragHandleProps: TDragHandleProps;
   onToggleMain: () => void;
   onDelete: () => void;
@@ -93,6 +98,7 @@ function CharacterListItem(props: {
           fill="outline"
           size="small"
           isLoading={props.isMainToggleLoading}
+          isDisabled={props.isMainToggleDisabled}
           onClick={props.onToggleMain}
         >
           {props.isMain ? '메인 해제' : '메인 등록'}

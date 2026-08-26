@@ -122,6 +122,7 @@ export default function AllCharactersClient() {
           {!isLoading && allCharacters.length > 0 && (
             <CharacterList
               characters={allCharacters}
+              isMainTogglePending={toggleMainCharacter.isPending}
               togglingMainCharacterId={toggleMainCharacter.variables?.id}
               onReorder={handleReorder}
               onToggleMain={handleToggleMainCharacter}
