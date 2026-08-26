@@ -1,6 +1,5 @@
 import type { TLostarkLegendaryAvatar } from '@/api/lostark/type';
 
-import { ItemTooltip, ItemTooltipTrigger } from '@/components/lostark/itemTooltip/ItemTooltip';
 import ItemSlot from '@/components/lostark/itemSlot/ItemSlot';
 
 import DetailPanel from './DetailPanel';
@@ -34,10 +33,7 @@ function LegendaryAvatarItem(props: {
   return (
     <div className={styles['avatar-item']}>
       {avatar ? (
-        <ItemTooltipTrigger>
-          <ItemSlot imageUrl={avatar.icon} grade={avatar.grade} size={36} />
-          <ItemTooltip>TODO</ItemTooltip>
-        </ItemTooltipTrigger>
+        <ItemSlot imageUrl={avatar.icon} grade={avatar.grade} size={36} />
       ) : (
         <ItemSlot imageUrl={null} size={36} />
       )}
