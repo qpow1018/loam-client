@@ -7,7 +7,7 @@ import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 
 import styles from './modal.module.scss';
 
-// ESC 시 가장 최근에 열린 dismissable Modal 하나만 닫기 위해 열린 순서대로 추적
+// Escape 시 가장 최근에 열린 Modal 하나만 닫기 위해 열린 순서대로 추적
 const openModalStack: symbol[] = [];
 
 export default function Modal(props: {
@@ -16,7 +16,8 @@ export default function Modal(props: {
   children: React.ReactNode;
   title?: string;
   isShowCloseButton?: boolean;
-  isDismissable?: boolean;
+  isCloseOnBackdropClick?: boolean;
+  isCloseOnEscape?: boolean;
   width?: number;
 }) {
   const {
@@ -25,7 +26,8 @@ export default function Modal(props: {
     children,
     title,
     isShowCloseButton = true,
-    isDismissable = true,
+    isCloseOnBackdropClick = false,
+    isCloseOnEscape = true,
     width = 480,
   } = props;
 
@@ -39,7 +41,7 @@ export default function Modal(props: {
   }, [onClose]);
 
   useEffect(() => {
-    if (!isOpen || !isDismissable) return;
+    if (!isOpen || !isCloseOnEscape) return;
 
     const token = Symbol();
     openModalStack.push(token);
@@ -56,7 +58,7 @@ export default function Modal(props: {
       const idx = openModalStack.indexOf(token);
       if (idx !== -1) openModalStack.splice(idx, 1);
     };
-  }, [isOpen, isDismissable]);
+  }, [isOpen, isCloseOnEscape]);
 
   if (!isOpen) return null;
 
@@ -65,7 +67,7 @@ export default function Modal(props: {
   }
 
   function handleBackdropClick(e: React.MouseEvent<HTMLDivElement>) {
-    if (!isDismissable) return;
+    if (!isCloseOnBackdropClick) return;
 
     const isBackdropClick =
       isBackdropPointerDownRef.current && e.target === e.currentTarget;

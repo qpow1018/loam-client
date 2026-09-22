@@ -15,11 +15,12 @@ import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md';
 
 export default function CreateCharacterModal(props: {
   isOpen: boolean;
+  isSaving: boolean;
   onClose: () => void;
   registeredCharacters: TResLostarkMyCharacter[];
   onSubmit: (characters: TReqCreateLostarkMyCharacter[]) => void;
 }) {
-  const { isOpen, onClose, registeredCharacters, onSubmit } = props;
+  const { isOpen, isSaving, onClose, registeredCharacters, onSubmit } = props;
 
   const [nickname, setNickname] = useState('');
   const [searchNickname, setSearchNickname] = useState('');
@@ -79,6 +80,8 @@ export default function CreateCharacterModal(props: {
   }
 
   function handleSubmit() {
+    if (isSaving) return;
+
     const selectedCharacters = unregisteredCharacters
       .filter((character) => !unselectedNames.has(character.CharacterName))
       .map((character) => ({
@@ -90,7 +93,14 @@ export default function CreateCharacterModal(props: {
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="원정대 불러오기" width={760}>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="원정대 불러오기"
+      isCloseOnEscape={!isSaving}
+      isShowCloseButton={!isSaving}
+      width={760}
+    >
       <div className={styles['create-character-modal-content']}>
         <div className={styles['search-section']}>
           <span className={styles['label']}>대표 캐릭터</span>
@@ -144,7 +154,7 @@ export default function CreateCharacterModal(props: {
         </div>
 
         <div className={styles['action-buttons']}>
-          <Button color="gray" fill="solid" size="large" onClick={onClose}>
+          <Button color="gray" fill="solid" size="large" isDisabled={isSaving} onClick={onClose}>
             취소
           </Button>
           <Button
@@ -153,7 +163,8 @@ export default function CreateCharacterModal(props: {
             size="large"
             className={styles['submit-btn']}
             onClick={handleSubmit}
-            isDisabled={isSubmitDisabled}
+            isLoading={isSaving}
+            isDisabled={isSubmitDisabled || isSaving}
           >
             등록
           </Button>
