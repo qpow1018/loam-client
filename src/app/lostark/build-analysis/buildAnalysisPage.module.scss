@@ -1,0 +1,15 @@
+.build-analysis-page {
+  width: $page-width;
+  margin: 0 auto;
+  padding: 48px 16px 80px;
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+  }
+
+  p {
+    margin-top: 12px;
+    color: $text-secondary;
+  }
+}

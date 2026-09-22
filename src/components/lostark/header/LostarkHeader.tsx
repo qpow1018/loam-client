@@ -6,6 +6,7 @@ const PRIMARY_MENUS: THeaderMenu[] = [
   { name: '전체캐릭터', link: '/lostark/all-characters' },
   { name: '클리어 골드', link: '/lostark/clear-gold' },
   { name: '재련 최적화', link: '/lostark/refining' },
+  { name: '세팅 분석', link: '/lostark/build-analysis' },
 ];
 
 const GAME_SWITCH_MENU: THeaderMenu = { name: '메이플 홈', link: '/maplestory/mapledo' };
