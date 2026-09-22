@@ -42,7 +42,7 @@ export default function EquipmentEditorModal(props: {
       isOpen
       onClose={onClose}
       title={`${editor.slotName} ${getEditorTitle(editor)}`}
-      isDismissable={!isSaving}
+      isCloseOnEscape={!isSaving}
       isShowCloseButton={!isSaving}
       width={editor.kind === 'spec' ? 860 : 480}
     >

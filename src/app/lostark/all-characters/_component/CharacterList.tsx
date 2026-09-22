@@ -22,12 +22,26 @@ export default function CharacterList(props: {
   onDeleteItem: (id: string) => void;
   onToggleMain: (character: TResLostarkMyCharacter) => void;
 }) {
+  const [previousCharacters, setPreviousCharacters] = useState(props.characters);
+  const [orderedCharacters, setOrderedCharacters] = useState(props.characters);
+
+  if (props.characters !== previousCharacters) {
+    setPreviousCharacters(props.characters);
+    setOrderedCharacters(props.characters);
+  }
+
+  function handleReorder(nextCharacters: TResLostarkMyCharacter[]) {
+    setOrderedCharacters(nextCharacters);
+    props.onReorder(nextCharacters);
+  }
+
   return (
     <DraggableList<TResLostarkMyCharacter>
-      items={props.characters}
+      items={orderedCharacters}
       getId={(c) => c.id}
       direction="vertical"
-      onReorder={props.onReorder}
+      isDropLayoutAnimationEnabled={false}
+      onReorder={handleReorder}
     >
       {(character, { dragHandleProps }) => {
         return (

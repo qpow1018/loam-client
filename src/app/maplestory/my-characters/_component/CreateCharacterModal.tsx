@@ -36,7 +36,14 @@ export default function CreateCharacterModal(props: {
   }
 
   return (
-    <Modal isOpen={props.isOpen} onClose={props.onClose} title="캐릭터 등록" width={480}>
+    <Modal
+      isOpen={props.isOpen}
+      onClose={props.onClose}
+      title="캐릭터 등록"
+      isCloseOnEscape={!isSubmitting}
+      isShowCloseButton={!isSubmitting}
+      width={480}
+    >
       <div className={styles['create-character-modal-content']}>
         <div className={styles['form-row']}>
           <span className={styles['label']}>닉네임</span>
@@ -58,7 +65,13 @@ export default function CreateCharacterModal(props: {
         </div>
 
         <div className={styles['action-buttons']}>
-          <Button color="gray" fill="solid" size="large" onClick={props.onClose}>
+          <Button
+            color="gray"
+            fill="solid"
+            size="large"
+            isDisabled={isSubmitting}
+            onClick={props.onClose}
+          >
             취소
           </Button>
           <Button

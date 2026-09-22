@@ -91,7 +91,28 @@ const lostarkQuery = {
   },
 
   useReorderMyCharacters() {
-    return useMyCharactersMutation(api.lostark.reorderMyCharacters);
+    const queryClient = useQueryClient();
+
+    return useMutation({
+      mutationFn: api.lostark.reorderMyCharacters,
+      async onMutate(reorderedCharacters) {
+        await queryClient.cancelQueries({ queryKey: MY_CHARACTERS_QUERY_KEY });
+        const previousCharacters =
+          queryClient.getQueryData<TResLostarkMyCharacter[]>(MY_CHARACTERS_QUERY_KEY);
+
+        queryClient.setQueryData(MY_CHARACTERS_QUERY_KEY, reorderedCharacters);
+
+        return { previousCharacters };
+      },
+      onError(_error, _reorderedCharacters, context) {
+        if (context?.previousCharacters === undefined) return;
+
+        queryClient.setQueryData(MY_CHARACTERS_QUERY_KEY, context.previousCharacters);
+      },
+      onSuccess(characters) {
+        queryClient.setQueryData(MY_CHARACTERS_QUERY_KEY, characters);
+      },
+    });
   },
 
   useToggleMainCharacter() {

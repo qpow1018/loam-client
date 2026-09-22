@@ -133,6 +133,7 @@ export default function AllCharactersClient() {
           {isCreateModalOpen && (
             <CreateCharacterModal
               isOpen={isCreateModalOpen}
+              isSaving={addMyCharacters.isPending}
               onClose={() => setIsCreateModalOpen(false)}
               registeredCharacters={allCharacters}
               onSubmit={handleSubmitCharacters}

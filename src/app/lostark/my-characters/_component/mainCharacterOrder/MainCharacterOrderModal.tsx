@@ -28,7 +28,7 @@ export default function MainCharacterOrderModal(props: {
       isOpen={props.isOpen}
       onClose={props.onClose}
       title="메인캐릭터 순서변경"
-      isDismissable={!props.isSaving}
+      isCloseOnEscape={!props.isSaving}
       isShowCloseButton={!props.isSaving}
     >
       <div className={styles['main-character-order-modal']}>
