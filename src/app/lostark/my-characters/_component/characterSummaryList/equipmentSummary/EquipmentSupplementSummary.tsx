@@ -7,7 +7,6 @@ export default function EquipmentSupplementSummary(props: {
   braceletScore: number | null;
 }) {
   const { abilityStone, braceletScore } = props;
-  console.log('abilityStone', abilityStone);
 
   const abilityStoneEngravings = abilityStone?.abilityStoneEngravings.slice(0, 2) ?? [];
   const isHighLevelStone = hasHighLevelStone(abilityStoneEngravings);
