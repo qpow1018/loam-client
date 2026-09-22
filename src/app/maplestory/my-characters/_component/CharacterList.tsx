@@ -18,12 +18,26 @@ export default function CharacterList(props: {
   onReorder: (characters: TResMaplestoryMyCharacter[]) => void;
   onDeleteItem: (id: string) => void;
 }) {
+  const [previousCharacters, setPreviousCharacters] = useState(props.characters);
+  const [orderedCharacters, setOrderedCharacters] = useState(props.characters);
+
+  if (props.characters !== previousCharacters) {
+    setPreviousCharacters(props.characters);
+    setOrderedCharacters(props.characters);
+  }
+
+  function handleReorder(nextCharacters: TResMaplestoryMyCharacter[]) {
+    setOrderedCharacters(nextCharacters);
+    props.onReorder(nextCharacters);
+  }
+
   return (
     <DraggableList<TResMaplestoryMyCharacter>
-      items={props.characters}
+      items={orderedCharacters}
       getId={(character) => character.id}
       direction="vertical"
-      onReorder={props.onReorder}
+      isDropLayoutAnimationEnabled={false}
+      onReorder={handleReorder}
     >
       {(character, { dragHandleProps }) => (
         <CharacterListItem

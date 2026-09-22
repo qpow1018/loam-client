@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import type { TResMaplestoryUnionCharacter } from '@/api/maplestory/type';
 
 import DraggableList from '@/components/common/draggableList/DraggableList';
@@ -11,6 +13,19 @@ export default function UnionGroup(props: {
   onLevelChange: (characterId: string, level: number | null) => Promise<boolean>;
   onReorder: (characters: TResMaplestoryUnionCharacter[]) => void;
 }) {
+  const [previousCharacters, setPreviousCharacters] = useState(props.characters);
+  const [orderedCharacters, setOrderedCharacters] = useState(props.characters);
+
+  if (!hasSameCharacters(props.characters, previousCharacters)) {
+    setPreviousCharacters(props.characters);
+    setOrderedCharacters(props.characters);
+  }
+
+  function handleReorder(nextCharacters: TResMaplestoryUnionCharacter[]) {
+    setOrderedCharacters(nextCharacters);
+    props.onReorder(nextCharacters);
+  }
+
   return (
     <section className={styles['union-group']}>
       <div className={styles['group-header']}>
@@ -28,10 +43,11 @@ export default function UnionGroup(props: {
       </div>
 
       <DraggableList<TResMaplestoryUnionCharacter>
-        items={props.characters}
+        items={orderedCharacters}
         getId={(character) => character.id}
         direction="vertical"
-        onReorder={props.onReorder}
+        isDropLayoutAnimationEnabled={false}
+        onReorder={handleReorder}
         className={styles['character-list']}
       >
         {(character, { dragHandleProps }) => (
@@ -43,5 +59,15 @@ export default function UnionGroup(props: {
         )}
       </DraggableList>
     </section>
+  );
+}
+
+function hasSameCharacters(
+  characters: TResMaplestoryUnionCharacter[],
+  previousCharacters: TResMaplestoryUnionCharacter[],
+) {
+  return (
+    characters.length === previousCharacters.length &&
+    characters.every((character, index) => character === previousCharacters[index])
   );
 }
