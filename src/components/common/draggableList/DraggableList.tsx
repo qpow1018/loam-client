@@ -9,6 +9,7 @@ import {
   closestCenter,
 } from '@dnd-kit/core';
 import {
+  type AnimateLayoutChanges,
   SortableContext,
   horizontalListSortingStrategy,
   verticalListSortingStrategy,
@@ -31,8 +32,17 @@ export default function DraggableList<T>(props: {
   onReorder: (newItems: T[]) => void;
   children: (item: T, props: { dragHandleProps: TDragHandleProps }) => React.ReactNode;
   className?: string;
+  isDropLayoutAnimationEnabled?: boolean;
 }) {
-  const { items, getId, direction, onReorder, children, className } = props;
+  const {
+    items,
+    getId,
+    direction,
+    onReorder,
+    children,
+    className,
+    isDropLayoutAnimationEnabled = true,
+  } = props;
 
   const pointerSensor = useSensor(PointerSensor);
   const sensors = useMemo(() => [pointerSensor], [pointerSensor]);
@@ -61,7 +71,11 @@ export default function DraggableList<T>(props: {
           `}
         >
           {items.map((item) => (
-            <SortableItem key={getId(item)} id={getId(item)}>
+            <SortableItem
+              key={getId(item)}
+              id={getId(item)}
+              isDropLayoutAnimationEnabled={isDropLayoutAnimationEnabled}
+            >
               {(dragHandleProps) => children(item, { dragHandleProps })}
             </SortableItem>
           ))}
@@ -71,13 +85,21 @@ export default function DraggableList<T>(props: {
   );
 }
 
+function animateWhileSorting({ isSorting }: Parameters<AnimateLayoutChanges>[0]) {
+  return isSorting;
+}
+
 function SortableItem(props: {
   id: string;
+  isDropLayoutAnimationEnabled: boolean;
   children: (dragHandleProps: TDragHandleProps) => React.ReactNode;
 }) {
-  const { id, children } = props;
+  const { id, isDropLayoutAnimationEnabled, children } = props;
 
-  const sortable = useSortable({ id });
+  const sortable = useSortable({
+    id,
+    animateLayoutChanges: isDropLayoutAnimationEnabled ? undefined : animateWhileSorting,
+  });
 
   const style: React.CSSProperties = {
     transform: CSS.Transform.toString(sortable.transform),
