@@ -3,13 +3,64 @@
   margin: 0 auto;
   padding: 48px 16px 80px;
 
-  h1 {
-    font-size: 28px;
+  .page-header {
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    p {
+      margin-top: 12px;
+      color: $text-secondary;
+    }
+  }
+
+  .search-form {
+    margin-top: 32px;
+    padding: 20px;
+    border: 1px solid $border-soft;
+    border-radius: $border-radius;
+    background-color: $bg;
+  }
+
+  .search-label {
+    display: block;
+    font-size: 14px;
     font-weight: 700;
   }
 
-  p {
-    margin-top: 12px;
+  .search-control {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+
+    input {
+      flex: 1;
+      min-width: 0;
+      height: 40px;
+      padding: 0 12px;
+      border: 1px solid $border;
+      border-radius: $border-radius;
+      color: $text-primary;
+      background-color: $bg-light;
+    }
+
+    button {
+      min-width: 72px;
+      border-radius: $border-radius;
+      color: $gray-900;
+      background-color: $mint;
+      font-weight: 700;
+
+      &:disabled {
+        color: $text-secondary;
+        background-color: $bg-accent;
+      }
+    }
+  }
+
+  .status-message {
+    margin-top: 32px;
     color: $text-secondary;
   }
 }

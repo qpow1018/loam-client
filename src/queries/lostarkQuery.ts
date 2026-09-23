@@ -6,6 +6,7 @@ import api from '@/api';
 import type {
   TReqCreateLostarkMyCharacter,
   TResLostarkMainCharacter,
+  TLostarkCharacterRawPayload,
   TResLostarkMyCharacter,
 } from '@/api/lostark/type';
 
@@ -14,6 +15,10 @@ const MAIN_CHARACTERS_QUERY_KEY = ['lostark', 'mainCharacters'] as const;
 
 function getMainCharacterDetailQueryKey(characterId: string) {
   return ['lostark', 'mainCharacterDetail', characterId] as const;
+}
+
+function getMainCharacterRawPayloadQueryKey(characterName: string) {
+  return ['lostark', 'mainCharacterRawPayload', characterName] as const;
 }
 
 function useMyCharactersMutation<TVariables>(
@@ -51,6 +56,14 @@ const lostarkQuery = {
     return useQuery({
       queryKey: MAIN_CHARACTERS_QUERY_KEY,
       queryFn: api.lostark.getMainCharacters,
+    });
+  },
+
+  useGetMainCharacterRawPayload(characterName: string | null) {
+    return useQuery({
+      queryKey: getMainCharacterRawPayloadQueryKey(characterName ?? ''),
+      queryFn: () => api.lostark.getMainCharacterRawPayloadByName(characterName!),
+      enabled: characterName !== null,
     });
   },
 
@@ -172,6 +185,10 @@ const lostarkQuery = {
             characters.map((item) => (item.id === character.id ? character : item)),
         );
         queryClient.setQueryData(getMainCharacterDetailQueryKey(character.id), character);
+        queryClient.setQueryData<TLostarkCharacterRawPayload | null>(
+          getMainCharacterRawPayloadQueryKey(character.characterName),
+          character.rawPayload,
+        );
       },
     });
   },
