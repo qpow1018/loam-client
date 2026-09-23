@@ -63,4 +63,83 @@
     margin-top: 32px;
     color: $text-secondary;
   }
+
+  .snapshot {
+    margin-top: 20px;
+    padding: 24px;
+    border: 1px solid $border-soft;
+    border-radius: $border-radius;
+    background-color: $bg;
+  }
+
+  .snapshot-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+
+    h2 {
+      margin-top: 4px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    > p {
+      color: $text-secondary;
+      font-size: 14px;
+      text-align: right;
+    }
+  }
+
+  .snapshot-eyebrow {
+    color: $mint;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .profile-metrics,
+  .stat-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .metric-item,
+  .stat-item {
+    padding: 14px;
+    border-radius: $border-radius;
+    background-color: $bg-light;
+
+    dt {
+      color: $text-secondary;
+      font-size: 13px;
+    }
+
+    dd {
+      margin-top: 6px;
+      color: $text-primary;
+      font-size: 16px;
+      font-weight: 700;
+    }
+  }
+
+  .stat-section {
+    margin-top: 28px;
+
+    h3 {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    > p {
+      margin-top: 6px;
+      color: $text-secondary;
+      font-size: 14px;
+    }
+  }
+
+  .stat-list {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }

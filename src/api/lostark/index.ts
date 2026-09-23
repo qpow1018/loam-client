@@ -187,26 +187,6 @@ export async function getMainCharacters(): Promise<TResLostarkMainCharacter[]> {
   return ((data ?? []) as TResLostarkMainCharacterRow[]).map(toMainCharacter);
 }
 
-// 로그인한 사용자의 메인 캐릭터 원본 API 응답을 조회한다.
-export async function getMainCharacterRawPayloadByName(
-  characterName: string,
-): Promise<TLostarkCharacterRawPayload | null> {
-  const supabase = createClient();
-  const userId = await getCurrentUserId();
-  const { data, error } = await supabase
-    .from(LOSTARK_MAIN_CHARACTERS_TABLE)
-    .select('raw_payload')
-    .eq('character_name', characterName)
-    .eq('user_id', userId)
-    .maybeSingle();
-
-  if (error) {
-    throw error;
-  }
-
-  return data?.raw_payload ?? null;
-}
-
 // 로그인한 사용자의 메인 캐릭터 상세를 조회한다.
 export async function getMainCharacterDetail(
   characterId: string,

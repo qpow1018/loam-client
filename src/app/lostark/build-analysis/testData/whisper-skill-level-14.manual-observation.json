@@ -1,0 +1,27 @@
+{
+  "description": "단죄의 속삭임 레벨 14 수기 관측값",
+  "characterClass": "발키리",
+  "referenceSkillName": "단죄의 속삭임",
+  "skillLevel": 14,
+  "manualStats": {
+    "attackPower": 138851,
+    "strength": 582796,
+    "weaponAttackPower": 198488,
+    "additionalDamage": 31,
+    "criticalDamage": 200,
+    "evolutionDamage": 6
+  },
+  "measurements": [
+    { "totalDamage": 7855183, "criticalHitRatio": 0 },
+    { "totalDamage": 8043557, "criticalHitRatio": 12.5 },
+    { "totalDamage": 7820152, "criticalHitRatio": 0 },
+    { "totalDamage": 8118826, "criticalHitRatio": 0 },
+    { "totalDamage": 7876934, "criticalHitRatio": 0 },
+    { "totalDamage": 8484171, "criticalHitRatio": 37.5 },
+    { "totalDamage": 8080623, "criticalHitRatio": 0 },
+    { "totalDamage": 7956032, "criticalHitRatio": 0 },
+    { "totalDamage": 7800001, "criticalHitRatio": 0 },
+    { "totalDamage": 7970587, "criticalHitRatio": 0 }
+  ],
+  "rawPayloadFile": null
+}

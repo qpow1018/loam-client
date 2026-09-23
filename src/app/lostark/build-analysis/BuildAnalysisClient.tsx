@@ -1,11 +1,14 @@
 'use client';
 
+import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
-import lostarkQuery from '@/queries/lostarkQuery';
+import api from '@/api';
+import type { TLostarkCharacterRawPayload } from '@/api/lostark/type';
 
 import BoxLoading from '@/components/common/loading/BoxLoading';
 
+import BuildAnalysisSnapshot from './_component/BuildAnalysisSnapshot';
 import styles from './buildAnalysisPage.module.scss';
 
 type TSearchTarget = {
@@ -15,17 +18,20 @@ type TSearchTarget = {
 export default function BuildAnalysisClient() {
   const [searchCharacterName, setSearchCharacterName] = useState('반포동딜키리');
   const [searchTarget, setSearchTarget] = useState<TSearchTarget | null>(null);
-  const {
-    data: rawPayload,
-    isLoading: isRawPayloadLoading,
-    isError: isRawPayloadError,
-  } = lostarkQuery.useGetMainCharacterRawPayload(searchTarget?.characterName ?? null);
+  const [rawPayload, setRawPayload] = useState<TLostarkCharacterRawPayload | null>(null);
+  const searchCharacter = useMutation({
+    mutationFn: api.lostark.getCharacterDetails,
+    onSuccess(response) {
+      setRawPayload(response.data.rawPayload);
+    },
+  });
 
   useEffect(() => {
-    if (!searchTarget || !rawPayload || isRawPayloadLoading || isRawPayloadError) return;
+    if (!searchTarget || !rawPayload || searchCharacter.isPending || searchCharacter.isError)
+      return;
 
     console.log('[세팅 분석] raw_payload', rawPayload);
-  }, [isRawPayloadError, isRawPayloadLoading, rawPayload, searchTarget]);
+  }, [rawPayload, searchCharacter.isError, searchCharacter.isPending, searchTarget]);
 
   function handleSearch() {
     const normalizedCharacterName = searchCharacterName.trim();
@@ -33,6 +39,8 @@ export default function BuildAnalysisClient() {
     setSearchTarget({
       characterName: normalizedCharacterName,
     });
+    setRawPayload(null);
+    searchCharacter.mutate(normalizedCharacterName);
   }
 
   return (
@@ -65,26 +73,30 @@ export default function BuildAnalysisClient() {
         </div>
       </form>
 
-      {searchTarget !== null && isRawPayloadLoading && <BoxLoading height={120} />}
+      {searchTarget !== null && searchCharacter.isPending && <BoxLoading height={120} />}
 
-      {searchTarget !== null && !isRawPayloadLoading && isRawPayloadError && (
+      {searchTarget !== null && !searchCharacter.isPending && searchCharacter.isError && (
         <p className={styles['status-message']}>캐릭터 원본 정보를 불러오지 못했습니다.</p>
       )}
 
       {searchTarget !== null &&
         rawPayload === null &&
-        !isRawPayloadLoading &&
-        !isRawPayloadError && (
-          <p className={styles['status-message']}>
-            등록된 캐릭터를 찾을 수 없거나 저장된 원본 API 응답이 없습니다.
-          </p>
+        !searchCharacter.isPending &&
+        !searchCharacter.isError && (
+          <p className={styles['status-message']}>원본 API 응답이 없습니다.</p>
         )}
 
-      {searchTarget !== null && rawPayload && !isRawPayloadLoading && !isRawPayloadError && (
-        <p className={styles['status-message']}>
-          {`${searchTarget.characterName}의 원본 응답을 콘솔에 출력했습니다.`}
-        </p>
-      )}
+      {searchTarget !== null &&
+        rawPayload &&
+        !searchCharacter.isPending &&
+        !searchCharacter.isError && (
+          <>
+            <p className={styles['status-message']}>
+              {`${searchTarget.characterName}의 최신 원본 응답을 콘솔에 출력했습니다.`}
+            </p>
+            <BuildAnalysisSnapshot rawPayload={rawPayload} />
+          </>
+        )}
     </main>
   );
 }

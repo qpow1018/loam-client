@@ -1,7 +1,0 @@
-{
-  "description": "기준",
-  "characterClass": "발키리",
-  "referenceSkillName": "단죄의 속삭임",
-  "skillDamage": null,
-  "rawPayloadFile": "./baseline.raw-payload.json"
-}
